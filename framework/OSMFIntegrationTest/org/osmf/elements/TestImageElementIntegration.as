@@ -21,9 +21,19 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import flash.display.Bitmap;
+	import flash.display.Loader;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.TestConstants;
 
 	public class TestImageElementIntegration extends TestImageOrSWFElementIntegration
@@ -42,6 +52,39 @@ package org.osmf.elements
 		{
 			// Size of resourceForMediaElement.
 			return 42803;
+		}
+		
+		public function testSmoothing():void
+		{
+			var eventDispatcher:EventDispatcher = new EventDispatcher();
+			
+			var element:ImageElement = createMediaElement() as ImageElement;
+			element.resource = resourceForMediaElement;
+			element.smoothing = true;
+			assertTrue(element.smoothing);
+			
+			var loadTrait:LoadTrait = element.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			
+			eventDispatcher.addEventListener(Event.COMPLETE, addAsync(mustReceiveEvent, 10000));
+			
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
+			
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					var displayObjectTrait:DisplayObjectTrait = element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					assertTrue(displayObjectTrait != null);
+					var loader:Loader = displayObjectTrait.displayObject as Loader;
+					assertTrue(loader != null);
+					var bitmap:Bitmap = loader.content as Bitmap;
+					assertTrue(bitmap != null);
+					assertTrue(bitmap.smoothing);
+					
+					eventDispatcher.dispatchEvent(new Event(Event.COMPLETE));
+				}
+			}
 		}
 	}
 }

@@ -22,6 +22,7 @@
 package org.osmf.elements
 {
 	import flash.display.Bitmap;
+	import flash.display.Loader;
 	
 	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
 	import org.osmf.elements.loaderClasses.LoaderUtils;
@@ -150,10 +151,14 @@ package org.osmf.elements
 			var displayObjectTrait:DisplayObjectTrait = getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 			if (displayObjectTrait)
 			{
-				var bitmap:Bitmap = displayObjectTrait.displayObject as Bitmap;
-				if (bitmap)
+				var loader:Loader = displayObjectTrait.displayObject as Loader;
+				if (loader != null)
 				{
-					bitmap.smoothing = _smoothing;
+					var bitmap:Bitmap = loader.content as Bitmap;
+					if (bitmap != null)
+					{
+						bitmap.smoothing = _smoothing;
+					}
 				}
 			}
 		}
