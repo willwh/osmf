@@ -251,18 +251,7 @@ package org.osmf.media.pluginClasses
 					
 			return identifier;
 		}
-		
-		private function removePluginEntry(pluginEntry:PluginEntry):void
-		{
-			for (var i:int = 0; i < _pluginList.length; i++)
-			{
-				if (_pluginList[i] == pluginEntry)
-				{
-					_pluginList.splice(i, 1);
-				}
-			}
-		}
-		
+				
 		private function initPluginFactory():void
 		{
 			_pluginFactory = new MediaFactory();
