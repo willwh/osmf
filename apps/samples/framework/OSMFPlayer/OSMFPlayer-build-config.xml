@@ -9,6 +9,11 @@
         <value>false</value>
       </define>
 
+      <define>
+        <name>CONFIG::FLASH_10_1</name>
+        <value>false</value>
+      </define>
+
 	  <!-- Specifies the locales for internationalization. -->
       <locale>
           <locale-element>en_US</locale-element>
@@ -17,6 +22,7 @@
       <!-- List of path elements that form the roots of ActionScript class hierarchies. -->
       <source-path>
          <path-element>src</path-element>
+         <path-element>src/assets</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
