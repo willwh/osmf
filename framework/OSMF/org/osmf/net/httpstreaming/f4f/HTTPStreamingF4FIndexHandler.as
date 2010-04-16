@@ -204,6 +204,7 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					fragmentRunTablesUpdating = false;
 					notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale, indexContext as int);
+					dispatchDVRStreamInfo(bootstrapBox);
 				}
 			}
 			
@@ -266,15 +267,7 @@ package org.osmf.net.httpstreaming.f4f
 					}
 					else
 					{
-						if (delay < 1.0)
-						{
-							delay = delay * 2.0;
-							if (delay > 1.0)
-							{
-								delay = 1.0;
-							} 
-						}
-						
+						adjustDelay();
 						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
@@ -320,6 +313,19 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
+
+			if (quality != this.currentQuality)
+			{
+				var curAbst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
+				if (currentFAI.fragmentEndTime*abst.timeScale/curAbst.timeScale > abst.totalDuration)
+				{
+					adjustDelay();
+					refreshBootstrapInfo(quality);					
+					return new HTTPStreamRequest(null, quality, 0, delay);
+				}
+
+				return this.getFileForTime(currentFAI.fragmentEndTime / curAbst.timeScale, quality); 
+			}
 			
 			if (!playInProgress && stopPlaying(abst))
 			{
@@ -348,15 +354,7 @@ package org.osmf.net.httpstreaming.f4f
 					}
 					else
 					{
-						if (delay < 1.0)
-						{
-							delay = delay * 2.0;
-							if (delay > 1.0)
-							{
-								delay = 1.0;
-							} 
-						}
-
+						adjustDelay();
 						currentFAI = oldCurrentFAI;
 						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
@@ -492,6 +490,7 @@ package org.osmf.net.httpstreaming.f4f
 		private function refreshBootstrapInfo(quality:uint):void
 		{
 			pendingIndexUpdates++;
+			fragmentRunTablesUpdating = true;
 			CONFIG::LOGGING
 			{
 				logger.debug("refresh frt: " + (streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url);
@@ -716,6 +715,18 @@ package org.osmf.net.httpstreaming.f4f
 			return (segmentRunTable == null) || (segmentRunTable.totalFragments < fragId);
 		}
 		
+		private function adjustDelay():void
+		{
+			if (delay < 1.0)
+			{
+				delay = delay * 2.0;
+				if (delay > 1.0)
+				{
+					delay = 1.0;
+				} 
+			}
+		}
+		
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
 		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
@@ -730,7 +741,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var dvrGetStreamInfoCall:Boolean;
 		private var playInProgress:Boolean;
 		
-		private var offsetFromCurrent:Number = 20;
+		private var offsetFromCurrent:Number = 5;
 		private var delay:Number = 0.05;
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
