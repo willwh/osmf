@@ -22,6 +22,7 @@
 package org.osmf.elements
 {
 	import flash.events.Event;
+	import flash.media.Video;
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.LoadEvent;
@@ -34,6 +35,8 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.CuePoint;
+	import org.osmf.metadata.CuePointType;
 	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamCodes;
@@ -65,6 +68,7 @@ package org.osmf.elements
 		{
 			super.tearDown();
 			
+			cuePoints = null;
 			netFactory = null;
 			loader = null;
 		}
@@ -147,6 +151,76 @@ package org.osmf.elements
 			}
 		}
 		
+		public function testDeblocking():void
+		{
+			var videoElement:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
+			videoElement.resource = resourceForMediaElement;
+			assertTrue(videoElement.deblocking == 0);
+			videoElement.deblocking = 4;
+			assertTrue(videoElement.deblocking == 4);
+			
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
+			
+			var loadTrait:LoadTrait= videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
+			
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					
+					var displayObjectTrait:DisplayObjectTrait = videoElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					assertTrue(displayObjectTrait != null);
+					var video:Video = displayObjectTrait.displayObject as Video;
+					assertTrue(video != null);
+					assertTrue(video.deblocking == 4);
+					
+					videoElement.deblocking = 1;
+					assertTrue(video.deblocking == 1);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
+		
+		public function testSmoothing():void
+		{
+			var videoElement:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
+			videoElement.resource = resourceForMediaElement;
+			assertTrue(videoElement.smoothing == false);
+			videoElement.smoothing = true;
+			assertTrue(videoElement.smoothing == true);
+			
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
+			
+			var loadTrait:LoadTrait= videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
+			
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					
+					var displayObjectTrait:DisplayObjectTrait = videoElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					assertTrue(displayObjectTrait != null);
+					var video:Video = displayObjectTrait.displayObject as Video;
+					assertTrue(video != null);
+					assertTrue(video.smoothing == true);
+					
+					videoElement.smoothing = false;
+					assertTrue(video.smoothing == false);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
+
 		/**
 		 * This test is for the in-stream onCuePoint callback
 		 * in LightweightVideoElement.
@@ -201,7 +275,6 @@ package org.osmf.elements
 					if (++cuePointCount >= testCuePoints.length)
 					{
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
-						cuePoints = null;				
 					} 
 				}
 			}
@@ -209,9 +282,19 @@ package org.osmf.elements
 
 		public function testOnMetadata():void
 		{
+			if (loader is MockNetLoader)
+			{
+				var testCuePoints:Array = 
+					[ 	{type:"event", time:1, name:"1 sec"},
+						{type:"event", time:2, name:"2 sec"},
+						{type:"event", time:3, name:"3 sec"}
+					];
+				cuePoints = testCuePoints;
+			}
+
 			var mediaElement:MediaElement = createMediaElement();
 			mediaElement.resource = resourceForMediaElement;
-			
+
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
 			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
@@ -243,6 +326,8 @@ package org.osmf.elements
 							, onMediaSizeChange
 							);
 					
+					assertTrue(mediaElement.getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) == null);
+					
 					// Playing the media should result in our receiving the
 					// metadata, which should impact our dimensions.
 					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
@@ -258,6 +343,16 @@ package org.osmf.elements
 						
 						assertEquals(displayObjectTrait.mediaWidth, displayObjectTrait.displayObject.width);
 						assertEquals(displayObjectTrait.mediaHeight, displayObjectTrait.displayObject.height);
+						
+						// We should also now have timeline metadata for the
+						// cue points.
+						var dynamicCuePoints:TimelineMetadata = mediaElement.getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+						assertTrue(dynamicCuePoints != null);
+						assertTrue(dynamicCuePoints.numMarkers == 3);
+						var cuePoint:CuePoint = dynamicCuePoints.getMarkerAt(0) as CuePoint;
+						assertTrue(cuePoint.name == "1 sec");
+						assertTrue(cuePoint.time == 1);
+						assertTrue(cuePoint.type == CuePointType.EVENT);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}

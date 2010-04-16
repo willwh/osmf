@@ -418,6 +418,10 @@ package org.osmf.netmocker
 				{
 					info["height"] = expectedHeight;
 				}
+				if (expectedCuePoints != null && expectedCuePoints.length > 0)
+				{
+					info["cuePoints"] = expectedCuePoints;
+				}
 				
 				try
 				{
