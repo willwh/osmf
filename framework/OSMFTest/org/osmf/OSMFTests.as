@@ -105,6 +105,7 @@ package org.osmf
 			addTestSuite(TestDefaultMediaFactory);
 			addTestSuite(TestMediaType);
 			addTestSuite(TestMediaTypeUtil);
+			addTestSuite(TestPluginInfo);
 			
 			// Video
 			//
