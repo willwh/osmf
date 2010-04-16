@@ -27,6 +27,8 @@ package org.osmf.media
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import flexunit.framework.TestCase;
 	
@@ -43,6 +45,7 @@ package org.osmf.media
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.traits.AudioTrait;
+	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -1155,6 +1158,64 @@ package org.osmf.media
 			}
 		}
 		
+		public function testDRM():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
+			
+			if (hasLoadTrait)
+			{
+				callAfterLoad(doTestDRM, false);
+			}
+			else
+			{
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+				doTestDRM();
+			}
+		}
+		
+		private function doTestDRM():void
+		{
+			if (traitExists(MediaTraitType.DRM))
+			{
+				// TODO
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+			else
+			{
+				assertTrue(mediaPlayer.hasDRM == false);
+				assertTrue(mediaPlayer.drmState == DRMState.UNINITIALIZED);
+				
+				assertTrue(isNaN(mediaPlayer.drmPeriod));
+				assertTrue(mediaPlayer.drmStartDate == null);
+				assertTrue(mediaPlayer.drmEndDate == null);
+				
+				try
+				{
+					mediaPlayer.authenticate();
+					
+					fail();
+				}
+				catch (e:IllegalOperationError)
+				{
+					// Swallow.
+				}
+
+				try
+				{
+					mediaPlayer.authenticateWithToken(null);
+					
+					fail();
+				}
+				catch (e:IllegalOperationError)
+				{
+					// Swallow.
+				}
+
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		public function testDisplayObjectEventGeneration():void
 		{
 			
@@ -1841,10 +1902,6 @@ package org.osmf.media
 				var eventCount:int = 0;
 				
 				var numExistentTraitTypesAfterLoad:Number = existentTraitTypesAfterLoad.length;
-				if (existentTraitTypesAfterLoad.indexOf(MediaTraitType.DISPLAY_OBJECT) != -1)
-				{
-					numExistentTraitTypesAfterLoad--;
-				}
 				
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE			, onCapabilityChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE			, onCapabilityChange);
@@ -1853,6 +1910,8 @@ package org.osmf.media
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE			, onCapabilityChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE	, onCapabilityChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE			, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE , onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE  			, onCapabilityChange);
 				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				
 				function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void
@@ -1890,7 +1949,10 @@ package org.osmf.media
 									assertTrue(mediaPlayer.temporal == true);
 									break;
 								case MediaTraitType.DISPLAY_OBJECT:
-									// Ignore
+									assertTrue(mediaPlayer.displayObject != null);
+									break;
+								case MediaTraitType.DRM:
+									assertTrue(mediaPlayer.drmState != null && mediaPlayer.drmState != "");
 									break;
 								default:
 									fail();
@@ -1903,38 +1965,85 @@ package org.osmf.media
 			}
 		}
 		
-		public function testBytesLoadedTotal():void
+		public function testBytesLoadedTotalWithChangeEvents():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
+			
+			var changeEventCount:int = 0;
+			
+			assertTrue(mediaPlayer.bytesLoadedUpdateInterval == 250);
 			
 			if (hasLoadTrait)
 			{
 				assertTrue(mediaPlayer.bytesLoaded == expectedBytesLoadedOnInitialization);
 				assertTrue(mediaPlayer.bytesTotal == expectedBytesTotalOnInitialization);
+				
+				mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
 
-				callAfterLoad(doTestBytesLoadedTotal, false);
+				mediaPlayer.bytesLoadedUpdateInterval = 100;
+				assertTrue(mediaPlayer.bytesLoadedUpdateInterval == 100);
+				
+				callAfterLoad(doTestBytesLoadedTotalWithChangeEvents, false);
 			}
 			else
 			{
 				mediaPlayer.media = createMediaElement(resourceForMediaElement);
-				doTestBytesLoadedTotal();
-			}
-		}
-		
-		private function doTestBytesLoadedTotal():void
-		{
-			if (traitExists(MediaTraitType.LOAD))
-			{
-				assertTrue(mediaPlayer.bytesLoaded == expectedBytesLoadedAfterLoad);
-				assertTrue(mediaPlayer.bytesTotal == expectedBytesTotalAfterLoad);
-			}
-			else
-			{
-				assertTrue(mediaPlayer.bytesLoaded == 0);
-				assertTrue(mediaPlayer.bytesTotal == 0);
+				doTestBytesLoadedTotalWithChangeEvents();
 			}
 			
-			eventDispatcher.dispatchEvent(new Event("testComplete"));
+			function onBytesLoadedChange(event:LoadEvent):void
+			{
+				changeEventCount++;
+			}
+		
+			function doTestBytesLoadedTotalWithChangeEvents():void
+			{
+				if (traitExists(MediaTraitType.LOAD))
+				{
+					assertTrue(mediaPlayer.bytesLoaded == expectedBytesLoadedAfterLoad);
+					assertTrue(mediaPlayer.bytesTotal == expectedBytesTotalAfterLoad);
+				}
+				else
+				{
+					assertTrue(mediaPlayer.bytesLoaded == 0);
+					assertTrue(mediaPlayer.bytesTotal == 0);
+				}
+				
+				if (mediaPlayer.bytesTotal > 0)
+				{
+					if (mediaPlayer.bytesLoaded == mediaPlayer.bytesTotal)
+					{
+						assertTrue(changeEventCount > 0);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					else
+					{
+						// Wait until the bytes are all here.
+						var timer:Timer = new Timer(100);
+						timer.addEventListener(TimerEvent.TIMER, onTimer);
+						timer.start();
+						
+						function onTimer(event:TimerEvent):void
+						{
+							if (mediaPlayer.bytesLoaded == mediaPlayer.bytesTotal)
+							{
+								timer.stop();
+								
+								assertTrue(changeEventCount > 0);
+								
+								eventDispatcher.dispatchEvent(new Event("testComplete"));
+							}
+						}
+					}
+				}
+				else
+				{
+					assertTrue(changeEventCount == 0);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
 		}
 		
 		public function testSubclip():void

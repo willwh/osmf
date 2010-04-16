@@ -1174,7 +1174,8 @@ package org.osmf.media
 		 * @param username The username.
 		 * @param password The password.
 		 * 
-		 * @throws IllegalOperationError If the media is not initialized yet.
+		 * @throws IllegalOperationError If the media is not initialized yet, or hasDRM
+		 * is false.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1183,10 +1184,7 @@ package org.osmf.media
 		 */ 
 		public function authenticate(username:String = null, password:String = null):void
 		{
-			if (hasDRM)
-			{
-				DRMTrait(media.getTrait(MediaTraitType.DRM)).authenticate(username, password);
-			}			
+			(getTraitOrThrow(MediaTraitType.DRM) as DRMTrait).authenticate(username, password);		
 		}
 		
 		
@@ -1196,7 +1194,10 @@ package org.osmf.media
 		 * already been authenticated or if the media isn't drm protected, this is a no-op.
 		 * 
 		 * @param token The token to use for authentication.
-		 *  
+		 * 
+		 * @throws IllegalOperationError If the media is not initialized yet, or hasDRM
+		 * is false.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -1204,16 +1205,14 @@ package org.osmf.media
 		 */ 
 		public function authenticateWithToken(token:Object):void
 		{	
-			if (hasDRM)
-			{
-				DRMTrait(media.getTrait(MediaTraitType.DRM)).authenticateWithToken(token);
-			}							
+			(getTraitOrThrow(MediaTraitType.DRM) as DRMTrait).authenticateWithToken(token);						
 		}
 		
 		/**
 		 * The current state of the DRM for this media.  The states are explained
 		 * in the DRMState enumeration in the org.osmf.drm package.  Returns 
-		 * "" if the DRM system sis unavailable.
+		 * DRMState.UNINITIALIZED if hasDRM is false.
+		 * 
 		 * @see DRMState
 		 *  
 		 *  @langversion 3.0
@@ -1223,12 +1222,12 @@ package org.osmf.media
 		 */
 		public function get drmState():String
 		{
-			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).drmState : "";
+			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).drmState : DRMState.UNINITIALIZED;;
 		}  
 
 		/**
 		 * Returns the start date for the playback window.  Returns null if authentication 
-		 * hasn't taken place or if the DRM system isn't available.
+		 * hasn't taken place or if hasDRM is false.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1242,7 +1241,7 @@ package org.osmf.media
 		
 		/**
 		 * Returns the end date for the playback window.  Returns null if authentication 
-		 * hasn't taken place or if the DRM system isn't available.
+		 * hasn't taken place or if if hasDRM is false.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1256,7 +1255,7 @@ package org.osmf.media
 		
 		/**
 		 * Returns the length of the playback window, in seconds.  Returns NaN if
-		 * authentication hasn't taken place or the DRM system isn't initialized.
+		 * authentication hasn't taken place or if hasDRM is false.
 		 * 
 		 * Note that this property will generally be the difference between startDate
 		 * and endDate, but is included as a property because there may be times where
