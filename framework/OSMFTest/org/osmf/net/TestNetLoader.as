@@ -27,9 +27,10 @@ package org.osmf.net
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.media.URLResource;
 	import org.osmf.media.MediaType;
+	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.DefaultNetConnectionFactory;
 	import org.osmf.netmocker.IMockNetLoader;
 	import org.osmf.netmocker.MockNetLoader;
@@ -65,6 +66,7 @@ package org.osmf.net
 			super.testCanHandleResource();
 			
 			// Verify some valid remote resources.
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com")));	
 	    	assertTrue(loader.canHandleResource(new URLResource("http://example.com/test")));	    	
 		   	assertTrue(loader.canHandleResource(new URLResource("https://example.com/test")));
 		   	assertTrue(loader.canHandleResource(new URLResource("http://example.com:8080")));
@@ -250,11 +252,113 @@ package org.osmf.net
 			doTestNetConnectionFactoryArgument();
 		}
 		
-		public function testLoadHTTP():void
+		public function testLoadOverHTTP():void
 		{
-			doTestLoadHTTP();
+			doTestLoadOverHTTP();
 		}
 		
+		public function testLoadRTMP():void
+		{
+			doTestLoadProtocol(new URLResource("rtmp://example.com"));
+		}
+
+		public function testLoadRTMPS():void
+		{
+			doTestLoadProtocol(new URLResource("rtmps://example.com"));
+		}
+
+		public function testLoadRTMPT():void
+		{
+			doTestLoadProtocol(new URLResource("rtmpt://example.com"));
+		}
+
+		public function testLoadRTMPE():void
+		{
+			doTestLoadProtocol(new URLResource("rtmpe://example.com"));
+		}
+
+		public function testLoadRTMPTE():void
+		{
+			doTestLoadProtocol(new URLResource("rtmpte://example.com"));
+		}
+
+		public function testLoadHTTP():void
+		{
+			doTestLoadProtocol(new URLResource("http://example.com"));
+		}
+
+		public function testLoadHTTPS():void
+		{
+			doTestLoadProtocol(new URLResource("https://example.com"));
+		}
+
+		public function testLoadFile():void
+		{
+			doTestLoadProtocol(new URLResource("file://example.com"));
+		}
+		
+		public function testLoadInvalidProtocol():void
+		{
+			var netLoader:NetLoader = netFactory.createNetLoader();
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+				
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+				
+				var loadErrorReceived:Boolean = false;
+				
+				var resource:URLResource = new URLResource("foo://example.com")
+				resource.mediaType= MediaType.VIDEO;
+				
+				var loadTrait:LoadTrait = new NetStreamLoadTrait(netLoader, resource);
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onProtocolLoad);
+				loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onProtocolError);
+				loadTrait.load();
+				
+				function onProtocolLoad(event:LoadEvent):void
+				{
+					if (event.loadState == LoadState.LOAD_ERROR)
+					{
+						loadErrorReceived = true;
+					}
+				}
+				
+				function onProtocolError(event:MediaErrorEvent):void
+				{
+					assertTrue(loadErrorReceived == true);
+					assertTrue(event.error.errorID == MediaErrorCodes.URL_SCHEME_INVALID);
+
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
+
+		private function doTestLoadProtocol(resource:MediaResourceBase):void
+		{
+			var netLoader:NetLoader = netFactory.createNetLoader();
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+				
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+				
+				var loadTrait:LoadTrait = new NetStreamLoadTrait(netLoader, resource);
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onProtocolLoad);
+				loadTrait.load();
+				
+				function onProtocolLoad(event:LoadEvent):void
+				{
+					if (event.loadState == LoadState.READY)
+					{
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
+		}
+
 		private function doTestMultipleConcurrentLoads():void
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
@@ -512,7 +616,7 @@ package org.osmf.net
 			}
 		}
 		
-		private function doTestLoadHTTP():void
+		private function doTestLoadOverHTTP():void
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
