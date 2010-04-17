@@ -1893,7 +1893,7 @@ package org.osmf.media
 			}
 		}
 		
-		public function testCapabilityEvents():void
+		public function testCapabilityAddEvents():void
 		{
 			if (hasLoadTrait)
 			{
@@ -1912,6 +1912,7 @@ package org.osmf.media
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE			, onCapabilityChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE , onCapabilityChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE  			, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE		, onStateChange);
 				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				
 				function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void
@@ -1920,9 +1921,14 @@ package org.osmf.media
 					{
 						eventCount++;
 					}
-					
-					if (eventCount == numExistentTraitTypesAfterLoad)
+				}
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					if (event.state == MediaPlayerState.READY)
 					{
+						assertTrue(eventCount == numExistentTraitTypesAfterLoad);
+					
 						for each (var traitType:String in existentTraitTypesAfterLoad)
 						{
 							switch (traitType)
@@ -1952,7 +1958,107 @@ package org.osmf.media
 									assertTrue(mediaPlayer.displayObject != null);
 									break;
 								case MediaTraitType.DRM:
-									assertTrue(mediaPlayer.drmState != null && mediaPlayer.drmState != "");
+									assertTrue(mediaPlayer.drmState != null);
+									break;
+								default:
+									fail();
+							}
+						}
+
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
+		}
+		
+		public function testCapabilityRemoveEvents():void
+		{
+			if (hasLoadTrait)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
+				
+				var eventCount:int = 0;
+				
+				var numExistentTraitTypesAfterLoad:Number = existentTraitTypesAfterLoad.length;
+				
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE		, onStateChange);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+								
+				function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void
+				{
+					if (!event.enabled)
+					{
+						eventCount++;
+					}
+				}
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					if (event.state == MediaPlayerState.READY)
+					{
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE			, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE			, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE			, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE			, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE			, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE	, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE			, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE , onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE  			, onCapabilityChange);
+						mediaPlayer.media = null;
+					}
+					else if (event.state == MediaPlayerState.UNINITIALIZED)
+					{
+						assertTrue(eventCount == existentTraitTypesAfterLoad.length - existentTraitTypesOnInitialization.length);
+						
+						for each (var traitType:String in existentTraitTypesAfterLoad)
+						{
+							// The value depends on whether the trait also existed
+							// on initialization.
+							var expectedValue:Boolean = existentTraitTypesOnInitialization.indexOf(traitType) != -1;
+							
+							switch (traitType)
+							{
+								case MediaTraitType.AUDIO:
+									assertTrue(mediaPlayer.hasAudio == expectedValue);
+									break;
+								case MediaTraitType.BUFFER:
+									assertTrue(mediaPlayer.canBuffer == expectedValue);
+									break;
+								case MediaTraitType.LOAD:
+									assertTrue(mediaPlayer.canLoad == expectedValue);
+									break;
+								case MediaTraitType.PLAY:
+									assertTrue(mediaPlayer.canPlay == expectedValue);
+									break;
+								case MediaTraitType.SEEK:
+									assertTrue(mediaPlayer.canSeek == expectedValue);
+									break;
+								case MediaTraitType.DYNAMIC_STREAM:
+									assertTrue(mediaPlayer.isDynamicStream == expectedValue);
+									break;
+								case MediaTraitType.TIME:
+									assertTrue(mediaPlayer.temporal == expectedValue);
+									break;
+								case MediaTraitType.DISPLAY_OBJECT:
+									if (expectedValue)
+									{
+										assertTrue(mediaPlayer.displayObject != null);
+									}
+									else
+									{
+										assertTrue(mediaPlayer.displayObject == null);
+									}
+									break;
+								case MediaTraitType.DRM:
+									if (expectedValue)
+									{
+										assertTrue(mediaPlayer.drmState != null);
+									}
+									else
+									{
+										assertTrue(mediaPlayer.drmState == DRMState.UNINITIALIZED);
+									}
 									break;
 								default:
 									fail();

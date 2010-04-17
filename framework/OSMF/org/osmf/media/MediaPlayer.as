@@ -1327,14 +1327,29 @@ package org.osmf.media
 				return;
 			}
 			
-			// The default values on each trait property here are checked, events are dispatched if the traits values
-			// is different from the default MediaPlayer's values.  Default values are listed in the ASDocs for the various
-			// properties.
+			// The default values on each trait property here are checked, events
+			// are dispatched if the trait's value is different from the default
+			// MediaPlayer's values.  Default values are listed in the ASDocs for
+			// the various properties.
+						
+			var eventType:String = getEventTypeForTrait(traitType);
 			
-			var eventType:String;	
+			// For added traits, the capability change event is dispatched first.
+			if (eventType != null && add)
+			{
+				dispatchEvent
+						( new MediaPlayerCapabilityChangeEvent
+							( eventType
+							, false
+							, false
+							, add
+							)
+						);
+			}
+					
 			switch (traitType)
 			{
-				case MediaTraitType.TIME:									
+				case MediaTraitType.TIME:								
 					changeListeners(add, traitType, TimeEvent.COMPLETE, onComplete);		
 					_temporal = add;
 					if (add && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval) )
@@ -1345,7 +1360,6 @@ package org.osmf.media
 					{
 						_currentTimeTimer.stop();					
 					}					
-					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;
 					var timeTrait:TimeTrait = TimeTrait(media.getTrait(MediaTraitType.TIME));
 										
 					if (timeTrait.currentTime != 0 && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval))
@@ -1374,7 +1388,6 @@ package org.osmf.media
 					{
 						dispatchEvent(new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE, false, false, null, add));
 					}							
-					eventType = MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIO:		
 					_hasAudio = add;
@@ -1403,7 +1416,6 @@ package org.osmf.media
 					{
 						dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, muted, volume, audioPan));
 					}				
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;		
 					break;
 				case MediaTraitType.SEEK:
 					changeListeners(add, traitType, SeekEvent.SEEKING_CHANGE, onSeeking);
@@ -1412,7 +1424,6 @@ package org.osmf.media
 					{
 						dispatchEvent(new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, add));
 					}					
-					eventType = MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE;							
 					break;
 				case MediaTraitType.DYNAMIC_STREAM:					
 					_isDynamicStream = add;	
@@ -1434,10 +1445,8 @@ package org.osmf.media
 						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
 					}
 					dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
-					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;						
 					break;						
 				case MediaTraitType.DISPLAY_OBJECT:						
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE;	
 					_hasDisplayObject = add;
 					var displayObjectTrait:DisplayObjectTrait = DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT));
 					if (displayObjectTrait.displayObject != null)
@@ -1483,11 +1492,9 @@ package org.osmf.media
 							_bytesLoadedTimer.stop();					
 						}			
 					}										
-					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFER:
 					changeListeners(add, traitType, BufferEvent.BUFFERING_CHANGE, onBuffering);					
-					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;	
 					_canBuffer = add;
 					var bufferTrait:BufferTrait = BufferTrait(media.getTrait(MediaTraitType.BUFFER));
 					if (mediaPlayerBufferTimeSet)
@@ -1508,12 +1515,13 @@ package org.osmf.media
 					}					
 					break;	
 				case MediaTraitType.DRM:					
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;
 					_hasDRM	= add; 
 					dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, drmState, false, false, drmStartDate, drmEndDate, drmPeriod));
 					break;			
-			}					 
-			if (eventType != null)
+			}
+			
+			// For removed traits, the capability change event is dispatched last.
+			if (eventType != null && add == false)
 			{
 				dispatchEvent
 					( new MediaPlayerCapabilityChangeEvent
@@ -1524,6 +1532,44 @@ package org.osmf.media
 						)
 					);	
 			}	
+		}
+		
+		private function getEventTypeForTrait(traitType:String):String
+		{
+			var eventType:String = null;
+			
+			switch (traitType)
+			{
+				case MediaTraitType.AUDIO:
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;
+					break;				
+				case MediaTraitType.BUFFER:
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;
+					break;	
+				case MediaTraitType.DISPLAY_OBJECT:						
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE;	
+					break;				
+				case MediaTraitType.DRM:					
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;
+					break;
+				case MediaTraitType.DYNAMIC_STREAM:
+					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;
+					break;				
+				case MediaTraitType.LOAD:					
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;
+					break;				
+				case MediaTraitType.PLAY:
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE;
+					break;				
+				case MediaTraitType.SEEK:
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE;
+					break;				
+				case MediaTraitType.TIME:
+					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;
+					break;				
+			}
+			
+			return eventType;
 		}
 		
 		// Add any number of listeners to the trait, using the given event name.
