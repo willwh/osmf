@@ -36,7 +36,6 @@ package org.osmf.net.dvr
 	/**
 	 * Defines a NetLoader sublcass for loading streams from a DVRCast equiped
 	 * FMS server.
-	 * @private 
 	 * 
 	 * @langversion 3.0
 	 * @playerversion Flash 10
