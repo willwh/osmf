@@ -151,13 +151,13 @@ package
 					factory.removeItem(item);
 				}
 				
-				var loader:HTTPStreamingNetLoaderWithBufferControl = new HTTPStreamingNetLoaderWithBufferControl();
+				httpStreamingLoader = new HTTPStreamingNetLoaderWithBufferControl();
 				item = new MediaFactoryItem(
-						HTTPSTREAM_ITEM_ID, 
-						loader.canHandleResource, 
+						"com.adobe.osmfplayer.elements.video.httpstreaming", 
+						httpStreamingLoader.canHandleResource, 
 						function():MediaElement
 						{
-							return new VideoElement(null, loader);
+							return new VideoElement(null, httpStreamingLoader);
 						});
 						
 				factory.addItem(item);
@@ -235,5 +235,7 @@ package
 		{
 			private const HTTPSTREAM_ITEM_ID:String = "org.osmf.elements.video.httpstreaming";
 		}
+		
+		private var httpStreamingLoader:HTTPStreamingNetLoaderWithBufferControl;	
 	}
 }            
