@@ -1787,12 +1787,18 @@ package org.osmf.media
 				// reflect reality.
 				if (newState == MediaPlayerState.PLAYBACK_ERROR)
 				{
+					var playing:Boolean = playing;
+					//Stops all media playing (specificaly in parallel cases)					
 					for each (var traitType:String in media.traitTypes)
 					{
 						if (traitType != MediaTraitType.LOAD)
 						{
 							updateTraitListeners(traitType, false, false);
 						}
+					}
+					if (playing)						
+					{
+						(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
 					}
 				}
 			}
