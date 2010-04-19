@@ -251,7 +251,7 @@ package org.osmf.net.httpstreaming.f4f
 			   )
 			{
 				currentFAI = frt.findFragmentIdByTime(
-					(time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale, abst.currentMediaTime, abst.live);
+					(time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
 				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
 					if (abst.contentComplete())
@@ -317,14 +317,14 @@ package org.osmf.net.httpstreaming.f4f
 			if (quality != this.currentQuality)
 			{
 				var curAbst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-				if (currentFAI.fragmentEndTime*abst.timeScale/curAbst.timeScale > abst.totalDuration)
+				if (currentFAI == null || (currentFAI.fragmentEndTime*abst.timeScale/curAbst.timeScale > abst.totalDuration))
 				{
 					adjustDelay();
 					refreshBootstrapInfo(quality);					
 					return new HTTPStreamRequest(null, quality, 0, delay);
 				}
 
-				return this.getFileForTime(currentFAI.fragmentEndTime / curAbst.timeScale, quality); 
+				return getFileForTime(currentFAI.fragmentEndTime / curAbst.timeScale, quality); 
 			}
 			
 			if (!playInProgress && stopPlaying(abst))
@@ -338,7 +338,7 @@ package org.osmf.net.httpstreaming.f4f
 			{
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 				var oldCurrentFAI:FragmentAccessInformation = currentFAI;
-				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime, abst.live);
+				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
 				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
 					if (!abst.live || abst.contentComplete())
