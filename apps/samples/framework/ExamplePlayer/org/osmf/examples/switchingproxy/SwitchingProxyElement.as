@@ -25,8 +25,8 @@ package org.osmf.examples.switchingproxy
 	import flash.utils.Timer;
 	
 	import org.osmf.elements.ProxyElement;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -61,11 +61,13 @@ package org.osmf.examples.switchingproxy
 			var firstLoadTrait:LoadTrait = firstElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			if (firstLoadTrait != null && firstLoadTrait.loadState == LoadState.UNINITIALIZED)
 			{
+				firstLoadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 0, true);
 				firstLoadTrait.load();
 			}
 			var secondLoadTrait:LoadTrait = secondElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			if (secondLoadTrait != null && secondLoadTrait.loadState == LoadState.UNINITIALIZED)
 			{
+				secondLoadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 0, true);
 				secondLoadTrait.load();
 			}			
 		}
@@ -87,6 +89,20 @@ package org.osmf.examples.switchingproxy
 			if (currentPlayTrait != null && currentPlayTrait.playState != PlayState.PLAYING)
 			{
 				currentPlayTrait.play();
+			}
+		}
+		
+		private function onLoadStateChange(event:LoadEvent):void
+		{
+			// If one of the two elements is unloaded, we should force the other
+			// to unload as well.
+			if (	event.loadState == LoadState.UNLOADING
+				&& 	event.target == proxiedElement.getTrait(MediaTraitType.LOAD)
+			   )
+			{
+				var otherElement:MediaElement = (proxiedElement == firstElement ? secondElement : firstElement);
+				var otherLoadTrait:LoadTrait = otherElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				otherLoadTrait.unload();
 			}
 		}
 
