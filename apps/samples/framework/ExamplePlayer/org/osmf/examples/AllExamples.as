@@ -898,7 +898,7 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					( 	"DefaultDuration Serial"
-					, 	"Demonstrates the defaultDuration feature on VideoElement, in a Serial Composition."
+					, 	"Demonstrates the defaultDuration feature on VideoElement, in a Serial Composition.  Note that the SerialElement is wrapped in an unseekable ProxyElement, to prevent seeking into the second child when it's not loaded."
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		var resource:URLResource = new URLResource(REMOTE_PROGRESSIVE);
@@ -914,7 +914,7 @@ package org.osmf.examples
 							serial.addChild(video1);
 							serial.addChild(video2);
 																	
-				  	   		return serial; 
+				  	   		return new UnseekableProxyElement(serial); 
 				  	   	}
 				  	)
 				);
