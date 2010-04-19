@@ -32,12 +32,17 @@ package org.osmf.media
 	
 	import flexunit.framework.TestCase;
 	
+	import mx.effects.Parallel;
+	
+	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.SerialElement;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
@@ -51,11 +56,14 @@ package org.osmf.media
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicBufferTrait;
 	import org.osmf.utils.DynamicDynamicStreamTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicPlayTrait;
+	import org.osmf.utils.DynamicSeekTrait;
+	import org.osmf.utils.DynamicTimeTrait;
 	import org.osmf.utils.NetFactory;
 	
 	public class TestMediaPlayer extends TestCase
@@ -1891,6 +1899,43 @@ package org.osmf.media
 					}
 				}
 			}
+		}
+		
+		// Fixes #FM-612, tests that a composition is stopped when a fatal error
+		// is raised from one element.
+		public function testMediaPlaybackErrorCompositions():void
+		{
+			var parallel:ParallelElement = new ParallelElement();
+			var media1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.PLAY], null, null, true);
+			var media2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.PLAY], null, null, true);
+			
+			var dynamicTime1:DynamicTimeTrait = new DynamicTimeTrait();
+			dynamicTime1.duration = 30;
+			var dynamicTime2:DynamicTimeTrait = new DynamicTimeTrait();
+			dynamicTime2.duration = 30;
+			
+			var seekTrait1:DynamicSeekTrait = new DynamicSeekTrait(dynamicTime1);
+			var seekTrait2:DynamicSeekTrait = new DynamicSeekTrait(dynamicTime2);
+			seekTrait1.autoCompleteSeek = true;
+			seekTrait2.autoCompleteSeek = true;
+			
+			media1.doAddTrait(MediaTraitType.TIME, dynamicTime1);
+			media2.doAddTrait(MediaTraitType.TIME, dynamicTime2);
+			media1.doAddTrait(MediaTraitType.SEEK, seekTrait1);
+			media2.doAddTrait(MediaTraitType.SEEK, seekTrait2);
+					
+			parallel.addChild(media1);
+			parallel.addChild(media2);
+						
+			mediaPlayer.media = parallel;
+			mediaPlayer.play();
+			
+			assertTrue(mediaPlayer.playing);
+			
+			media1.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(2, "sample media error")));
+			
+			assertEquals(PlayState.STOPPED, (media2.getTrait(MediaTraitType.PLAY) as PlayTrait).playState);
+						
 		}
 		
 		public function testCapabilityAddEvents():void
