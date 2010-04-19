@@ -102,9 +102,7 @@ package org.osmf.events
 		 * Null if type is not METADATA_ADD or METADATA_REMOVE.
 		 * @param metadata The Metadata that was added or removed. Null if type is not
 		 * METADATA_ADD or METADATA_REMOVE.
-		 * @param parent The new composite parent of the element. Null if type is not
-		 * PARENT_CHANGE.
- 		 *  
+		 *  
  		 *  @langversion 3.0
  		 *  @playerversion Flash 10
  		 *  @playerversion AIR 1.5
