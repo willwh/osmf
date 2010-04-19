@@ -23,6 +23,7 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
+	import org.osmf.elements.CompositeElement;
 	import org.osmf.metadata.Metadata;
 	
 	/**
@@ -86,6 +87,19 @@ package org.osmf.events
 		 *  @productversion OSMF 1.0
 		 */
 		public static const METADATA_REMOVE:String = "metadataRemove";
+		
+		/**
+		 * The MediaElementEvent.PARENT_CHANGE constant defines the value of the
+		 * type property of the event object for a parentChange event.
+		 * 
+		 * @eventType metadataRemove
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const PARENT_CHANGE:String = "parentChange";
 
 		/**
 		 * Constructor.
@@ -99,21 +113,24 @@ package org.osmf.events
 		 * if type is not TRAIT_ADD or TRAIT_REMOVE.
 		 * @param namespaceURL The namespace URL of the Metadata that was added or removed.
 		 * Null if type is not METADATA_ADD or METADATA_REMOVE.
-		 * @param metadata The Metadata that was added or removed.  Null if type is not
+		 * @param metadata The Metadata that was added or removed. Null if type is not
 		 * METADATA_ADD or METADATA_REMOVE.
+		 * @param parent The new composite parent of the element. Null if type is not
+		 * PARENT_CHANGE.
  		 *  
  		 *  @langversion 3.0
  		 *  @playerversion Flash 10
  		 *  @playerversion AIR 1.5
  		 *  @productversion OSMF 1.0
  		 */
-		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null, namespaceURL:String=null, metadata:Metadata=null)
+		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null, namespaceURL:String=null, metadata:Metadata=null, parent:CompositeElement=null)
 		{
 			super(type, bubbles, cancelable);
 
 			_traitType = traitType;
 			_namespaceURL = namespaceURL;
 			_metadata = metadata;
+			_parent = parent;
 		}
 		
 		/**
@@ -156,11 +173,17 @@ package org.osmf.events
 			return _metadata;
 		}
 		
+		public function get parent():CompositeElement
+		{
+			return _parent;
+		}
+		
 		// Internals
 		//
 		
 		private var _traitType:String;
 		private var _namespaceURL:String;
 		private var _metadata:Metadata;
+		private var _parent:CompositeElement;
 	}
 }

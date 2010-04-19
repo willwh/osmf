@@ -23,16 +23,17 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.containers.IMediaContainer;
+	import org.osmf.elements.CompositeElement;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
 
@@ -163,6 +164,11 @@ package org.osmf.media
 				, onContainerChange
 				, false
 				, Number.MAX_VALUE
+				);
+				
+			addEventListener
+				( MediaElementEvent.PARENT_CHANGE
+				, onParentChange
 				);
 		}
 	
@@ -670,6 +676,15 @@ package org.osmf.media
 			}
 		}
 		
+		private function onParentChange(event:MediaElementEvent):void
+		{
+			if (_parent != null && event.parent != null)
+			{
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_A_CHILD));
+			}
+			_parent = event.parent;
+		}
+		
 		private var traits:Dictionary = new Dictionary();
 		private var traitResolvers:Dictionary = new Dictionary();
 		private var unresolvedTraits:Dictionary = new Dictionary();
@@ -679,5 +694,6 @@ package org.osmf.media
 		private var _metadata:Metadata;
 		
 		private var _container:IMediaContainer;
+		private var _parent:CompositeElement;
 	}
 }

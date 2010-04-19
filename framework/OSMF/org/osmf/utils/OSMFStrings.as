@@ -103,6 +103,11 @@ package org.osmf.utils
 		 * @private
 		 **/
 		public static const ALREADY_ADDED:String						= "alreadyAdded";
+		
+		/**
+		 * @private
+		 **/
+		public static const ALREADY_A_CHILD:String						= "alreadyAChild";
 
 		/**
 		 * @private
@@ -369,6 +374,7 @@ package org.osmf.utils
 			resourceDict[NULL_PARAM]								= "Unexpected null parameter passed to method";
 			resourceDict[FUNCTION_MUST_BE_OVERRIDDEN]				= "Function must be overridden";
 			resourceDict[ALREADY_ADDED]								= "Child has already been added";
+			resourceDict[ALREADY_A_CHILD]							= "Element is already a child of another composite element";
 			resourceDict[UNSUPPORTED_MEDIA_ELEMENT_TYPE]			= "The specified media element type is not supported";
 			
 			resourceDict[TRAIT_INSTANCE_ALREADY_ADDED]				= "An instance of this trait class has already been added to this MediaElement";
