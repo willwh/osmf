@@ -22,7 +22,9 @@
 package org.osmf.elements
 {
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.media.Video;
+	import flash.utils.Timer;
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.LoadEvent;
@@ -105,7 +107,7 @@ package org.osmf.elements
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
-			var loadTrait:LoadTrait= videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			assertTrue(loadTrait != null);
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			loadTrait.load();
@@ -161,7 +163,7 @@ package org.osmf.elements
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 			
-			var loadTrait:LoadTrait= videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			assertTrue(loadTrait != null);
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			loadTrait.load();
@@ -196,7 +198,7 @@ package org.osmf.elements
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 			
-			var loadTrait:LoadTrait= videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			assertTrue(loadTrait != null);
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			loadTrait.load();
@@ -221,6 +223,15 @@ package org.osmf.elements
 			}
 		}
 
+		public function testCurrentFPS():void
+		{
+			var videoElement:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
+			videoElement.resource = resourceForMediaElement;
+			assertTrue(videoElement.currentFPS == 0);
+			
+			assertTrue(new VideoElement().currentFPS == 0);
+		}
+		
 		/**
 		 * This test is for the in-stream onCuePoint callback
 		 * in LightweightVideoElement.

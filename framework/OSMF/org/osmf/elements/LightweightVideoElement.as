@@ -278,6 +278,15 @@ package org.osmf.elements
 				video.deblocking = value;
 			}
 		}
+		
+		/**
+		 * The number of frames per second being displayed.  Will be zero until
+		 * the video is loaded and playing.
+		 **/
+		public function get currentFPS():Number
+		{
+			return stream != null ? stream.currentFPS : 0;
+		}
 
        	// Overrides
        	//
