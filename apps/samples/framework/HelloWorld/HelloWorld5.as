@@ -29,7 +29,7 @@ package
 
 	/**
 	 * Variation on HelloWorld, using MediaPlayer + DisplayObjectTrait
-	 * rather than MediaContainer.
+	 * rather than MediaPlayerSprite.
 	 **/
 	[SWF(width="640", height="352")]
 	public class HelloWorld5 extends Sprite

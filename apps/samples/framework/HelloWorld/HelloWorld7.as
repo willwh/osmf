@@ -24,30 +24,34 @@ package
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.Event;
 	
 	import org.osmf.containers.MediaContainer;
+	import org.osmf.elements.DurationElement;
+	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.ScaleMode;
 	import org.osmf.layout.VerticalAlign;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 
 	/**
-	 * A simple OSMF application, building on HelloWorld2.as.
+	 * Another simple OSMF application, building on HelloWorld2.as.
 	 * 
-	 * Rather than specify explicit dimensions for the SWF, we now
-	 * maximize the SWF and center the content.
+	 * Plays a video, then shows a SWF, then plays another video.
 	 **/
 	[SWF(backgroundColor="0x333333")]
-	public class HelloWorld3 extends Sprite
+	public class HelloWorld7 extends Sprite
 	{
-		public function HelloWorld3()
+		public function HelloWorld7()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
-			
+ 
  			// Create the container class that displays the media.
  			var container:MediaContainer = new MediaContainer();
 			addChild(container);
@@ -56,13 +60,17 @@ package
 			// prevent the content from being scaled.
 			container.width = stage.stageWidth;
 			container.height = stage.stageHeight;
-			container.layoutMetadata.scaleMode = ScaleMode.NONE;
-			
+
+			// Make sure we resize the container when the stage dimensions
+			// change.
+			container.addEventListener(Event.RESIZE, onStageResize);
+
 			// Create the resource to play.
 			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
-			// Create the MediaElement.
-			var videoElement:VideoElement =  new VideoElement(resource);
+			// Create a composite MediaElement, consisting of a video
+			// followed by a SWF, followed by another video.
+			var mediaElement:MediaElement = createMediaElement();
 			
 			// Assign some layout metadata to the MediaElement.  This will cause
 			// it to be centered in the container, with no scaling of content.
@@ -70,16 +78,64 @@ package
 			layoutMetadata.scaleMode = ScaleMode.NONE;
 			layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 			layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
-			videoElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
+			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
 			
 			// Add the MediaElement to our container class, so that it gets
 			// displayed.
-			container.addMediaElement(videoElement);
+			container.addMediaElement(mediaElement);
 			
 			// Set the MediaElement on a MediaPlayer.  Because autoPlay
 			// defaults to true, playback begins immediately.
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
-			mediaPlayer.media = videoElement;
+			mediaPlayer.media = mediaElement;
 		}
+		
+		private function createMediaElement():MediaElement
+		{
+			var serialElement:SerialElement = new SerialElement();
+			
+			// First child is a progressive video.
+			serialElement.addChild
+				( new VideoElement
+					( new URLResource(REMOTE_PROGRESSIVE)
+					)
+				);
+
+			// Second child is a SWF that shows for three seconds.
+			serialElement.addChild
+				( new DurationElement
+					( 3
+					, new SWFElement
+						( new URLResource(REMOTE_SWF)
+						)
+					)
+				);
+
+			// Third child is a progressive video.
+			serialElement.addChild
+				( new VideoElement
+					( new URLResource(REMOTE_STREAM)
+					)
+				);
+				
+			return serialElement;
+		}
+		
+		private function onStageResize(event:Event):void
+		{
+			container.width = stage.stageWidth;
+			container.height = stage.stageHeight;
+		}
+		
+		private var container:MediaContainer;
+		
+		private static const REMOTE_PROGRESSIVE:String
+			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
+			
+		private static const REMOTE_SWF:String
+			= "http://mediapm.edgesuite.net/osmf/swf/ReferenceSampleSWF.swf";
+			
+		private static const REMOTE_STREAM:String
+			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 	}
 }

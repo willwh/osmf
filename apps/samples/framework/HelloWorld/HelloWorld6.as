@@ -23,7 +23,7 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.elements.VideoElement;
+	import org.osmf.elements.LightweightVideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -34,15 +34,17 @@ package
 
 	/**
 	 * Variation on HelloWorld, using MediaElement + DisplayObjectTrait
-	 * rather than MediaPlayerSprite.
+	 * rather than MediaPlayerSprite.  This example uses LightweightVideoElement
+	 * instead of VideoElement.  LightweightVideoElement has a smaller footprint,
+	 * but only supports progressive and simple streaming.
 	 **/
 	[SWF(width="640", height="352")]
-	public class HelloWorld4 extends Sprite
+	public class HelloWorld6 extends Sprite
 	{
-		public function HelloWorld4()
+		public function HelloWorld6()
 		{
 			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
-			videoElement = new VideoElement(resource);
+			videoElement = new LightweightVideoElement(resource);
 			
 			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
@@ -64,6 +66,6 @@ package
 			}
 		}
 		
-		private var videoElement:VideoElement;
+		private var videoElement:LightweightVideoElement;
 	}
 }

@@ -22,58 +22,30 @@
 package
 {
 	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.elements.VideoElement;
-	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutMetadata;
-	import org.osmf.layout.ScaleMode;
-	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 
 	/**
-	 * A simple OSMF application, building on HelloWorld.as.
-	 * 
-	 * Rather than specify explicit dimensions for the SWF, we now
-	 * maximize the SWF and center the content.
+	 * Variation on HelloWorld, using MediaPlayer + MediaContainer
+	 * rather than MediaPlayerSprite.
 	 **/
-	[SWF(backgroundColor="0x333333")]
+	[SWF(width="640", height="352")]
 	public class HelloWorld2 extends Sprite
 	{
 		public function HelloWorld2()
 		{
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP_LEFT;
-			
- 			// Create the container class that displays the media.
+			// Create the container class that displays the media.
  			var container:MediaContainer = new MediaContainer();
 			addChild(container);
 
-			// Set the container's size to match that of the stage, and
-			// prevent the content from being scaled.
-			container.width = stage.stageWidth;
-			container.height = stage.stageHeight;
-			container.layoutMetadata.scaleMode = ScaleMode.NONE;
-			
 			// Create the resource to play.
 			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
-			// Create the MediaElement.
+			// Create the MediaElement and add it to our container class.
 			var videoElement:VideoElement =  new VideoElement(resource);
-			
-			// Assign some layout metadata to the MediaElement.  This will cause
-			// it to be centered in the container, with no scaling of content.
-			var layoutMetadata:LayoutMetadata = new LayoutMetadata();
-			layoutMetadata.scaleMode = ScaleMode.NONE;
-			layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
-			layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
-			videoElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
-			
-			// Add the MediaElement to our container class, so that it gets
-			// displayed.
 			container.addMediaElement(videoElement);
 			
 			// Set the MediaElement on a MediaPlayer.  Because autoPlay

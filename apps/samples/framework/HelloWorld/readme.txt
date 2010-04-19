@@ -2,14 +2,17 @@ Sample Application: Hello World
 
 A. Overview
 
-This sample application demonstrates the simplest possible application that can be build with
+This sample application demonstrates the simplest possible application that can be built with
 the OSMF (see HelloWorld.as). The sample is gradually extended, to demonstrate additional framework
 features:
 
-HelloWorld2.as: Centers the content.
-HelloWorld3.as: Plays a video, then shows a SWF, then plays another video.
-HelloWorld4.as: Uses MediaElement and DisplayObjectTrait, rather than MediaContainer.
+HelloWorld.as: Uses MediaPlayerSprite to play a video.
+HelloWorld2.as: Uses MediaPlayer and MediaContainer instead of MediaPlayerSprite.
+HelloWorld3.as: Same as HelloWorld2, but centers the content.
+HelloWorld4.as: Uses MediaElement and DisplayObjectTrait, rather than MediaPlayerSprite.
 HelloWorld5.as: Uses MediaPlayer and DisplayObjectTrait, rather than MediaContainer.
+HelloWorld6.as: Uses LightweightVideoElement instead of VideoElement to minimize player size.
+HelloWorld7.as: Plays a video, then shows a SWF, then plays another video.
 
 For more detail on this sample, please refer to:
 http://blogs.adobe.com/osmf/2009/09/building_a_helloworld_app_with_osmf.html
