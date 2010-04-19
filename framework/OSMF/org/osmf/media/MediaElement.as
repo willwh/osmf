@@ -165,11 +165,6 @@ package org.osmf.media
 				, false
 				, Number.MAX_VALUE
 				);
-				
-			addEventListener
-				( MediaElementEvent.PARENT_CHANGE
-				, onParentChange
-				);
 		}
 	
 		/**
@@ -676,15 +671,6 @@ package org.osmf.media
 			}
 		}
 		
-		private function onParentChange(event:MediaElementEvent):void
-		{
-			if (_parent != null && event.parent != null)
-			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_A_CHILD));
-			}
-			_parent = event.parent;
-		}
-		
 		private var traits:Dictionary = new Dictionary();
 		private var traitResolvers:Dictionary = new Dictionary();
 		private var unresolvedTraits:Dictionary = new Dictionary();
@@ -694,6 +680,5 @@ package org.osmf.media
 		private var _metadata:Metadata;
 		
 		private var _container:IMediaContainer;
-		private var _parent:CompositeElement;
 	}
 }

@@ -202,14 +202,6 @@ package org.osmf.elements
 			
 			processAddedChild(child, index);
 			
-			child.dispatchEvent
-				( new MediaElementEvent
-					( MediaElementEvent.PARENT_CHANGE
-					, false, false, null, null, null
-					, this
-					)
-				);
-			
 			return child;
 		}
 
@@ -269,14 +261,6 @@ package org.osmf.elements
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
-			
-			child.dispatchEvent
-				( new MediaElementEvent
-					( MediaElementEvent.PARENT_CHANGE
-					, false, false, null, null, null
-					, null
-					)
-				);
 			
 			return child;
 		}

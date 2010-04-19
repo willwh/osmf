@@ -89,19 +89,6 @@ package org.osmf.events
 		public static const METADATA_REMOVE:String = "metadataRemove";
 		
 		/**
-		 * The MediaElementEvent.PARENT_CHANGE constant defines the value of the
-		 * type property of the event object for a parentChange event.
-		 * 
-		 * @eventType metadataRemove
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const PARENT_CHANGE:String = "parentChange";
-
-		/**
 		 * Constructor.
 		 * 
 		 * @param type Event type
@@ -123,14 +110,13 @@ package org.osmf.events
  		 *  @playerversion AIR 1.5
  		 *  @productversion OSMF 1.0
  		 */
-		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null, namespaceURL:String=null, metadata:Metadata=null, parent:CompositeElement=null)
+		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null, namespaceURL:String=null, metadata:Metadata=null)
 		{
 			super(type, bubbles, cancelable);
 
 			_traitType = traitType;
 			_namespaceURL = namespaceURL;
 			_metadata = metadata;
-			_parent = parent;
 		}
 		
 		/**
@@ -173,17 +159,11 @@ package org.osmf.events
 			return _metadata;
 		}
 		
-		public function get parent():CompositeElement
-		{
-			return _parent;
-		}
-		
 		// Internals
 		//
 		
 		private var _traitType:String;
 		private var _namespaceURL:String;
 		private var _metadata:Metadata;
-		private var _parent:CompositeElement;
 	}
 }
