@@ -38,12 +38,22 @@ package org.osmf.net
 	 * 
 	 * This is an abstract base class, clients must subclass it to implement
 	 * their own switching logic.
-	 **/
+	 * 
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */				
 	public class NetStreamSwitchManagerBase extends EventDispatcher
 	{
 		/**
 		 * Constructor.
-		 **/
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
 		public function NetStreamSwitchManagerBase()
 		{
 			super();
@@ -55,7 +65,12 @@ package org.osmf.net
 		/**
 		 * Indicates whether the switching manager should automatically
 		 * switch between streams.  The default is true.
-		 */
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
 		public function get autoSwitch():Boolean
 		{
 			return _autoSwitch;
@@ -70,7 +85,13 @@ package org.osmf.net
 		 * Returns the current stream index that is rendering on the client.
 		 * Note this may differ from the last index requested if this property
 		 * is queried after a switch has begun but before it has completed.
-		 */
+		 *
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
 		public function get currentIndex():uint
 		{
 			// Subclasses must override.
@@ -80,12 +101,26 @@ package org.osmf.net
 		/**
 		 * The highest stream index that the switching manager is
 		 * allowed to switch to.
-		 */
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
 		public function get maxAllowedIndex():int 
 		{
 			return _maxAllowedIndex;
 		}
 		
+		/**
+		 * The highest stream index that the switching manager is
+		 * allowed to switch to.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
 		public function set maxAllowedIndex(value:int):void
 		{
 			_maxAllowedIndex = value;
@@ -93,8 +128,13 @@ package org.osmf.net
 
 		/**
 		 * Initiate a switch to the stream with the given index.
-    	 * Note:  If the media is paused, switching will not take place until after play resumes.		 
-		 **/
+    	 * Note:  If the media is paused, switching will not take place until after play resumes.	
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
 		public function switchTo(index:int):void
 		{
 			// Subclasses must override.

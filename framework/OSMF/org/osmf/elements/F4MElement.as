@@ -28,6 +28,12 @@ package org.osmf.elements
 	 * The F4MElement is the MediaElement used to load media from F4M files.  F4M files are
 	 * XML documents that adhere to the Flash Media Manifest format, which is documented
 	 * at http://opensource.adobe.com/wiki/display/osmf/Flash+Media+Manifest+File+Format+Specification.  
+ 	 *
+ 	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0	 	 	
+	 *	 
 	 */
   	public class F4MElement extends LoadFromDocumentElement
 	{

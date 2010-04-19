@@ -48,11 +48,6 @@ package org.osmf.traits
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	 
@@ -280,12 +275,21 @@ package org.osmf.traits
 	 * all trait events on a media element.  The trait events redispatched are 
 	 * an amalgamation of all trait events.  
 	 * 
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0	 
 	 */ 
 	public class TraitEventDispatcher extends EventDispatcher
 	{
 		/**
 		 * Constructs a new TraitEventDispatcher.  Set a mediaElement
 		 * in order to allow event redispatching.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0		 
 		 */ 
 		public function TraitEventDispatcher()
 		{
@@ -322,6 +326,11 @@ package org.osmf.traits
 		 * events with.  All of the mediaElement's trait events
 		 * such as SeekEvent.SEEKING_CHANGE or PlayEvent.PLAY_STATE_CHANGE
 		 * are redispatched from this class.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0				 
 		 */ 
 		public function get media():MediaElement
 		{

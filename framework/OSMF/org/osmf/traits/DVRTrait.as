@@ -34,7 +34,12 @@ package org.osmf.traits
 	/**
 	 * The DVRTrait object defines a set of methods and properties to operate
 	 * on media that might be in the process of being recorded.
-	 */	
+	 * 
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */				
 	public class DVRTrait extends MediaTraitBase
 	{
 		/**

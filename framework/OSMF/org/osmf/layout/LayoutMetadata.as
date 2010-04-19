@@ -29,16 +29,29 @@ package org.osmf.layout
 	/**
 	 * Defines a metadata object that contains the properties that a layout
 	 * renderer will base its layout on.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0	 
 	 */	
 	public class LayoutMetadata extends Metadata
 	{
 		/**
 		 * Namespace URL for LayoutMetadata objects when added to a MediaElement.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0	 
 		 **/
 		public static const LAYOUT_NAMESPACE:String	= "http://www.osmf.org/layout/1.0";
 
 		/**
 		 * Constructor.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0	 
 		 **/
 		public function LayoutMetadata()
 		{

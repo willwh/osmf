@@ -45,6 +45,11 @@ package org.osmf.net
 	/**
 	 * Class which manages transitions between multi-bitrate (MBR) streams
 	 * using configurable switching rules.
+	 *
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0	 	 	 
 	 **/
 	public class NetStreamSwitchManager extends NetStreamSwitchManagerBase
 	{
@@ -56,6 +61,11 @@ package org.osmf.net
 		 * @param resource The DynamicStreamingResource that is playing in the NetStream.
 		 * @param metrics The provider of runtime metrics.
 		 * @param switchingRules The switching rules that this manager will use.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0	 	 	 
 		 **/
 		public function NetStreamSwitchManager
 			( connection:NetConnection

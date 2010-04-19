@@ -123,6 +123,11 @@ package org.osmf.elements
 	* @see org.osmf.media.URLResource
 	* @see org.osmf.media.MediaElement
 	* @see org.osmf.traits
+	*
+	*  @langversion 3.0
+	*  @playerversion Flash 10
+	*  @playerversion AIR 1.5
+	*  @productversion OSMF 1.0	 	 	
 	**/
 	public class LightweightVideoElement extends LoadableElementBase
 	{
