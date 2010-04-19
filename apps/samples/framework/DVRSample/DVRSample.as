@@ -26,19 +26,15 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	
-	import org.osmf.chrome.controlbar.ControlBar;
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.net.StreamType;
 
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="360")]
 	public class DVRSample extends Sprite
@@ -48,9 +44,7 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			
-			layoutRenderer = new LayoutRenderer();
-			
-			mediaContainer = new MediaContainer(layoutRenderer);
+			mediaContainer = new MediaContainer();
 			mediaContainer.width = stage.stageWidth;
 			mediaContainer.height = stage.stageHeight;
 			addChild(mediaContainer);
@@ -61,7 +55,7 @@ package
 			mediaFactory = new DefaultMediaFactory();
 			
 			// Below is a place holder media element: in order to see the DVR
-			// feature at work, one will have to connect to a DVRCast equiped
+			// feature at work, one will have to connect to a DVRCast-equipped
 			// server that is progress of recording a live stream, and comment
 			// the statement below:
 			mediaElement
@@ -72,8 +66,8 @@ package
 					);
 					
 			/*
-			This clause illustrates how to connect to a DVRCast equiped server. The
-			URL is not a publically accessible server: it has to be replaced by a
+			This clause illustrates how to connect to a DVRCast-equipped server. The
+			URL is not a publicly accessible server: it has to be replaced by a
 			custom address.
 			mediaElement
 				= mediaFactory.createMediaElement
@@ -86,15 +80,6 @@ package
 					
 			mediaContainer.addMediaElement(mediaElement);
 			mediaPlayer.media = mediaElement;
-			
-			controlBar = new ControlBar();
-			controlBar.element = mediaElement;
-			controlBar.layoutMetadata.index = 2;
-			controlBar.layoutMetadata.bottom = 25;
-			controlBar.layoutMetadata.verticalAlign = VerticalAlign.TOP;
-			controlBar.layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
-			
-			layoutRenderer.addTarget(controlBar);
 		}
 		
 		private function onMediaError(event:MediaErrorEvent):void
@@ -102,9 +87,7 @@ package
 			trace(event.error.message, "\n", event.error.detail);
 		}
 		
-		private var layoutRenderer:LayoutRenderer;
 		private var mediaContainer:MediaContainer;
-		private var controlBar:ControlBar;
 		private var mediaPlayer:MediaPlayer;
 		private var mediaFactory:MediaFactory;
 		private var mediaElement:MediaElement;
