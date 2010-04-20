@@ -35,6 +35,8 @@ package org.osmf.elements
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
+	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicSeekTrait;
 
 	public class TestDurationElement extends TestMediaElement
 	{
@@ -74,6 +76,80 @@ package org.osmf.elements
 			assertTrue(proxy.getTrait(MediaTraitType.BUFFER) == null);
 			assertTrue(proxy.getTrait(MediaTraitType.LOAD) == null);
 			assertTrue(proxy.getTrait(MediaTraitType.DISPLAY_OBJECT) == null);
+		}
+		
+		public function testBlockedTraits():void
+		{
+			var mediaElement:DynamicMediaElement = new DynamicMediaElement
+				(
+				[ MediaTraitType.AUDIO
+				, MediaTraitType.BUFFER
+				, MediaTraitType.DISPLAY_OBJECT
+				, MediaTraitType.DRM
+				, MediaTraitType.DVR
+				, MediaTraitType.DYNAMIC_STREAM
+				, MediaTraitType.LOAD
+				, MediaTraitType.PLAY
+				, MediaTraitType.SEEK
+				, MediaTraitType.TIME
+				]
+				, null, null, true
+				); 
+			var proxy:DurationElement = new DurationElement(10, mediaElement);
+			
+			// All the base traits should be blocked initially.
+			assertHasTraits(proxy, [MediaTraitType.LOAD, MediaTraitType.PLAY, MediaTraitType.SEEK, MediaTraitType.TIME]);
+			
+			// As soon as we begin playback, the traits should be unblocked.
+			var playTrait:PlayTrait = proxy.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			playTrait.play();
+
+			assertHasTraits(proxy, [], false);
+			
+			// Pausing should have no effect.
+			playTrait.pause();
+			assertHasTraits(proxy, [], false);
+			
+			// Ditto for seeking.
+			var seekTrait:SeekTrait = proxy.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			seekTrait.seek(5);
+			assertHasTraits(proxy, [], false);
+			
+			// Unless we seek(0), which should block the traits.
+			seekTrait.seek(0);
+			assertHasTraits(proxy, [MediaTraitType.LOAD, MediaTraitType.PLAY, MediaTraitType.SEEK, MediaTraitType.TIME]);
+			
+			// Or if we seek(duration), which is equivalent to completing playback.
+			seekTrait.seek(10);
+			assertHasTraits(proxy, [MediaTraitType.LOAD, MediaTraitType.PLAY, MediaTraitType.SEEK, MediaTraitType.TIME]);
+			
+			// But seeking back in should expose the traits.
+			seekTrait.seek(5);
+			assertHasTraits(proxy, [], false);
+		}
+		
+		private function assertHasTraits(mediaElement:MediaElement, traitTypes:Array, mustHave:Boolean=true):void
+		{
+			// Create a separate list with the traits that should *not* exist
+			// on the media element.
+			var missingTraitTypes:Vector.<String> = MediaTraitType.ALL_TYPES.concat();
+			for each (var traitType:String in traitTypes)
+			{
+				missingTraitTypes.splice(missingTraitTypes.indexOf(traitType), 1);
+			}
+			assertTrue(traitTypes.length + missingTraitTypes.length == MediaTraitType.ALL_TYPES.length);
+			
+			// Verify the ones that should exist do exist.
+			for (var i:int = 0; i < traitTypes.length; i++)
+			{
+				assertTrue(mediaElement.hasTrait(traitTypes[i]) == mustHave);
+			}
+			
+			// Verify the ones that shouldn't exist don't exist.
+			for (i = 0; i < missingTraitTypes.length; i++)
+			{
+				assertTrue(mediaElement.hasTrait(missingTraitTypes[i]) == !mustHave);
+			}
 		}
 		
 		public function testEvents():void

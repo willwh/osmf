@@ -410,7 +410,58 @@ package org.osmf.examples
 				  	   	} 
 				  	)
 				);
-				
+
+			examples.push
+				( new Example
+					( 	"Parallel Composition (Timed Banner)"
+					, 	"Demonstrates playback of a ParallelElement that contains a video and a banner.  The banner only shows during seconds 10 to 20 of the video."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		// The display area for all media is 640x700.
+							var parallelElement:ParallelElement = new ParallelElement();
+							var layout:LayoutMetadata = new LayoutMetadata();
+							layout.horizontalAlign = HorizontalAlign.CENTER;
+							layout.verticalAlign = VerticalAlign.MIDDLE;
+							layout.width = 640
+							layout.height = 700;
+							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							
+							// Create a SerialElement with two DurationElements.  The first
+							// is a placeholder to delay the display of the second.  The
+							// second represents the banner.  Size the banner to 80% width,
+							// align to the center, and stretch.
+							var serial:SerialElement = new SerialElement();
+							serial.addChild(new DurationElement(10));
+							var banner:MediaElement = new DurationElement(10, new ImageElement(new URLResource(REMOTE_IMAGE)));
+							layout = new LayoutMetadata();
+							layout.percentWidth = 80;
+							layout.percentHeight = 100;
+							layout.horizontalAlign = HorizontalAlign.CENTER;
+							layout.scaleMode = ScaleMode.STRETCH;
+							banner.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							serial.addChild(banner);
+							
+							// Place the banner at the top with a fixed height.
+							layout = new LayoutMetadata();
+							layout.top = 0;
+							layout.height = 100;
+							serial.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(serial);
+							
+							// Place the video beneath.
+							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
+							layout = new LayoutMetadata();
+							layout.percentWidth = 100;
+							layout.top = 150;
+							layout.scaleMode = ScaleMode.LETTERBOX;
+							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement2);
+							
+							return parallelElement;
+				  	   	} 
+				  	)
+				);
+
 			examples.push
 				( new Example
 					( 	"Synchronized Parallel Composition"
@@ -463,7 +514,7 @@ package org.osmf.examples
 				  	   	} 
 				  	)
 				);
-
+				
 			examples.push
 				( new Example
 					( 	"Invalid Serial Composition"

@@ -150,6 +150,9 @@ package org.osmf.elements
 			playTrait = new PlayTrait();
 			playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 			addTrait(MediaTraitType.PLAY, playTrait);
+			
+			// Block all other traits, we'll unblock them once we're playing.
+			blockedTraits = ALL_OTHER_TRAITS;
 		}
 		
 		// Internals
@@ -183,7 +186,20 @@ package org.osmf.elements
 			else
 			{
 				playheadTimer.stop();
-			}			
+				
+			}
+			
+			// When the element is neither playing nor paused, block exposure
+			// of all non-overridden traits.
+			if (event.playState != PlayState.STOPPED && currentTime < _duration)
+			{
+				blockedTraits = NO_TRAITS;
+			}
+			else
+			{
+				blockedTraits = ALL_OTHER_TRAITS;
+			}
+
 		}
 		
 		private function onSeekingChange(event:SeekEvent):void
@@ -195,12 +211,29 @@ package org.osmf.elements
 				currentTime = event.time;
 				absoluteStartTime -= diff*1000;
 			}
+			else
+			{
+				// When the the user seeks outside the range of this element, block
+				// exposure of all non-overridden traits.  When they seek into this
+				// element, expose them again.
+				if (currentTime > 0 && currentTime < _duration)
+				{
+					blockedTraits = NO_TRAITS;
+				}
+				else
+				{
+					blockedTraits = ALL_OTHER_TRAITS;
+				}
+			}
 		}
-		
+
 		private function onComplete(event:TimeEvent):void
 		{
 			playheadTimer.stop();
 			playTrait.stop();
+			
+			// When playback completes, block exposure of all non-overridden traits.
+			blockedTraits = ALL_OTHER_TRAITS;
 		}
 				
 		private function get currentTime():Number
@@ -215,6 +248,17 @@ package org.osmf.elements
 		}
 		
 		private static const DEFAULT_PLAYHEAD_UPDATE_INTERVAL:Number = 250;
+		private static const NO_TRAITS:Vector.<String> = new Vector.<String>();
+		private static const ALL_OTHER_TRAITS:Vector.<String> = new Vector.<String>();
+		{
+			// Everything but LOAD, SEEK, PLAY, and TIME.
+			ALL_OTHER_TRAITS.push(MediaTraitType.AUDIO);
+			ALL_OTHER_TRAITS.push(MediaTraitType.BUFFER);
+			ALL_OTHER_TRAITS.push(MediaTraitType.DISPLAY_OBJECT);
+			ALL_OTHER_TRAITS.push(MediaTraitType.DRM);
+			ALL_OTHER_TRAITS.push(MediaTraitType.DVR);
+			ALL_OTHER_TRAITS.push(MediaTraitType.DYNAMIC_STREAM);
+		}
 		
 		private var _currentTime:Number = 0; // seconds
 		private var _duration:Number = 0;	// seconds
