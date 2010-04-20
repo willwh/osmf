@@ -26,6 +26,8 @@ package org.osmf.events
 	/**
 	 * A MediaPlayer dispatches this event when its state  
 	 * has changed.
+	 *
+	 * @see org.osmf.media.MediaPlayerState
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
