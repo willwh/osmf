@@ -195,7 +195,7 @@ package org.osmf.elements.compositeClasses
 				var curChildSeekOperation:SerialElementSegment = serialSegments[curChildIndex];
 				
 				// Check whether this is a seek within the current child
-				if (curChildSeekOperation.relativeStart <= time && time < curChildSeekOperation.relativeEnd)
+				if (curChildSeekOperation.relativeStart <= time && time <= curChildSeekOperation.relativeEnd)
 				{
 					seekToOp = new SerialSeekOperationInfo();
 					seekToOp.canSeekTo = true;
@@ -257,7 +257,7 @@ package org.osmf.elements.compositeClasses
 							( mediaElement
 							, currentTime
 							, currentTime + timeTrait.duration
-							, mediaElement.hasTrait(MediaTraitType.SEEK)
+							, mediaElement.hasTrait(MediaTraitType.SEEK) == false
 							)
 						);
 	
@@ -272,7 +272,7 @@ package org.osmf.elements.compositeClasses
 							( mediaElement
 							, currentTime
 							, currentTime
-							, mediaElement.hasTrait(MediaTraitType.SEEK)
+							, mediaElement.hasTrait(MediaTraitType.SEEK) == false
 							)
 						);
 				}
@@ -419,15 +419,13 @@ package org.osmf.elements.compositeClasses
 			var curSegment:SerialElementSegment = serialSegments[index];
 			while (curSegment != null)
 			{
-				if (time < curSegment.relativeEnd)
+				if (time <= curSegment.relativeEnd)
 				{
 					var childSeekTrait:SeekTrait = curSegment.mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
 					if (childSeekTrait == null)
 					{
-						curSegment = serialSegments[index-1];
-						seekToOp.toChild = curSegment.mediaElement;
-						var childTimeTrait:TimeTrait = curSegment.mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
-						seekToOp.toChildTime = childTimeTrait.duration;
+						// Not seekable.
+						break;
 					}
 					else
 					{
@@ -440,8 +438,9 @@ package org.osmf.elements.compositeClasses
 				}
 				
 				index++;
-				if (index >= serialSegments.length)
+				if (index >= serialSegments.length || curSegment.unseekable)
 				{
+					// Not seekable.
 					break;
 				}	
 				else

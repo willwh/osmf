@@ -261,6 +261,7 @@ package org.osmf.elements.compositeClasses
 		private function updateDuration():void
 		{
 			var newDuration:Number = 0;
+			var hasChildWithDuration:Boolean = false;
 			
 			traitAggregator.forEachChildTrait
 				(
@@ -269,6 +270,8 @@ package org.osmf.elements.compositeClasses
 				  		var childDuration:Number = TimeTrait(mediaTrait).duration;
 				  		if (!isNaN(childDuration))
 				  		{
+				  			hasChildWithDuration = true;
+				  			
 					  		if (mode == CompositionMode.PARALLEL)
 					  	 	{ 
 					  	 		// The duration is the max of all child durations.
@@ -284,20 +287,28 @@ package org.osmf.elements.compositeClasses
 					, MediaTraitType.TIME
 				);
 
-			setDuration(newDuration);
+			setDuration(hasChildWithDuration ? newDuration : NaN);
 		}
 		
 		private function updateCurrentTime():void
 		{
 			var newCurrentTime:Number = 0;
-			var currentTimeCalculated:Boolean = false;
+			var hasChildWithCurrentTime:Boolean = false;
+			var serialCurrentTimeCalculated:Boolean = false;
 			
 			traitAggregator.forEachChildTrait
 				(
 					function(mediaTrait:MediaTraitBase):void
 				  	{
 				  		var childCurrentTime:Number = TimeTrait(mediaTrait).currentTime;
-				  		childCurrentTime = isNaN(childCurrentTime) ? 0 : childCurrentTime;
+				  		if (isNaN(childCurrentTime))
+				  		{
+				  			childCurrentTime = 0;
+				  		}
+				  		else
+				  		{
+				  			hasChildWithCurrentTime = true;
+				  		}
 				  		
 				  		if (mode == CompositionMode.PARALLEL)
 				  	 	{
@@ -309,13 +320,13 @@ package org.osmf.elements.compositeClasses
 							// The currentTime is the sum of all durations up to the
 							// current child, plus the currentTime of the current
 							// child.
-					  	 	if (!currentTimeCalculated)
+					  	 	if (!serialCurrentTimeCalculated)
 					  	 	{
 						  	 	if (mediaTrait == traitOfCurrentChild)
 						  	 	{
 						  	 	 	newCurrentTime += childCurrentTime;
 						  	 	
-						  	 	 	currentTimeCalculated = true;
+						  	 	 	serialCurrentTimeCalculated = true;
 						  	 	}
 						  	 	else
 						  	 	{
@@ -331,7 +342,7 @@ package org.osmf.elements.compositeClasses
 					, MediaTraitType.TIME
 				);
 
-			setCurrentTime(newCurrentTime);
+			setCurrentTime(hasChildWithCurrentTime ? newCurrentTime : NaN);
 		}
 
 		private function get traitOfCurrentChild():TimeTrait

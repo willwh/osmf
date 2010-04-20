@@ -40,7 +40,84 @@ package org.osmf.elements
 			events = [];
 		}
 		
-		public function testSeekTrait():void
+		public function testSeekTraitCanSeekTo():void
+		{
+			var serial:SerialElement = new SerialElement();
+
+			// No trait to begin with.
+			assertTrue(serial.getTrait(MediaTraitType.TIME) == null);
+			assertTrue(serial.getTrait(MediaTraitType.SEEK) == null);
+
+			var mediaElement1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.PLAY], null, null, true);
+			var timeTrait1:DynamicTimeTrait = mediaElement1.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			var seekTrait1:DynamicSeekTrait = mediaElement1.getTrait(MediaTraitType.SEEK) as DynamicSeekTrait;
+			timeTrait1.duration = 30;
+			timeTrait1.currentTime = 0;
+
+			var mediaElement2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK], null, null, true);
+			var timeTrait2:DynamicTimeTrait = mediaElement2.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			var seekTrait2:DynamicSeekTrait = mediaElement2.getTrait(MediaTraitType.SEEK) as DynamicSeekTrait;
+			timeTrait2.duration = 15;
+			timeTrait2.currentTime = 0;
+
+			var mediaElement3:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.PLAY], null, null, true);
+			var timeTrait3:DynamicTimeTrait = mediaElement3.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			var seekTrait3:DynamicSeekTrait = mediaElement3.getTrait(MediaTraitType.SEEK) as DynamicSeekTrait;
+			timeTrait3.duration = 20;
+			timeTrait3.currentTime = 0;
+
+			var mediaElement4:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.TIME], null, null, true);
+			var timeTrait4:DynamicTimeTrait = mediaElement4.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait4.duration = 10;
+			timeTrait4.currentTime = 0;
+
+			var mediaElement5:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK], null, null, true);
+			var timeTrait5:DynamicTimeTrait = mediaElement5.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			var seekTrait5:DynamicSeekTrait = mediaElement5.getTrait(MediaTraitType.SEEK) as DynamicSeekTrait;
+			timeTrait5.duration = 40;
+			timeTrait5.currentTime = 0;
+			
+			serial.addChild(mediaElement1);
+			serial.addChild(mediaElement2);
+			serial.addChild(mediaElement3);
+			serial.addChild(mediaElement4);
+			serial.addChild(mediaElement5);
+			
+			var timeTrait:TimeTrait = serial.getTrait(MediaTraitType.TIME) as TimeTrait;
+			var seekTrait:SeekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			assertTrue(timeTrait != null);
+			assertTrue(seekTrait != null);
+			assertTrue(seekTrait.seeking == false);
+			
+			// Can only seek as far as the last seekable child.
+			assertTrue(seekTrait.canSeekTo(0) == true);
+			assertTrue(seekTrait.canSeekTo(20) == true);
+			assertTrue(seekTrait.canSeekTo(35) == true);
+			assertTrue(seekTrait.canSeekTo(55) == true);
+			assertTrue(seekTrait.canSeekTo(70) == false);
+			assertTrue(seekTrait.canSeekTo(90) == false);
+			assertTrue(seekTrait.canSeekTo(65) == true);
+			assertTrue(seekTrait.canSeekTo(65.1) == false);
+			assertTrue(seekTrait.canSeekTo(-100) == false);
+			
+			// Now make the intermediate child seekable.
+			mediaElement4.doAddTrait(MediaTraitType.SEEK, new SeekTrait(timeTrait4));
+
+			// Can now seek to the end.
+			assertTrue(seekTrait.canSeekTo(0) == true);
+			assertTrue(seekTrait.canSeekTo(20) == true);
+			assertTrue(seekTrait.canSeekTo(35) == true);
+			assertTrue(seekTrait.canSeekTo(55) == true);
+			assertTrue(seekTrait.canSeekTo(70) == true);
+			assertTrue(seekTrait.canSeekTo(90) == true);
+			assertTrue(seekTrait.canSeekTo(65) == true);
+			assertTrue(seekTrait.canSeekTo(65.1) == true);
+			assertTrue(seekTrait.canSeekTo(115) == true);
+			assertTrue(seekTrait.canSeekTo(115.1) == false);
+			assertTrue(seekTrait.canSeekTo(-100) == false);
+		}
+		
+		public function testSeekTraitSeek():void
 		{
 			var serial:SerialElement = new SerialElement();
 
@@ -89,13 +166,6 @@ package org.osmf.elements
 			assertTrue(seekTrait != null);
 			assertTrue(seekTrait.seeking == false);
 			
-			assertTrue(seekTrait.canSeekTo(20) == true);
-			assertTrue(seekTrait.canSeekTo(35) == true);
-			assertTrue(seekTrait.canSeekTo(55) == true);
-			assertTrue(seekTrait.canSeekTo(70) == true);
-			assertTrue(seekTrait.canSeekTo(90) == true);
-			assertTrue(seekTrait.canSeekTo(-100) == false);
-
 			seekTrait.seek(50);
 			timeTrait = serial.getTrait(MediaTraitType.TIME) as TimeTrait;
 			seekTrait1.completeSeek(30);
@@ -127,7 +197,7 @@ package org.osmf.elements
 			assertTrue(timeTrait.currentTime == 15);
 		}
 		
-		public function testSeekTraitWhenUnseekable():void
+		public function testSeekTraitSeekWhenUnseekable():void
 		{
 			var serial:SerialElement = new SerialElement();
 
@@ -165,7 +235,7 @@ package org.osmf.elements
 			assertTrue(seekTrait.canSeekTo(20) == true);
 			assertTrue(seekTrait.canSeekTo(40) == true);
 			
-			// A SerialElement whose duration is NaN should not have the SeekTrait.
+			// A SerialElement whose duration is NaN should not be seekable.
 			var mediaElement4:MediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK], null, null, true);
 			var timeTrait4:DynamicTimeTrait = mediaElement4.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
 			var seekTrait4:DynamicSeekTrait = mediaElement4.getTrait(MediaTraitType.SEEK) as DynamicSeekTrait;

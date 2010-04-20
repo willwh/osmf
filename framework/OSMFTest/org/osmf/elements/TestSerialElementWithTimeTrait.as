@@ -136,6 +136,54 @@ package org.osmf.elements
 			assertTrue(timeTrait.duration == 93);
 		}
 		
+		public function testTimeTraitWithNaNChildren():void
+		{
+			var serial:SerialElement = new SerialElement();
+			
+			// No trait to begin with.
+			assertTrue(serial.getTrait(MediaTraitType.TIME) == null);
+			
+			// Create a few media elements with the TimeTrait and NaN
+			// currentTime and duration values.
+			//
+
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.TIME], null, null, true);
+			var timeTrait1:DynamicTimeTrait = mediaElement1.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait1.duration = NaN;
+			timeTrait1.currentTime = NaN;
+
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.TIME], null, null, true);
+			var timeTrait2:DynamicTimeTrait = mediaElement2.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait2.duration = NaN;
+			timeTrait2.currentTime = NaN;
+
+			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.TIME], null, null, true);
+			var timeTrait3:DynamicTimeTrait = mediaElement3.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait3.duration = 20;
+			timeTrait3.currentTime = 15;
+			
+			// Add the first child.  This should cause its properties to
+			// propagate to the composition.
+			serial.addChild(mediaElement1);
+			var timeTrait:TimeTrait = serial.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertTrue(timeTrait != null);
+			assertTrue(isNaN(timeTrait.duration));
+			assertTrue(isNaN(timeTrait.currentTime));
+			
+			serial.addChild(mediaElement2);
+			assertTrue(isNaN(timeTrait.duration));
+			assertTrue(isNaN(timeTrait.currentTime));
+
+			// Current time will be zero, since the added child isn't first.
+			serial.addChild(mediaElement3);
+			assertTrue(timeTrait.duration == 20);
+			assertTrue(timeTrait.currentTime == 0);
+			
+			serial.removeChild(mediaElement3);
+			assertTrue(isNaN(timeTrait.duration));
+			assertTrue(isNaN(timeTrait.currentTime));
+		}
+		
 		public function testTimeTraitWithNestedSerialElement():void
 		{
 			var serial:SerialElement = new SerialElement();

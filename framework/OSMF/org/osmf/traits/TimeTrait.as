@@ -226,7 +226,12 @@ package org.osmf.traits
 				}
 			}
 			
-			if (_currentTime != value)
+			if (	_currentTime != value
+				&& 	!
+						(	isNaN(_currentTime)
+						&& 	isNaN(value)
+						)
+				)
 			{
 				currentTimeChangeStart(value);
 					
