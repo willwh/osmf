@@ -144,6 +144,16 @@ package
 		{		
 			override protected function constructMediaFactory():MediaFactory
 			{
+				/**
+				 * Here, we want to replace the standard http streaming media factory item
+				 * with our "home made" media factory item which used HTTPStreamingNetLoaderWithBufferControl
+				 * instead of the HTTPStreamNetLoader that comes with OSMF.
+				 * 
+				 * Meanwhile, we want to make sure that our "home made" media factory item
+				 * gets picked up to handle a media before any other media factory item. Therefore
+				 * we want to rename the id of the item to be something other than org.osmf...
+				 * This way the media factory will put this item in front of any osmf item. 
+				 */
 				var factory:DefaultMediaFactory = new DefaultMediaFactory();
 				var item:MediaFactoryItem = factory.getItemById(HTTPSTREAM_ITEM_ID);
 				if (item != null)
@@ -153,7 +163,7 @@ package
 				
 				httpStreamingLoader = new HTTPStreamingNetLoaderWithBufferControl();
 				item = new MediaFactoryItem(
-						"com.adobe.osmfplayer.elements.video.httpstreaming", 
+						HTTPSTREAM_WITH_BUFFER_CONTROL_ITEM_ID, 
 						httpStreamingLoader.canHandleResource, 
 						function():MediaElement
 						{
@@ -234,6 +244,7 @@ package
 		CONFIG::FLASH_10_1
 		{
 			private const HTTPSTREAM_ITEM_ID:String = "org.osmf.elements.video.httpstreaming";
+			private const HTTPSTREAM_WITH_BUFFER_CONTROL_ITEM_ID:String = "com.adobe.osmfplayer.elements.video.httpstreaming";
 		}
 		
 		private var httpStreamingLoader:HTTPStreamingNetLoaderWithBufferControl;	
