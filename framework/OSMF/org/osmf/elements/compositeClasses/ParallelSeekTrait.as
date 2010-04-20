@@ -27,6 +27,8 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 
@@ -45,6 +47,8 @@ package org.osmf.elements.compositeClasses
 		public function ParallelSeekTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
 			super(traitAggregator, CompositionMode.PARALLEL, owner);
+			
+			this.owner = owner;
 		}
 		
 		// Overrides
@@ -63,12 +67,41 @@ package org.osmf.elements.compositeClasses
 			var childSeekOperations:Vector.<ChildSeekOperation> = parallelSeek.childSeekOperations;
 			for (var i:int = 0; i < childSeekOperations.length; i++)
 			{
-				var childSeekOperation:ChildSeekOperation = childSeekOperations[i] as ChildSeekOperation;
-				var childSeekTrait:SeekTrait = childSeekOperation.child.getTrait(MediaTraitType.SEEK) as SeekTrait;
-				childSeekTrait.seek(childSeekOperation.time);
+				doChildSeek(childSeekOperations[i] as ChildSeekOperation);
 			}
 			
 			inSeek = false;
+		}
+		
+		private function doChildSeek(childSeekOperation:ChildSeekOperation):void
+		{
+			var childSeekTrait:SeekTrait = childSeekOperation.child.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			childSeekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onChildSeekingChange);
+			childSeekTrait.seek(childSeekOperation.time);
+
+			function onChildSeekingChange(event:SeekEvent):void
+			{
+				if (event.seeking == false)
+				{
+					childSeekTrait.removeEventListener(SeekEvent.SEEKING_CHANGE, onChildSeekingChange);
+				
+					// When the seek completes, make sure the child is playing if the
+					// composite element is playing.
+					var childPlayTrait:PlayTrait = childSeekOperation.child.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					var parentPlayTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					if (childPlayTrait != null && parentPlayTrait != null)
+					{
+						if (parentPlayTrait.playState == PlayState.PLAYING)
+						{
+							childPlayTrait.play();
+						}
+						else if (parentPlayTrait.playState == PlayState.PAUSED && childPlayTrait.canPause)
+						{
+							childPlayTrait.pause();
+						}
+					}
+				}
+			} 
 		}
 		
 		/**
@@ -162,5 +195,6 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		private var inSeek:Boolean = false;
+		private var owner:MediaElement;
 	}
 }

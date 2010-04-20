@@ -28,9 +28,12 @@ package org.osmf.elements
 	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicPlayTrait;
 	import org.osmf.utils.DynamicSeekTrait;
 	import org.osmf.utils.DynamicTimeTrait;
 	
@@ -180,6 +183,146 @@ package org.osmf.elements
 			assertTrue(timeTrait != null);
 			assertTrue(seekTrait != null);
 			assertTrue(seekTrait.canSeekTo(10) == false);
+		}
+		
+		public function testSeekTraitWithPlayTrait():void
+		{
+			var parallel:ParallelElement = new ParallelElement();
+			
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.PLAY], null, null, true);
+			var timeTrait1:DynamicTimeTrait = mediaElement1.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			var seekTrait1:DynamicSeekTrait = mediaElement1.getTrait(MediaTraitType.SEEK) as DynamicSeekTrait;
+			var playTrait1:DynamicPlayTrait = mediaElement1.getTrait(MediaTraitType.PLAY) as DynamicPlayTrait;
+
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.PLAY], null, null, true);
+			var timeTrait2:DynamicTimeTrait = mediaElement2.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			var seekTrait2:DynamicSeekTrait = mediaElement2.getTrait(MediaTraitType.SEEK) as DynamicSeekTrait;
+			var playTrait2:DynamicPlayTrait = mediaElement2.getTrait(MediaTraitType.PLAY) as DynamicPlayTrait;
+			
+			timeTrait1.duration = 20;
+			timeTrait1.currentTime = 0;
+			timeTrait2.duration = 40;
+			timeTrait2.currentTime = 0;
+			
+			parallel.addChild(mediaElement1);
+			parallel.addChild(mediaElement2);
+			
+			var timeTrait:TimeTrait = parallel.getTrait(MediaTraitType.TIME) as TimeTrait;
+			var seekTrait:SeekTrait = parallel.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			var playTrait:PlayTrait = parallel.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(timeTrait != null);
+			assertTrue(seekTrait != null);
+			assertTrue(seekTrait.seeking == false);
+			assertTrue(playTrait != null);
+			assertTrue(playTrait.playState == PlayState.STOPPED);
+			
+			// Seeking when STOPPED should result in both children being STOPPED.
+			//
+			
+			seekTrait.seek(5);
+			seekTrait1.completeSeek(5);
+			seekTrait2.completeSeek(5);
+
+			assertTrue(timeTrait.currentTime == 5);
+			assertTrue(timeTrait1.currentTime == 5);
+			assertTrue(timeTrait2.currentTime == 5);
+			assertTrue(playTrait.playState == PlayState.STOPPED);
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+			assertTrue(playTrait2.playState == PlayState.STOPPED);
+			
+			// Seeking when PLAYING should result in both children being PLAYING.
+			//
+			
+			playTrait.play();
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.PLAYING);
+			assertTrue(playTrait2.playState == PlayState.PLAYING);
+			
+			seekTrait.seek(10);
+			seekTrait1.completeSeek(10);
+			seekTrait2.completeSeek(10);
+			
+			assertTrue(timeTrait.currentTime == 10);
+			assertTrue(timeTrait1.currentTime == 10);
+			assertTrue(timeTrait2.currentTime == 10);
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.PLAYING);
+			assertTrue(playTrait2.playState == PlayState.PLAYING);
+
+			seekTrait.seek(30);
+			seekTrait1.completeSeek(30);
+			seekTrait2.completeSeek(30);
+
+			assertTrue(timeTrait.currentTime == 30);
+			assertTrue(timeTrait1.currentTime == 20);
+			assertTrue(timeTrait2.currentTime == 30);
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.PLAYING);
+			assertTrue(playTrait2.playState == PlayState.PLAYING);
+			
+			// If we stop the second child, but seek back into its range,
+			// then it should be PLAYING again.
+			playTrait1.stop(); 
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+
+			seekTrait.seek(10);
+			seekTrait1.completeSeek(10);
+			seekTrait2.completeSeek(10);
+
+			// But seeking back into its range should cause it to be playing.
+			assertTrue(timeTrait.currentTime == 10);
+			assertTrue(timeTrait1.currentTime == 10);
+			assertTrue(timeTrait2.currentTime == 10);
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.PLAYING);
+			assertTrue(playTrait2.playState == PlayState.PLAYING);
+			
+			// Seeking when PAUSED should result in both children being PAUSED.
+			//
+			
+			playTrait.pause();
+			assertTrue(playTrait.playState == PlayState.PAUSED);
+			assertTrue(playTrait1.playState == PlayState.PAUSED);
+			assertTrue(playTrait2.playState == PlayState.PAUSED);
+			
+			seekTrait.seek(15);
+			seekTrait1.completeSeek(15);
+			seekTrait2.completeSeek(15);
+			
+			assertTrue(timeTrait.currentTime == 15);
+			assertTrue(timeTrait1.currentTime == 15);
+			assertTrue(timeTrait2.currentTime == 15);
+			assertTrue(playTrait.playState == PlayState.PAUSED);
+			assertTrue(playTrait1.playState == PlayState.PAUSED);
+			assertTrue(playTrait2.playState == PlayState.PAUSED);
+
+			seekTrait.seek(30);
+			seekTrait1.completeSeek(30);
+			seekTrait2.completeSeek(30);
+
+			assertTrue(timeTrait.currentTime == 30);
+			assertTrue(timeTrait1.currentTime == 20);
+			assertTrue(timeTrait2.currentTime == 30);
+			assertTrue(playTrait.playState == PlayState.PAUSED);
+			assertTrue(playTrait1.playState == PlayState.PAUSED);
+			assertTrue(playTrait2.playState == PlayState.PAUSED);
+			
+			// If we stop the second child, but seek back into its range,
+			// then it should be PAUSED again.
+			playTrait1.stop(); 
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+
+			seekTrait.seek(10);
+			seekTrait1.completeSeek(10);
+			seekTrait2.completeSeek(10);
+
+			// But seeking back into its range should cause it to be playing.
+			assertTrue(timeTrait.currentTime == 10);
+			assertTrue(timeTrait1.currentTime == 10);
+			assertTrue(timeTrait2.currentTime == 10);
+			assertTrue(playTrait.playState == PlayState.PAUSED);
+			assertTrue(playTrait1.playState == PlayState.PAUSED);
+			assertTrue(playTrait2.playState == PlayState.PAUSED);
 		}
 		
 		private function eventCatcher(event:Event):void
