@@ -211,9 +211,22 @@ package
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			// Compose error message:
-			var message:String
-				= event.error.message
-				+ (event.error.detail ? "\n" + event.error.detail : "");
+			var message:String;
+			if (event.error.detail && event.error.detail.indexOf(URL_LOADER_NOT_FOUND) == 0)
+			{
+				// If the error is a URLLoader #2032 error, replace the message with
+				// a custom one (FM-487):
+				message
+					= "The media located at "
+					+ event.error.detail.substr(URL_LOADER_NOT_FOUND.length)
+					+ " was not found";
+			}
+			else
+			{
+				message
+					= event.error.message
+					+ (event.error.detail ? "\n" + event.error.detail : "");
+			}
 			
 			// If an alert widget is available, use it. Otherwise, trace the message:
 			if (alert)
@@ -247,6 +260,9 @@ package
 			private const HTTPSTREAM_WITH_BUFFER_CONTROL_ITEM_ID:String = "com.adobe.osmfplayer.elements.video.httpstreaming";
 		}
 		
-		private var httpStreamingLoader:HTTPStreamingNetLoaderWithBufferControl;	
+		private var httpStreamingLoader:HTTPStreamingNetLoaderWithBufferControl;
+		
+		/* static */
+		private static const URL_LOADER_NOT_FOUND:String = "Error #2032: Stream Error. URL: ";
 	}
 }            
