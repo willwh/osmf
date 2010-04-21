@@ -82,12 +82,12 @@ package org.osmf.chrome.widgets
 				
 				var scrubBarWidth:Number = Math.max(10, availableWidth - ((timeFieldsWidth + timeFieldSpacing) * 2));
 				 
-				scrubberStart = scrubBarTrack.x - scrubber.width /2;
-				scrubberEnd = scrubberStart + scrubBarWidth;
-				
 				scrubBarTrack.x = timeFieldsWidth + timeFieldSpacing;
 				scrubBarTrack.y = Math.round((timeFieldsHeight - scrubBarTrack.height) / 2) 
 				scrubBarTrack.width = scrubBarWidth;
+				
+				scrubberStart = scrubBarTrack.x - scrubber.width /2;
+				scrubberEnd = scrubberStart + scrubBarWidth;
 				
 				scrubber.range = scrubBarWidth;
 				scrubber.y = scrubBarTrack.y;
