@@ -375,19 +375,17 @@ package org.osmf.net.drm
 		{	
 			if (event.contentData == drmContentData)
 			{
-				var now:Date = new Date();
-				this.voucher = event.voucher;		
-				if (	voucher
-					 && ((  voucher.voucherEndDate != null
-						 && voucher.voucherEndDate.time >= now.time
-						 && voucher.voucherStartDate != null
-						 && voucher.voucherStartDate.time <= now.time)
-						 || (voucher.offlineLeaseStartDate 
-							 &&  voucher.offlineLeaseStartDate.time <= now.time 
-						 	 && (!voucher.offlineLeaseEndDate 
-								 ||	voucher.offlineLeaseEndDate.time > now.time)))
+				var now:Date = new Date();	
+				if (event.voucher && 
+						 (
+							 (   event.voucher.voucherEndDate == null
+						      || event.voucher.voucherEndDate.time >= now.time)
+						  && (   event.voucher.voucherStartDate == null
+						      || event.voucher.voucherStartDate.time <= now.time)
+						 )
 				    )
 				{
+					this.voucher = event.voucher;		
 					removeEventListeners();
 								
 					if (voucher.playbackTimeWindow == null)
@@ -399,7 +397,7 @@ package org.osmf.net.drm
 						updateDRMState(DRMState.AUTHENTICATION_COMPLETE, null, voucher.playbackTimeWindow.startDate, voucher.playbackTimeWindow.endDate, voucher.playbackTimeWindow.period, lastToken);
 					}								
 				}
-				else
+				else  //Only force refresh if voucher was good, and has expired (local voucher).
 				{
 					forceRefreshVoucher();
 				}	
