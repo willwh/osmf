@@ -19,6 +19,18 @@ B. Installation Instructions (Flex Builder)
 7. Build the project.
 8. Launch the application from the Run menu.
 
+If you're compiling this example with the Flex 4.0 SDK, you need to specify that they use the Halo
+theme rather than the default Spark theme. The easiest way to do this is to edit the flex-config.xml
+file in your SDK's "frameworks" folder and replace the existing <theme> content with the following:
+
+<!-- List of CSS or SWC files to apply as a theme. -->
+<theme>
+   <filename>themes/Halo/halo.swc</filename>
+   <filename>themes/Spark/spark.css</filename>
+</theme>
+
+The changes will take effect the next time you restart Flash Builder. 
+
 Note that some of the examples (such as the Chromeless SWF examples) require that the Example Player be
 launched from the network rather than the file system.  Here's how to do so.
 
