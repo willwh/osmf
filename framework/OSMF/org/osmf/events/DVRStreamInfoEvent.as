@@ -26,6 +26,9 @@ package org.osmf.events
 
 	[ExcludeClass]
 
+	/**
+	 * @private
+	 **/
 	public class DVRStreamInfoEvent extends Event
 	{
 		public static const DVRSTREAMINFO:String = "DVRStreamInfo";
