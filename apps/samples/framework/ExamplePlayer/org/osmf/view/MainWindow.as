@@ -262,15 +262,18 @@ package org.osmf.view
 
 		private function onCurrentTimeChange(event:TimeEvent):void
 		{
-			position.text = "" + Math.round(event.time);
-
-			seekBar.value = 	mediaPlayer.temporal
-							? 	mediaPlayer.currentTime
-							:	0;
-			
-			bufferLength.text = mediaPlayer.canBuffer
-							? 	mediaPlayer.bufferLength.toFixed(1)
-							: "";
+			if (mediaPlayer.seeking == false && mediaPlayer.buffering == false)
+			{
+				position.text = "" + Math.round(event.time);
+	
+				seekBar.value = 	mediaPlayer.temporal
+								? 	mediaPlayer.currentTime
+								:	0;
+				
+				bufferLength.text = mediaPlayer.canBuffer
+								? 	mediaPlayer.bufferLength.toFixed(1)
+								: "";
+			}
 		}
 		
 		private function onMutedChange(event:AudioEvent):void
