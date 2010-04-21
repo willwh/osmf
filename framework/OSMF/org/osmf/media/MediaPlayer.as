@@ -1335,22 +1335,14 @@ package org.osmf.media
 			// are dispatched if the trait's value is different from the default
 			// MediaPlayer's values.  Default values are listed in the ASDocs for
 			// the various properties.
-						
-			var eventType:String = getEventTypeForTrait(traitType);
 			
-			// For added traits, the capability change event is dispatched first.
-			if (eventType != null && add)
+			// For added traits, the capability is updated (and change event
+			// dispatched first).
+			if (add)
 			{
-				dispatchEvent
-						( new MediaPlayerCapabilityChangeEvent
-							( eventType
-							, false
-							, false
-							, add
-							)
-						);
+				updateCapabilityForTrait(traitType, add);
 			}
-					
+			
 			switch (traitType)
 			{
 				case MediaTraitType.TIME:								
@@ -1524,21 +1516,15 @@ package org.osmf.media
 					break;			
 			}
 			
-			// For removed traits, the capability change event is dispatched last.
-			if (eventType != null && add == false)
+			// For removed traits, the capability is updated (and change event dispatched)
+			// last.
+			if (add == false)
 			{
-				dispatchEvent
-					( new MediaPlayerCapabilityChangeEvent
-						( eventType
-						, false
-						, false
-						, add
-						)
-					);	
+				updateCapabilityForTrait(traitType, false);
 			}	
 		}
 		
-		private function getEventTypeForTrait(traitType:String):String
+		private function updateCapabilityForTrait(traitType:String, capabilityAdd:Boolean):void
 		{
 			var eventType:String = null;
 			
@@ -1546,34 +1532,52 @@ package org.osmf.media
 			{
 				case MediaTraitType.AUDIO:
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;
+					_hasAudio = capabilityAdd;
 					break;				
 				case MediaTraitType.BUFFER:
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;
+					_canBuffer = capabilityAdd;
 					break;	
 				case MediaTraitType.DISPLAY_OBJECT:						
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE;	
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE;
 					break;				
 				case MediaTraitType.DRM:					
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;
+					_hasDRM = capabilityAdd;
 					break;
 				case MediaTraitType.DYNAMIC_STREAM:
 					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;
+					_isDynamicStream = capabilityAdd;
 					break;				
 				case MediaTraitType.LOAD:					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;
+					_canLoad = capabilityAdd;
 					break;				
 				case MediaTraitType.PLAY:
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE;
+					_canPlay = capabilityAdd;
 					break;				
 				case MediaTraitType.SEEK:
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE;
+					_canSeek = capabilityAdd;
 					break;				
 				case MediaTraitType.TIME:
 					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;
+					_temporal = capabilityAdd;
 					break;				
 			}
 			
-			return eventType;
+			if (eventType != null)
+			{
+				dispatchEvent
+						( new MediaPlayerCapabilityChangeEvent
+							( eventType
+							, false
+							, false
+							, capabilityAdd
+							)
+						);
+			}
 		}
 		
 		// Add any number of listeners to the trait, using the given event name.
