@@ -108,7 +108,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var curLength:uint;
+		public var curLength:Number;
 
 		/**
 		 * Indicates the starting position when the DVR content is loaded and about to play. 

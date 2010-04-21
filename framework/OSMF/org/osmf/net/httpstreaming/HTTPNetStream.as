@@ -40,12 +40,11 @@ package org.osmf.net.httpstreaming
 	import flash.utils.IDataInput;
 	import flash.utils.Timer;
 	
+	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
-	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
@@ -129,6 +128,8 @@ package org.osmf.net.httpstreaming
 			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
 			mainTimer.start();
+			
+			this.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 		}
 		
 		/**
@@ -310,6 +311,8 @@ package org.osmf.net.httpstreaming
 			{
 				_playForDuration = -1;
 			}
+			
+			_unpublishNotifyPending = false;
 		}
 		
 		/**
@@ -368,6 +371,8 @@ package org.osmf.net.httpstreaming
 				setState(HTTPStreamingState.SEEK);		
 				super.seek(offset);
 			}
+			
+			_unpublishNotifyPending = false;
 		}
 		
 		/**
@@ -1010,14 +1015,7 @@ package org.osmf.net.httpstreaming
 						setState(HTTPStreamingState.STOP);
 						if (nextRequest != null && nextRequest.unpublishNotify)
 						{
-							dispatchEvent
-								( new NetStatusEvent
-									( NetStatusEvent.NET_STATUS
-									, false
-									, false
-									, {code:NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY, level:"status"}
-									)
-								); 
+							_unpublishNotifyPending = true;								
 						}
 					}
 					break;
@@ -1145,24 +1143,10 @@ package org.osmf.net.httpstreaming
 					break;
 
 				case HTTPStreamingState.STOP:
-						var playCompleteInfo:Object = new Object();
-			            playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
-			            playCompleteInfo.level = "status";
-			                                    
-			            var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-			            playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
-			
-			            var tagBytes:ByteArray = new ByteArray();
-			            playCompleteInfoSDOTag.write(tagBytes);
-
-       					CONFIG::FLASH_10_1
+						if (bufferLength == 0)
 						{
-							appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
-							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-						}
-			            attemptAppendBytes(tagBytes);
-			            
-			            setState(HTTPStreamingState.HALT);
+							finishStopProcess();
+				  		}
 			            break;
 			            
 				case HTTPStreamingState.HALT:
@@ -1395,6 +1379,50 @@ package org.osmf.net.httpstreaming
 				super.appendBytes(bytes);
 			}
 		}
+		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.STOP) 
+			{
+				finishStopProcess();
+			}
+		}
+		
+		private function finishStopProcess():void
+		{
+			var playCompleteInfo:Object = new Object();
+            playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
+            playCompleteInfo.level = "status";
+                                    
+            var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+            playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
+
+            var tagBytes:ByteArray = new ByteArray();
+            playCompleteInfoSDOTag.write(tagBytes);
+
+   			CONFIG::FLASH_10_1
+			{
+				appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
+				appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+			}
+            attemptAppendBytes(tagBytes);
+            
+            setState(HTTPStreamingState.HALT);
+
+			if (_unpublishNotifyPending)
+			{
+				dispatchEvent
+					( new NetStatusEvent
+						( NetStatusEvent.NET_STATUS
+						, false
+						, false
+						, {code:NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY, level:"status"}
+						)
+					);
+					
+				_unpublishNotifyPending = false; 
+			}
+		}
 
 		private static const MAIN_TIMER_INTERVAL:int = 25;
 		
@@ -1440,6 +1468,7 @@ package org.osmf.net.httpstreaming
 		private var _retryAfterWaitUntil:Number = 0;	// millisecond timestamp (as per date.getTime) of when we retry next
 		
 		private var _dvrInfo:DVRInfo = null;
+		private var _unpublishNotifyPending:Boolean = false;
 		
 		CONFIG::LOGGING
 		{

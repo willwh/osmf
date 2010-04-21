@@ -21,14 +21,13 @@
 
 package org.osmf.net.httpstreaming.dvr
 {
-	import flash.net.NetConnection;
 	import flash.events.NetStatusEvent;
+	import flash.net.NetConnection;
 	
 	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
-	import org.osmf.net.httpstreaming.HTTPNetStream
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.NetStreamTimeTrait;
+	import org.osmf.net.httpstreaming.HTTPNetStream;
 	import org.osmf.traits.TimeTrait;
 
 	[ExcludeClass]
