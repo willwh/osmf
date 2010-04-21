@@ -300,12 +300,23 @@ package org.osmf.layout
 		
 		public static function getInstance(mediaElement:MediaElement):MediaElementLayoutTarget
 		{
-			var instance:* = layoutTargets[mediaElement];
+			var instance:*;
+			for (instance in layoutTargets)
+			{
+				if (instance.mediaElement == mediaElement)
+				{
+					break;
+				}
+				else
+				{
+					instance = null;
+				}
+			}
 			
-			if (instance == undefined)
+			if (instance == null)
 			{
 				instance = new MediaElementLayoutTarget(mediaElement, ConstructorLock);
-				layoutTargets[mediaElement] = instance;
+				layoutTargets[instance] = true;
 			}
 			
 			return instance;
