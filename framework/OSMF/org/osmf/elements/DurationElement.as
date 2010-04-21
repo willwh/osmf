@@ -178,6 +178,12 @@ package org.osmf.elements
 		{
 			if (event.playState == PlayState.PLAYING)
 			{
+				if (mediaAtEnd)
+				{
+					mediaAtEnd = false;
+					currentTime = 0;
+				} 
+				
 				// When play starts, we reset our absoluteStartTime based on
 				// what our currentTime is.
 				absoluteStartTime = flash.utils.getTimer() - currentTime*1000;
@@ -231,6 +237,7 @@ package org.osmf.elements
 		{
 			playheadTimer.stop();
 			playTrait.stop();
+			mediaAtEnd = true;
 			
 			// When playback completes, block exposure of all non-overridden traits.
 			blockedTraits = ALL_OTHER_TRAITS;
@@ -264,6 +271,7 @@ package org.osmf.elements
 		private var _duration:Number = 0;	// seconds
 		private var absoluteStartTime:Number = 0; // milliseconds
 		private var playheadTimer:Timer;
+		private var mediaAtEnd:Boolean = false;
 		
 		private var timeTrait:DurationTimeTrait;
 		private var seekTrait:DurationSeekTrait;

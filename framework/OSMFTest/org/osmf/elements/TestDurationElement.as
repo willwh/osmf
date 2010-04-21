@@ -178,6 +178,22 @@ package org.osmf.elements
 			assertTrue(SeekEvent(events[1]).seeking == false);		
 		}
 		
+		public function testAutoRewind():void
+		{
+			var proxy:DurationElement = new DurationElement(10);
+			
+			var timeTrait:TimeTrait = proxy.getTrait(MediaTraitType.TIME) as TimeTrait;
+			var playTrait:PlayTrait = proxy.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var seekTrait:SeekTrait = proxy.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			
+			seekTrait.seek(10);
+			assertTrue(timeTrait.currentTime == 10);
+			
+			// Playing when at the end should cause an auto-rewind.
+			playTrait.play();
+			assertTrue(timeTrait.currentTime == 0);
+		}
+		
 		public function eventCatcher(event:Event):void
 		{
 			events.push(event);
