@@ -32,17 +32,13 @@ package org.osmf.media
 	
 	import flexunit.framework.TestCase;
 	
-	import mx.effects.Parallel;
-	
 	import org.osmf.elements.ParallelElement;
-	import org.osmf.elements.SerialElement;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
-	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
@@ -1692,6 +1688,62 @@ package org.osmf.media
 						!(states.length > 0 && event.state == states[states.length-1]))
 					{
 						states.push(event.state);
+					}
+				}
+			}
+			else
+			{
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testAutoRewindFalse():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
+			
+			if (hasLoadTrait)
+			{
+				callAfterLoad(doTestAutoRewindFalse, false);
+			}
+			else
+			{
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+				doTestAutoRewindFalse();
+			}
+		}
+		
+		private function doTestAutoRewindFalse():void
+		{
+			if (traitExists(MediaTraitType.TIME))
+			{
+				mediaPlayer.autoRewind = false;
+				
+				var states:Array = [];
+				
+				mediaPlayer.addEventListener(TimeEvent.COMPLETE, onTestAutoRewindFalse);
+				mediaPlayer.play();
+				
+				function onTestAutoRewindFalse(event:TimeEvent):void
+				{
+					mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestAutoRewindFalse);
+					
+					assertTrue(mediaPlayer.paused == false);
+					assertTrue(mediaPlayer.playing == false);
+					
+					// Calling play when it's at the end should cause the media
+					// to rewind and begin playback again.
+					mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+					mediaPlayer.play();
+				}
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					// If the autoRewind works, we should get a READY event.
+					if (event.state == MediaPlayerState.READY)
+					{
+						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
 			}

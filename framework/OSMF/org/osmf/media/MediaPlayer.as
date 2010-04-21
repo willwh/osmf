@@ -248,6 +248,9 @@ package org.osmf.media
 			if (value != media)
 			{
 				var traitType:String;
+				
+				mediaAtEnd = false;
+				
 				if (media != null)
 				{		
 					if (playing)
@@ -275,7 +278,7 @@ package org.osmf.media
 							updateTraitListeners(traitType, false);
 						}
 					}								
-				}	
+				}
 				super.media = value;
 				if (media != null)
 				{
@@ -738,11 +741,12 @@ package org.osmf.media
 	    */
 	    public function play():void
 	    {
-	    	// Bug FM-347 - the media player should autorewind once the playhead is at the end, and play() is called.
+	    	// Bug FM-347 - the media player should auto-rewind once the
+	    	// playhead is at the end, and play() is called.
 	    	if (canPlay && 
 	    		canSeek &&
 	    		canSeekTo(0) &&
-	    		duration == currentTime)
+	    		mediaAtEnd)
 	    	{
 	    		executeAutoRewind(true);
 	    	}
@@ -1590,7 +1594,9 @@ package org.osmf.media
 		}
 		
 		private function onSeeking(event:SeekEvent):void
-		{			
+		{
+			mediaAtEnd = false;
+			
 			if (event.type == SeekEvent.SEEKING_CHANGE && event.seeking)
 			{				
 				setState(MediaPlayerState.BUFFERING);				
@@ -1630,7 +1636,7 @@ package org.osmf.media
 		}
 		
 		private function onLoadState(event:LoadEvent):void
-		{		
+		{
 			if (event.loadState == LoadState.READY && 
 				state == MediaPlayerState.LOADING)
 			{
@@ -1661,6 +1667,8 @@ package org.osmf.media
 		
 		private function onComplete(event:TimeEvent):void
 		{
+			mediaAtEnd = true;
+			
 			if (loop && canSeek && canPlay)
 			{
 				executeAutoRewind(true);
@@ -1690,6 +1698,7 @@ package org.osmf.media
 			if (inExecuteAutoRewind == false)
 			{
 				inExecuteAutoRewind = true;
+				mediaAtEnd = false;
 				
 	 			addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				function onSeekingChange(event:SeekEvent):void
@@ -1848,6 +1857,7 @@ package org.osmf.media
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var inExecuteAutoRewind:Boolean = false;
 		private var inSeek:Boolean = false;
+		private var mediaAtEnd:Boolean = false;
 		
 		// Persistent properties of the MediaPlayer, as opposed to properties that apply
 		// to a specific MediaElement.  We use xxxSet Booleans to determine
