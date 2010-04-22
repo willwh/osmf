@@ -732,6 +732,10 @@ package org.osmf.media
 	    
 	    /**
 	    * Plays the media, if it is not already playing.
+		* To use the play() method, MediaPlayer.canPlay must be true.
+		* You must listen for the mediaPlayerStateChange event, and only
+		* call play() (or enable the UI play button) when the state is READY.
+		* 
 	    * @throws IllegalOperationError if the media cannot be played.
 	    *  
 	    *  @langversion 3.0
