@@ -118,6 +118,6 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var startTime:uint;
+		public var startTime:Number = NaN;
 	}
 }

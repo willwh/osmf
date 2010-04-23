@@ -108,6 +108,7 @@ package org.osmf.net.httpstreaming.f4f
 			fragmentRunTablesUpdating= false;
 			playInProgress = false;
 			pendingIndexLoads = 0;
+			pureLiveOffset = NaN;
 			
 			serverBaseURL = f4fIndexInfo.serverBaseURL;			
 			streamInfos = f4fIndexInfo.streamInfos;
@@ -177,8 +178,6 @@ package org.osmf.net.httpstreaming.f4f
 			var index:int = indexContext as int;
 			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, index);
 			
-			delay = 0.05; 
-			
 			CONFIG::LOGGING
 			{			
 				logger.debug("processIndexData: " + index + " pendingIndexUpdates: " + pendingIndexUpdates);
@@ -208,7 +207,11 @@ package org.osmf.net.httpstreaming.f4f
 				}
 			}
 			
-			bootstrapBoxes[index] = bootstrapBox;
+			if (bootstrapBoxes[index] == null || bootstrapBoxes[index].bootstrapVersion < bootstrapBox.bootstrapVersion)
+			{
+				delay = 0.05; 		
+				bootstrapBoxes[index] = bootstrapBox;
+			}
 
 			if (pendingIndexLoads == 0 && !fragmentRunTablesUpdating)
 			{
@@ -245,13 +248,13 @@ package org.osmf.net.httpstreaming.f4f
 			
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 			if (	time >= 0
-				&&	time * abst.timeScale <= abst.totalDuration
+				&&	time * abst.timeScale <= abst.currentMediaTime
 				&& 	quality >= 0
 				&&  quality < streamInfos.length
 			   )
 			{
 				currentFAI = frt.findFragmentIdByTime(
-					(time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
+					time * abst.timeScale, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
 				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
 					if (abst.contentComplete())
@@ -274,7 +277,8 @@ package org.osmf.net.httpstreaming.f4f
 				}
 				
 				playInProgress = true;
-				var segId:uint = abst.findSegmentId(currentFAI.fragId);
+				var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
+				var segId:uint = abst.findSegmentId(currentFAI.fragId - fdp.firstFragment + 1);
 				var requestUrl:String = "";
 				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
 				{
@@ -313,11 +317,11 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
-
+/*
 			if (quality != this.currentQuality)
 			{
 				var curAbst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-				if (currentFAI == null || (currentFAI.fragmentEndTime*abst.timeScale/curAbst.timeScale > abst.totalDuration))
+				if (currentFAI == null || (currentFAI.fragmentEndTime*abst.timeScale/curAbst.timeScale > abst.currentMediaTime))
 				{
 					adjustDelay();
 					refreshBootstrapInfo(quality);					
@@ -326,7 +330,7 @@ package org.osmf.net.httpstreaming.f4f
 
 				return getFileForTime(currentFAI.fragmentEndTime / curAbst.timeScale, quality); 
 			}
-			
+*/			
 			if (!playInProgress && stopPlaying(abst))
 			{
 				return null;
@@ -362,7 +366,8 @@ package org.osmf.net.httpstreaming.f4f
 				}
 
 				playInProgress = true;
-				var segId:uint = abst.findSegmentId(currentFAI.fragId);
+				var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
+				var segId:uint = abst.findSegmentId(currentFAI.fragId - fdp.firstFragment + 1);
 				var requestUrl:String = "";
 				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
 				{
@@ -380,7 +385,7 @@ package org.osmf.net.httpstreaming.f4f
 				CONFIG::LOGGING
 				{
 					logger.debug("getNextFile URL = " + requestUrl);
-				}
+				}				
 			}
 			
 			CONFIG::LOGGING
@@ -600,7 +605,7 @@ package org.osmf.net.httpstreaming.f4f
 				metaInfo = new Object();
 			}
 			metaInfo.duration = duration;
-			
+
 			sdo.objects = ["onMetaData", metaInfo];
 			dispatchEvent
 				( new HTTPStreamingIndexHandlerEvent
@@ -650,10 +655,9 @@ package org.osmf.net.httpstreaming.f4f
 
 			if (!dvrGetStreamInfoCall)
 			{
-				var offset:Number = 0;
-				if (abst.live && f4fIndexInfo.dvrInfo == null)
+				if (abst.live && f4fIndexInfo.dvrInfo == null && isNaN(pureLiveOffset))
 				{
-					offset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
+					pureLiveOffset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
 				}
 
 				dispatchEvent
@@ -662,7 +666,7 @@ package org.osmf.net.httpstreaming.f4f
 						, false
 						, false
 						, abst.live
-						, offset 
+						, pureLiveOffset 
 						)
 					);
 			}
@@ -684,7 +688,7 @@ package org.osmf.net.httpstreaming.f4f
 		private function onNewBootstrapBox(event:HTTPStreamingFileHandlerEvent):void
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-			if (abst.bootstrapVersion <= event.bootstrapBox.bootstrapVersion)
+			if (abst.bootstrapVersion < event.bootstrapBox.bootstrapVersion)
 			{
 				bootstrapBoxes[currentQuality] = event.bootstrapBox;
 				dispatchDVRStreamInfo(event.bootstrapBox);
@@ -698,12 +702,22 @@ package org.osmf.net.httpstreaming.f4f
 			if (f4fIndexInfo.dvrInfo != null)
 			{
 				f4fIndexInfo.dvrInfo.isRecording = !frt.tableComplete();
-				f4fIndexInfo.dvrInfo.curLength = abst.totalDuration/abst.timeScale;
-				f4fIndexInfo.dvrInfo.startTime = 
-					frt.tableComplete()? 0 : DVRUtils.calculateOffset(
-						f4fIndexInfo.dvrInfo.beginOffset, 
-						f4fIndexInfo.dvrInfo.endOffset == 0? 0 : f4fIndexInfo.dvrInfo.endOffset, 
-						abst.totalDuration/abst.timeScale);
+				if (isNaN(f4fIndexInfo.dvrInfo.startTime))
+				{
+					f4fIndexInfo.dvrInfo.startTime = 
+						frt.tableComplete()? 0 : DVRUtils.calculateOffset(
+							f4fIndexInfo.dvrInfo.beginOffset, 
+							f4fIndexInfo.dvrInfo.endOffset == 0? 0 : f4fIndexInfo.dvrInfo.endOffset, 
+							abst.totalDuration/abst.timeScale);
+					f4fIndexInfo.dvrInfo.startTime += (frt.fragmentDurationPairs)[0].durationAccrued/abst.timeScale;
+							
+					if (f4fIndexInfo.dvrInfo.startTime > abst.currentMediaTime)
+					{
+						f4fIndexInfo.dvrInfo.startTime = abst.currentMediaTime;
+					}
+				}
+				
+				f4fIndexInfo.dvrInfo.curLength = abst.currentMediaTime/abst.timeScale - f4fIndexInfo.dvrInfo.startTime;
 
 				dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
 			}	
@@ -711,8 +725,10 @@ package org.osmf.net.httpstreaming.f4f
 		
 		private function fragmentOverflow(abst:AdobeBootstrapBox, fragId:uint):Boolean
 		{
+			var fragmentRunTable:AdobeFragmentRunTable = abst.fragmentRunTables[0];
+			var fdp:FragmentDurationPair = fragmentRunTable.fragmentDurationPairs[0];
 			var segmentRunTable:AdobeSegmentRunTable = abst.segmentRunTables[0];
-			return (segmentRunTable == null) || (segmentRunTable.totalFragments < fragId);
+			return ((segmentRunTable == null) || ((segmentRunTable.totalFragments + fdp.firstFragment - 1) < fragId));
 		}
 		
 		private function adjustDelay():void
@@ -743,6 +759,7 @@ package org.osmf.net.httpstreaming.f4f
 		
 		private var offsetFromCurrent:Number = 5;
 		private var delay:Number = 0.05;
+		private var pureLiveOffset:Number = NaN;
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		

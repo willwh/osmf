@@ -281,11 +281,7 @@ package org.osmf.net.httpstreaming
 			setState(HTTPStreamingState.INIT);
 			_initialTime = -1;
 			_seekTime = -1;
-			if (_dvrInfo != null)
-			{
-				_seekTime = _dvrInfo.startTime;
-			}
-									
+			
 			indexIsReady = false;
 			indexHandler.initialize(_indexInfo != null ? _indexInfo : args[0]);
 		
@@ -294,7 +290,14 @@ package org.osmf.net.httpstreaming
 				_seekTarget = Number(args[1]);
 				if (_seekTarget < 0)
 				{
-					_seekTarget = 0;	// FMS behavior, mimic -1 or -2 being passed in
+					if (_dvrInfo != null)
+					{
+						_seekTarget = _dvrInfo.startTime;
+					}
+					else
+					{
+						_seekTarget = 0;	// FMS behavior, mimic -1 or -2 being passed in
+					}
 				}
 			}
 			else
