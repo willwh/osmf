@@ -569,7 +569,15 @@ package org.osmf.elements
 						, cuePoints[i].name
 						, cuePoints[i].parameters
 						);
-					dynamicCuePoints.addMarker(cuePoint);
+						
+					try
+					{
+						dynamicCuePoints.addMarker(cuePoint);
+					}
+					catch (error:ArgumentError)
+					{
+						// Invalid cue points should be ignored.
+					}
 				}
 			}			    		
      	}
@@ -588,8 +596,15 @@ package org.osmf.elements
 				, info.name
 				, info.parameters
 				);
-				
-			embeddedCuePoints.addMarker(cuePoint);
+			
+			try
+			{
+				embeddedCuePoints.addMarker(cuePoint);
+			}
+			catch (error:ArgumentError)
+			{
+				// Invalid cue points should be ignored.
+			}
      	}     	
      	     	
      	// Fired when the DRM subsystem is updated.  NetStream needs to be recreated.

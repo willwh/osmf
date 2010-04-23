@@ -244,6 +244,7 @@ package org.osmf.elements
 			{
 				var testCuePoints:Array = [ {type:"event", time:1, name:"1 sec"},
 										{type:"event", time:2, name:"2 sec"},
+										{type:"event", time:NaN, name:"invalid cue point, ignore me"},
 										{type:"event", time:3, name:"3 sec"} ];
 				cuePoints = testCuePoints;
 			}
@@ -252,7 +253,7 @@ package org.osmf.elements
 			videoElement.resource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 			videoElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
 			
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
 
 			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			assertTrue(loadTrait != null);
@@ -283,7 +284,7 @@ package org.osmf.elements
 			{
 				if (testCuePoints)
 				{
-					if (++cuePointCount >= testCuePoints.length)
+					if (++cuePointCount >= testCuePoints.length - 1)
 					{
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					} 
@@ -298,6 +299,7 @@ package org.osmf.elements
 				var testCuePoints:Array = 
 					[ 	{type:"event", time:1, name:"1 sec"},
 						{type:"event", time:2, name:"2 sec"},
+						{type:"event", time:NaN, name:"invalid cue point, ignore me"},
 						{type:"event", time:3, name:"3 sec"}
 					];
 				cuePoints = testCuePoints;

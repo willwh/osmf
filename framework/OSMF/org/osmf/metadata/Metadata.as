@@ -120,7 +120,7 @@ package org.osmf.metadata
 		 * @param key The key to associate the value with.
 		 * @param value The value to add to the Metadata object.
 		 * 
-		 * @throws ArgumentError If key is null.
+		 * @throws ArgumentError If key is null or somehow invalid.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

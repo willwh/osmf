@@ -186,7 +186,7 @@ package org.osmf.metadata
 		 * 
 		 * @param marker The marker to add.
 		 * 
-		 * @throws ArgumentError If marker is null.
+		 * @throws ArgumentError If marker is null or specifies an invalid time.
 		 **/
 		public function addMarker(marker:TimelineMarker):void
 		{
