@@ -80,9 +80,9 @@ package org.osmf.elements.compositeClasses
 		 */
 		public function attach():void
 		{			
-			traitAggregationHelper.attach();			
-			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(this.traitAggregator.listenedChild));
-			childrenContainer.measure(true);	
+			traitAggregationHelper.attach();
+			
+			addToRenderer();
 		}
 		
 		/**
@@ -91,7 +91,8 @@ package org.osmf.elements.compositeClasses
 		public function detach():void
 		{			
 			traitAggregationHelper.detach();
-			layoutRenderer.removeTarget(MediaElementLayoutTarget.getInstance(this.traitAggregator.listenedChild));	
+			
+			removeFromRenderer();
 		}
 
 		// Internals
@@ -108,7 +109,6 @@ package org.osmf.elements.compositeClasses
 		private function onListenedChildChange(event:TraitAggregatorEvent):void
 		{
 			setupLayoutTarget(event.newListenedChild);
-			//trace('done listened child change');
 		}
 		
 		private function onTargetContainerChange(event:ContainerChangeEvent):void
@@ -124,23 +124,20 @@ package org.osmf.elements.compositeClasses
 			{
 				if (targetInLayoutRenderer == false)
 				{
-					//trace('removing target from layout renderer');
 					layoutRenderer.addTarget(layoutTarget);
 				}
 			}
 			else
 			{ 
 				if (targetInLayoutRenderer)
-				{
-					//trace('adding target from layout renderer');
+				{					
 					layoutRenderer.removeTarget(layoutTarget);
 				}
 			}
 		}
 		
 		private function setupLayoutTarget(listenedChild:MediaElement):void
-		{
-			//trace('setupLayoutTarget' + listenedChild);
+		{			
 			if (layoutTarget != null)
 			{
 				layoutTarget.mediaElement.removeEventListener
@@ -148,13 +145,7 @@ package org.osmf.elements.compositeClasses
 					, onTargetContainerChange
 					);
 				
-				var mediaElement:MediaElement = layoutTarget.mediaElement;
-					
-				if (layoutRenderer.hasTarget(layoutTarget))
-				{
-					//trace('removing target from layout renderer' + DisplayObjectTrait(listenedChild.getTrait(MediaTraitType.DISPLAY_OBJECT)).mediaWidth);
-					layoutRenderer.removeTarget(layoutTarget);
-				}
+				removeFromRenderer();
 			}
 				
 			if (listenedChild != null)
@@ -176,6 +167,33 @@ package org.osmf.elements.compositeClasses
 						)
 					);
 			}
+		}
+		
+		private function addToRenderer():void
+		{
+			if (traitAggregator.listenedChild != null)
+			{
+				layoutTarget = MediaElementLayoutTarget.getInstance(traitAggregator.listenedChild)
+				if (!layoutRenderer.hasTarget(layoutTarget))
+				{
+					layoutRenderer.addTarget(layoutTarget);
+					childrenContainer.measure(true);	
+				}	
+			}
+			
+		}
+		
+		private function removeFromRenderer():void
+		{
+			if (traitAggregator.listenedChild != null)
+			{
+				layoutTarget = MediaElementLayoutTarget.getInstance(traitAggregator.listenedChild)
+				if (layoutRenderer.hasTarget(layoutTarget))
+				{
+					layoutRenderer.removeTarget(layoutTarget);	
+				}
+			}
+			
 		}
 		
 		private function processAggregatedChild(child:MediaTraitBase):void
