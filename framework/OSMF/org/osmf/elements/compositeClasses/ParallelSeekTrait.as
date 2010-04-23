@@ -86,10 +86,17 @@ package org.osmf.elements.compositeClasses
 					childSeekTrait.removeEventListener(SeekEvent.SEEKING_CHANGE, onChildSeekingChange);
 				
 					// When the seek completes, make sure the child is playing if the
-					// composite element is playing.
+					// composite element is playing.  But if a child has reached its
+					// duration, then there's no need to play it.
 					var childPlayTrait:PlayTrait = childSeekOperation.child.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					var childTimeTrait:TimeTrait = childSeekOperation.child.getTrait(MediaTraitType.TIME) as TimeTrait;
 					var parentPlayTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
-					if (childPlayTrait != null && parentPlayTrait != null)
+					if (	childPlayTrait != null
+						&& 	parentPlayTrait != null
+						&& 	(	childTimeTrait == null
+							||	childTimeTrait.currentTime != childTimeTrait.duration
+							)
+					   )
 					{
 						if (parentPlayTrait.playState == PlayState.PLAYING)
 						{

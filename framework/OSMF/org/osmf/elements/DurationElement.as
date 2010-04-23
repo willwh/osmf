@@ -210,6 +210,8 @@ package org.osmf.elements
 		
 		private function onSeekingChange(event:SeekEvent):void
 		{
+			mediaAtEnd = false;
+			
 			if (event.seeking)
 			{
 				// Adjust the currentTime and absoluteStartTime by the seek amount.
@@ -221,8 +223,12 @@ package org.osmf.elements
 			{
 				// When the the user seeks outside the range of this element, block
 				// exposure of all non-overridden traits.  When they seek into this
-				// element, expose them again.
-				if (currentTime > 0 && currentTime < _duration)
+				// element, expose them again.  Note that we don't include currentTime
+				// of zero as an unblocked case unless the media is playing, since
+				// zero is usually the seek time for auto-rewound media.
+				if (	currentTime < _duration
+					&&	(currentTime > 0 || playTrait.playState == PlayState.PLAYING)
+				   )
 				{
 					blockedTraits = NO_TRAITS;
 				}

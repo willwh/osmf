@@ -26,6 +26,7 @@ package org.osmf.elements
 	import flash.events.Event;
 	
 	import org.osmf.events.SeekEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
@@ -36,7 +37,6 @@ package org.osmf.elements
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicMediaElement;
-	import org.osmf.utils.DynamicSeekTrait;
 
 	public class TestDurationElement extends TestMediaElement
 	{
@@ -118,6 +118,12 @@ package org.osmf.elements
 			// Unless we seek(0), which should block the traits.
 			seekTrait.seek(0);
 			assertHasTraits(proxy, [MediaTraitType.LOAD, MediaTraitType.PLAY, MediaTraitType.SEEK, MediaTraitType.TIME]);
+
+			// But if we seek(0) while playing, it should unblock the traits.
+			seekTrait.seek(5);
+			playTrait.play();
+			seekTrait.seek(0);
+			assertHasTraits(proxy, [], false);
 			
 			// Or if we seek(duration), which is equivalent to completing playback.
 			seekTrait.seek(10);
@@ -178,7 +184,7 @@ package org.osmf.elements
 			assertTrue(SeekEvent(events[1]).seeking == false);		
 		}
 		
-		public function testAutoRewind():void
+		public function testAutoRewindOnSeek():void
 		{
 			var proxy:DurationElement = new DurationElement(10);
 			
@@ -189,9 +195,29 @@ package org.osmf.elements
 			seekTrait.seek(10);
 			assertTrue(timeTrait.currentTime == 10);
 			
-			// Playing when at the end should cause an auto-rewind.
+			// Playing when at the end should not cause an auto-rewind.
 			playTrait.play();
-			assertTrue(timeTrait.currentTime == 0);
+			assertTrue(timeTrait.currentTime == 10);
+		}
+
+		public function testAutoRewindOnComplete():void
+		{
+			var proxy:DurationElement = new DurationElement(1);
+			
+			var timeTrait:TimeTrait = proxy.getTrait(MediaTraitType.TIME) as TimeTrait;
+			timeTrait.addEventListener(TimeEvent.COMPLETE, addAsync(onTestAutoRewindComplete, 2000));
+			var playTrait:PlayTrait = proxy.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			
+			playTrait.play();
+		
+			function onTestAutoRewindComplete(event:TimeEvent):void
+			{
+				assertTrue(timeTrait.currentTime == 1);
+				
+				// Playing when at the end should cause an auto-rewind.
+				playTrait.play();
+				assertTrue(timeTrait.currentTime == 0);
+			}
 		}
 		
 		public function eventCatcher(event:Event):void

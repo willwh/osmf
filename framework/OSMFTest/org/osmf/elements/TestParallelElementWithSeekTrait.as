@@ -323,6 +323,25 @@ package org.osmf.elements
 			assertTrue(playTrait.playState == PlayState.PAUSED);
 			assertTrue(playTrait1.playState == PlayState.PAUSED);
 			assertTrue(playTrait2.playState == PlayState.PAUSED);
+			
+			// If we seek a playing parallel element to a time which is past the
+			// duration of a child, and that child is at its duration, then
+			// that child should not be played.
+			playTrait.play();
+			seekTrait.seek(20);
+			seekTrait1.completeSeek(20);
+			seekTrait2.completeSeek(20);
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.PLAYING);
+			assertTrue(playTrait2.playState == PlayState.PLAYING);
+			
+			playTrait1.stop();
+			seekTrait.seek(30);
+			seekTrait1.completeSeek(30);
+			seekTrait2.completeSeek(30);
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+			assertTrue(playTrait2.playState == PlayState.PLAYING);
 		}
 		
 		private function eventCatcher(event:Event):void
