@@ -179,6 +179,7 @@ package org.osmf
 			addTestSuite(TestSerialElementWithDisplayObjectTrait);
 			
 			addTestSuite(TestCompositeAudioTrait);
+			addTestSuite(TestCompositeDisplayObjectTrait);
 			
 			addTestSuite(TestCompositeMetadata);
 			

@@ -166,11 +166,10 @@ package org.osmf.elements.compositeClasses
 			{
 				try
 				{
-					// TODO: Fix this.  Presumably the layout renderer metadata should have
-					// a default key to which the layout renderer class is assigned.  But
-					// I'm not sure if this code is even being used.
+					// The layout renderer metadata stores the custom layout renderer
+					// under the LAYOUT_RENDER_TYPE key:
 					_layoutRenderer
-						= new (metadata.getValue(null) as Class)()
+						= new (metadata.getValue(MetadataNamespaces.LAYOUT_RENDERER_TYPE) as Class)()
 						as LayoutRendererBase;
 				}
 				catch (e:*)

@@ -21,42 +21,43 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import flexunit.framework.TestCase;
-	
+	import org.osmf.elements.SerialElement;
+	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.layout.*;
 	import org.osmf.media.MediaElement;
+	import org.osmf.metadata.*;
 
-	public class TestCompositeDisplayObjectTrait extends TestCase
+	public class TestCompositeDisplayObjectTrait extends TestCaseEx
 	{
 		public function testCompositedisplayObjectTrait():void
 		{
 			var aggregator:TraitAggregator = new TraitAggregator();
 			
-			var owner:MediaElement = new SerialElement;
-			
-			var trait:CompositedisplayObjectTrait
-				= new CompositedisplayObjectTrait(aggregator, owner); 
+			var owner:MediaElement = new SerialElement();
+			var trait:CompositeDisplayObjectTrait
+				= new CompositeDisplayObjectTrait(aggregator, owner); 
 			
 			// No layout renderer class being assigned, the default
 			// should have been used:
 			assertTrue(trait.layoutRenderer is LayoutRenderer);
 			
-			var layoutRendererFacet:LayoutRendererFacet
-				= new LayoutRendererFacet(MyLayoutRenderer);
-			owner.metadata.addFacet(layoutRendererFacet);
+			var md:Metadata = new Metadata();
+			md.addValue(MetadataNamespaces.LAYOUT_RENDERER_TYPE, MyLayoutRenderer);
+			owner.addMetadata(MetadataNamespaces.LAYOUT_RENDERER_TYPE, md);
 			
 			// Layout should now have changed to be of type
 			// MyLayoutRenderer:
 			assertTrue(trait.layoutRenderer is MyLayoutRenderer);
 			
-			owner.metadata.removeFacet(layoutRendererFacet);
+			owner.removeMetadata(MetadataNamespaces.LAYOUT_RENDERER_TYPE);
 			
 			// Should be 'default' once more: 
 			assertTrue(trait.layoutRenderer is LayoutRenderer);
 			
 			// Assigning class that is not LayoutRenderer implementing:
-			layoutRendererFacet = new LayoutRendererFacet(Array);
-			owner.metadata.addFacet(layoutRendererFacet);
+			md = new Metadata();
+			md.addValue(MetadataNamespaces.LAYOUT_RENDERER_TYPE, Array);
+			assertThrows(owner.addMetadata,MetadataNamespaces.LAYOUT_RENDERER_TYPE, md);
 			
 			// Should be 'default' once more: 
 			assertTrue(trait.layoutRenderer is LayoutRenderer);
@@ -69,56 +70,7 @@ import org.osmf.layout.*;
 import flash.events.EventDispatcher;
 import flash.geom.Rectangle;
 
-internal class MyLayoutRenderer extends EventDispatcher implements LayoutRendererBase
+internal class MyLayoutRenderer extends LayoutRendererBase
 {
-	public function get parent():LayoutRendererBase
-	{
-		return _parent;
-	}
 	
-	public function set parent(value:LayoutRendererBase):void
-	{
-		_parent = value;
-	}
-	
-	public function set context(value:ILayoutContext):void
-	{
-		
-	}
-	
-	public function addTarget(target:ILayoutTarget):ILayoutTarget
-	{
-		return null;
-	}
-	
-	public function removeTarget(target:ILayoutTarget):ILayoutTarget
-	{
-		return null;
-	}
-	
-	public function targets(target:ILayoutTarget):Boolean
-	{
-		return false;
-	}
-	
-	public function invalidate():void
-	{
-		
-	}
-	
-	public function validateNow():void
-	{
-	
-	}
-	
-	public function updateCalculatedBounds():Rectangle
-	{
-		return null;
-	}
-	
-	public function updateLayout():void
-	{
-	}
-	
-	private var _parent:LayoutRendererBase;
 }
