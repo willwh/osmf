@@ -290,6 +290,7 @@ package org.osmf
 			addTestSuite(TestLayoutRendererBase);
 			addTestSuite(TestLayoutRenderer);
 			addTestSuite(TestLayoutAttributesMetadata);
+			addTestSuite(TestBoxAttributesMetadata);
 			addTestSuite(TestMediaElementLayoutTarget);
 			addTestSuite(TestPaddingLayoutMetadata);
 			addTestSuite(TestVerticalAlign);
