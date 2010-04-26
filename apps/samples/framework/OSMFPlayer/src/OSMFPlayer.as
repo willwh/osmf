@@ -28,12 +28,14 @@ package
 	import org.osmf.chrome.application.*;
 	import org.osmf.chrome.configuration.*;
 	import org.osmf.chrome.debug.*;
+	import org.osmf.chrome.metadata.ChromeMetadata;
 	import org.osmf.chrome.widgets.*;
 	import org.osmf.containers.*;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.*;
 	import org.osmf.layout.*;
 	import org.osmf.media.*;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.*;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoaderWithBufferControl;
 	import org.osmf.player.configuration.*;
@@ -124,19 +126,22 @@ package
 		
 		override protected function processNewMedia(value:MediaElement):MediaElement
 		{
-			var result:MediaElement;
-			if (value != null)
+			var result:MediaElement = value;
+			
+			var metadata:Metadata = new Metadata();
+			metadata.addValue(ChromeMetadata.AUTO_HIDE, configuration.autoHideControlBar);
+			result.addMetadata(ChromeMetadata.CHROME_METADATA_KEY, metadata); 
+			
+			CONFIG::DEBUG
 			{
-				CONFIG::DEBUG
+				if (value)
 				{
-					if (value)
-					{
-						result = new DebuggerElementProxy(value, debugger);
-					}
-					
-					debugger.send("TRACE", "media change", value);
+					result = new DebuggerElementProxy(value, debugger);
 				}
+				
+				debugger.send("TRACE", "media change", value);
 			}
+		
 			return result;
 		}
 		
@@ -162,13 +167,15 @@ package
 				}
 				
 				httpStreamingLoader = new HTTPStreamingNetLoaderWithBufferControl();
-				item = new MediaFactoryItem(
-						HTTPSTREAM_WITH_BUFFER_CONTROL_ITEM_ID, 
-						httpStreamingLoader.canHandleResource, 
-						function():MediaElement
-						{
-							return new VideoElement(null, httpStreamingLoader);
-						});
+				item 
+					= new MediaFactoryItem
+						( HTTPSTREAM_WITH_BUFFER_CONTROL_ITEM_ID
+						, httpStreamingLoader.canHandleResource
+						, function():MediaElement
+							{
+								return new VideoElement(null, httpStreamingLoader);
+							}
+						);
 						
 				factory.addItem(item);
 				
