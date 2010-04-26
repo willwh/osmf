@@ -40,11 +40,11 @@ package org.osmf.net.httpstreaming
 	import flash.utils.IDataInput;
 	import flash.utils.Timer;
 	
-	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;

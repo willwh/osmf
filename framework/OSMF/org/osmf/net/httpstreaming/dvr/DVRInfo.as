@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.elements.f4mClasses
+package org.osmf.net.httpstreaming.dvr
 {
 	[ExcludeClass]
 	
@@ -67,7 +67,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var beginOffset:uint;
+		public var beginOffset:uint = 0;
 
 		/**
 		 * The amoutn of data, in seconds, that client can begin viewing
@@ -78,7 +78,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var endOffset:uint;
+		public var endOffset:uint = 0;
 
 		/**
 		 * Indicates whether the stream is offline, or available for playback. It is optional, and defaults to false. 

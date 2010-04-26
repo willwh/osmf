@@ -26,7 +26,7 @@ package org.osmf.net.httpstreaming.f4f
 	import flash.utils.ByteArray;
 	
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase;
-	import org.osmf.elements.f4mClasses.DVRInfo;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	
 	[ExcludeClass]
 	

@@ -706,8 +706,8 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					f4fIndexInfo.dvrInfo.startTime = 
 						frt.tableComplete()? 0 : DVRUtils.calculateOffset(
-							f4fIndexInfo.dvrInfo.beginOffset, 
-							f4fIndexInfo.dvrInfo.endOffset == 0? 0 : f4fIndexInfo.dvrInfo.endOffset, 
+							((f4fIndexInfo.dvrInfo.beginOffset < 0) || isNaN(f4fIndexInfo.dvrInfo.beginOffset))? 0 : f4fIndexInfo.dvrInfo.beginOffset, 
+							((f4fIndexInfo.dvrInfo.endOffset < 0) || isNaN(f4fIndexInfo.dvrInfo.endOffset))? 0 : f4fIndexInfo.dvrInfo.endOffset, 
 							abst.totalDuration/abst.timeScale);
 					f4fIndexInfo.dvrInfo.startTime += (frt.fragmentDurationPairs)[0].durationAccrued/abst.timeScale;
 							

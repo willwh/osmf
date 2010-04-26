@@ -24,7 +24,6 @@ package org.osmf.net.httpstreaming
 	import flash.utils.ByteArray;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
-	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -32,6 +31,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	
 	[ExcludeClass]
 	

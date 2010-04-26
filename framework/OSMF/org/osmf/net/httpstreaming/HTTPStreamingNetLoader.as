@@ -25,7 +25,6 @@ package org.osmf.net.httpstreaming
 	import flash.net.NetStream;
 	
 	import org.osmf.events.DVRStreamInfoEvent;
-	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
@@ -40,6 +39,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait;
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
 	import org.osmf.traits.LoadState;
 

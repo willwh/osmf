@@ -23,7 +23,6 @@ package org.osmf.net.httpstreaming.dvr
 {
 	import flash.net.NetConnection;
 	
-	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.net.httpstreaming.HTTPNetStream;
 	import org.osmf.traits.DVRTrait;

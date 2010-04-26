@@ -22,6 +22,8 @@
 package org.osmf.elements.f4mClasses
 {
 	import __AS3__.vec.Vector;
+	
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 		
 	[ExcludeClass]
 	
