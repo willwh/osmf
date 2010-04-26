@@ -26,13 +26,14 @@ package org.osmf.elements
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.elements.compositeClasses.CompositeDisplayObjectTrait;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.DisplayObjectTrait;
-	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicDisplayObjectTrait;
+	import org.osmf.utils.DynamicMediaElement;
 	
 	public class TestSerialElementWithDisplayObjectTrait extends TestCase
 	{
@@ -143,6 +144,17 @@ package org.osmf.elements
 			
 			// No trait to end with.
 			assertFalse(serial.hasTrait(MediaTraitType.DISPLAY_OBJECT));
+			
+			// Add children once more:
+			serial.addChild(mediaElement1);
+			serial.addChild(mediaElement2);
+			
+			// Now move both children into another container:
+			var container:MediaContainer = new MediaContainer();
+			container.addMediaElement(mediaElement1);
+			container.addMediaElement(mediaElement2);
+			
+			assertEquals(2, serial.numChildren);
 		}
 		
 		private function onMediaSizeChange(event:DisplayObjectEvent):void

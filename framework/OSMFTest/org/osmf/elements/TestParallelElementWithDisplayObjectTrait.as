@@ -26,6 +26,7 @@ package org.osmf.elements
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.elements.compositeClasses.CompositeDisplayObjectTrait;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.LayoutMetadata;
@@ -171,6 +172,10 @@ package org.osmf.elements
 			// The display list is not updated until we validate. Force an update:
 			CompositeDisplayObjectTrait(displayObjectTrait).layoutRenderer.validateNow();
 			assertTrue(view.contains(displayObjectTrait2.displayObject));
+			
+			// Create a second container, and add one of the child media-elements to it:
+			var mc:MediaContainer = new MediaContainer();
+			mc.addMediaElement(mediaElement2);
 		}
 		
 		public function testDisplayObjectTraitLayout():void
