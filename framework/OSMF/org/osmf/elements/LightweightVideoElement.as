@@ -337,20 +337,18 @@ package org.osmf.elements
     						    			 			
      			// Check for DRMContentData
     			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
-    			if (streamingResource != null)
+    			if (streamingResource != null 
+					&& streamingResource.drmContentData)
     			{
     				var metadata:ByteArray = streamingResource.drmContentData;
-    				if (metadata != null)
-    				{
-    					setupDRMTrait(metadata);
-    					drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onMetadataAuth);	   
-    					return;  // Don't finishLoad() until the "auth" has completed.
-    				} 			
+    				setupDRMTrait(metadata);					    				 			
 	    		}
-
-    			// Non sidecar, we need to play before getting access to the DRMTrait.
-   				stream.addEventListener(StatusEvent.STATUS, onStatus);
-   				stream.addEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
+				else
+				{
+					// Non sidecar, we need to play before getting access to the DRMTrait.
+	   				stream.addEventListener(StatusEvent.STATUS, onStatus);
+   					stream.addEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
+				}
     		}
 			finishLoad();			
 		}
@@ -418,15 +416,7 @@ package org.osmf.elements
 					drmTrait.inlineDRMFailed(new MediaError(event.errorID));
 				}
 			}	
-			
-			private function onMetadataAuth(event:DRMEvent):void
-			{
-				if (drmTrait.drmState == DRMState.AUTHENTICATION_COMPLETE)
-				{
-					finishLoad();
-				}	
-			}	
-			
+						
 			private function update(type:String):void
 			{
 				if (drmTrait == null)
@@ -533,8 +523,7 @@ package org.osmf.elements
     			stream.removeEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
     			stream.removeEventListener(StatusEvent.STATUS, onStatus);
     			if (drmTrait != null)
-    			{    			
-	    			drmTrait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onMetadataAuth);	  
+    			{       			
 	    			drmTrait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, reloadAfterAuth);	 
 	    			removeTrait(MediaTraitType.DRM);  
 	    			drmTrait = null;
