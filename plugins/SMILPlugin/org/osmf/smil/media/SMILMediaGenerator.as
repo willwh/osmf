@@ -159,6 +159,11 @@ package org.osmf.smil.media
 				}
 				
 				mediaElement = factory.createMediaElement(mediaResource);
+				
+				if (parentMediaElement is CompositeElement)
+				{
+					(parentMediaElement as CompositeElement).addChild(mediaElement);
+				}
 			}
 			
 			return mediaElement;			
