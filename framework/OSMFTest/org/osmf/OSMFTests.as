@@ -58,7 +58,7 @@ package org.osmf
 			
 			// Logging
 			//
-
+			
 			addTestSuite(TestLog);
 			addTestSuite(TestTraceLogger);
 			addTestSuite(TestTraceLoggerFactory);
@@ -279,7 +279,7 @@ package org.osmf
 			addTestSuite(TestDynamicPluginLoader);
 			addTestSuite(TestPluginManager);
 			addTestSuite(TestPluginLoadingState);
-						
+			
 			// Layout
 			//			
 			
@@ -297,13 +297,17 @@ package org.osmf
 			addTestSuite(TestHorizontalAlign);
 			addTestSuite(TestRelativeLayoutMetadata);
 			addTestSuite(TestLayoutMetadata);
+			addTestSuite(TestScaleMode);
+			addTestSuite(TestLayoutMode);
+			addTestSuite(TestLayoutTargetRenderers);
+			addTestSuite(TestLayoutTargetEvent);
 			
 			// Containers
 			//
 			
 			addTestSuite(TestMediaContainer);
 			addTestSuite(TestHTMLMediaContainer);
-
+			
 			// Utils
 			//
 			

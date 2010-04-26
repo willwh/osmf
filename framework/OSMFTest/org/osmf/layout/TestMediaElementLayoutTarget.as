@@ -26,8 +26,10 @@ package org.osmf.layout
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.ParallelElement;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicDisplayObjectTrait;
 	import org.osmf.utils.DynamicMediaElement;
@@ -48,6 +50,46 @@ package org.osmf.layout
 			assertEquals(melt.layoutMetadata, me.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata);
 			assertEquals(NaN, melt.measuredWidth);
 			assertEquals(NaN, melt.measuredHeight);
+			
+			var lmd:LayoutMetadata = new LayoutMetadata();
+			me.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, lmd);
+			assertEquals(lmd, melt.layoutMetadata);
+			
+			var md:Metadata = new Metadata();
+			me.addMetadata("test", md);
+			
+			me.removeMetadata("test");
+			me.removeMetadata(LayoutMetadata.LAYOUT_NAMESPACE);
+			assertFalse(melt.layoutMetadata == lmd);
+		}
+		
+		public function testCompositeElement():void
+		{
+			var p:ParallelElement = new ParallelElement();
+			var melt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(p);
+			
+			var me:DynamicMediaElement = new DynamicMediaElement();
+			var lts:LayoutTargetSprite = new LayoutTargetSprite(me.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata);
+			var displayObjectTrait:DynamicDisplayObjectTrait = new DynamicDisplayObjectTrait(lts, 100, 200);
+			me.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
+			
+			melt.dispatchEvent
+				( new LayoutTargetEvent
+					( LayoutTargetEvent.ADD_CHILD_AT
+					)
+				);
+				
+			melt.dispatchEvent
+				( new LayoutTargetEvent
+					( LayoutTargetEvent.REMOVE_CHILD
+					)
+				);
+				
+			melt.dispatchEvent
+				( new LayoutTargetEvent
+					( LayoutTargetEvent.SET_CHILD_INDEX
+					)
+				);
 		}
 		
 		public function testMediaElementLayoutTargetWithDisplayObjectTrait():void
