@@ -46,7 +46,7 @@ package org.osmf.net
 		 * Constructor.
 		 * 
 		 * @param url The URL of the resource. For information about formatting this
-		 * URL for various encoding types:
+		 * URL for various formats, see FlashMediaServer documentation link below.
 		 * @see http://help.adobe.com/en_US/FlashMediaServer/3.5_Deving/WS5b3ccc516d4fbf351e63e3d11a0773d117-7fc8.html
 		 * @param streamType The type of the stream. If null, defaults to
 		 * StreamType.RECORDED.
