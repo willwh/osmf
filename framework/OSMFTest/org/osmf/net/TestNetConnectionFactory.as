@@ -98,6 +98,11 @@ package org.osmf.net
 		{
 			doTestCreateWithBadResource();
 		}
+		
+		public function testCreateWithUnknownProtocolResource():void
+		{
+			doTestCreateWithUnknownProtocolResource();
+		}
 
 		public function testCreateWithConnectionArguments():void
 		{
@@ -230,6 +235,23 @@ package org.osmf.net
 			}
 		}
 		
+		private function doTestCreateWithUnknownProtocolResource():void
+		{
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var factory:NetConnectionFactory = createNetConnectionFactory(true, NetConnectionExpectation.REJECTED_CONNECTION);
+			factory.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR,onCreationFailed);
+			factory.create(UNKNOWN_PROTOCOL_RESOURCE);
+			function onCreationFailed(event:NetConnectionFactoryEvent):void
+			{
+				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_ERROR);
+				assertTrue(event.netConnection == null);
+				assertTrue(event.mediaError.errorID == MediaErrorCodes.NETCONNECTION_REJECTED);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		private function doTestCreateWithConnectionArguments():void
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
@@ -312,5 +334,6 @@ package org.osmf.net
 		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 		private static const SUCCESSFUL_RESOURCE2:URLResource = new URLResource(TestConstants.STREAMING_AUDIO_FILE);
 		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_VIDEO);
+		private static const UNKNOWN_PROTOCOL_RESOURCE:URLResource = new URLResource("rtmpwtf://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv");
 	}
 }

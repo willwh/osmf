@@ -364,7 +364,7 @@ package org.osmf.net
 			var theURL:URL = new URL(url);
 			
 			var allowedPorts:String = (theURL.port == "") ? DEFAULT_PORTS: theURL.port;
-			var allowedProtocols:String;
+			var allowedProtocols:String = "";
 			switch (theURL.protocol)
 			{
 				case PROTOCOL_RTMP:

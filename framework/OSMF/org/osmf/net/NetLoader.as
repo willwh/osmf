@@ -269,15 +269,17 @@ package org.osmf.net
 		private function finishLoading(connection:NetConnection, loadTrait:LoadTrait, factory:NetConnectionFactoryBase = null):void
 		{
 			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
-			
-			netLoadTrait.connection = connection;
-			var netStream:NetStream = createNetStream(connection, netLoadTrait.resource as URLResource);				
-			netStream.client = new NetClient();
-			netLoadTrait.netStream = netStream;
-			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
-			netLoadTrait.netConnectionFactory = factory;
-			
-			processFinishLoading(loadTrait as NetStreamLoadTrait);
+			if (netLoadTrait != null)
+			{
+				netLoadTrait.connection = connection;
+				var netStream:NetStream = createNetStream(connection, netLoadTrait.resource as URLResource);				
+				netStream.client = new NetClient();
+				netLoadTrait.netStream = netStream;
+				netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
+				netLoadTrait.netConnectionFactory = factory;
+				
+				processFinishLoading(loadTrait as NetStreamLoadTrait);
+			}
 		}	
 		
 		/**
@@ -315,8 +317,11 @@ package org.osmf.net
 		private function onCreationError(event:NetConnectionFactoryEvent):void
 		{
 			var loadTrait:LoadTrait = findAndRemovePendingLoad(event.resource);
-			loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, event.mediaError));
-			updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+			if (loadTrait != null)
+			{
+				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, event.mediaError));
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+			}
 		}
 		
 		/**
@@ -350,23 +355,26 @@ package org.osmf.net
 		
 		private function findAndRemovePendingLoad(resource:URLResource):LoadTrait
 		{
-			var loadTrait:LoadTrait;
+			var loadTrait:LoadTrait = null;
 			
 			var pendingLoadsArray:Array = pendingLoads[resource];
-			if (pendingLoadsArray.length == 1)
+			if (pendingLoadsArray != null)
 			{
-				loadTrait = pendingLoadsArray[0] as LoadTrait;
-				delete pendingLoads[resource];
-			}
-			else
-			{
-				for (var i:int = 0; i < pendingLoadsArray.length; i++)
+				if (pendingLoadsArray.length == 1)
 				{
-					loadTrait = pendingLoadsArray[i];
-					if (loadTrait.resource == resource)
+					loadTrait = pendingLoadsArray[0] as LoadTrait;
+					delete pendingLoads[resource];
+				}
+				else
+				{
+					for (var i:int = 0; i < pendingLoadsArray.length; i++)
 					{
-						pendingLoadsArray.splice(i, 1);
-						break;
+						loadTrait = pendingLoadsArray[i];
+						if (loadTrait.resource == resource)
+						{
+							pendingLoadsArray.splice(i, 1);
+							break;
+						}
 					}
 				}
 			}
