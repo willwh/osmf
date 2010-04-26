@@ -24,10 +24,11 @@ package org.osmf.containers
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	
-	import flexunit.framework.TestCase;
-	
+	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
+	import org.osmf.layout.LayoutRenderer;
+	import org.osmf.layout.LayoutRendererBase;
 	import org.osmf.layout.ScaleMode;
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.layout.VerticalAlign;
@@ -35,19 +36,36 @@ package org.osmf.containers
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 
-	public class TestMediaContainer extends TestCase
+	public class TestMediaContainer extends TestCaseEx
 	{
-		public function constructContainer():MediaContainer
+		public function constructContainer(renderer:LayoutRendererBase=null):MediaContainer
 		{
-			return new MediaContainer();
+			return new MediaContainer(renderer);
 		}
 		
 		public function testContainerElements():void
 		{
-			var parent:MediaContainer = constructContainer();
+			var container:MediaContainer = constructContainer();
+			
+			// Direct child addition and removal is prohibited:
+			//
+			
+			assertThrows(container.addChild, null);
+			assertThrows(container.addChildAt, null, null);
+			assertThrows(container.removeChild, null);
+			assertThrows(container.removeChildAt, null);
+			assertThrows(container.setChildIndex, null, null);
+		}
+		
+		public function testContainerMediaElements():void
+		{
+			var renderer:LayoutRenderer = new LayoutRenderer();
+			var parent:MediaContainer = constructContainer(renderer);
 			parent.backgroundColor = 0xff0000;
 			parent.backgroundAlpha = 1;
 			parent.clipChildren = true;
+			
+			assertThrows(parent.addMediaElement,null);
 			
 			var element1:DynamicMediaElement = new DynamicMediaElement();
 			var element2:DynamicMediaElement = new DynamicMediaElement();
@@ -59,11 +77,18 @@ package org.osmf.containers
 			parent.addMediaElement(element1);
 			assertTrue(parent.containsMediaElement(element1));
 			
+			assertThrows(parent.addMediaElement,element1);
+			
 			parent.addMediaElement(element2);
 			assertTrue(parent.containsMediaElement(element2));
 			
 			assertTrue(element1 == parent.removeMediaElement(element1));
 			assertFalse(parent.containsMediaElement(element1));
+			
+			var c2:MediaContainer = constructContainer();
+			c2.addMediaElement(element2);
+			
+			assertFalse(parent.containsMediaElement(element2));
 			
 			var error:Error;
 			try
@@ -77,6 +102,8 @@ package org.osmf.containers
 			
 			assertNotNull(error);
 			assertTrue(error is IllegalOperationError);
+			
+			assertThrows(parent.removeMediaElement, null);
 		}
 		
 		public function testContainerScaleAndAlign():void
@@ -121,6 +148,12 @@ package org.osmf.containers
 			container.backgroundColor = 0xFF00FF;
 			assertEquals(0xFF00FF, container.backgroundColor);
 			
+			container.backgroundColor = 0xFF00FF;
+			assertEquals(0xFF00FF, container.backgroundColor);
+			
+			container.backgroundAlpha = 0.5;
+			assertEquals(0.5, container.backgroundAlpha);
+			
 			container.backgroundAlpha = 0.5;
 			assertEquals(0.5, container.backgroundAlpha);
 			
@@ -128,9 +161,25 @@ package org.osmf.containers
 			container.clipChildren = true;
 			assertTrue(container.clipChildren);
 			
+			container.clipChildren = true;
+			assertTrue(container.clipChildren);
+			
+			container.clipChildren = false;
+			assertFalse(container.clipChildren);
+			
 			container.validateNow();
 			assertEquals(500, container.width);
 			assertEquals(400, container.height);
+		}
+		
+		public function testConstructor():void
+		{
+			var renderer:LayoutRenderer = new LayoutRenderer();
+			var container:MediaContainer = constructContainer(renderer);
+			assertEquals(renderer, container.layoutRenderer);
+			
+			var container2:MediaContainer = new MediaContainer();
+			assertNotNull(container2.layoutRenderer);
 		}
 	}
 }
