@@ -97,7 +97,7 @@ package org.osmf.layout
 		
 		private function onUnsetAsLayoutRendererContainer(event:LayoutTargetEvent):void
 		{
-			if (containerRenderer == event.layoutRenderer)
+			if (containerRenderer != null && containerRenderer == event.layoutRenderer)
 			{
 				// This target is no longer being used as a container. Release
 				// the reference to the container renderer:

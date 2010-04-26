@@ -35,7 +35,6 @@ package org.osmf.layout
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.logging.Logger;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -120,24 +119,25 @@ package org.osmf.layout
 		{
 			if (value != _container)
 			{
-				if (_container != null)
+				var oldContainer:ILayoutTarget = _container;
+				
+				if (oldContainer != null)
 				{
 					reset();
 					
-					_container.dispatchEvent
+					oldContainer.dispatchEvent
 						( new LayoutTargetEvent
 							( LayoutTargetEvent.UNSET_AS_LAYOUT_RENDERER_CONTAINER
 							, false, false, this
 							)
 						);
 					
-					_container.removeEventListener
+					oldContainer.removeEventListener
 						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 						, invalidatingEventHandler
 						);
 				}
-			
-				var oldContainer:ILayoutTarget = _container;	
+					
 				_container = value;
 					
 				if (_container)
