@@ -11,7 +11,6 @@
     <classEntry path="org.osmf.net.dvr.DVRCastRecordingInfo"/>
     <classEntry path="org.osmf.net.NetConnectionCodes"/>
     <classEntry path="org.osmf.layout.LayoutTargetSprite"/>
-    <classEntry path="org.osmf.elements.f4mClasses.DVRInfo"/>
     <classEntry path="org.osmf.net.dvr.DVRCastNetStream"/>
     <classEntry path="org.osmf.elements.audioClasses.SoundAdapter"/>
     <classEntry path="org.osmf.elements.audioClasses.AudioSeekTrait"/>
@@ -251,6 +250,7 @@
     <classEntry path="org.osmf.media.MediaPlayerSprite"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeFragmentRunTable"/>
     <classEntry path="org.osmf.elements.audioClasses.AudioPlayTrait"/>
+    <classEntry path="org.osmf.net.httpstreaming.dvr.DVRInfo"/>
     <classEntry path="org.osmf.net.dvr.DVRCastNetConnectionFactory"/>
     <classEntry path="org.osmf.elements.f4mClasses.Base64Decoder"/>
     <classEntry path="org.osmf.elements.SWFLoader"/>
