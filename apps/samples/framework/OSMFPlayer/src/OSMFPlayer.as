@@ -133,6 +133,7 @@ package
 				debugger.send("DRMState:" + event.drmState);
 				if (event.mediaError)
 				{
+					alert.alert("DRMError", event.mediaError.detail);
 					debugger.send("DRMError:" + event.mediaError.detail);
 				}
 			}
