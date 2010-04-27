@@ -128,20 +128,21 @@ package
 		{
 			var result:MediaElement = value;
 			
-			var metadata:Metadata = new Metadata();
-			metadata.addValue(ChromeMetadata.AUTO_HIDE, configuration.autoHideControlBar);
-			result.addMetadata(ChromeMetadata.CHROME_METADATA_KEY, metadata); 
-			
-			CONFIG::DEBUG
+			if (result != null)
 			{
-				if (value)
+				// Forward the configuration's auto-hide setting:
+				var metadata:Metadata = new Metadata();
+				metadata.addValue(ChromeMetadata.AUTO_HIDE, configuration.autoHideControlBar);
+				result.addMetadata(ChromeMetadata.CHROME_METADATA_KEY, metadata); 
+				
+				// When in debugging mode, wrap the element in a debugger proxy:
+				CONFIG::DEBUG
 				{
 					result = new DebuggerElementProxy(value, debugger);
+					debugger.send("TRACE", "media change", value);
 				}
-				
-				debugger.send("TRACE", "media change", value);
 			}
-		
+			
 			return result;
 		}
 		
