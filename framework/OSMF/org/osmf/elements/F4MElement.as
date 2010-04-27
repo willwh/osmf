@@ -26,9 +26,13 @@ package org.osmf.elements
 
 	/**
 	 * The F4MElement is the MediaElement used to load media from F4M files.  F4M files are
-	 * XML documents that adhere to the Flash Media Manifest format. 
-	 * Note: It is simplest to use the MediaPlayer class in conjunction with the F4MElement. The MediaPlayer class listens to 
-	 * the many events and accounts for extra events as traits are added and removed when an F4M file is loaded.
+	 * XML documents that adhere to the Flash Media Manifest format.
+	 * 
+	 * Note: It is simplest to use the MediaPlayer class in conjunction with the F4MElement.
+	 * If you work directly with an F4MElement, then it's important to listen for events
+	 * related to traits being added and removed.  If you use the MediaPlayer class with an
+	 * F4MElement, then the MediaPlayer will automatically listen for these events for you. 
+	 * 
 	 * @see http://opensource.adobe.com/wiki/display/osmf/Flash%2BMedia%2BManifest%2BFile%2BFormat%2BSpecification
 	 *
 	 * @see org.osmf.media.MediaPlayer

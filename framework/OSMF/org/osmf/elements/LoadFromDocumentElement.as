@@ -47,6 +47,12 @@ package org.osmf.elements
 	 * 
 	 * This is an abstract base class, and should be subclassed.
 	 *  
+	 * Note: It is simplest to use the MediaPlayer class in conjunction with subclasses of
+	 * the LoadFromDocumentElement.  If you work directly with a LoadFromDocumentElement, then
+	 * it's important to listen for events related to traits being added and removed.  If you
+	 * use the MediaPlayer class with a LoadFromDocumentElement, then the MediaPlayer will
+	 * automatically listen for these events for you.
+	 *   
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
