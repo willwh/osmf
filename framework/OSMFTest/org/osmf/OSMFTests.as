@@ -275,6 +275,7 @@ package org.osmf
  			addTestSuite(TestDVRCastStreamInfoRetriever);
  			addTestSuite(TestDVRCastTimeTrait);
  			addTestSuite(TestDVRUtils);
+ 			addTestSuite(TestDVRStreamInfoEvent);
 			
 			// Plugins
 			//
