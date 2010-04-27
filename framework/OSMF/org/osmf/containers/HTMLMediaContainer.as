@@ -71,7 +71,7 @@ package org.osmf.containers
 			var elementId:String = "element_" + elementIdCounter++;
 			var elementScriptPath:String = containerScriptPath + "elements." + elementId + "."; 
 			
-			elements[elementId] = child;
+			elements[elementId] = htmlElement;
 			
 			htmlElement.scriptPath = elementScriptPath; 
 			
