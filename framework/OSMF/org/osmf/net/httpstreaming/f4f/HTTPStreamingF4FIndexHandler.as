@@ -207,7 +207,9 @@ package org.osmf.net.httpstreaming.f4f
 				}
 			}
 			
-			if (bootstrapBoxes[index] == null || bootstrapBoxes[index].bootstrapVersion < bootstrapBox.bootstrapVersion)
+			if (bootstrapBoxes[index] == null || 
+				bootstrapBoxes[index].bootstrapVersion < bootstrapBox.bootstrapVersion ||
+				bootstrapBoxes[index].currentMediaTime < bootstrapBox.currentMediaTime)
 			{
 				delay = 0.05; 		
 				bootstrapBoxes[index] = bootstrapBox;
@@ -688,7 +690,8 @@ package org.osmf.net.httpstreaming.f4f
 		private function onNewBootstrapBox(event:HTTPStreamingFileHandlerEvent):void
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-			if (abst.bootstrapVersion < event.bootstrapBox.bootstrapVersion)
+			if (abst.bootstrapVersion < event.bootstrapBox.bootstrapVersion || 
+				abst.currentMediaTime < event.bootstrapBox.currentMediaTime)
 			{
 				bootstrapBoxes[currentQuality] = event.bootstrapBox;
 				dispatchDVRStreamInfo(event.bootstrapBox);
