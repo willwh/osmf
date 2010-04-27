@@ -327,8 +327,8 @@ package org.osmf.elements
 					// We should now have a view trait with the default dimensions:
 					var displayObjectTrait:DisplayObjectTrait = mediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 					assertTrue(displayObjectTrait != null);
-					assertTrue(displayObjectTrait.mediaWidth == 0);
-					assertTrue(displayObjectTrait.mediaHeight == 0);
+					assertTrue(isNaN(displayObjectTrait.mediaWidth));
+					assertTrue(isNaN(displayObjectTrait.mediaHeight));
 					
 					// See if the view matches the reported size:
 					assertEquals(0, displayObjectTrait.displayObject.width);
