@@ -114,7 +114,7 @@ package org.osmf.net.dvr
 			streamName = NetStreamUtils.getStreamNameFromURL(urlResource.url, urlIncludesFMSApplicationInstance);
 			
 			var responder:Responder 
-				= new Responder
+				= new TestableResponder
 					( onStreamSubscriptionResult
 					, onServerCallError
 					);
@@ -203,7 +203,7 @@ package org.osmf.net.dvr
 						, false
 						, netConnection
 						, urlResource
-						, new MediaError(MediaErrorCodes.DVRCAST_SUBSCRIBE_FAILED, error.message)
+						, new MediaError(MediaErrorCodes.DVRCAST_SUBSCRIBE_FAILED, error ? error.message : "")
 						)
 					);
 			}	
