@@ -23,11 +23,12 @@ package org.osmf.containers
 {
 	import flash.external.ExternalInterface;
 	
-	import flexunit.framework.TestCase;
-	
 	import org.osmf.elements.HTMLElement;
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.media.MediaElement;
 	
-	public class TestHTMLMediaContainer extends TestCase
+	public class TestHTMLMediaContainer extends TestCaseEx
 	{
 		public function testHTMLMediaContainer():void
 		{
@@ -42,19 +43,33 @@ package org.osmf.containers
 				assertTrue(ExternalInterface.call("function(){return document.osmf.containers;}"));
 				assertTrue(ExternalInterface.call("function(){return document.osmf.containers.MediaFrameworkTest_test;}"));
 				*/
+				assertThrows(container.addMediaElement, null);
+				assertThrows(container.addMediaElement, new MediaElement());
 				
 				var element:HTMLElement = new HTMLElement();
 				container.addMediaElement(element);
 				
 				assertTrue(container.containsMediaElement(element));
+				assertFalse(container.containsMediaElement(null));
+				assertFalse(container.containsMediaElement(new MediaElement()));
+				
+				assertThrows(container.removeMediaElement, null);
+				assertThrows(container.removeMediaElement, new MediaElement());
 				
 				container.removeMediaElement(element);
-				
 				assertFalse(container.containsMediaElement(element));
 				
 				container.addMediaElement(element);
-				
 				assertTrue(container.containsMediaElement(element));
+				
+				var element2:HTMLElement = new HTMLElement();
+				container.addMediaElement(new ProxyElement(new ProxyElement(element2)));
+				
+				assertTrue(container.containsMediaElement(element2));
+				
+				// Test if the container constructs its own id if we omit it:
+				var container2:HTMLMediaContainer = new HTMLMediaContainer();
+				
 			}
 		}
 		
