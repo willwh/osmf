@@ -167,6 +167,7 @@ package org.osmf
 			addTestSuite(TestParallelElementWithSeekTrait);
 			addTestSuite(TestParallelElementWithTimeTrait);
 			addTestSuite(TestParallelElementWithDisplayObjectTrait);
+			addTestSuite(TestParallelElementWithDVRTrait);
 			
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
@@ -177,6 +178,7 @@ package org.osmf
 			addTestSuite(TestSerialElementWithSeekTrait);
 			addTestSuite(TestSerialElementWithTimeTrait);
 			addTestSuite(TestSerialElementWithDisplayObjectTrait);
+			addTestSuite(TestSerialElementWithDVRTrait);
 			
 			addTestSuite(TestCompositeAudioTrait);
 			addTestSuite(TestCompositeDisplayObjectTrait);

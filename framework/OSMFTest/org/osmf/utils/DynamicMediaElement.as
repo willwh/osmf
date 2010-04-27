@@ -84,7 +84,7 @@ package org.osmf.utils
 							trait = useDynamicTraits ? new DynamicDRMTrait() : new DRMTrait();
 							break;
 						case MediaTraitType.DVR:
-							trait = new DVRTrait();
+							trait = useDynamicTraits ? new DynamicDVRTrait() : new DVRTrait();
 							break;
 						default:
 							break;

@@ -26,7 +26,6 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TimeTrait;
 
 	[ExcludeClass]
 	
@@ -78,30 +77,31 @@ package org.osmf.elements.compositeClasses
 		
 		private function processAggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
-			child.addEventListener(DVREvent.IS_RECORDING_CHANGE, onChildIsRecordingChange);
+			childTrait.addEventListener(DVREvent.IS_RECORDING_CHANGE, onChildIsRecordingChange);
+			onChildIsRecordingChange();
 		}
 		
 		private function processUnaggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
-			child.removeEventListener(DVREvent.IS_RECORDING_CHANGE, onChildIsRecordingChange);
+			childTrait.removeEventListener(DVREvent.IS_RECORDING_CHANGE, onChildIsRecordingChange);
+			onChildIsRecordingChange();
 		}
 		
-		private function onChildIsRecordingChange(event:DVREvent):void
+		private function onChildIsRecordingChange(event:DVREvent = null):void
 		{
-			var dvrTrait:DVRTrait = DVRTrait(event.target);
-			
 			if (mode == CompositionMode.SERIAL)
 			{
 				// isRecording must be true if the active child's isRecording
 				// property is true:
-				if	(	traitAggregator.listenedChild
-					&&	(	traitAggregator.listenedChild.getTrait(MediaTraitType.DVR)
-						== 	dvrTrait
-						)
-					)
+				var dvrTrait:DVRTrait
+					= traitAggregator.listenedChild
+						? traitAggregator.listenedChild.getTrait(MediaTraitType.DVR) as DVRTrait
+						: null;
+						
+				if (dvrTrait)
 				{
-					// The active child's trait changed value: update ours
-					// accordingly:
+					// Update the composite's isRecording property to match the
+					// curent child's one:
 					setIsRecording(dvrTrait.isRecording);
 				}
 			}
