@@ -307,12 +307,12 @@ package org.osmf.elements.compositeClasses
 					{
 						// The child is exiting the seeking state, so we just
 						// update the composite seeking state.
-						setSeeking(false, timeTrait.currentTime);
+						setSeeking(false, timeTrait != null ? timeTrait.currentTime : 0);
 					}
 					else
 					{
 						// Save the time which we'll pass to the setSeeking method.
-						exitSeekingStateTime = timeTrait.currentTime;
+						exitSeekingStateTime = timeTrait != null ? timeTrait.currentTime : 0;
 					}		
 				}
 			}					
