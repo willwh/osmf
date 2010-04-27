@@ -103,6 +103,7 @@ package
 		{
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
+			player.addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRM);
 			
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
@@ -122,6 +123,19 @@ package
 			}
 			
 			alert = widgets.getWidget("alert") as AlertDialog;
+		}
+		
+		private function onDRM(event:DRMEvent):void
+		{
+			trace('drmevent:' + event.drmState);
+			CONFIG::DEBUG 
+			{	
+				debugger.send("DRMState:" + event.drmState);
+				if (event.mediaError)
+				{
+					debugger.send("DRMError:" + event.mediaError.detail);
+				}
+			}
 		}
 		
 		override protected function processNewMedia(value:MediaElement):MediaElement
@@ -215,7 +229,7 @@ package
 				url = urlInput.url;
 			}
 		}
-		
+			
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			// Compose error message:
