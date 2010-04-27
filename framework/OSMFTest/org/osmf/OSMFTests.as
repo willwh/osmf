@@ -262,6 +262,7 @@ package org.osmf
 			// DVR
 			//
 			
+			addTestSuite(TestDVRCastSupport);
 			addTestSuite(TestDVRCastConstants);
  			addTestSuite(TestDVRCastDVRTrait);
  			addTestSuite(TestDVRCastNetConnectionFactory);
@@ -271,7 +272,8 @@ package org.osmf
  			addTestSuite(TestDVRCastStreamInfo);
  			addTestSuite(TestDVRCastStreamInfoRetriever);
  			addTestSuite(TestDVRCastTimeTrait);
-
+ 			addTestSuite(TestDVRUtils);
+			
 			// Plugins
 			//
 			
