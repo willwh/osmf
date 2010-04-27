@@ -458,7 +458,7 @@ package org.osmf.elements
 			addTrait
 				(	MediaTraitType.DISPLAY_OBJECT
 				,	trait
-				||	new NetStreamDisplayObjectTrait(stream, video, video.width, video.height)
+				||	new NetStreamDisplayObjectTrait(stream, video, NaN, NaN)
 				);
 			
 			trait = loadTrait.getTrait(MediaTraitType.PLAY);
