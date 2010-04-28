@@ -456,6 +456,48 @@ package org.osmf.elements.f4mClasses
 			assertEquals(dynResource.streamItems[2].streamName, "high");
 			assertEquals(dynResource.host, "http://example.com");
 		}
+		
+		public function testDVRInfo():void
+		{					
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<duration>253</duration>
+								<mimeType>video/x-flv</mimeType>
+								<streamType>recorded</streamType>
+								<media url="low"  bitrate="408" width="640" height="480" />
+								<media url="medium" bitrate="908" width="800" height="600" />
+								<media url="high" bitrate="1708" width="1920" height="1080" />
+								<dvrInfo url="http://example.com/testInfo.xml"
+										id="testInfo"
+										beginOffset="20"
+										endOffset="300"
+										offline="false"/>
+							</manifest>;
+			var manifest:Manifest = parser.parse(test);
+			var errorSeen:Boolean = false;
+			var resource:MediaResourceBase;
+			try
+			{
+				resource = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
+			}
+			catch(error:Error)
+			{
+				errorSeen = true;
+			}			
+			assertFalse(errorSeen);
 			
+			// With no URL, the stream items should be prefixed by the location of the manifest.
+			assertTrue(resource != null);
+			var dynResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+			assertNotNull(manifest.dvrInfo);
+			assertEquals("testInfo", manifest.dvrInfo.id);
+			assertEquals("http://example.com/testInfo.xml", manifest.dvrInfo.url);
+			assertEquals(20, manifest.dvrInfo.beginOffset);
+			assertEquals(300, manifest.dvrInfo.endOffset);
+			assertEquals(false, manifest.dvrInfo.offline);
+			
+			
+		}
+				
 	}
 }
