@@ -122,5 +122,67 @@ package org.osmf.elements
 				}
 			}	
 		}
+						
+		public function testDRMAdditionalHeaderURL2():void
+		{
+			var finished:Function = addAsync(function():void{}, 5000);
+			
+			var loader:F4MLoader = new F4MLoader();			
+			var res1:URLResource = new URLResource('http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Protected/215/production/external/avatar_4000.f4m');
+			var proxy:F4MElement = new F4MElement(null, loader);
+			proxy.resource = res1;
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
+			player.autoPlay = false;
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
+			
+			player.media = proxy;
+			
+			function onLoadedError(event:MediaErrorEvent):void
+			{
+				assertTrue(false);
+			}
+			
+			function onLoaded(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					player.media = null;
+					finished(null);
+				}
+			}	
+		}
+	
+		
+		public function testDRMAdditionalHeader():void
+		{
+			var finished:Function = addAsync(function():void{}, 5000);
+			
+			var loader:F4MLoader = new F4MLoader();			
+			var res1:URLResource = new URLResource('http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Protected/12%20LEGEND.f4m');
+			var proxy:F4MElement = new F4MElement(null, loader);
+			proxy.resource = res1;
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
+			player.autoPlay = false;
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
+			
+			player.media = proxy;
+			
+			function onLoadedError(event:MediaErrorEvent):void
+			{
+				assertTrue(false);
+			}
+			
+			function onLoaded(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					player.media = null;
+					finished(null);
+				}
+			}	
+		}
+		
 	}
 }
