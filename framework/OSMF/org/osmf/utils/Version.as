@@ -80,8 +80,10 @@ package org.osmf.utils
 			// will use the old API and we'll get a VerifyError when we load
 			// it.
 
-			// TODO: This should be set to "1.0" for final release.
-			return Version.version;
+			// Note that this value should *not* be set to Version.version,
+			// but to an explicit hardcoded number.  We will manually update
+			// it whenever we make a change of the type outlined above.
+			return "1.0";
 		}
 		
 		/**
@@ -122,8 +124,8 @@ package org.osmf.utils
 			return false;
 		}
 				
-		private static const _major:String = "0";
-		private static const _minor:String = "95";
+		private static const _major:String = "1";
+		private static const _minor:String = "0";
 		
 		private static const FIELD_SEPARATOR:String = ".";	
 	}
