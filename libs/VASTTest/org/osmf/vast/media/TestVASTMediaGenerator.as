@@ -25,7 +25,11 @@ package org.osmf.vast.media
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.VideoElement;
+	import org.osmf.events.MediaFactoryEvent;
+	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.vast.model.VASTAd;
@@ -37,7 +41,6 @@ package org.osmf.vast.media
 	import org.osmf.vast.model.VASTUrl;
 	import org.osmf.vast.model.VASTVideo;
 	import org.osmf.vast.model.VASTWrapperAd;
-	import org.osmf.elements.VideoElement;
 	
 	public class TestVASTMediaGenerator extends TestCase
 	{
@@ -168,6 +171,38 @@ package org.osmf.vast.media
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
 			assertTrue(resource.url == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+		}
+		
+		public function testCreateMediaElementsWithMediaFactory():void
+		{
+			var createdCount:int = 0;
+			
+			var factory:MediaFactory = new DefaultMediaFactory();
+			factory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onElementCreate);
+			var generator:VASTMediaGenerator = new VASTMediaGenerator(null, factory);
+			
+			var document:VASTDocument = new VASTDocument();
+			var vastAd:VASTAd = new VASTAd("myad1");
+			document.addAd(vastAd);
+			vastAd.inlineAd = new VASTInlineAd();
+			vastAd.inlineAd.video = new VASTVideo();
+			
+			var mediaFile:VASTMediaFile = new VASTMediaFile();
+			vastAd.inlineAd.video.mediaFiles.push(mediaFile);
+			mediaFile.url = TestConstants.REMOTE_PROGRESSIVE_VIDEO;
+			mediaFile.delivery = VASTMediaFile.DELIVERY_PROGRESSIVE;
+			mediaFile.type = "video/x-flv";
+
+			// Should get the VideoElement with the supported MIME type back.			
+			var mediaElements:Vector.<MediaElement> = generator.createMediaElements(document);
+			assertTrue(mediaElements.length == 1);
+			
+			assertTrue(createdCount == 1);
+			
+			function onElementCreate(event:MediaFactoryEvent):void
+			{
+				createdCount++;
+			}
 		}
 		
 		public function testCreateMediaElementsWithImpressionProxy():void

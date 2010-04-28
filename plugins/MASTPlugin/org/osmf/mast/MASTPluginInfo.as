@@ -25,6 +25,7 @@ package org.osmf.mast
 	
 	import org.osmf.mast.media.MASTProxyElement;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaFactoryItemType;
 	import org.osmf.media.MediaResourceBase;
@@ -71,9 +72,16 @@ package org.osmf.mast
 		
 		private function createMASTProxyElement():MediaElement
 		{
-			return new MASTProxyElement();
+			return new MASTProxyElement(null, mediaFactory);
 		}
 		
+		override public function initializePlugin(resource:MediaResourceBase):void
+		{
+			// We'll use the player-supplied MediaFactory for creating all MediaElements.
+			mediaFactory = resource.getMetadataValue(PluginInfo.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
+		}
+
 		private var loader:NetLoader;
+		private var mediaFactory:MediaFactory;
 	}
 }

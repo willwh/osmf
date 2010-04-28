@@ -30,9 +30,9 @@ package org.osmf.mast.loader
 	import org.osmf.mast.managers.MASTConditionManager;
 	import org.osmf.mast.model.*;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.vast.loader.VASTLoadTrait;
 	import org.osmf.vast.loader.VASTLoader;
 	import org.osmf.vast.media.DefaultVASTMediaFileResolver;
@@ -52,10 +52,16 @@ package org.osmf.mast.loader
 		
 		/**
 		 * Constructor.
+		 * 
+		 * @param mediaFactory Optional MediaFactory.  If specified, then all MediaElements
+		 * will be created through the factory.  If not specified, then all MediaElements
+		 * will be directly instantiated.
 		 */
-		public function MASTDocumentProcessor()
+		public function MASTDocumentProcessor(mediaFactory:MediaFactory)
 		{
 			super();
+			
+			this.mediaFactory = mediaFactory;
 		}
 		
 		/**
@@ -159,12 +165,13 @@ package org.osmf.mast.loader
 					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 					// Get the appropriate inline MediaElements.
-					var generator:VASTMediaGenerator = new VASTMediaGenerator();
-					var resolver:IVASTMediaFileResolver = new DefaultVASTMediaFileResolver();
+					var generator:VASTMediaGenerator = new VASTMediaGenerator(null, mediaFactory);
 					
 					dispatchEvent(new MASTDocumentProcessedEvent(generator.createMediaElements(loadTrait.vastDocument), condition));
 				}
 			}
 		}
+		
+		private var mediaFactory:MediaFactory;
 	}
 }

@@ -26,6 +26,7 @@ package org.osmf.vast.media
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.vast.model.VASTAd;
 	import org.osmf.vast.model.VASTDocument;
@@ -48,13 +49,16 @@ package org.osmf.vast.media
 		 * @param mediaFileResolver The resolver to use when a VASTDocument
 		 * contains multiple representations of the same content (MediaFile).
 		 * If null, this object will use a DefaultVASTMediaFileResolver.
+		 * @param mediaFactory Optional MediaFactory.  If specified, this
+		 * object will be used to generate MediaElements.  If not specified,
+		 * then the MediaElements will be directly instantiated.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function VASTMediaGenerator(mediaFileResolver:IVASTMediaFileResolver=null)
+		public function VASTMediaGenerator(mediaFileResolver:IVASTMediaFileResolver=null, mediaFactory:MediaFactory=null)
 		{
 			super();
 			
@@ -62,6 +66,7 @@ package org.osmf.vast.media
 				 mediaFileResolver != null
 				 ? mediaFileResolver
 				 : new DefaultVASTMediaFileResolver();
+			this.mediaFactory = mediaFactory;
 		}
 		
 		/**
@@ -121,7 +126,16 @@ package org.osmf.vast.media
 								mediaURL = mediaURL.replace(/\.flv$|\.f4v$/i, "");
 							}
 
-							var rootElement:MediaElement = new VideoElement(new URLResource(mediaURL));
+							var rootElement:MediaElement;
+							
+							if (mediaFactory != null)
+							{
+								rootElement = mediaFactory.createMediaElement(new URLResource(mediaURL));
+							}
+							else
+							{
+								rootElement = new VideoElement(new URLResource(mediaURL));
+							}
 							
 							// Resolve the chain of ProxyElements, ensuring that
 							// the VideoElement is at the deepest point. 
@@ -141,5 +155,6 @@ package org.osmf.vast.media
 		}
 		
 		private var mediaFileResolver:IVASTMediaFileResolver;
+		private var mediaFactory:MediaFactory;
 	}
 }

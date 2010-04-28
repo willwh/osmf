@@ -39,6 +39,7 @@ package org.osmf.mast.media
 	import org.osmf.mast.traits.MASTPlayTrait;
 	import org.osmf.mast.types.MASTConditionType;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
@@ -66,11 +67,16 @@ package org.osmf.mast.media
 		/**
 		 * Constructor.
 		 * 
-		 * @inheritDoc
+		 * @param proxiedElement The MediaElement to proxy.
+		 * @param mediaFactory Optional MediaFactory.  If specified, then all
+		 * MediaElements will be created through the factory.  If not specified,
+		 * then all MediaElements will be directly instantiated. 
 		 **/
-		public function MASTProxyElement(wrappedElement:MediaElement=null)
+		public function MASTProxyElement(proxiedElement:MediaElement=null, mediaFactory:MediaFactory=null)
 		{
-			super(wrappedElement);
+			super(proxiedElement);
+			
+			this.mediaFactory = mediaFactory;
 		}
 		
 		/**
@@ -158,7 +164,6 @@ package org.osmf.mast.media
 					{
 						orgPlayTrait.play();
 					}
-					
 				}	
 			}
 		}
@@ -178,7 +183,7 @@ package org.osmf.mast.media
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				var processor:MASTDocumentProcessor = new MASTDocumentProcessor();
+				var processor:MASTDocumentProcessor = new MASTDocumentProcessor(mediaFactory);
 				processor.addEventListener(MASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed, false, 0, true);
 				var mediaElement:MediaElement = (proxiedElement as SerialElement).getChildAt(0);
 				var causesPendingPlayRequest:Boolean = processor.processDocument(loadTrait.document, mediaElement);
@@ -279,6 +284,7 @@ package org.osmf.mast.media
 		}
 		
 		private var loadTrait:MASTLoadTrait;
+		private var mediaFactory:MediaFactory;
 		
 		private static const ERROR_MISSING_MAST_METADATA:String = "Media Element is missing MAST metadata";
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";
