@@ -239,11 +239,11 @@ package org.osmf.elements.f4mClasses
 			}
 			if (value.attribute("beginOffset").length() > 0)
 			{
-				dvrInfo.beginOffset = value.@beginOffset;
+				dvrInfo.beginOffset = Math.max(0, parseInt(value.@beginOffset));
 			}
 			if (value.attribute("endOffset").length() > 0)
 			{
-				dvrInfo.endOffset = value.@endOffset;
+				dvrInfo.endOffset =  Math.max(0, parseInt(value.@endOffset));
 			}
 			if (value.attribute("offline").length() > 0)
 			{
