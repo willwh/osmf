@@ -46,6 +46,13 @@ package org.osmf.player.configuration
 					: parameters.autoSwitchQuality.toString().toLowerCase() == "false" 
 						? false
 						: true;
+						
+			_autoPlay
+				= parameters.autoPlay == undefined
+					? true
+					: parameters.autoPlay.toString().toLowerCase() == "false" 
+						? false
+						: true;
 		}
 
 		public function get url():String
@@ -68,6 +75,11 @@ package org.osmf.player.configuration
 			return _autoSwitchQuality;
 		}
 		
+		public function get autoPlay():Boolean
+		{
+			return _autoPlay;
+		}
+		
 		// Internals
 		//
 		
@@ -76,5 +88,6 @@ package org.osmf.player.configuration
 		private var _showStopButton:Boolean;
 		private var _autoHideControlBar:Boolean;
 		private var _autoSwitchQuality:Boolean;
+		private var _autoPlay:Boolean;
 	}
 }

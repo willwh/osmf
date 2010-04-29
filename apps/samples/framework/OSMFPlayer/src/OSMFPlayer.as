@@ -103,7 +103,7 @@ package
 		{
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
-			player.addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRM);
+			player.autoPlay = true;
 			
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
@@ -125,20 +125,6 @@ package
 			alert = widgets.getWidget("alert") as AlertDialog;
 		}
 		
-		private function onDRM(event:DRMEvent):void
-		{
-			trace('drmevent:' + event.drmState);
-			CONFIG::DEBUG 
-			{	
-				debugger.send("DRMState:" + event.drmState);
-				if (event.mediaError)
-				{
-					alert.alert("DRMError", event.mediaError.detail);
-					debugger.send("DRMError:" + event.mediaError.detail);
-				}
-			}
-		}
-		
 		override protected function processNewMedia(value:MediaElement):MediaElement
 		{
 			var result:MediaElement = value;
@@ -148,7 +134,30 @@ package
 				// Forward the configuration's auto-hide setting:
 				var metadata:Metadata = new Metadata();
 				metadata.addValue(ChromeMetadata.AUTO_HIDE, configuration.autoHideControlBar);
-				result.addMetadata(ChromeMetadata.CHROME_METADATA_KEY, metadata); 
+				result.addMetadata(ChromeMetadata.CHROME_METADATA_KEY, metadata);
+				
+				// If not auto-playing, watch the player become seekable, once:
+				if (configuration.autoPlay == false)
+				{
+					player.addEventListener
+						( MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE
+						, onCanSeekChange
+						);
+						
+					function onCanSeekChange(event:MediaPlayerCapabilityChangeEvent):void
+					{
+						player.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onCanSeekChange);
+						if (player.canPause)
+						{
+							player.pause();
+							if (player.canSeek && player.canSeekTo(0.001))
+							{
+								player.seek(0.001);
+							}
+						}
+					}
+				}
+				 
 				
 				// When in debugging mode, wrap the element in a debugger proxy:
 				CONFIG::DEBUG
@@ -230,7 +239,7 @@ package
 				url = urlInput.url;
 			}
 		}
-			
+		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			// Compose error message:

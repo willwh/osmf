@@ -69,72 +69,79 @@ package org.osmf.chrome.assets
 					)
 				)
 			{
-				bitmapData = new BitmapData(width, height, true, 0);
+				try
+				{
+					bitmapData = new BitmapData(width, height, true, 0);
+					
+					var sourceWidth:Number = sourceData.width;
+					var sourceHeight:Number = sourceData.height;
 				
-				var sourceWidth:Number = sourceData.width;
-				var sourceHeight:Number = sourceData.height;
-			
-				var rightWidth:Number = sourceHeight - scale9.y - scale9.height;
-				var bottomHeight:Number = sourceWidth - scale9.x - scale9.width;
-				
-				var matrix:Matrix = new Matrix();
-				var clipRect:Rectangle = new Rectangle();
-				
-				
-				// [1] | [5] | [2]
-				// ---------------
-				// [8] | [7] | [9]
-				// ---------------
-				// [4] | [6] | [3]
-				
-				// [1]
-				clipRect = new Rectangle(0, 0, scale9.x, scale9.y);
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-				
-				// [2]
-				matrix.tx = width - sourceWidth;
-				clipRect = new Rectangle(width - bottomHeight, 0, scale9.x, scale9.y);
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-				
-				// [3]
-				matrix.ty = height - sourceHeight;
-				clipRect = new Rectangle(width - bottomHeight, height - rightWidth, scale9.x, bottomHeight);
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-
-				// [4]
-				matrix.tx = 0;				
-				clipRect = new Rectangle(0, height - rightWidth, scale9.x, rightWidth);
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-				
-				// [5]
-				matrix.identity();
-				matrix.a = (width - scale9.x - rightWidth) / scale9.width;
-				matrix.tx = scale9.x - scale9.x * matrix.a;
-				clipRect = new Rectangle(scale9.x, 0, scale9.width * matrix.a, scale9.y); 
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-				
-				// [6]
-				matrix.ty = height - sourceHeight;
-				clipRect = new Rectangle(scale9.x, height - rightWidth, scale9.width * matrix.a, bottomHeight); 
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-				
-				// [7]
-				matrix.d = (height - scale9.y - bottomHeight) / scale9.height;
-				matrix.ty = scale9.y - scale9.y * matrix.d;
-				clipRect = new Rectangle(scale9.x, scale9.y, scale9.width * matrix.a, scale9.height * matrix.d);
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-				
-				// [8]
-				matrix.identity();
-				matrix.d = (height - scale9.y - bottomHeight) / scale9.height;
-				matrix.ty = scale9.y - scale9.y * matrix.d;
-				clipRect = new Rectangle(0, scale9.y, scale9.x, scale9.height * matrix.d); 
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
-				
-				// [9]
-				matrix.tx = width - sourceWidth;
-				clipRect = new Rectangle(width - rightWidth, scale9.y, rightWidth, scale9.height * matrix.d); 
-				bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					var rightWidth:Number = sourceHeight - scale9.y - scale9.height;
+					var bottomHeight:Number = sourceWidth - scale9.x - scale9.width;
+					
+					var matrix:Matrix = new Matrix();
+					var clipRect:Rectangle = new Rectangle();
+					
+					
+					// [1] | [5] | [2]
+					// ---------------
+					// [8] | [7] | [9]
+					// ---------------
+					// [4] | [6] | [3]
+					
+					// [1]
+					clipRect = new Rectangle(0, 0, scale9.x, scale9.y);
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					
+					// [2]
+					matrix.tx = width - sourceWidth;
+					clipRect = new Rectangle(width - bottomHeight, 0, scale9.x, scale9.y);
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					
+					// [3]
+					matrix.ty = height - sourceHeight;
+					clipRect = new Rectangle(width - bottomHeight, height - rightWidth, scale9.x, bottomHeight);
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+	
+					// [4]
+					matrix.tx = 0;				
+					clipRect = new Rectangle(0, height - rightWidth, scale9.x, rightWidth);
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					
+					// [5]
+					matrix.identity();
+					matrix.a = (width - scale9.x - rightWidth) / scale9.width;
+					matrix.tx = scale9.x - scale9.x * matrix.a;
+					clipRect = new Rectangle(scale9.x, 0, scale9.width * matrix.a, scale9.y); 
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					
+					// [6]
+					matrix.ty = height - sourceHeight;
+					clipRect = new Rectangle(scale9.x, height - rightWidth, scale9.width * matrix.a, bottomHeight); 
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					
+					// [7]
+					matrix.d = (height - scale9.y - bottomHeight) / scale9.height;
+					matrix.ty = scale9.y - scale9.y * matrix.d;
+					clipRect = new Rectangle(scale9.x, scale9.y, scale9.width * matrix.a, scale9.height * matrix.d);
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					
+					// [8]
+					matrix.identity();
+					matrix.d = (height - scale9.y - bottomHeight) / scale9.height;
+					matrix.ty = scale9.y - scale9.y * matrix.d;
+					clipRect = new Rectangle(0, scale9.y, scale9.x, scale9.height * matrix.d); 
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+					
+					// [9]
+					matrix.tx = width - sourceWidth;
+					clipRect = new Rectangle(width - rightWidth, scale9.y, rightWidth, scale9.height * matrix.d); 
+					bitmapData.draw(sourceData, matrix, null, null, clipRect, smoothing);
+				}
+				catch(e:ArgumentError)
+				{
+					trace("Warning: argument error on 9-slicing bitmap!");
+				}
 			}
 			else
 			{
