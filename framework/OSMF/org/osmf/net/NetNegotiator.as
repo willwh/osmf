@@ -237,6 +237,21 @@ package org.osmf.net
 
     				break;
 				case NetConnectionCodes.CONNECT_SUCCESS:
+				
+					CONFIG::LOGGING
+					{
+						if (	event.info.hasOwnProperty("data")
+							&& 	event.info.data.hasOwnProperty("version")
+						   )
+						{
+							logger.info("FMS Version: " + event.info.data.version);
+						}
+						else
+						{
+							logger.info("FMS Version unknown");
+						}
+					}
+					
 					shutDownUnsuccessfulConnections();
 					dispatchEvent
 						( new NetConnectionFactoryEvent
