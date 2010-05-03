@@ -29,7 +29,7 @@ package org.osmf.media
      *  @playerversion Flash 10
      *  @playerversion AIR 1.5
      *  @productversion OSMF 1.0
-	 *  @productversion OSMF 1.0
+	 *  @productversion FLEXOSMF 4.0
      */
     public final class MediaPlayerState
     {
