@@ -45,9 +45,9 @@ package org.osmf.net
 		/**
 		 * Constructor.
 		 * 
-		 * @param url The URL of the resource. For information about formatting this
-		 * URL for various formats, see FlashMediaServer documentation link below.
-		 * @see http://help.adobe.com/en_US/FlashMediaServer/3.5_Deving/WS5b3ccc516d4fbf351e63e3d11a0773d117-7fc8.html
+		 * @param url The URL of the resource. For details about how to format this
+		 * URL for flv, mp4, and other file formats, see Adobe® Flash® Media Server documentation link below.
+		 * @see http://www.adobe.com/go/learn_OSMF_fms_url_format_en
 		 * @param streamType The type of the stream. If null, defaults to
 		 * StreamType.RECORDED.
 		 * @param subclipStartTime Optional start time of the streaming
