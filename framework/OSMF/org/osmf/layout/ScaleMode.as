@@ -29,7 +29,6 @@ package org.osmf.layout
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 *  @productversion FLEXOSMF 4.0
 	 */ 
 	public final class ScaleMode
 	{				
@@ -40,7 +39,6 @@ package org.osmf.layout
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const NONE:String 		= "none";
 		
@@ -52,7 +50,6 @@ package org.osmf.layout
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 *  @productversion FLEXOSMF 4.0
 		 */ 
 		public static const STRETCH:String		= "stretch";
 		
@@ -65,7 +62,6 @@ package org.osmf.layout
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 *  @productversion FLEXOSMF 4.0
 		 */ 
 		public static const LETTERBOX:String 	= "letterbox";
 		
@@ -78,7 +74,6 @@ package org.osmf.layout
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const ZOOM:String			= "zoom";
 	}
