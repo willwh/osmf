@@ -24,8 +24,11 @@ package org.osmf.examples.seeking
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.elements.ProxyElement;
+	import org.osmf.events.SeekEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.TraitEventDispatcher;
 	
 	/**
 	 * A ProxyElement which can non-invasively prevent another
@@ -33,13 +36,46 @@ package org.osmf.examples.seeking
 	 **/
 	public class UnseekableProxyElement extends ProxyElement
 	{
-		public function UnseekableProxyElement(wrappedElement:MediaElement)
+		public function UnseekableProxyElement(proxiedElement:MediaElement)
 		{
-			super(wrappedElement);
-			
+			super(proxiedElement);
+
 			// Prevent seeking.
+			enableSeeking(false);
+			
+			// We need to know when playback completes and when the media
+			// is rewound.
+			var traitEventDispatcher:TraitEventDispatcher = new TraitEventDispatcher();
+			traitEventDispatcher.media = proxiedElement;
+			traitEventDispatcher.addEventListener(TimeEvent.COMPLETE, onComplete);
+			traitEventDispatcher.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+		}
+		
+		private function onComplete(event:TimeEvent):void
+		{
+			// When playback completes, unblock seeking (i.e. so that we
+			// can be rewound).
+			blockedTraits = new Vector.<String>();
+		}
+		
+		private function onSeekingChange(event:SeekEvent):void
+		{
+			if (event.seeking == false && event.time == 0)
+			{
+				// Prevent seeking.
+				enableSeeking(false);
+			}
+		}
+		
+		private function enableSeeking(enable:Boolean):void
+		{
 			var traitsToBlock:Vector.<String> = new Vector.<String>();
-			traitsToBlock.push(MediaTraitType.SEEK);
+			
+			if (enable == false)
+			{
+				traitsToBlock.push(MediaTraitType.SEEK);
+			}
+			
 			blockedTraits = traitsToBlock;
 		}
 	}
