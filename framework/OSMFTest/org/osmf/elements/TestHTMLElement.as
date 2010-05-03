@@ -21,14 +21,42 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.TestMediaElement;
 
-	public class TestHTMLElement extends TestCaseEx
+	public class TestHTMLElement extends TestMediaElement
 	{
-		public function testHTMLElement():void
+		// Overrides
+		//
+		
+		override public function testSetResource():void
 		{
-			var htmlElement:HTMLElement = new HTMLElement();
-			assertNotNull(htmlElement);
+		}
+		
+		override protected function createMediaElement():MediaElement
+		{
+			return new HTMLElement();
+		}
+		
+		override protected function get hasLoadTrait():Boolean
+		{
+			return false;
+		}
+		
+		override protected function get resourceForMediaElement():MediaResourceBase
+		{
+			return null;
+		}
+
+		override protected function get existentTraitTypesOnInitialization():Array
+		{
+			return [];
+		}
+
+		override protected function get existentTraitTypesAfterLoad():Array
+		{
+			return [];
 		}
 	}
 }
