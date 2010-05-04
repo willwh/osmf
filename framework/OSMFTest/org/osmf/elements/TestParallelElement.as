@@ -187,7 +187,7 @@ package org.osmf.elements
 			assertTrue(cm.getValue("foo1") == "foo2");
 			assertTrue(cm.getValue("bar1") == null);
 			
-			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataAddCount == 1);
 			assertTrue(metadataRemoveCount == 0);
 			
 			// Adding the second child shouldn't have an impact, since
@@ -200,29 +200,28 @@ package org.osmf.elements
 			assertTrue(cm.getValue("foo1") == "foo2");
 			assertTrue(cm.getValue("bar1") == null);
 			
-			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataAddCount == 1);
 			assertTrue(metadataRemoveCount == 0);
 			
 			// Adding and removing metadata on a child should trigger
 			// some events.
 			mediaElement1.addMetadata("ns2", new Metadata());
-			assertTrue(metadataAddCount == 1);
+			assertTrue(metadataAddCount == 2);
 			assertTrue(metadataRemoveCount == 0);
 
 			mediaElement2.addMetadata("ns2", new Metadata());
-			
-			// TODO: This probably shouldn't register as an add, given that
-			// we're adding it to the second child.  But I'm not sure how
-			// (or if) to fix this.  (Ditto for the second remove, below.)
 			assertTrue(metadataAddCount == 2);
 			assertTrue(metadataRemoveCount == 0);
 
+			// When we remove a metadata where another child has metadata
+			// in the same namespace, it's essentially a "change" event
+			// (which means a remove followed by an add).
 			mediaElement1.removeMetadata("ns2");
-			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataAddCount == 3);
 			assertTrue(metadataRemoveCount == 1);
 
 			mediaElement2.removeMetadata("ns2");
-			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataAddCount == 3);
 			assertTrue(metadataRemoveCount == 2);
 			
 			// If we remove the first child, the metadata of the second
@@ -234,8 +233,8 @@ package org.osmf.elements
 			assertTrue(cm.getValue("foo1") == null);
 			assertTrue(cm.getValue("bar1") == "bar2");
 			
-			assertTrue(metadataAddCount == 2);
-			assertTrue(metadataRemoveCount == 2);
+			assertTrue(metadataAddCount == 4);
+			assertTrue(metadataRemoveCount == 3);
 
 			// And if we remove the last child, the metadata is gone.
 			composite.removeChild(mediaElement2);
@@ -243,8 +242,8 @@ package org.osmf.elements
 			cm = composite.getMetadata("ns1");
 			assertTrue(cm == null);
 
-			assertTrue(metadataAddCount == 2);
-			assertTrue(metadataRemoveCount == 2);
+			assertTrue(metadataAddCount == 4);
+			assertTrue(metadataRemoveCount == 4);
 			
 			function onMetadataAdd(event:MediaElementEvent):void
 			{

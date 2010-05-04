@@ -76,9 +76,7 @@ package org.osmf.elements.compositeClasses
 			cm.addChild(metadata);
 			assertDispatches
 				(	cm
-				,	[ CompositeMetadataEvent.METADATA_GROUP_ADD
-					, CompositeMetadataEvent.CHILD_METADATA_ADD
-					]
+				,	[ CompositeMetadataEvent.METADATA_GROUP_ADD ]
 				,	metadata.addValue
 				,	url
 				, 	childMetadata
@@ -97,17 +95,14 @@ package org.osmf.elements.compositeClasses
 				
 			assertDispatches
 				( 	cm
-				, 	[ CompositeMetadataEvent.CHILD_METADATA_REMOVE
-					, CompositeMetadataEvent.METADATA_GROUP_CHANGE	
-				  	]
+				, 	[ CompositeMetadataEvent.METADATA_GROUP_CHANGE	]
 				, 	md2.removeValue
 				,	url
 				);
 				
 			assertDispatches
 				( 	cm
-				, 	[ CompositeMetadataEvent.CHILD_METADATA_REMOVE
-					, CompositeMetadataEvent.METADATA_GROUP_CHANGE
+				, 	[ CompositeMetadataEvent.METADATA_GROUP_CHANGE
 					, CompositeMetadataEvent.METADATA_GROUP_REMOVE
 				  	]
 				, 	metadata.removeValue

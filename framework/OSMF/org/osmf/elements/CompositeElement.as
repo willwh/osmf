@@ -27,10 +27,8 @@ package org.osmf.elements
 	
 	import org.osmf.elements.compositeClasses.CompositeMediaTraitFactory;
 	import org.osmf.elements.compositeClasses.CompositeMetadata;
-	import org.osmf.elements.compositeClasses.CompositeMetadataEvent;
 	import org.osmf.elements.compositeClasses.TraitAggregator;
 	import org.osmf.elements.compositeClasses.TraitAggregatorEvent;
-	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
@@ -347,10 +345,7 @@ package org.osmf.elements
 		 */
 		override protected function createMetadata():Metadata
 		{
-			var compositeMetadata:CompositeMetadata = new CompositeMetadata();
-			compositeMetadata.addEventListener(CompositeMetadataEvent.CHILD_METADATA_ADD, onCompositeMetadataChildMetadataAdd);
-			compositeMetadata.addEventListener(CompositeMetadataEvent.CHILD_METADATA_REMOVE, onCompositeMetadataChildMetadataRemove);
-			return compositeMetadata;
+			return new CompositeMetadata();
 		}
 		
 		/**
@@ -406,34 +401,6 @@ package org.osmf.elements
 		private function onChildError(event:MediaErrorEvent):void
 		{
 			dispatchEvent(event.clone());
-		}
-		
-		private function onCompositeMetadataChildMetadataAdd(event:CompositeMetadataEvent):void
-		{
-			dispatchEvent
-				( new MediaElementEvent
-					( MediaElementEvent.METADATA_ADD
-					, false
-					, false
-					, null
-					, event.childMetadataNamespaceURL
-					, event.childMetadata
-					)
-				);
-		}
-
-		private function onCompositeMetadataChildMetadataRemove(event:CompositeMetadataEvent):void
-		{
-			dispatchEvent
-				( new MediaElementEvent
-					( MediaElementEvent.METADATA_REMOVE
-					, false
-					, false
-					, null
-					, event.childMetadataNamespaceURL
-					, event.childMetadata
-					)
-				);
 		}
 
 		private var _traitFactory:CompositeMediaTraitFactory;

@@ -201,6 +201,14 @@ package org.osmf.media
 			
 			assertEquals(mediaElement.getMetadata(nsurl1), meta1);
 			assertEquals(mediaElement.getMetadata(nsurl2), meta2);
+			
+			// Test addition through the undocumented API results in
+			// an event.  (This is how we simulate metadata being added
+			// internally.)
+			addCalled = false;
+			mediaElement.metadata.addValue("foo", meta1);
+			assertEquals(mediaElement.getMetadata("foo"), meta1);
+			assertTrue(addCalled);
 
 			// Test the Catching of Errors
 			try
@@ -223,7 +231,7 @@ package org.osmf.media
 			{
 				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-
+			
 			function onAdd(event:MediaElementEvent):void
 			{
 				addCalled = true;
@@ -250,6 +258,14 @@ package org.osmf.media
 			assertTrue(removeCalled);
 			assertEquals(mediaElement.removeMetadata(nsurl2), null);
 			assertEquals(mediaElement.removeMetadata(nsurl1), meta1);
+
+			// Test removal through the undocumented API results in
+			// an event.  (This is how we simulate metadata being removed
+			// internally.)
+			removeCalled = false;
+			mediaElement.addMetadata("foo", meta1);
+			assertEquals(mediaElement.metadata.removeValue("foo"), meta1);
+			assertTrue(removeCalled);
 
 			// Test the Catching of Errors
 			try

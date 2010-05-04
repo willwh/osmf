@@ -44,8 +44,6 @@ package org.osmf.elements.compositeClasses
 	{
 		public static const CHILD_ADD:String = "childAdd";
 		public static const CHILD_REMOVE:String = "childRemove";
-		public static const CHILD_METADATA_ADD:String = "childMetadataAdd";
-		public static const CHILD_METADATA_REMOVE:String = "childMetadataRemove";
 		public static const METADATA_GROUP_ADD:String = "metadataGroupAdd";
 		public static const METADATA_GROUP_REMOVE:String = "metadataGroupRemove";
 		public static const METADATA_GROUP_CHANGE:String = "metadataGroupChange";

@@ -28,7 +28,6 @@ package org.osmf.elements.compositeClasses
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataGroup;
 	import org.osmf.metadata.MetadataSynthesizer;
@@ -61,27 +60,7 @@ package org.osmf.elements.compositeClasses
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="childRemove", type="org.osmf.events.CompositeMetadataEvent")]
-	
-	/**
-	 * Event fired when a child got a Metadata added. 
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name="childMetadataAdd", type="org.osmf.events.CompositeMetadataEvent")]
-	
-	/**
-	 * Event fired when a child got a Metadata removed. 
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name="childMetadataRemove", type="org.osmf.events.CompositeMetadataEvent")]
-	
+		
 	/**
 	 * Event fired when a new metadata group emerged. 
 	 *  
@@ -215,14 +194,13 @@ package org.osmf.elements.compositeClasses
 						, onChildMetadataGroupChange
 						);
 				}
-					
+				
 				for each (var url:String in child.keys)
 				{
 					processChildMetadataAdd
 						( child
 						, child.getValue(url) as Metadata
 						, url
-						, false // Don't trigger child metadata add events. 
 						);
 				}
 				
@@ -271,7 +249,7 @@ package org.osmf.elements.compositeClasses
 					);
 					
 				child.removeEventListener
-					( MetadataEvent.VALUE_ADD
+					( MetadataEvent.VALUE_REMOVE
 					, onChildMetadataRemove
 					);
 				
@@ -289,7 +267,6 @@ package org.osmf.elements.compositeClasses
 						( child
 						, child.getValue(url) as Metadata
 						, url
-						, false // Don't trigger child metadata remove events.
 						);
 				}
 				
@@ -517,7 +494,7 @@ package org.osmf.elements.compositeClasses
 		// Internals
 		//
 		
-		private function processChildMetadataAdd(child:Metadata, metadata:Metadata, metadataNamespaceURL:String, dispatchAddChildEvent:Boolean = true):void
+		private function processChildMetadataAdd(child:Metadata, metadata:Metadata, metadataNamespaceURL:String):void
 		{
 			var groupAddEvent:CompositeMetadataEvent;
 			
@@ -547,27 +524,6 @@ package org.osmf.elements.compositeClasses
 				
 				metadataGroup.addMetadata(child, metadata);
 			}
-			
-			// Don't dispatch the event if the metadata doesn't synthesize.
-			// Note that this is a highly fragile approach, which would be
-			// improved if we refactored the synthesizer code in light of
-			// the changes to how metadata is exposed from the MediaElement
-			// (i.e. via add/remove APIs, rather than through a property
-			// on the MediaElement).  The property-based approach allowed us
-			// to funnel everything through the synthesizer, but that constraint
-			// no longer holds. 
-			if (dispatchAddChildEvent && !(metadata.synthesizer is NullMetadataSynthesizer))
-			{
-				dispatchEvent
-					( new CompositeMetadataEvent
-						( CompositeMetadataEvent.CHILD_METADATA_ADD
-						, false, false
-						, child
-						, metadataNamespaceURL
-						, metadata
-						)
-					);
-			}
 					
 			if (groupAddEvent != null)
 			{
@@ -575,7 +531,7 @@ package org.osmf.elements.compositeClasses
 			}
 		}
 		
-		private function processChildMetadataRemove(child:Metadata, metadata:Metadata, metadataNamespaceURL:String, dispatchChildRemoveEvent:Boolean = true):void
+		private function processChildMetadataRemove(child:Metadata, metadata:Metadata, metadataNamespaceURL:String):void
 		{
 			var groupRemoveEvent:CompositeMetadataEvent;
 			
@@ -602,19 +558,6 @@ package org.osmf.elements.compositeClasses
 					delete childMetadataGroups[childrenNamespaceURL];
 					
 				}
-			}
-			
-			if (dispatchChildRemoveEvent && !(metadata.synthesizer is NullMetadataSynthesizer))
-			{
-				dispatchEvent
-					( new CompositeMetadataEvent
-						( CompositeMetadataEvent.CHILD_METADATA_REMOVE
-						, false, false
-						, child
-						, metadataNamespaceURL
-						, metadata
-						)
-					);
 			}
 			
 			if (groupRemoveEvent != null)
@@ -710,7 +653,7 @@ package org.osmf.elements.compositeClasses
 			// If the activeChild was just removed, don't let it influence the
 			// synthesis decision.
 			var serialElementActiveChild:Metadata = _activeChild;
-			if (_activeChild != null && metadataGroup.parentMetadatas.indexOf(_activeChild) == -1)
+			if (_activeChild != null && children.indexOf(_activeChild) == -1)
 			{
 				serialElementActiveChild = null;
 			}

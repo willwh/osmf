@@ -23,16 +23,15 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.containers.IMediaContainer;
-	import org.osmf.elements.CompositeElement;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MetadataEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
@@ -156,6 +155,10 @@ package org.osmf.media
 			super();
 			
 			_metadata = createMetadata();
+			_metadata.addEventListener(MetadataEvent.VALUE_ADD, onMetadataValueAdd);
+			_metadata.addEventListener(MetadataEvent.VALUE_REMOVE, onMetadataValueRemove);
+			_metadata.addEventListener(MetadataEvent.VALUE_CHANGE, onMetadataValueChange);
+			
 			setupTraitResolvers();		
 			setupTraits();
 			
@@ -283,9 +286,6 @@ package org.osmf.media
 			}
 			
 			this.metadata.addValue(namespaceURL, metadata);
-			
-			dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_ADD, false, false, null, namespaceURL, metadata));
-			
 		}
 		
 		/**
@@ -311,12 +311,7 @@ package org.osmf.media
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 
-			var result:Metadata = metadata.removeValue(namespaceURL) as Metadata;
-			if (result != null)
-			{
-				dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_REMOVE, false, false, null, namespaceURL, result));
-			}
-			return result;
+			return metadata.removeValue(namespaceURL) as Metadata;
 		}
 		
 		/** 
@@ -669,6 +664,59 @@ package org.osmf.media
 			{
 				_container = event.newContainer;
 			}
+		}
+		
+		private function onMetadataValueAdd(event:MetadataEvent):void
+		{
+			dispatchEvent
+				( new MediaElementEvent
+					( MediaElementEvent.METADATA_ADD
+					, false
+					, false
+					, null
+					, event.key
+					, event.value as Metadata
+					)
+				);
+		}
+		
+		private function onMetadataValueChange(event:MetadataEvent):void
+		{
+			dispatchEvent
+				( new MediaElementEvent
+					( MediaElementEvent.METADATA_REMOVE
+					, false
+					, false
+					, null
+					, event.key
+					, event.oldValue as Metadata
+					)
+				);
+
+			dispatchEvent
+				( new MediaElementEvent
+					( MediaElementEvent.METADATA_ADD
+					, false
+					, false
+					, null
+					, event.key
+					, event.value as Metadata
+					)
+				);
+		}
+
+		private function onMetadataValueRemove(event:MetadataEvent):void
+		{
+			dispatchEvent
+				( new MediaElementEvent
+					( MediaElementEvent.METADATA_REMOVE
+					, false
+					, false
+					, null
+					, event.key
+					, event.value as Metadata
+					)
+				);
 		}
 		
 		private var traits:Dictionary = new Dictionary();

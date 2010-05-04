@@ -254,7 +254,7 @@ package org.osmf.elements
 			assertTrue(cm.getValue("foo1") == "foo2");
 			assertTrue(cm.getValue("bar1") == null);
 			
-			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataAddCount == 1);
 			assertTrue(metadataRemoveCount == 0);
 			
 			// Adding the second child shouldn't have an impact, since
@@ -266,20 +266,16 @@ package org.osmf.elements
 			assertTrue(cm.getValue("foo1") == "foo2");
 			assertTrue(cm.getValue("bar1") == null);
 			
-			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataAddCount == 1);
 			assertTrue(metadataRemoveCount == 0);
 			
 			// Adding and removing metadata on a child should trigger
 			// some events.
 			mediaElement1.addMetadata("ns2", new Metadata());
-			assertTrue(metadataAddCount == 1);
+			assertTrue(metadataAddCount == 2);
 			assertTrue(metadataRemoveCount == 0);
 
 			mediaElement2.addMetadata("ns2", new Metadata());
-			
-			// TODO: This probably shouldn't register as an add, given that
-			// we're adding it to a non-active child.  But I'm not sure how
-			// (or if) to fix this.  (Ditto for the second remove, below.)
 			assertTrue(metadataAddCount == 2);
 			assertTrue(metadataRemoveCount == 0);
 
@@ -289,7 +285,7 @@ package org.osmf.elements
 
 			mediaElement2.removeMetadata("ns2");
 			assertTrue(metadataAddCount == 2);
-			assertTrue(metadataRemoveCount == 2);
+			assertTrue(metadataRemoveCount == 1);
 			
 			// If we remove the first child, the second child will
 			// become active.
@@ -300,7 +296,7 @@ package org.osmf.elements
 			assertTrue(cm.getValue("foo1") == null);
 			assertTrue(cm.getValue("bar1") == "bar2");
 			
-			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataAddCount == 3);
 			assertTrue(metadataRemoveCount == 2);
 
 			// And if we remove the last child, the metadata is gone.
@@ -309,8 +305,8 @@ package org.osmf.elements
 			cm = composite.getMetadata("ns1");
 			assertTrue(cm == null);
 
-			assertTrue(metadataAddCount == 2);
-			assertTrue(metadataRemoveCount == 2);
+			assertTrue(metadataAddCount == 3);
+			assertTrue(metadataRemoveCount == 3);
 			
 			function onMetadataAdd(event:MediaElementEvent):void
 			{
