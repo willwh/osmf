@@ -155,7 +155,8 @@ package org.osmf.player.debug
 		
 		private function processDRMStateChange(event:DRMEvent):void
 		{
-			debugger.send("EVENT","drmStateChange", event.drmState);
+			var error:String = event.mediaError ? "ErrorID: " + event.mediaError.errorID + ", Message: " + event.mediaError.message + ", Detail: " + event.mediaError.detail  : "";
+			debugger.send("EVENT","drmStateChange", event.drmState, "[", error, "]");
 		}
 		
 		// Internals
