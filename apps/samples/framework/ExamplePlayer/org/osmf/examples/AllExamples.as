@@ -344,25 +344,6 @@ package org.osmf.examples
 
 			examples.push
 				( new Example
-					( 	"Serial Composition (Preloaded)"
-					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), where each video is loaded up front, enabling a quicker transition from one to the other."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							var videoElement:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							preload(videoElement, true);
-							var videoElement2:VideoElement  = new VideoElement(new URLResource(REMOTE_STREAM));
-							preload(videoElement2, false);
-							
-							serialElement.addChild(videoElement);
-							serialElement.addChild(videoElement2);
-							return serialElement;
-				  	   	} 
-				  	)
-				);
-
-			examples.push
-				( new Example
 					( 	"Parallel Composition (Default Layout)"
 					, 	"Demonstrates playback of a ParallelElement that contains two videos (one progressive, one streaming), using the default layout settings.  Note that only one video is shown.  This is because both videos use the default layout settings, and thus overlap each other."
 				  	,  	function():MediaElement
@@ -1056,31 +1037,7 @@ package org.osmf.examples
 				
 			return examples;
 		}
-		
-     	private static function preload(mediaElement:MediaElement, doPlayPause:Boolean):void
-		{
-			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-			if (doPlayPause)
-			{			
-				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			}			
-			loadTrait.load();
-			
-			function onLoadStateChange(event:LoadEvent):void
-			{
-				if (event.loadState == LoadState.READY)
-				{	
-					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
-					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-										
-					playTrait.play();					
-					playTrait.pause();						
-				}				
-			}
-			
-     	}
-
-		
+				
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 		private static const REMOTE_PROGRESSIVE2:String 		= "http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv";
 		private static const REMOTE_STREAM:String 				= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
