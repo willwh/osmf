@@ -82,16 +82,16 @@ package org.osmf.chrome.widgets
 				
 				var scrubBarWidth:Number = Math.max(10, availableWidth - ((timeFieldsWidth + timeFieldSpacing) * 2));
 				 
-				scrubBarTrack.x = timeFieldsWidth + timeFieldSpacing;
+				scrubBarTrack.x = Math.round(timeFieldsWidth + timeFieldSpacing);
 				scrubBarTrack.y = Math.round((timeFieldsHeight - scrubBarTrack.height) / 2) 
 				scrubBarTrack.width = scrubBarWidth;
 				
-				scrubberStart = scrubBarTrack.x - scrubber.width /2;
+				scrubberStart = scrubBarTrack.x - Math.round(scrubber.width / 2);
 				scrubberEnd = scrubberStart + scrubBarWidth;
 				
 				scrubber.range = scrubBarWidth;
 				scrubber.y = scrubBarTrack.y;
-				scrubber.origin = scrubBarTrack.x - (scrubber.width / 2);
+				scrubber.origin = scrubberStart;
 				
 				scrubBarClickArea.x = scrubBarTrack.x;
 				scrubBarClickArea.y = scrubBarTrack.y;
@@ -263,7 +263,10 @@ package org.osmf.chrome.widgets
 			var seekable:SeekTrait = media ? media.getTrait(MediaTraitType.SEEK) as SeekTrait : null;
 			if (temporal && seekable)
 			{
-				var time:Number = temporal.duration * (scrubber.x + scrubber.width / 2 - scrubberStart) / (scrubberEnd - scrubberStart);
+				var time:Number
+					= (temporal.duration * (scrubber.x - scrubberStart))
+					/ scrubber.range;
+				
 				if (seekable.canSeekTo(time))
 				{
 					seekable.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange)
