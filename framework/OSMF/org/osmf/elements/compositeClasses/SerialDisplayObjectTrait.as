@@ -21,8 +21,7 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import mx.utils.DisplayUtil;
-	
+
 	import org.osmf.containers.IMediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
