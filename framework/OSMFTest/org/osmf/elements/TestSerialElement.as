@@ -43,6 +43,105 @@ package org.osmf.elements
 		// Tests
 		//
 		
+		public function testCurrentChild():void
+		{
+			var currentChildChangeCount:int = 0;
+			
+			var serial:SerialElement = createSerialElement();
+			serial.addEventListener(SerialElementEvent.CURRENT_CHILD_CHANGE, onCurrentChildChange);
+			
+			assertTrue(serial.currentChild == null);
+			assertTrue(currentChildChangeCount == 0);
+			
+			// Add some children.
+			//
+			
+			var child1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO, MediaTraitType.LOAD]);
+			serial.addChild(child1);
+			
+			// As soon as we add a child, it becomes the "current child" of the composition.
+			assertTrue(serial.currentChild == child1);
+			assertTrue(currentChildChangeCount == 1);
+
+			var child2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO, MediaTraitType.BUFFER]);
+			serial.addChild(child2);
+			
+			// No change to the current child.
+			assertTrue(serial.currentChild == child1);
+			assertTrue(currentChildChangeCount == 1);
+						
+			// But if we remove and readd the first child, the second one
+			// should now be reflected as the "current child".
+			serial.removeChild(child1);
+			assertTrue(serial.currentChild == child2);
+			assertTrue(currentChildChangeCount == 2);
+			
+			serial.addChildAt(child1, 0);
+			assertTrue(serial.currentChild == child2);
+			assertTrue(currentChildChangeCount == 2);
+			
+			// Add some more children.
+			//
+
+			var child3:DynamicMediaElement = new DynamicMediaElement([]);
+			
+			serial.addChild(child3);
+			assertTrue(serial.currentChild == child2);
+			assertTrue(currentChildChangeCount == 2);
+			
+			var child4:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO]);
+			serial.addChildAt(child4, 0);
+			assertTrue(serial.currentChild == child2);
+			assertTrue(currentChildChangeCount == 2);
+
+			var child5:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO]);
+			serial.addChild(child5);
+			assertTrue(serial.currentChild == child2);
+			assertTrue(currentChildChangeCount == 2);
+			
+			// When we remove the current child, the next child should be the
+			// new current child.
+			serial.removeChild(child2);
+			assertTrue(serial.currentChild == child3);
+			assertTrue(currentChildChangeCount == 3);
+
+			serial.removeChild(child3);
+			assertTrue(serial.currentChild == child5);
+			assertTrue(currentChildChangeCount == 4);
+			
+			// Now when we remove the current child, the new current child is
+			// the first child since there is no next child.
+			serial.removeChild(child5);
+			assertTrue(serial.currentChild == child4);
+			assertTrue(currentChildChangeCount == 5);
+			
+			// When we remove the last child, we have no more current child.
+			serial.removeChild(child4);
+			assertTrue(serial.currentChild == child1);
+			assertTrue(currentChildChangeCount == 6);
+			serial.removeChild(child1);
+			assertTrue(serial.currentChild == null);
+			assertTrue(currentChildChangeCount == 7);
+			
+			function onCurrentChildChange(event:SerialElementEvent):void
+			{
+				currentChildChangeCount++;
+				
+				if (currentChildChangeCount == 1)
+				{
+					assertTrue(event.currentChild == child1);
+				}
+				else if (currentChildChangeCount == 7)
+				{
+					assertTrue(event.currentChild == null);
+				}
+				else
+				{
+					assertTrue(event.currentChild != null);
+				}
+			}
+		}
+		
 		public function testGetResourceReturnsChildResource():void
 		{
 			var serial:SerialElement = createSerialElement();

@@ -158,8 +158,6 @@ package org.osmf
 			addTestSuite(TestParallelElement);
 			addTestSuite(TestSerialElement);
 			
-			addTestSuite(TestSerialElementAsSubclass);
-
 			addTestSuite(TestParallelElementWithAudioTrait);
 			addTestSuite(TestParallelElementWithBufferTrait);
 			addTestSuite(TestParallelElementWithDRMTrait); 

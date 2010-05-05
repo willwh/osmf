@@ -27,6 +27,7 @@ package org.osmf.elements
 	import org.osmf.elements.compositeClasses.CompositionMode;
 	import org.osmf.elements.compositeClasses.IReusable;
 	import org.osmf.elements.compositeClasses.TraitAggregatorEvent;
+	import org.osmf.events.SerialElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
@@ -133,6 +134,14 @@ package org.osmf.elements
 		}
 		
 		/**
+		 * The currently active child of this SerialElement.
+		 **/
+		public function get currentChild():MediaElement
+		{
+			return traitAggregator.listenedChild;
+		}
+
+		/**
 		 * @private
 		 **/
 		override public function get resource():MediaResourceBase
@@ -144,22 +153,12 @@ package org.osmf.elements
 		
 		// Protected
 		//
-		
+				
 		/**
-		 * The currently active child of this SerialElement.
+		 * @private
 		 * 
-		 * This is not exposed as a public API because clients of a SerialElement
-		 * should be able to work with the base MediaElement API, and not rely
-		 * on subclass methods.  It's exposed as a protected method so that
-		 * implementors can subclass SerialElement and use the indication of which child
-		 * is the current child to change the behavior of the SerialElement as a whole.
-		 **/
-		protected final function get currentChild():MediaElement
-		{
-			return traitAggregator.listenedChild;
-		}
-		
-		/**
+		 * Deprecated method.
+		 * 
 		 * Method invoked after the currentChild property has changed.  The base implementation
 		 * does nothing.
 		 * 
@@ -291,7 +290,6 @@ package org.osmf.elements
 				}
 			}
 		}
-		
 	
 		// Internals
 		//
@@ -308,6 +306,9 @@ package org.osmf.elements
 			
 			// Inform any interested subclasses of the change.
 			currentChildChange();
+			
+			// Dispatch the change event.
+			dispatchEvent(new SerialElementEvent(SerialElementEvent.CURRENT_CHILD_CHANGE, false, false, currentChild));
 		}
 
 		private function updateListenedChildIndex():void
