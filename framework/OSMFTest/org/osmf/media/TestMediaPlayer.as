@@ -1498,7 +1498,7 @@ package org.osmf.media
 			}
 		}
 		
-		public function testLoopWithAutoRewind():void
+ 		public function testLoopWithAutoRewind():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
@@ -1514,7 +1514,7 @@ package org.osmf.media
 				doTestLoop();
 			}
 		}
-
+ 
 		private function doTestLoop():void
 		{
 			if (traitExists(MediaTraitType.TIME))
@@ -1739,7 +1739,7 @@ package org.osmf.media
 				function onStateChange(event:MediaPlayerStateChangeEvent):void
 				{
 					// If the autoRewind works, we should get a READY event.
-					if (event.state == MediaPlayerState.READY)
+					if (event.state == MediaPlayerState.READY || event.state == MediaPlayerState.PLAYING)
 					{
 						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 

@@ -32,7 +32,9 @@ package org.osmf.elements
 	import org.osmf.elements.htmlClasses.HTMLPlayTrait;
 	import org.osmf.elements.htmlClasses.HTMLTimeTrait;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.URLResource;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
@@ -152,6 +154,17 @@ package org.osmf.elements
 					if (loadTrait)
 					{
 						loadTrait.loadState = newLoadState;
+						if (newLoadState == LoadState.LOAD_ERROR)
+						{
+							dispatchEvent
+								( new MediaErrorEvent
+									( MediaErrorEvent.MEDIA_ERROR
+									, false
+									, false
+									, new MediaError(MediaErrorCodes.MEDIA_LOAD_FAILED)
+									)
+								);
+						}
 					}
 					break;
 					
@@ -311,6 +324,7 @@ package org.osmf.elements
 					loadTrait.addEventListener
 						( LoadEvent.LOAD_STATE_CHANGE
 						, onLoadStateChange
+						, false, int.MAX_VALUE
 						);
 				}
 			}

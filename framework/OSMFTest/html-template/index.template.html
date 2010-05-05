@@ -40,10 +40,107 @@ var requiredMinorVersion = ${version_minor};
 var requiredRevision = ${version_revision};
 // -----------------------------------------------------------------------------
 // -->
+
+function onHTMLMediaContainerConstructed(container)
+{
+	var osmf = document["osmf"];
+	osmf.trace("Container " + container.containerId + " added.");
+		
+	if (container.containerId == "bannerContainer")
+	{
+		container.onElementAdd = function(element)
+		{
+			osmf.trace(element.elementId + " added.");
+			
+			// Elements must be loadable, so having a 'load' and 'unload'
+			// method defined on the object is mandatory:
+			element.load = function(url)
+			{
+				osmf.trace(element.elementId + " loading." + url);
+				
+				activeBanner = this;
+				
+				// Simulate failure based on URL pattern.
+				if (url == "http://www.adobe.com/invalidURL")
+				{
+					this.setLoadState(osmf.constants.loadState.LOAD_ERROR);
+				}
+				else
+				{
+					bannerImage.src = url;
+				
+					// Define that we support the play trait:
+					element.setPlayable(true);
+					element.setCanPause(true);
+				
+					// Define that we now support the temporal trait:
+					this.setTemporal(true);
+				
+					// Set the duration of the element.
+					this.setDuration(2);
+					this.setCurrentTime(0);
+
+					this.setLoadState(osmf.constants.loadState.READY);
+				}
+			}
+			
+			element.unload = function()
+			{
+				osmf.trace(element.elementId + " unloading.");
+				
+				this.setLoadState(osmf.constants.loadState.UNLOADING);
+				
+				element.setPlayable(false);
+				element.setTemporal(false);
+				
+				if (activeBanner == element) 
+				{
+					activeBanner = null;
+				}
+				
+				osmf.trace(element.elementId + " uninitialized.");
+				bannerImage.src = null;
+				
+				this.setLoadState(osmf.constants.loadState.UNINITIALIZED);
+			}
+			
+			element.onPlayStateChange = function(newPlayState)
+			{
+				osmf.trace(element.elementId + " onPlayStateChange, new state: " + newPlayState);
+				
+				if (newPlayState == osmf.constants.playState.PLAYING)
+				{
+					function tick()
+					{
+						element.intervalCount = element.intervalCount + 1;
+						
+						osmf.trace(element.elementId + " tick: " + element.intervalCount);
+						
+						if (element.intervalCount == 2)
+						{
+							osmf.trace(element.elementId + " completion callback");
+							bannerImage.src = null;
+							clearInterval(element.intervalId);
+						}
+						
+						element.setCurrentTime(element.intervalCount);
+					}
+					
+					element.intervalCount = 0;
+					element.intervalId = setInterval(tick, 1000 /* milliseconds */);
+				}
+			}
+		}
+	}
+}
+
 </script>
 </head>
 
 <body scroll="no">
+<div id="bannerRegion">
+	<img id="bannerImage" src="" alt="" name="banner">
+</div>
 <script language="JavaScript" type="text/javascript">
 <!--
 // Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
@@ -70,7 +167,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"quality", "high",
 		"bgcolor", "${bgcolor}",
 		"name", "${application}",
-		"allowScriptAccess","sameDomain",
+		"allowScriptAccess","always",
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -86,7 +183,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"quality", "high",
 			"bgcolor", "${bgcolor}",
 			"name", "${application}",
-			"allowScriptAccess","sameDomain",
+			"allowScriptAccess","always",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -97,6 +194,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
     document.write(alternateContent);  // insert non-flash content
   }
 // -->
+
 </script>
 <noscript>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
@@ -111,7 +209,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 				play="true"
 				loop="false"
 				quality="high"
-				allowScriptAccess="sameDomain"
+				allowScriptAccess="always"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>

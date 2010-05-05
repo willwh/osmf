@@ -308,12 +308,6 @@ package org.osmf
 			addTestSuite(TestLayoutTargetRenderers);
 			addTestSuite(TestLayoutTargetEvent);
 			
-			// Containers
-			//
-			
-			addTestSuite(TestMediaContainer);
-			addTestSuite(TestHTMLMediaContainer);
-			
 			// Utils
 			//
 			
@@ -337,6 +331,13 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDurationElement);
 			addTestSuite(TestMediaPlayerWithSerialElementWithDurationElements);
 			addTestSuite(TestMediaPlayerWithBeaconElement);
+			addTestSuite(TestMediaPlayerWithHTMLElement);
+
+			// Containers
+			//
+			
+			addTestSuite(TestMediaContainer);
+			addTestSuite(TestHTMLMediaContainer);
 
 			// MediaPlayerSprite
 			addTestSuite(TestMediaPlayerSprite);
