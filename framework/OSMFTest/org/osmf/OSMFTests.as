@@ -333,17 +333,17 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDurationElement);
 			addTestSuite(TestMediaPlayerWithSerialElementWithDurationElements);
 			addTestSuite(TestMediaPlayerWithBeaconElement);
-			addTestSuite(TestMediaPlayerWithHTMLElement);
+			
+			if (ExternalInterface.available)
+			{
+				addTestSuite(TestMediaPlayerWithHTMLElement);
+			}
 
 			// Containers
 			//
 			
 			addTestSuite(TestMediaContainer);
-			
-			if (ExternalInterface.available)
-			{
-				addTestSuite(TestHTMLMediaContainer);
-			}
+			addTestSuite(TestHTMLMediaContainer);
 
 			// MediaPlayerSprite
 			addTestSuite(TestMediaPlayerSprite);
