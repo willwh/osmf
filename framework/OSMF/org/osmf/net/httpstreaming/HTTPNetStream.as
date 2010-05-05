@@ -747,8 +747,13 @@ package org.osmf.net.httpstreaming
 			} // !manualSwitch
 		}
 		
-		private function byteSource(input:IDataInput, numBytes:int):IDataInput
+		private function byteSource(input:IDataInput, numBytes:Number):IDataInput
 		{
+			if (numBytes < 0)
+			{
+				return null;
+			}
+			
 			if (numBytes)
 			{
 			 	if (_savedBytes.bytesAvailable + input.bytesAvailable < numBytes)
