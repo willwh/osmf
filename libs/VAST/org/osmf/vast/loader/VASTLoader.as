@@ -119,63 +119,66 @@ package org.osmf.vast.loader
 			
 			CONFIG::LOGGING
 			{
-				logger.debug("Downloading document at " + URLResource(loadTrait.resource).url.rawUrl + ", " + maxNumWrapperRedirects + " wrapper redirects left");
+				logger.debug("Downloading document at " + URLResource(loadTrait.resource).url + ", " + maxNumWrapperRedirects + " wrapper redirects left");
 			}
 			
 			httpLoader.load(httpLoadTrait);
 			
 			function onHTTPLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.newState == LoadState.READY)
+				if (httpLoadTrait == event.loadTrait)
 				{
-					// This is a terminal state, so remove all listeners.
-					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
-					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadTraitError);
+					if (event.newState == LoadState.READY)
+					{
+						// This is a terminal state, so remove all listeners.
+						httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
+						httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadTraitError);
+		
+						// Use a separate processor class to parse the document.
+						var processor:VASTDocumentProcessor = new VASTDocumentProcessor(maxNumWrapperRedirects, httpLoader);
+						toggleProcessorListeners(processor, true);
+						processor.processVASTDocument(httpLoadTrait.urlLoader.data);
 	
-					// Use a separate processor class to parse the document.
-					var processor:VASTDocumentProcessor = new VASTDocumentProcessor(maxNumWrapperRedirects, httpLoader);
-					toggleProcessorListeners(processor, true);
-					processor.processVASTDocument(httpLoadTrait.urlLoader.data);
-
-					function toggleProcessorListeners(processor:VASTDocumentProcessor, add:Boolean):void
-					{
-						if (add)
+						function toggleProcessorListeners(processor:VASTDocumentProcessor, add:Boolean):void
 						{
-							processor.addEventListener(VASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed);
-							processor.addEventListener(VASTDocumentProcessedEvent.PROCESSING_FAILED, onDocumentProcessFailed);
+							if (add)
+							{
+								processor.addEventListener(VASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed);
+								processor.addEventListener(VASTDocumentProcessedEvent.PROCESSING_FAILED, onDocumentProcessFailed);
+							}
+							else
+							{
+								processor.removeEventListener(VASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed);
+								processor.removeEventListener(VASTDocumentProcessedEvent.PROCESSING_FAILED, onDocumentProcessFailed);
+							}
 						}
-						else
+	
+						function onDocumentProcessed(event:VASTDocumentProcessedEvent):void
 						{
-							processor.removeEventListener(VASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed);
-							processor.removeEventListener(VASTDocumentProcessedEvent.PROCESSING_FAILED, onDocumentProcessFailed);
+							toggleProcessorListeners(processor, false);
+						
+							var vastLoadTrait:VASTLoadTrait = loadTrait as VASTLoadTrait;
+							vastLoadTrait.vastDocument = event.vastDocument;
+							updateLoadTrait(loadTrait, LoadState.READY);
+						}
+						
+						function onDocumentProcessFailed(event:VASTDocumentProcessedEvent):void
+						{
+							toggleProcessorListeners(processor, false);
+	
+							updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 						}
 					}
-
-					function onDocumentProcessed(event:VASTDocumentProcessedEvent):void
+					else if (event.newState == LoadState.LOAD_ERROR)
 					{
-						toggleProcessorListeners(processor, false);
-					
-						var vastLoadTrait:VASTLoadTrait = loadTrait as VASTLoadTrait;
-						vastLoadTrait.vastDocument = event.vastDocument;
-						updateLoadTrait(loadTrait, LoadState.READY);
+						// This is a terminal state, so remove the listener.  But
+						// don't remove the error event listener, as that will be
+						// removed when the error event for this failure is
+						// dispatched.
+						httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
+						
+						updateLoadTrait(loadTrait, event.newState);
 					}
-					
-					function onDocumentProcessFailed(event:VASTDocumentProcessedEvent):void
-					{
-						toggleProcessorListeners(processor, false);
-
-						updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
-					}
-				}
-				else if (event.newState == LoadState.LOAD_ERROR)
-				{
-					// This is a terminal state, so remove the listener.  But
-					// don't remove the error event listener, as that will be
-					// removed when the error event for this failure is
-					// dispatched.
-					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
-					
-					updateLoadTrait(loadTrait, event.newState);
 				}
 			}
 			
