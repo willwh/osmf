@@ -409,23 +409,15 @@ package org.osmf.examples
 							
 							// Create a SerialElement with two DurationElements.  The first
 							// is a placeholder to delay the display of the second.  The
-							// second represents the banner.  Size the banner to 80% width,
-							// align to the center, and stretch.
+							// second represents the banner.
 							var serial:SerialElement = new SerialElement();
 							serial.addChild(new DurationElement(10));
-							var banner:MediaElement = new DurationElement(10, new ImageElement(new URLResource(REMOTE_IMAGE)));
-							layout = new LayoutMetadata();
-							layout.percentWidth = 80;
-							layout.percentHeight = 100;
-							layout.horizontalAlign = HorizontalAlign.CENTER;
-							layout.scaleMode = ScaleMode.STRETCH;
-							banner.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							serial.addChild(banner);
+							serial.addChild(new DurationElement(10, new ImageElement(new URLResource(REMOTE_BANNER))));
 							
-							// Place the banner at the top with a fixed height.
+							// Place the banner at the top, centered horizontally.
 							layout = new LayoutMetadata();
-							layout.top = 0;
-							layout.height = 100;
+							layout.top = 10;
+							layout.horizontalAlign = HorizontalAlign.CENTER;
 							serial.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							parallelElement.addChild(serial);
 							
@@ -1046,6 +1038,7 @@ package org.osmf.examples
 		private static const REMOTE_MBR_STREAM_HOST:String 		= "rtmp://cp67126.edgefcs.net/ondemand";
 		private static const REMOTE_MP3:String 					= "http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3";
 		private static const REMOTE_IMAGE:String				= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
+		private static const REMOTE_BANNER:String				= "http://mediapm.edgesuite.net/osmf/image/banner.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE1:String 	= "http://mediapm.edgesuite.net/osmf/swf/OSMFPlayer/images/vegetation.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE2:String 	= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE3:String 	= "http://mediapm.edgesuite.net/osmf/image/flex_48x45.gif";
