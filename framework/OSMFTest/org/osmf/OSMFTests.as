@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf
 {
+	import flash.external.ExternalInterface;
+	
 	import flexunit.framework.TestSuite;
 	
 	import org.osmf.containers.*;
@@ -337,7 +339,11 @@ package org.osmf
 			//
 			
 			addTestSuite(TestMediaContainer);
-			addTestSuite(TestHTMLMediaContainer);
+			
+			if (ExternalInterface.available)
+			{
+				addTestSuite(TestHTMLMediaContainer);
+			}
 
 			// MediaPlayerSprite
 			addTestSuite(TestMediaPlayerSprite);
