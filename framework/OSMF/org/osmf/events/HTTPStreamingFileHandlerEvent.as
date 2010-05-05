@@ -23,8 +23,8 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.f4f.AdobeBootstrapBox;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 
 	[ExcludeClass]
 	
@@ -36,6 +36,7 @@ package org.osmf.events
 		public static const NOTIFY_SEGMENT_DURATION:String = "notifySegmentDuration";
 		public static const NOTIFY_SCRIPT_DATA:String = "notifyScriptData";
 		public static const NOTIFY_BOOTSTRAP_BOX:String = "notifyBootstrapBox";
+		public static const NOTIFY_ERROR:String = "notifyError";
 		
 		public function HTTPStreamingFileHandlerEvent(
 			type:String, 
@@ -45,7 +46,8 @@ package org.osmf.events
 			scriptDataObject:FLVTagScriptDataObject = null,
 			scriptDataFirst:Boolean = false,
 			scriptDataImmediate:Boolean = false,
-			abst:AdobeBootstrapBox = null)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
+			abst:AdobeBootstrapBox = null,
+			error:Boolean = false)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -54,6 +56,7 @@ package org.osmf.events
 			_scriptDataFirst = scriptDataFirst;
 			_scriptDataImmediate = scriptDataImmediate
 			_abst = abst;
+			_error = error;
 		}
 
 		public function get segmentDuration():Number
@@ -81,10 +84,24 @@ package org.osmf.events
 		{
 			return _abst;
 		}
+		
+		public function get error():Boolean
+		{
+			return _error;				
+		}
 	
 		override public function clone():Event
 		{
-			return new HTTPStreamingFileHandlerEvent(type, bubbles, cancelable, segmentDuration, scriptDataObject, scriptDataFirst, scriptDataImmediate);
+			return new HTTPStreamingFileHandlerEvent(
+				type, 
+				bubbles, 
+				cancelable, 
+				segmentDuration, 
+				scriptDataObject, 
+				scriptDataFirst, 
+				scriptDataImmediate, 
+				bootstrapBox, 
+				error);
 		}
 				
 		// Internal
@@ -95,5 +112,6 @@ package org.osmf.events
 		private var _scriptDataFirst:Boolean;
 		private var _scriptDataImmediate:Boolean;	
 		private var _abst:AdobeBootstrapBox;
+		private var _error:Boolean;
 	}
 }

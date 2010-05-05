@@ -186,6 +186,21 @@ package org.osmf.net.httpstreaming.f4f
 		 */	
 		override public function endProcessFile(input:IDataInput):ByteArray
 		{
+			if (this._bytesNeeded > 0)
+			{
+				dispatchEvent(
+					new HTTPStreamingFileHandlerEvent(
+						HTTPStreamingFileHandlerEvent.NOTIFY_ERROR, 
+						false, 
+						false, 
+						0, 
+						null, 
+						false, 
+						false, 
+						null, 
+						true));
+			}
+			
 			return getMDATBytes(input, true);
 		}	
 

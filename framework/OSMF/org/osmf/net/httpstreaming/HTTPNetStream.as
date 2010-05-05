@@ -124,6 +124,7 @@ package org.osmf.net.httpstreaming
 			// removed NOTIFY_TIME_BIAS
 			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
 			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromFileHandler);
+			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_ERROR, onErrorFromFileHandler);
 			
 			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -1147,7 +1148,10 @@ package org.osmf.net.httpstreaming
 					processAndAppend(bytes);
 					_lastDownloadRatio = _segmentDuration / _lastDownloadDuration;	// urlcomplete would have fired by now, otherwise we couldn't be done, and onEndSegment is the last possible chance to report duration
 
-					setState(HTTPStreamingState.LOAD_WAIT);
+					if (_state != HTTPStreamingState.STOP && _state != HTTPStreamingState.HALT)
+					{ 
+						setState(HTTPStreamingState.LOAD_WAIT);
+					}
 					break;
 
 				case HTTPStreamingState.STOP:
@@ -1280,6 +1284,20 @@ package org.osmf.net.httpstreaming
 		private function onScriptDataFromFileHandler(event:HTTPStreamingFileHandlerEvent):void
 		{
 			onScriptData(event.scriptDataObject, event.scriptDataFirst, event.scriptDataImmediate);			// TODO: somehow figure out how to not need duplicate listeners
+		}
+		
+		private function onErrorFromFileHandler(event:HTTPStreamingFileHandlerEvent):void
+		{
+			// We map file handler error to Play.NETSTREAM_PLAY_FILESTRUCTUREINVALID.
+			setState(HTTPStreamingState.HALT);
+			dispatchEvent
+				( new NetStatusEvent
+					( NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID, level:"error"}
+					)
+				);
 		}
 		
 		private function onScriptData(scriptDataObject:FLVTagScriptDataObject, scriptDataFirst:Boolean, scriptDataImmediate:Boolean):void
