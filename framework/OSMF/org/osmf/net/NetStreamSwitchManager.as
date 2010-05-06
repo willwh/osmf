@@ -365,6 +365,10 @@ package org.osmf.net
 					{
 						prepareForSwitching();
 					}
+					else if (autoSwitch && checkRulesTimer.running == false)
+					{
+						checkRulesTimer.start();
+					}
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
 					switching  = false;
