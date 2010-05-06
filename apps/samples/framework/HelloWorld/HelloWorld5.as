@@ -24,6 +24,7 @@ package
 	import flash.display.Sprite;
 	
 	import org.osmf.elements.VideoElement;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 
@@ -36,18 +37,21 @@ package
 	{
 		public function HelloWorld5()
 		{
-			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			mediaPlayer = new MediaPlayer();
+			mediaPlayer.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);
 
 			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
 			mediaPlayer.media = new VideoElement(resource);
-				
-			if (mediaPlayer.displayObject != null)
-			{
-				addChild(mediaPlayer.displayObject);
-			}
 		}
+		
+		private function onDisplayObjectChange(event:DisplayObjectEvent):void
+		{
+			addChild(mediaPlayer.displayObject);
+		}
+		
+		private var mediaPlayer:MediaPlayer;
 	}
 }
