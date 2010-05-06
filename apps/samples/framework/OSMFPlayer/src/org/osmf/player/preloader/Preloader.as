@@ -93,9 +93,14 @@ package org.osmf.player.preloader
 			
 			configuration.addEventListener(Event.COMPLETE, onConfigurationComplete);
 			var configurationFileURL:String = loaderInfo.parameters.configuration;
-			if (configurationFileURL)
+			if (configurationFileURL != null)
 			{
-				configuration.loadFromFile(configurationFileURL, true)
+				configuration.loadFromFile(configurationFileURL, true);
+			}
+			else
+			{
+				trace("WARNING: configuration file not specified in SWF parameters");
+				onConfigurationComplete(null);
 			}
 		}
 		

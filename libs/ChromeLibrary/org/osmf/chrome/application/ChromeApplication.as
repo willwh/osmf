@@ -59,17 +59,20 @@ package org.osmf.chrome.application
 		
 		public function setup(configuration:Configuration):void
 		{
-			_widgets.parse
-				( configuration.configuration.widgets.*
-				, configuration.assetsManager
-				);
-			
-			// Add widgets on top of the media:
-			var index:Number = 10000;
-			for each (var widget:Widget in _widgets.widgets)
+			if (configuration.configuration != null)
 			{
-				widget.layoutMetadata.index = index++;
-				_renderer.addTarget(widget);
+				_widgets.parse
+					( configuration.configuration.widgets.*
+					, configuration.assetsManager
+					);
+				
+				// Add widgets on top of the media:
+				var index:Number = 10000;
+				for each (var widget:Widget in _widgets.widgets)
+				{
+					widget.layoutMetadata.index = index++;
+					_renderer.addTarget(widget);
+				}
 			}
 			
 			processSetupComplete();
