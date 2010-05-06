@@ -33,9 +33,11 @@ package org.osmf.media
 	
 	/**
 	 * <code>MediaPlayerSprite</code> provides MediaPlayer, MediaContainer, and MediaFactory
-	 * capabilities all in one Sprite based class.  It also provides convenience methods to generate
-	 * mediaElements from a resource, as well as a scaleMode setter. 
-	 *
+	 * capabilities all in one Sprite-based class.  It also provides convenience methods to generate
+	 * MediaElements from a resource, as well as a scaleMode setter.
+	 * 
+	 *  @includeExample MediaPlayerSpriteExample.as
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
@@ -49,7 +51,7 @@ package org.osmf.media
 		 * @param mediaPlayer A custom MediaPlayer can be provided. if null, defaults to new MediaPlayer
 		 * @param mediaContainer A custom MediaContainer can be provided. if null defaults to a new MediaContainer
 		 * @param mediaFactory A custom MediaFactory can be provided. if null defaults to a new DefaultMediaFactory
-		 *
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
