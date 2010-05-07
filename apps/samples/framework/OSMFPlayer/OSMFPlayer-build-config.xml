@@ -23,6 +23,7 @@
       <source-path>
          <path-element>src</path-element>
          <path-element>src/assets</path-element>
+         <path-element>../../plugins/VideoQoSPlugin/src</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
