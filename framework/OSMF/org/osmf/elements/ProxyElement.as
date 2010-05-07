@@ -35,41 +35,41 @@ package org.osmf.elements
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * A ProxyElement acts as a wrapper for another MediaElement.
+	 * ProxyElement is a media element that acts as a wrapper for another MediaElement.
 	 * Its purpose is to control access to the wrapped element.
 	 * <p>ProxyElement is not instantiated directly but rather used
 	 * as the base class for creating wrappers for specific purposes. 
 	 * ProxyElement can be subclassed for any trait type or set of trait types.
-	 * The subclass controls access to the wrapped element either by overriding
-	 * one or more of the wrapped element's traits or by blocking them.</p>
-	 * <p>To override any of the wrapped element's traits, 
+	 * The subclass controls access to the proxied element either by overriding
+	 * one or more of the proxied element's traits or by blocking them.</p>
+	 * <p>To override any of the proxied element's traits, 
 	 * the subclass creates its own trait instances,
-	 * which it substitutes for the wrapped element's traits that it wishes to override.</p>
+	 * which it substitutes for the proxied element's traits that it wishes to override.</p>
 	 * <p>To block traits, the subclass prevents the traits of
-	 * the wrapped element from being exposed by setting the ProxyElement's
+	 * the proxied element from being exposed by setting the ProxyElement's
 	 * <code>blockedTraits</code> property for the trait
 	 * types that it wants to block.
-	 * This causes the wrapped element's <code>hasTrait()</code>
+	 * This causes the proxied element's <code>hasTrait()</code>
 	 * method to return <code>false</code> and its
 	 * <code>getTrait()</code> method to return <code>null</code>
 	 * for the blocked trait types.</p>
-	 * <p>A ProxyElement normally dispatches the wrapped element's
-	 * MediaElementEvents, unless its the trait's type is among those that
+	 * <p>A ProxyElement normally dispatches the proxied element's
+	 * events, unless the trait's type is among those that
 	 * are blocked by the ProxyElement.</p>
 	 * <p>ProxyElement subclasses are useful for modifying the behavior of a
 	 * MediaElement in a non-invasive way.  
 	 * An example would be adding
 	 * temporal capabilities to a set of ImageElements to present them in a slide show
 	 * in which the images are displayed for a specified duration.
-	 * The ProxyElement subclass would wrap the non-temporal ImageElements
-	 * and override the wrapped element's TimeTrait to return a custom
+	 * The ProxyElement subclass would proxy the non-temporal ImageElements
+	 * and override the proxied element's TimeTrait to return a custom
 	 * instance of that trait.
 	 * A similar approach can be applied to other traits, either to provide an 
-	 * alternate implementation of some of the wrapped element's underlying traits,
+	 * alternate implementation of some of the proxied element's underlying traits,
 	 * to provide an implementation when a needed underlying trait does not exist,
 	 * or to prevent an underlying trait from being exposed at all.</p>
-	 * @see DurationElement
-	 * @see org.osmf.events.MediaElementEvent
+	 * 
+	 * @see org.osmf.elements.DurationElement
 	 * @see org.osmf.traits
 	 *  
 	 *  @langversion 3.0
@@ -117,6 +117,11 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
+		public function get proxiedElement():MediaElement
+		{
+			return _proxiedElement;
+		}
+
 		public function set proxiedElement(value:MediaElement):void
 		{
 			var traitType:String;
@@ -162,12 +167,7 @@ package org.osmf.elements
 				}				
 			}
 		}
-		
-		public function get proxiedElement():MediaElement
-		{
-			return _proxiedElement;
-		}
-		
+				
 		/**
 		 * @private
 		 */

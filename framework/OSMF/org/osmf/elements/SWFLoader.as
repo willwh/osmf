@@ -33,14 +33,14 @@ package org.osmf.elements
 	import org.osmf.utils.URL;
 	
 	/**
-	 * The SWFLoader class creates a flash.display.Loader object, 
-	 * which it uses to load and unload a SWF.
+	 * SWFLoader is a loader that is capable of loading and displaying SWF files.
+	 * 
 	 * <p>The SWF is loaded from the URL provided by the
 	 * <code>resource</code> property of the LoadTrait that is passed
 	 * to the SWFLoader's <code>load()</code> method.</p>
 	 *
-	 * @see SWFElement
-	 * @see flash.display.Loader
+	 * @see org.osmf.elements.SWFElement
+	 * @see org.osmf.traits.LoadTrait
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -150,6 +150,9 @@ package org.osmf.elements
 			return allowValidationOfLoadedContent ? _validateLoadedContentFunction : null;
 		}
 		
+		/**
+		 * @private
+		 **/
 		public function set validateLoadedContentFunction(value:Function):void
 		{
 			_validateLoadedContentFunction = value;

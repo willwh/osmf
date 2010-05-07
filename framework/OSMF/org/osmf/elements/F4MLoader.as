@@ -49,12 +49,11 @@ package org.osmf.elements
 	import org.osmf.utils.URL;
 	
 	/**
-	 * The F4MLoader is a LoaderBase that's capable of loading files of the Flash
-	 * Media Manifest format, also known as F4M files (after the file extension).
+	 * F4MLoader is a loader that is capable of loading F4M files.  F4M files are
+	 * XML documents that adhere to the Flash Media Manifest format, and which
+	 * represent all of the information needed to load and play a media file.
 	 * 
-	 * For details on the Flash Media Manifest format, see
-	 * http://opensource.adobe.com/wiki/display/osmf/Flash+Media+Manifest+File+Format+Specification.
-	 * 
+	 * @see http://opensource.adobe.com/wiki/display/osmf/Flash%2BMedia%2BManifest%2BFile%2BFormat%2BSpecification Flash Media Manifest File Format Specification
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

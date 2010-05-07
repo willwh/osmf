@@ -54,26 +54,19 @@ package org.osmf.elements
 	 * <ol>
 	 * <li>Create a new URLResource pointing to the URL of the audio stream or file
 	 * containing the sound to be loaded.</li>
-	 * <li>Create a new NetLoader or SoundLoader.  NetLoader is used for streaming
-	 * audio, SoundLoader for progressive audio.</li>
 	 * <li>Create the new AudioElement, 
-	 * passing the LoaderBase and URLResource
-	 * as parameters.</li>
-	 * <li>Get the AudioElement's LoadTrait using the 
-	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
-	 * <li>Load the audio using the LoadTrait's <code>load()</code> method.</li>
-	 * <li>Control the media using the AudioElement's traits, and handle its trait
-	 * change events.</li>
-	 * <li>When done with the AudioElement, unload the audio
-	 * using the LoadTrait's <code>unload()</code> method.</li>
+	 * passing the URLResource as a parameter.</li>
+	 * <li>Create a new MediaPlayer.</li>
+	 * <li>Assign the AudioElement to the MediaPlayer's <code>media</code> property.</li>
+	 * <li>Control the media using the MediaPlayer's methods, properties, and events.</li>
+	 * <li>When done with the AudioElement, set the MediaPlayer's <code>media</code>
+	 * property to null.  This will unload the AudioElement.</li>
 	 * </ol>
 	 * </p>
 	 * 
-	 * @see org.osmf.net.NetLoader
-	 * @see org.osmf.audio.SoundLoader
 	 * @see org.osmf.media.URLResource
 	 * @see org.osmf.media.MediaElement
-	 * @see org.osmf.traits
+	 * @see org.osmf.media.MediaPlayer
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -122,7 +115,12 @@ package org.osmf.elements
        	 *  @playerversion AIR 1.5
        	 *  @productversion OSMF 1.0
        	 */       	
-       	public function set defaultDuration(value:Number):void
+		public function get defaultDuration():Number
+		{
+			return defaultTimeTrait ? defaultTimeTrait.duration : NaN;
+		}
+
+      	public function set defaultDuration(value:Number):void
 		{
 			if (isNaN(value) || value < 0)
 			{
@@ -153,12 +151,7 @@ package org.osmf.elements
 		  		defaultTimeTrait.duration = value; 
 			}	
 		}
-		
-		public function get defaultDuration():Number
-		{
-			return defaultTimeTrait ? defaultTimeTrait.duration : NaN;
-		}
-		
+				
 		/**
 		 * @private
 		 **/

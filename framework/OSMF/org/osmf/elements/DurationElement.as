@@ -35,25 +35,23 @@ package org.osmf.elements
 	import org.osmf.traits.PlayTrait;
 
 	/**
-	 * A DurationElement wraps a MediaElement to give it temporal capabilities.
+	 * DurationElement is a media element that wraps a MediaElement to give it
+	 * temporal capabilities.
 	 * It allows a non-temporal MediaElement to be treated as a temporal MediaElement.
 	 * <p>The DurationElement class is especially useful for creating delays
 	 * in the presentation of a media composition.
 	 * For example, the following code presents a sequence of videos,
-	 * separated from each another by five-second delays.</p>
+	 * separated from each other by five-second delays.</p>
 	 * <listing>
 	 * var sequence:SerialElement = new SerialElement();
 	 * 
-	 * sequence.addChild(new VideoElement(
-	 * 	new URLResource("http://www.example.com/video1.flv")));
+	 * sequence.addChild(new VideoElement(new URLResource("http://www.example.com/video1.flv")));
 	 * sequence.addChild(new DurationElement(5));
-	 * sequence.addChild(new VideoElement(
-	 * 	new URLResource("http://www.example.com/ad.flv")));
+	 * sequence.addChild(new VideoElement(new URLResource("http://www.example.com/ad.flv")));
 	 * sequence.addChild(new DurationElement(5));
-	 * sequence.addChild(new VideoElement(
-	 * 	new URLResource("http://www.example.com/video2.flv")));
+	 * sequence.addChild(new VideoElement(new URLResource("http://www.example.com/video2.flv")));
 	 * 
-	 * // Add the SerialElement to the MediaPlayer.
+	 * // Assign the SerialElement to the MediaPlayer.
 	 * player.media = sequence;
 	 * </listing>
 	 * <p>The following example presents a sequence of rotating banners.
@@ -69,21 +67,20 @@ package org.osmf.elements
 	 * var bannerSequence:SerialElement = new SerialElement();
 	 * 
 	 * bannerSequence.addChild(new DurationElement(5));
-	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
-	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")));
+	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new URLResource("http://www.example.com/banner1.jpg")));
 	 * bannerSequence.addChild(new DurationElement(15));
-	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
-	 * 	new URLResource("http://www.examplebanners.com/banner2.jpg")));
+	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new URLResource("http://www.example.com/banner2.jpg")));
 	 * bannerSequence.addChild(new DurationElement(15));
-	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
-	 * 	new URLResource("http://www.examplebanners.com/banner3.jpg")));
+	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new URLResource("http://www.example.com/banner3.jpg")));
 	 * </listing>
 	 * 
-	 * The DurationElement will not work with elements that already have a Time trait, such
-	 * as VideoElement.  Use the subclips feature for modyifying these elements.
+	 * The DurationElement will not work with elements that already have a TimeTrait, such
+	 * as VideoElement.  To specify a start and end time for a VideoElement. use
+	 * StreamingURLResource's <code>clipStartTime</code> and <code>clipEndTime</code> properties.
 	 * 
-	 * @see ProxyElement
+	 * @see org.osmf.elements.ProxyElement
 	 * @see org.osmf.elements.SerialElement
+	 * @see org.osmf.net.StreamingURLResource
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -94,6 +91,7 @@ package org.osmf.elements
 	{
 		/**
 	 	 * Constructor.
+	 	 * 
 	 	 * @param duration Duration of the DurationElement's TimeTrait, in seconds.
 	 	 * @param mediaElement Optional element to be wrapped by this DurationElement.
 	 	 *  
@@ -125,7 +123,7 @@ package org.osmf.elements
 	 	 * the application to specify the duration that the image is displayed, in this case 20 seconds.</p>
 	 	 * <listing>
 	 	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
-	 	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")));	
+	 	 * 	new URLResource("http://www.example.com/banner1.jpg")));	
 	 	 * </listing>
 	 	 */	
 		override protected function setupTraits():void

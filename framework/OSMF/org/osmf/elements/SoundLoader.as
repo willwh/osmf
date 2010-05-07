@@ -45,17 +45,14 @@ package org.osmf.elements
 	import org.osmf.utils.*;
 
 	/**
-	 * The SoundLoader class extends LoaderBase to provide
-	 * loading support to the AudioElement class for progressive audio.
-	 * <p>Creates a flash.media.Sound object, which it uses to load and
-	 * unload the audio file.</p>
+	 * SoundLoader is a loader that is capable of loading progressive audio files.
+	 * 
 	 * <p>The audio file is loaded from the URL provided by the
 	 * <code>resource</code> property of the LoadTrait that is passed
 	 * to the SoundLoader's <code>load()</code> method.</p>
 	 *
-	 * @see AudioElement
+	 * @see org.osmf.elements.AudioElement
 	 * @see org.osmf.traits.LoadTrait
-	 * @see flash.media.Sound
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

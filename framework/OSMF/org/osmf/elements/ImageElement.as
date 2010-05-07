@@ -38,34 +38,25 @@ package org.osmf.elements
 	 * ImageElement is a media element specifically created for
 	 * presenting still images.
 	 * It can load and present any PNG, GIF, or JPG image.
-	 * <p>The ImageElement uses an ImageLoader class to load and unload its media.
-	 * Developers requiring custom loading logic for images
-	 * can pass their own loaders to the ImageElement constructor. 
-	 * These loaders should subclass ImageLoader.</p>
 	 * <p>The basic steps for creating and using an ImageElement are:
 	 * <ol>
 	 * <li>Create a new URLResource pointing to the URL of image to be loaded.</li>
-	 * <li>Create a new ImageLoader.</li>
-	 * <li>Create the new ImageElement, passing the ImageLoader and URLResource
-	 * as parameters.</li>
-	 * <li>Get the ImageElement's LoadTrait using the 
-	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
-	 * <li>Load the image using the LoadTrait's <code>load()</code> method.</li>
-	 * <li>Get the ImageElement's DisplayObjectTrait trait using the 
-	 * <code>MediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT)</code> method.</li>
-	 * <li>Add the DisplayObject that represents the ImageElement's DisplayObjectTrait trait
-	 * to the display list. This DisplayObjects is in the <code>view</code>
-	 * property of the DisplayObjectTrait.</li>
-	 * <li>When done with the ImageElement, unload the image using the
-	 * LoadTrait's <code>unload()</code> method.</li>
+	 * <li>Create the new ImageElement, passing the URLResource as a parameter.</li>
+	 * <li>Create a new MediaPlayer.</li>
+	 * <li>Assign the ImageElement to the MediaPlayer's <code>media</code> property.</li>
+	 * <li>Get the DisplayObject from the MediaPlayer's <code>displayObject</code> property,
+	 * and add it to the display list.  Note that the <code>displayObject</code> property
+	 * may not be immediately available, in which case you can listen for the MediaPlayer's
+	 * <code>displayObjectChange</code> event.</li>
+	 * <li>When done with the ImageElement, set the MediaPlayer's <code>media</code>
+	 * property to null, and remove the DisplayObject from the display list.</li>
 	 * </ol>
 	 * </p>
 	 * 
-	 * @see ImageLoader
-	 * @see org.osmf.media.URLResource
+	 * @see org.osmf.elements.ImageLoader
 	 * @see org.osmf.media.MediaElement
-	 * @see org.osmf.traits
-	 * @see flash.display.DisplayObjectContainer#addChild()
+	 * @see org.osmf.media.MediaPlayer
+	 * @see org.osmf.media.URLResource
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -79,7 +70,7 @@ package org.osmf.elements
 		 * 
 		 * @param resource URLResource that points to the image source that the ImageElement
 		 * will use.
-		 * @param loader Loader used to load the image.  If null, the Loader will be created.
+		 * @param loader ImageLoader used to load the image.  If null, the ImageLoader will be created.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -94,6 +85,14 @@ package org.osmf.elements
 			}
 			super(resource, loader);
 		}
+
+		/**
+		 * Specifies whether the image should be smoothed when it is scaled.  The default value is false.
+		 **/
+		public function get smoothing():Boolean
+		{
+			return _smoothing;			
+		}
 		
 		public function set smoothing(value:Boolean):void
 		{
@@ -105,11 +104,6 @@ package org.osmf.elements
 			}
 		}
 
-		public function get smoothing():Boolean
-		{
-			return _smoothing;			
-		}
-		
 		// Overrides
 		//
 		

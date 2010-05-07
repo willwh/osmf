@@ -27,8 +27,8 @@ package org.osmf.elements
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
-	 * A MediaElement which maps the "play" operation to the request (via
-	 * an HTTP GET) of a URL.
+	 * BeaconElement is a media element which maps the "play" operation to the
+	 * request (via an HTTP GET) of a URL.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

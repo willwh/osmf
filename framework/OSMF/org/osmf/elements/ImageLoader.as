@@ -33,15 +33,15 @@ package org.osmf.elements
 	import org.osmf.utils.*;
 
 	/**
-	 * The ImageLoader class creates a flash.display.Loader object, 
-	 * which it uses to load and unload an image.
+	 * ImageLoader is a loader that is capable of loading and displaying
+	 * image files.
+	 * 
 	 * <p>The image is loaded from the URL provided by the
 	 * <code>resource</code> property of the LoadTrait that is passed
 	 * to the ImageLoader's <code>load()</code> method.</p>
 	 *
-	 * @see ImageElement
+	 * @see org.osmf.elements.ImageElement
 	 * @see org.osmf.traits.LoadTrait
-	 * @see flash.display.Loader
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -51,7 +51,7 @@ package org.osmf.elements
 	public class ImageLoader extends LoaderBase
 	{
 		/**
-		 * Constructs a new ImageLoader.
+		 * Constructor.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -27,15 +27,18 @@ package org.osmf.elements
 	import org.osmf.traits.MediaTraitBase;
 	
 	/**
-	 * A ParallelElement is a media composition whose elements are presented
+	 * ParallelElement is a media composition whose elements are presented
 	 * in parallel (concurrently).
 	 * 
 	 * <p>The media elements that make up a ParallelElement are treated as a
-	 * single, unified media element whose capabilities are expressed through
-	 * the traits of the granular media elements.  Typically, a trait on a
-	 * ParallelElement is a composite or merged combination of that trait on
-	 * all its children.  When a new media element is added as a child of the media
-	 * composition,  either its traits or the composite's traits are adjusted
+	 * single, unified media element.  For example, if a ParallelElement
+	 * encapsulates a image and a piece of audio, the ParallelElement will
+	 * behave as if it's a single MediaElement with the audio characteristics
+	 * of the audio file and the display characteristics of the image file.</p>
+	 * 
+	 * <p>Typically, a trait on a ParallelElement is a composite or merged combination
+	 * of that trait on all its children.  When a new media element is added as a child
+	 * of the media composition,  either its traits or the composite's traits are adjusted
 	 * to make the traits of the media composition and its children consistent.</p>
 	 * <p> As an example of the first case, consider AudioTrait.
 	 * If a client adds a new MediaElement that has its AudioTrait volume at 0.5
@@ -64,6 +67,30 @@ package org.osmf.elements
 	 * starting position of all of its children.
 	 * </li>
 	 * <li>
+	 * DisplayObjectTrait - If one or more of the composite’s children has the DisplayObjectTrait,
+	 * the composite trait’s spatial dimensions are defined by the bounding box
+	 * of the DisplayObject referenced by
+	 * the <code>displayObject</code> property of the composite's DisplayObjectTrait.
+	 * If none of the composite’s children has the DisplayObjectTrait,
+	 * the composite trait's <code>mediaWidth</code> is the width of its widest child and its
+	 * <code>mediaHeight</code> is the height of its tallest child.
+	 * </li>
+	 * <li>
+	 * DRMTrait - The composite trait attempts to keep the DRM state of all children
+	 * in sync.  When a child element is authenticated, all DRM-enabled children are
+	 * simultaneously authenticated.
+	 * </li>
+	 * <li>
+	 * DVRTrait - The composite trait attempts to keep the DVR state of all children
+	 * in sync.
+	 * </li>
+	 * <li>
+	 * DynamicStreamTrait - The composite trait attempts to keep the dynamic streaming
+	 * state of all children in sync.  Specifically, it attempts to keep the
+	 * <code>autoSwitch</code> property the same for all elements, and the current
+	 * stream items within a similar bitrate range.
+	 * </li>
+	 * <li>
 	 * LoadTrait - The composite trait keeps the load state of all children in
 	 * sync.  When a child element (or the composite element) is loaded, all
 	 * loadable children (and the composite element) are simultaneously loaded.
@@ -80,15 +107,6 @@ package org.osmf.elements
 	 * sync.  When a child element (or the composite element) performs a seek,
 	 * all seekable children (and the composite element) simultaneously perform
 	 * that same seek. 
-	 * </li>
-	 * <li>
-	 * DisplayObjectTrait - If one or more of the composite’s children has the DisplayObjectTrait,
-	 * the composite trait’s spatial dimensions are defined by the bounding box
-	 * of the DisplayObject referenced by
-	 * the <code>view</code> property of the composite's DisplayObjectTrait.
-	 * If none of the composite’s children have the DisplayObjectTrait,
-	 * the composite trait's <code>mediaWidth</code> is the width of its widest child and its
-	 * <code>mediaHeight</code> is the height of its tallest child.
 	 * </li>
 	 * <li>
 	 * TimeTrait - The composite trait represents a timeline that encapsulates

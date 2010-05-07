@@ -33,34 +33,26 @@ package org.osmf.elements
 	/**
 	 * SWFElement is a media element specifically created for
 	 * presenting SWFs.
-	 * <p>The SWFElement uses a SWFLoader class to load and unload its media.
-	 * Developers requiring custom loading logic for SWFs
-	 * can pass their own loaders to the SWFElement constructor. 
-	 * These loaders should subclass SWFLoader.</p>
+	 * 
 	 * <p>The basic steps for creating and using a SWFElement are:
 	 * <ol>
 	 * <li>Create a new URLResource pointing to the URL of the SWF to be loaded.</li>
-	 * <li>Create a new SWFLoader.</li>
-	 * <li>Create the new SWFElement, passing the SWFLoader and URLResource
-	 * as parameters.</li>
-	 * <li>Get the SWFElement's LoadTrait using the 
-	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
-	 * <li>Load the SWF using the LoadTrait's <code>load()</code> method.</li>
-	 * <li>Get the SWFElement's DisplayObjectTrait using the 
-	 * <code>MediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT)</code> method.</li>
-	 * <li>Add the DisplayObject that represents the SWFElement's DisplayObjectTrait
-	 * to the display list. This DisplayObject is in the <code>displayObject</code>
-	 * property of the DisplayObjectTrait.</li>
-	 * <li>When done with the SWFElement, unload the SWF using the
-	 * LoadTrait's <code>unload()</code> method.</li>
+	 * <li>Create the new SWFElement, passing the URLResource as a parameter.</li>
+	 * <li>Create a new MediaPlayer.</li>
+	 * <li>Assign the SWFElement to the MediaPlayer's <code>media</code> property.</li>
+	 * <li>Get the DisplayObject from the MediaPlayer's <code>displayObject</code> property,
+	 * and add it to the display list.  Note that the <code>displayObject</code> property
+	 * may not be immediately available, in which case you can listen for the MediaPlayer's
+	 * <code>displayObjectChange</code> event.</li>
+	 * <li>When done with the SWFElement, set the MediaPlayer's <code>media</code>
+	 * property to null, and remove the DisplayObject from the display list.</li>
 	 * </ol>
 	 * </p>
 	 * 
-	 * @see SWFLoader
-	 * @see org.osmf.media.URLResource
+	 * @see org.osmf.elements.SWFLoader
 	 * @see org.osmf.media.MediaElement
-	 * @see org.osmf.traits
-	 * @see flash.display.DisplayObjectContainer#addChild()
+	 * @see org.osmf.media.MediaPlayer
+	 * @see org.osmf.media.URLResource
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -74,7 +66,7 @@ package org.osmf.elements
 		 * 
 		 * @param resource URLResource that points to the SWF source that the SWFElement
 		 * will use.
-		 * @param loader Loader used to load the SWF.  If null, the Loader will be created.
+		 * @param loader SWFLoader used to load the SWF.  If null, the SWFLoader will be created.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

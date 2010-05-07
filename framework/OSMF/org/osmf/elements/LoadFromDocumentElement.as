@@ -36,22 +36,28 @@ package org.osmf.elements
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * The LoadFromDocumentElement is the base class for MediaElements that load documents
-	 * that contain information about the real MediaElement to expose.  For example, a SMIL
-	 * document can be translated into a MediaElement, but until the load of the SMIl document
-	 * takes place, it's impossible to know what MediaElement the SMIL document will expose.
+	 * LoadFromDocumentElement is the base class for MediaElements that load documents
+	 * that contain information about the real MediaElement to expose.  For example, the
+	 * contents of a SMIL document can be represented as a MediaElement, but until the
+	 * SMIL document is loaded, it's impossible to know what MediaElement the SMIL
+	 * document represents.
 	 * 
-	 * Because of the dynamic nature of this operation, a LoadFromDocumentElement extends
-	 * ProxyElement.  When the load is complete, it will set the proxiedElement property to
-	 * the MediaElement that was generated from the document.
+	 * <p>Because of the dynamic nature of this operation, a LoadFromDocumentElement extends
+	 * ProxyElement.  When the document has been loaded, this class will set the
+	 * <code>proxiedElement</code> property to the MediaElement that was generated from
+	 * the document.</p>
 	 * 
-	 * This is an abstract base class, and should be subclassed.
+	 * <p>This is an abstract base class, and must be subclassed.</p>
 	 *  
-	 * Note: It is simplest to use the MediaPlayer class in conjunction with subclasses of
+	 * <p>Note: It is simplest to use the MediaPlayer class in conjunction with subclasses of
 	 * the LoadFromDocumentElement.  If you work directly with a LoadFromDocumentElement, then
 	 * it's important to listen for events related to traits being added and removed.  If you
 	 * use the MediaPlayer class with a LoadFromDocumentElement, then the MediaPlayer will
-	 * automatically listen for these events for you.
+	 * automatically listen for these events for you.<p>
+	 * 
+	 * @see org.osmf.elements.ProxyElement
+	 * @see org.osmf.media.MediaElement
+	 * @see org.osmf.media.MediaPlayer
 	 *   
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -86,16 +92,10 @@ package org.osmf.elements
 			} 
 		}
 	
-		private function onLoaderStateChange(event:Event):void
-		{			
-			removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
-			proxiedElement = loadTrait.mediaElement;
-		}		
-				
 		/**
 		 * @private
 		 * 
-		 * Overriding is necessary because there is a null wrappedElement.
+		 * Overriding is necessary because there is a null proxiedElement.
 		 */ 
 		override public function set resource(value:MediaResourceBase):void 
 		{
@@ -123,6 +123,14 @@ package org.osmf.elements
 		
 		// Internals
 		//
+
+		private function onLoaderStateChange(event:Event):void
+		{
+			// Remove the temporary LoadTrait.
+			removeTrait(MediaTraitType.LOAD);
+			
+			proxiedElement = loadTrait.mediaElement;
+		}		
 
 		private function onLoadStateChange(event:LoadEvent):void
 		{

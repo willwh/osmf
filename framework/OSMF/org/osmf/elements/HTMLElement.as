@@ -44,12 +44,10 @@ package org.osmf.elements
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * Represents a media element who's characteristics are governed by
-	 * HTML, and that (by contract) has its resource pointing to a URL.
-	 * 
-	 * Internally, an HTMLElement holds switchable playable, pausible,
-	 * temporal and audible traits that HTMLMediaContainer uses to bridge between 
-	 * HTML and Flash.
+	 * HTMLElement is a media element that represents a piece of media external
+	 * to the Flash SWF, and within an HTML region.  It serves as a bridge between
+	 * the OSMF APIs for controlling media, and a corresponding (external)
+	 * JavaScript implementation.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

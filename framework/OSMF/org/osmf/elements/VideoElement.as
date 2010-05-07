@@ -40,6 +40,7 @@ package org.osmf.elements
 	import org.osmf.net.drm.NetStreamDRMTrait;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	}
+	
 	/**
 	* VideoElement is a media element specifically created for video playback.
 	* It supports streaming and progressive formats, as well as HTTP streaming
@@ -52,9 +53,9 @@ package org.osmf.elements
 	*    
 	* <p>The VideoElement uses a NetLoader class to load and unload its media.
 	* Developers requiring custom loading logic for video
-	* can pass their own loaders to the VideoElement constructor. 
+	* can pass their own loaders to the LightweightVideoElement constructor. 
 	* These loaders should subclass NetLoader.</p>
-	* <p>The basic steps for creating and using a VideoElement are:
+	* <p>The basic steps for creating and using a LightweightVideoElement are:
 	* <ol>
 	* <li>Create a new URLResource pointing to the URL of the video stream or file
 	* containing the video to be loaded.</li>
@@ -62,29 +63,29 @@ package org.osmf.elements
 	* <li>Create the new VideoElement, 
 	* passing the NetLoader and URLResource
 	* as parameters.</li>
-	* <li>Get the VideoElement's LoadTrait using the 
-	* <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
-	* <li>Load the video using the LoadTrait's <code>load()</code> method.</li>
-	* <li>Control the media using the VideoElement's traits and handle its trait
-	* change events.</li>
-	* <li>When done with the VideoElement, unload the video using the  
-	* using the LoadTrait's <code>unload()</code> method.</li>
+	* <li>Create a new MediaPlayer.</li>
+	* <li>Assign the VideoElement to the MediaPlayer's <code>media</code> property.</li>
+	* <li>Control the media using the MediaPlayer's methods, properties, and events.</li>
+	* <li>When done with the VideoElement, set the MediaPlayer's <code>media</code>  
+	* property to null.  This will unload the VideoElement.</li>
 	* </ol>
 	* </p>
 	*
-	* The VideoElement has support for the DRMTrait.  The DRMTrait implementation on 
-	* this element will use the NetStreamDRMTrait, which contains The flash player's specific DRM
-	* implementation.  The startDate, endDate, and period properties of this trait correspond
-	* to the voucher validity before playback starts.  Once playback beigns these properties reflect the 
-	* playback time window, as found on flash.net.drm.DRMVoucher.
-	*  
+	* <p>The VideoElement supports Flash Media Token Authentication,  
+	* for passing authentication tokens through the NetConnection.</p>
+	*
+	* <p>The VideoElement has support for the Flash Player's DRM implementation.
+	* Note that the <code>startDate</code>, <code>endDate</code>, and <code>period</code>
+	* properties of the DRMTrait on this element correspond to the voucher validity before
+	* playback starts.  Once playback begins, these properties correspond to the playback
+	* time window (as found on flash.net.drm.DRMVoucher).
 	* 
-	* 
-	* @see org.osmf.net.NetLoader
+	* @see org.osmf.elements.LightweightVideoElement
 	* @see org.osmf.media.URLResource
 	* @see org.osmf.media.MediaElement
-	* @see org.osmf.traits
-	*  
+	* @see org.osmf.media.MediaPlayer
+	* @see org.osmf.net.NetLoader
+	* 
 	*  @langversion 3.0
 	*  @playerversion Flash 10
 	*  @playerversion AIR 1.5

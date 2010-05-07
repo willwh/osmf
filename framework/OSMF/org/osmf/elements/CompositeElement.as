@@ -37,19 +37,15 @@ package org.osmf.elements
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * A CompositeElement is a media element which encapsulates a collection
+	 * CompositeElement is a media element which encapsulates a collection
 	 * of other more granular media elements.  It is generally referred to as
 	 * a <b>media composition</b>.
 	 * 
 	 * <p>The media elements that make up a media composition are treated
-	 * as a single, unified media element whose capabilities are expressed
-	 * through the traits of the granular media elements.  For example, if a
-	 * media composition encapsulates a sequence of videos, the
-	 * CompositeElement's traits (as reflected through the underlying getTrait
-	 * method) are derived from the one video in the sequence which is
-	 * currently active.  Similarly, if a CompositeElement encapsulates a video
-	 * and an image being displayed concurrently, the reflected traits are
-	 * a combination of the traits of the video and the image.</p>
+	 * as a single, unified media element.  For example, if a media composition
+	 * encapsulates a sequence of videos, the CompositeElement will behave as
+	 * if it's a single VideoElement, but one which plays several videos in
+	 * sequence.</p>
 	 * 
 	 * <p>Because a CompositeElement maintains a list of MediaElement children,
 	 * any of which may be CompositeElements themselves, a media composition

@@ -33,7 +33,7 @@ package org.osmf.containers
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * HTMLContainer is an IMediaContainer implementing class that uses the ExternalConnection
+	 * HTMLMediaContainer is an IMediaContainer-implementing class that uses ExternalInterface
 	 * to expose the container's child media elements to JavaScript.
 	 *  
 	 *  @langversion 3.0
@@ -43,7 +43,7 @@ package org.osmf.containers
 	 */	
 	public class HTMLMediaContainer implements IMediaContainer
 	{
-		// IMediaContainerContainer
+		// IMediaContainer
 		//
 
 		/**

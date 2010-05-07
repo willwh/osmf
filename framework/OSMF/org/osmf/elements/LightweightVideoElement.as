@@ -98,33 +98,30 @@ package org.osmf.elements
 	* <li>Create the new LightweightVideoElement, 
 	* passing the NetLoader and URLResource
 	* as parameters.</li>
-	* <li>Get the LightweightVideoElement's LoadTrait using the 
-	* <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
-	* <li>Load the video using the LoadTrait's <code>load()</code> method.</li>
-	* <li>Control the media using the LightweightVideoElement's traits and handle its trait
-	* change events.</li>
-	* <li>When done with the LightweightVideoElement, unload the video using the  
-	* using the LoadTrait's <code>unload()</code> method.</li>
+	* <li>Create a new MediaPlayer.</li>
+	* <li>Assign the LightweightVideoElement to the MediaPlayer's <code>media</code> property.</li>
+	* <li>Control the media using the MediaPlayer's methods, properties, and events.</li>
+	* <li>When done with the LightweightVideoElement, set the MediaPlayer's <code>media</code>  
+	* property to null.  This will unload the LightweightVideoElement.</li>
 	* </ol>
 	* </p>
 	* 
-	* The VideoElement supports Flash Media Token Authentication,  
-	* for passing authentication tokens through the NetConnection.
+	* <p>The LightweightVideoElement supports Flash Media Token Authentication,  
+	* for passing authentication tokens through the NetConnection.</p>
 	*
-	* The LightweightVideoElement has support for the DRMTrait.  The DRMTrait implementation on 
-	* this element will use the NetStreamDRMTrait, which contains the Flash Player's specific DRM
-	* implementation.  The startDate, endDate, and period properties of this trait correspond
-	* to the voucher validity before playback starts.  Once playback beigns these properties reflect the 
-	* playback time window, as found on flash.net.drm.DRMVoucher.
-	*  
+	* <p>The LightweightVideoElement has support for the Flash Player's DRM implementation.
+	* Note that the <code>startDate</code>, <code>endDate</code>, and <code>period</code>
+	* properties of the DRMTrait on this element correspond to the voucher validity before
+	* playback starts.  Once playback begins, these properties correspond to the playback
+	* time window (as found on flash.net.drm.DRMVoucher).
 	* 
-	* 
-	* @see org.osmf.net.NetLoader
+	* @see org.osmf.elements.VideoElement
 	* @see org.osmf.media.URLResource
 	* @see org.osmf.media.MediaElement
-	* @see org.osmf.traits
-	*
-	*  @langversion 3.0
+	* @see org.osmf.media.MediaPlayer
+	* @see org.osmf.net.NetLoader
+	* 
+ 	*  @langversion 3.0
 	*  @playerversion Flash 10
 	*  @playerversion AIR 1.5
 	*  @productversion OSMF 1.0	 	 	
@@ -136,7 +133,7 @@ package org.osmf.elements
 		 * 
 		 * @param resource URLResource that points to the video source that the LightweightVideoElement
 		 * will use.  For dynamic streaming content, use a DynamicStreamingResource.
-		 * @param loader NetLoader used to load the video.  If null, then a base NetLoader will
+		 * @param loader NetLoader used to load the video.  If null, then a NetLoader will
 		 * be used.
 		 * 
 		 * @throws ArgumentError If resource is not an URLResource. 

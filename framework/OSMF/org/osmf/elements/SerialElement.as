@@ -34,18 +34,21 @@ package org.osmf.elements
 	import org.osmf.traits.MediaTraitBase;
 	
 	/**
-	 * A SerialElement is a media composition whose elements are presented
+	 * SerialElement is a media composition whose elements are presented
 	 * serially (i.e. in sequence).
 	 * 
 	 * <p>The media elements that make up a SerialElement are treated as a
-	 * single, unified media element whose capabilities are expressed through
-	 * the traits of the granular media elements.  Typically, a trait on a
-	 * SerialElement is a reflection of the "current" child of the composition.
-	 * A SerialElement cycles through its children in serial order.  As the
-	 * current child completes its execution, the next child in the sequence
-	 * becomes the "current" child.  To a client of the class, the
-	 * changes from one current child to the next are hidden. They are only
-	 * noticeable through changes to the traits of this class.</p>
+	 * single, unified media element.  For example, if a SerialElement
+	 * encapsulates a sequence of videos, the SerialElement will behave as
+	 * if it's a single VideoElement, but one which plays several videos in
+	 * sequence.</p>
+	 * 
+  	 * <p>Typically, a trait on a SerialElement is a reflection of the "current"
+  	 * child of the composition.  A SerialElement plays through its children
+  	 * in serial order.  As the current child completes its execution, the next
+  	 * child in the sequence becomes the "current" child.  To a client of the
+  	 * class, the changes from one current child to the next are hidden. They
+  	 * are only noticeable through changes to the traits of this class.</p>
 	 * 
 	 * <p>A childless SerialElement has no notion of a "current" child, so
 	 * it reflects no traits.  The first child that
@@ -80,6 +83,23 @@ package org.osmf.elements
 	 * current child.
 	 * </li>
 	 * <li>
+	 * DisplayObjectTrait - The composite trait represents the DisplayObjectTrait of the
+	 * current child in the sequence.
+	 * </li>
+	 * <li>
+	 * DRMTrait - The composite trait represents the DRMTrait of the
+	 * current child in the sequence.
+	 * </li>
+	 * <li>
+	 * DVRTrait - The composite trait represents the DVRTrait of the
+	 * current child in the sequence.
+	 * </li>
+	 * <li>
+	 * DynamicStreamTrait - The composite trait represents the DynamicStreamTrait of the
+	 * current child in the sequence.  Any changes apply only to the current
+	 * child.
+	 * </li>
+	 * <li>
 	 * LoadTrait - The composite trait represents the LoadTrait of the
 	 * current child in the sequence.  Any changes apply only to the current
 	 * child.
@@ -93,10 +113,6 @@ package org.osmf.elements
 	 * SeekTrait - The composite trait represents the SeekTrait of the
 	 * current child in the sequence.  A seek operation can change the current
 	 * child.
-	 * </li>
-	 * <li>
-	 * DisplayObjectTrait - The composite trait represents the DisplayObjectTrait of the
-	 * current child in the sequence.
 	 * </li>
 	 * <li>
 	 * TimeTrait - The composite trait represents a timeline that encapsulates
