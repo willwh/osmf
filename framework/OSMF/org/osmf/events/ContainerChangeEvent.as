@@ -26,7 +26,7 @@ package org.osmf.events
 	import org.osmf.containers.IMediaContainer;
 
 	/**
-	 * ContainerChangeEvent signals that a reference to an IMediaContainer has changed.
+	 * A ContainerChangeEvent is dispatched when a reference to an IMediaContainer changes.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -50,7 +50,7 @@ package org.osmf.events
 		public static const CONTAINER_CHANGE:String = "containerChange";
 		
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.

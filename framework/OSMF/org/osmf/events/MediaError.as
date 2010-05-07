@@ -22,9 +22,9 @@
 package org.osmf.events
 {
 	/**
-	 * A MediaError encapsulates an error.  Errors are represented as error
-	 * IDs with corresponding messages.  Error IDs zero through 999
-	 * are reserved for use by the framework.
+	 * A MediaError encapsulates an error related to a MediaElement.  Errors are
+	 * represented as error IDs with corresponding messages.  Error IDs zero
+	 * through 999 are reserved for use by the framework.
 	 * 
 	 * <p>A list of all possible framework-level errors can be found in the
 	 * MediaErrorCodes class.</p>

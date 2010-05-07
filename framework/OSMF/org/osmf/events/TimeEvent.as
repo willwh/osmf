@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A TimeEvent is dispatched when properties of a TimeTrait have changed.
+	 * A TimeEvent is dispatched when properties of a TimeTrait change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

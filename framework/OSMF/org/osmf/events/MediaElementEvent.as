@@ -27,7 +27,7 @@ package org.osmf.events
 	import org.osmf.metadata.Metadata;
 	
 	/**
-	 * A MediaElementEvent is dispatched when properties of a MediaElement have changed.
+	 * A MediaElementEvent is dispatched when the properties of a MediaElement change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

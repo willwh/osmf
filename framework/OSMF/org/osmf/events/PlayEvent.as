@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A PlayEvent is dispatched when properties of a PlayTrait have changed.
+	 * A PlayEvent is dispatched when the properties of a PlayTrait change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

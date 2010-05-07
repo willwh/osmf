@@ -76,7 +76,7 @@ package org.osmf.events
 		public static const PAN_CHANGE:String = "panChange";
 
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
 		 * @param type The type of the event.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.

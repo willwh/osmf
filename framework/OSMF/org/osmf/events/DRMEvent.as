@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A DRMEvent is dispatched when a DRMTrait's properties change.
+	 * A DRMEvent is dispatched when the properties of a DRMTrait change.
 	 *
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
@@ -101,8 +101,8 @@ package org.osmf.events
 			return _mediaError;
 		}
 		
-			/**
-		 * Returns the start date for the playback window.  Returns null if authentication 
+		/**
+		 * The start date for the playback window, null if authentication 
 		 * hasn't taken place.
 		 *  
 		 *  @langversion 3.0
@@ -116,7 +116,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * Returns the end date for the playback window.  Returns null if authentication 
+		 * The end date for the playback window, null if authentication 
 		 * hasn't taken place.
 		 *  
 		 *  @langversion 3.0
@@ -130,13 +130,13 @@ package org.osmf.events
 		}
 		
 		/**
-		 * Returns the length of the playback window, in seconds.  Returns NaN if
+		 * The length of the playback window, in seconds; NaN if
 		 * authentication hasn't taken place.
 		 * 
-		 * Note that this property will generally be the difference between startDate
+		 * <p>Note that this property will generally be the difference between startDate
 		 * and endDate, but is included as a property because there may be times where
 		 * the duration is known up front, but the start or end dates are not (e.g. a
-		 * one week rental).
+		 * one week rental).</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1

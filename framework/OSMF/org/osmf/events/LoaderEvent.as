@@ -28,7 +28,7 @@ package org.osmf.events
 	
 	/**
 	 * A LoaderBase dispatches a LoaderEvent when a LoadTrait that it's loading
-	 * or unloading has undergone a notable load-oriented change.
+	 * or unloading undergoes a notable load-oriented change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

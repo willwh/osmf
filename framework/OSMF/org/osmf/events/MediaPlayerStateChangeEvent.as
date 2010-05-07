@@ -24,8 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 
 	/**
-	 * A MediaPlayer dispatches this event when its state  
-	 * has changed.
+	 * A MediaPlayer dispatches this event when its <code>state</code> property changes.
 	 *
 	 * @see org.osmf.media.MediaPlayerState
 	 *  

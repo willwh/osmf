@@ -24,7 +24,8 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A MediaPlayer dispatches a MediaPlayerCapabilityChangeEvent when its capabilities have changed.
+	 * A MediaPlayer dispatches a MediaPlayerCapabilityChangeEvent when its
+	 * capabilities change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A LoadEvent is dispatched when properties of a LoadTrait have changed.
+	 * A LoadEvent is dispatched when the properties of a LoadTrait change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

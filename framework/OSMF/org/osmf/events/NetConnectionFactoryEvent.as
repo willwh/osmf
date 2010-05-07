@@ -30,8 +30,8 @@ package org.osmf.events
 	import org.osmf.media.URLResource;
 	
 	/**
-	 * A NetConnectionFactory dispatches this event when it has either succeeded or failed at
-	 * establishing a NetConnection. 
+	 * A NetConnectionFactory dispatches a NetConnectionFactoryEvent when it has either
+	 * succeeded or failed at establishing a NetConnection. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

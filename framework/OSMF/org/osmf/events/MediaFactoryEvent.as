@@ -27,7 +27,8 @@ package org.osmf.events
 	import org.osmf.media.MediaResourceBase;
 
 	/**
-	 * Event class for events dispatched by a MediaFactory.
+	 * A MediaFactoryEvent is dispatched when the MediaFactory creates a MediaElement or
+	 * succeeds or fails at loading a plugin.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

@@ -26,7 +26,7 @@ package org.osmf.events
 	import org.osmf.media.MediaElement;
 	
 	/**
-	 * A SerialElementEvent is dispatched when properties of a SerialElement have changed.
+	 * A SerialElementEvent is dispatched when properties of a SerialElement change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

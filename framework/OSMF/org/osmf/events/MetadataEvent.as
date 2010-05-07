@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 
 	/**
-	 * Metadata Events are dispatched by the Metadata object when 
+	 * A MetadataEvent is dispatched by a Metadata object when metadata
 	 * values are added, removed, or changed.
 	 *  
 	 *  @langversion 3.0

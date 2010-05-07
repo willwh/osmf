@@ -26,9 +26,8 @@ package org.osmf.events
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * The MediaErrorCodes class provides static constants for error IDs,
-	 * as well as a means for retrieving a message for a particular error
-	 * ID.  Error IDs zero through 999 are reserved for use by the
+	 * The MediaErrorCodes class provides static constants for error IDs.
+	 * Error IDs zero through 999 are reserved for use by the
 	 * framework.
 	 *  
 	 *  @langversion 3.0

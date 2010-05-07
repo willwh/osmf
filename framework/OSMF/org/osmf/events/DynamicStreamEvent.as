@@ -24,8 +24,8 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A DynamicStreamEvent is dispatched when properties of a DynamicStreamTrait
-	 * have changed.
+	 * A DynamicStreamEvent is dispatched when the properties of a DynamicStreamTrait
+	 * change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -77,7 +77,7 @@ package org.osmf.events
 		public static const AUTO_SWITCH_CHANGE:String = "autoSwitchChange";
 		
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.

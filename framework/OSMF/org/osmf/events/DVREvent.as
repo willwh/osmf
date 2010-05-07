@@ -23,7 +23,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A DVREvent is dispatched when a DVRTrait's properties change.
+	 * A DVREvent is dispatched when the properties of a DVRTrait change.
 	 *
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
@@ -47,7 +47,7 @@ package org.osmf.events
 		public static const IS_RECORDING_CHANGE:String = "isRecordingChange";
 		
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
 		 * @param type The type of the event.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.

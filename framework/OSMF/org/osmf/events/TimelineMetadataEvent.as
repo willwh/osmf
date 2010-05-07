@@ -26,8 +26,8 @@ package org.osmf.events
 	import org.osmf.metadata.TimelineMarker;
 
 	/**
-	 * A TimelineMetadataEvent is dispatched when properties of the TimelineMetadata
-	 * class change.
+	 * A TimelineMetadataEvent is dispatched when properties of a TimelineMetadata
+	 * object change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
