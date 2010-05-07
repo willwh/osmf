@@ -84,7 +84,7 @@ package org.osmf.media
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [MediaTraitType.LOAD, MediaTraitType.TIME, MediaTraitType.PLAY];
+			return [MediaTraitType.LOAD, MediaTraitType.TIME, MediaTraitType.PLAY, MediaTraitType.AUDIO];
 		}
 		
 		private var element:HTMLElement;

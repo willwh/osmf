@@ -72,6 +72,7 @@ function onHTMLMediaContainerConstructed(container)
 					// Define that we support the play trait:
 					element.setPlayable(true);
 					element.setCanPause(true);
+					element.setAudible(true);
 				
 					// Define that we now support the temporal trait:
 					this.setTemporal(true);
@@ -92,6 +93,44 @@ function onHTMLMediaContainerConstructed(container)
 				
 				element.setPlayable(false);
 				element.setTemporal(false);
+				element.setAudible(false);
+				element.setVolume(0.5);
+				element.setVolume(1);
+				element.setMuted(true);
+				element.setMuted(false);
+				element.setPan(-1);
+				element.setPan(0);
+				element.setCanPause(true);
+				
+				
+				element.getAudible();
+				element.getTemporal();
+				element.getPlayable();
+				element.getPan();
+				element.getMuted();
+				element.getVolume();
+				element.getCurrentTime();
+				element.getDuration();
+				element.getCanPause();
+				element.getPlayState();
+				element.resource;
+				element.loadState;
+				
+				element.setPlayable(true);
+				element.setTemporal(true);
+				element.setAudible(true);
+				element.getAudible();
+				element.getTemporal();
+				element.getPlayable();
+				element.getPan();
+				element.getMuted();
+				element.getVolume();
+				element.getCurrentTime();
+				element.getDuration();
+				element.getCanPause();
+				element.getPlayState();
+				element.resource;
+				element.loadState;
 				
 				if (activeBanner == element) 
 				{
