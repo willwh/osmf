@@ -36,7 +36,7 @@ package
 		public function HTMLMediaContainerSample()
 		{
 			runSample1();
-			runSample2();
+			//runSample2(); --> uncomment to run sample 2 (and comment out the line above).
 		}
 		
 		/**
