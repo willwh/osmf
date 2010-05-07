@@ -15,11 +15,4 @@
 	<natures>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>[source path] src</name>
-			<type>2</type>
-			<locationURI>DOCUMENTS/apps/samples/plugins/VideoQoSPlugin/src</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

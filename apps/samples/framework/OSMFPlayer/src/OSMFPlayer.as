@@ -41,7 +41,6 @@ package
 	import org.osmf.player.configuration.*;
 	import org.osmf.player.debug.*;
 	import org.osmf.player.preloader.*;
-	import org.osmf.qos.VideoQoSPluginInfo;
 	import org.osmf.traits.*;
 	
 	CONFIG::DEBUG 
@@ -207,11 +206,6 @@ package
 						);
 						
 				factory.addItem(item);
-			}
-			
-			CONFIG::DEBUG
-			{				
-				factory.addItem(VideoQoSPluginInfo.mediaFactoryItem);
 			}
 			
 			return factory;
