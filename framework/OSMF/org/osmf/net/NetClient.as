@@ -37,12 +37,9 @@ package org.osmf.net
 	 * to an instance of the NetClient class.
 	 * Then use the NetClient's <code>addHandler()</code>
 	 * and <code>removeHandler()</code> methods to register and unregister handlers for
-	 * the NetStream callbacks. 
-	 * The names of these callbacks are the constants with names beginning with "ON_" 
-	 * enumerated in the NetStreamCodes class.</p>
+	 * the NetStream callbacks.</p>
 	 * 
 	 * @see NetLoader
-	 * @see NetStreamCodes
 	 * @see flash.net.NetConnection
 	 * @see flash.net.NetStream
 	 *  
@@ -71,19 +68,16 @@ package org.osmf.net
 		 * 
 		 * var stream:NetStream;
 		 * var client:NetClient = (stream.client as NetClient); //assign the stream to the NetClient
-		 * client.addHandler(NetStreamCodes.ON_METADATA, onMetaData); //add the handler
+		 * client.addHandler("onMetaData", onMetaData); //add the handler
 		 * </listing>
 		 * </p>
 		 * 
 		 * @param name Name of callback to handle.
-		 * The callback names are enumerated in the 
-		 * and NetStreamCodes class.
 		 * @param handler Handler to add.
 		 * @priority The priority level of the handler.  The higher the number, the higher the priority.
 		 * All handlers with priority N are processed before handlers of priority N-1.  If two or more
 		 * handlers are added with the same priority, they are processed in the order in which they
 		 * were added.
-		 * @see NetStreamCodes
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -131,11 +125,7 @@ package org.osmf.net
 		 * Removes a handler method for the specified callback name.
 		 * 
 		 * @param name Name of callback for whose handler is being removed.
-		 * The callback names are those constants enumerated in the
-		 * NetStreamCodes class that have the prefix "ON_", such as 
-		 * ON_CUE_POINT, ON_IMAGE_DATA, etc.
 		 * @param handler Handler to remove.
-		 * @see NetStreamCodes
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -24,7 +24,7 @@ package org.osmf.layout
 {
 	/**
 	 * Defines an enumeration of layout modes as supported by the
-	 * default layour renderer.
+	 * default layout renderer.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -34,7 +34,7 @@ package org.osmf.layout
 	public final class LayoutMode
 	{
 		/**
-		 * Identifier for the layout renderer's default) mode.
+		 * Identifier for the layout renderer's default mode.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
