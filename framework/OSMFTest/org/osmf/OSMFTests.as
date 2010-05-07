@@ -43,6 +43,7 @@ package org.osmf
 	import org.osmf.net.*;
 	import org.osmf.net.dvr.*;
 	import org.osmf.net.httpstreaming.*;
+	import org.osmf.net.httpstreaming.dvr.*;
 	import org.osmf.net.httpstreaming.f4f.*;
 	import org.osmf.net.httpstreaming.flv.*;
 	import org.osmf.net.rtmpstreaming.*;
@@ -57,7 +58,7 @@ package org.osmf
 			
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
-			
+
 			// Logging
 			//
 			
@@ -260,6 +261,9 @@ package org.osmf
 			addTestSuite(TestFLVHeader);
 			addTestSuite(TestFLVTagAudio);
 			addTestSuite(TestFLVTagScriptDataObject);
+			addTestSuite(TestDVRInfo);			
+			addTestSuite(TestHTTPStreamingDVRCastTimeTrait);
+			addTestSuite(TestHTTPStreamingDVRCastDVRTrait);
 			
 			// DVR
 			//
