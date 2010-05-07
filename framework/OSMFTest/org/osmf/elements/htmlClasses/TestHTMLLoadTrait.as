@@ -22,6 +22,8 @@
 package org.osmf.elements.htmlClasses
 {
 	import org.osmf.elements.HTMLElement;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadState;
 	import org.osmf.traits.TestLoadTrait;
 
 	public class TestHTMLLoadTrait extends TestLoadTrait
@@ -31,6 +33,21 @@ package org.osmf.elements.htmlClasses
 			htmlElement = new HTMLElement();
 			var trait:HTMLLoadTrait = new HTMLLoadTrait(htmlElement);
 			assertNotNull(trait);
+			
+			trait.loadState = LoadState.READY;
+			assertThrows(trait.load);
+			
+			trait.loadState = LoadState.LOADING;
+			assertThrows(trait.load);
+			
+			htmlElement.resource = new MediaResourceBase();
+			assertThrows(trait.load);
+			
+			trait.loadState = LoadState.UNLOADING;
+			assertThrows(trait.unload);
+			
+			trait.loadState = LoadState.UNINITIALIZED;
+			assertThrows(trait.unload);
 		}
 		
 		private var htmlElement:HTMLElement;

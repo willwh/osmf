@@ -42,7 +42,7 @@ package org.osmf.elements.htmlClasses
 		{
 			internalMutation++;
 			
-			setVolume(value);
+			volume = value;
 			
 			internalMutation--;	
 		}
@@ -51,7 +51,7 @@ package org.osmf.elements.htmlClasses
 		{
 			internalMutation++;
 			
-			setMuted(value);
+			muted = value;
 			
 			internalMutation--;
 		}
@@ -60,7 +60,7 @@ package org.osmf.elements.htmlClasses
 		{
 			internalMutation++;
 			
-			setPan(value);
+			pan = value;
 			
 			internalMutation--;
 		}

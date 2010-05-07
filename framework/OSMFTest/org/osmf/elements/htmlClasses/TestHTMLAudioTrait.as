@@ -29,8 +29,12 @@ package org.osmf.elements.htmlClasses
 		public function testHTMLAudioTrait():void
 		{
 			htmlElement = new HTMLElement();
-			var trait:HTMLLoadTrait = new HTMLLoadTrait(htmlElement);
+			var trait:HTMLAudioTrait = new HTMLAudioTrait(htmlElement);
 			assertNotNull(trait);
+			
+			trait.setMuted(true);
+			trait.setPan(1);
+			trait.setVolume(0.5);
 		}
 		
 		private var htmlElement:HTMLElement;

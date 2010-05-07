@@ -23,14 +23,20 @@ package org.osmf.elements.htmlClasses
 {
 	import org.osmf.elements.HTMLElement;
 	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.traits.PlayState;
 
 	public class TestHTMLPlayTrait extends TestCaseEx
 	{
 		public function testHTMLPlayTrait():void
 		{
 			htmlElement = new HTMLElement();
-			var trait:HTMLLoadTrait = new HTMLLoadTrait(htmlElement);
+			var trait:HTMLPlayTrait = new HTMLPlayTrait(htmlElement);
 			assertNotNull(trait);
+			
+			trait.playState = PlayState.PAUSED;
+			trait.playState = PlayState.STOPPED;
+			trait.playState = PlayState.PLAYING;
+			
 		}
 		
 		private var htmlElement:HTMLElement;
