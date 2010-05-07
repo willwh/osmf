@@ -134,6 +134,7 @@ package org.osmf.chrome.configuration
 				, urlinput: URLInput
 				, authenticationdialog: AuthenticationDialog
 				, label: LabelWidget
+				, metadatalabel: MetadataLabel
 				};
 				
 		private var _widgets:Vector.<Widget>;
