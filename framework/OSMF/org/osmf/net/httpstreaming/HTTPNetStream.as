@@ -50,6 +50,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVTag;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
+	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 
 	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
 	
@@ -596,7 +597,21 @@ package org.osmf.net.httpstreaming
 					tag.write(bytes);
 					_flvParserProcessed += bytes.length;
 					attemptAppendBytes(bytes);
-				} // else tag is FLVTagAudio, which we discard
+				} else if (tag is FLVTagAudio) // else tag is FLVTagAudio, which we discard, unless...
+				{
+					var aTag:FLVTagAudio = tag as FLVTagAudio;
+					if (aTag.soundFormat == FLVTagAudio.SOUND_FORMAT_AAC)	// is it AAC?
+					{
+						if (aTag.isAACSequenceHeader)	// is it an AAC sequence header?
+						{
+							// yes, can never skip initialization...
+							bytes = new ByteArray();
+							_flvParserProcessed += bytes.length;
+							tag.write(bytes);
+							attemptAppendBytes(bytes);
+						}
+					}
+				}
 				return true;
 			} // enhanced seek
 			
@@ -891,14 +906,14 @@ package org.osmf.net.httpstreaming
 					// XXX for now, we have a simplistic dynamic handler, in that if downloads are going poorly, we are a bit more aggressive about prefetching
 					if (this._lastDownloadRatio < 2.0)	// XXX this needs to be more linear, and/or settable
 					{
-						if (this.bufferLength < 7.5)	// XXX need to make settable
+						if (this.bufferLength < Math.max(7.5, this.bufferTime))	// XXX need to make settable
 						{
 							setState(HTTPStreamingState.LOAD_NEXT);
 						}
 					}
 					else
 					{
-						if (this.bufferLength < 3.75)	// XXX need to make settable
+						if (this.bufferLength < Math.max(3.75, this.bufferTime))	// XXX need to make settable
 						{
 							setState(HTTPStreamingState.LOAD_NEXT);
 						}					
@@ -1473,7 +1488,7 @@ package org.osmf.net.httpstreaming
 		private var fileHandler:HTTPStreamingFileHandlerBase;
 		private var _totalDuration:Number = -1;
 		private var _enhancedSeekTarget:Number = -1;	// now in seconds, just like everything else
-		private var _enhancedSeekEnabled:Boolean = false;
+		private var _enhancedSeekEnabled:Boolean = true;
 		private var _enhancedSeekTags:Vector.<FLVTagVideo>;
 		private var _flvParserIsSegmentStart:Boolean = false;
 		private var _savedBytes:ByteArray = null;

@@ -144,7 +144,7 @@ package org.osmf.net.httpstreaming.f4f
 								, NaN
 								, null
 								, null
-								, new URLRequest(bootstrap.url + "?rand=" + new Date().getTime())
+								, new URLRequest(bootstrap.url)
 								, i
 								, true
 								)
@@ -177,7 +177,7 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var index:int = indexContext as int;
 			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, index);
-			
+
 			CONFIG::LOGGING
 			{			
 				logger.debug("processIndexData: " + index + " pendingIndexUpdates: " + pendingIndexUpdates);
@@ -511,7 +511,7 @@ package org.osmf.net.httpstreaming.f4f
 						, NaN
 						, null
 						, null
-						, new URLRequest((streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url + "?rand=" + new Date().getTime())
+						, new URLRequest((streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url)
 						, quality
 						, true
 						)
