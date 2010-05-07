@@ -22,8 +22,8 @@
 package org.osmf.layout
 {
 	/**
-	 * <code>ScaleMode</code> controls the layout of out a single piece of content within a container.
-	 * There are four enumeration values, <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code>, and <code>ZOOM</code>.
+	 * ScaleMode defines the layout of a single piece of content within
+	 * a MediaContainer.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

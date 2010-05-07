@@ -39,8 +39,11 @@ package org.osmf.layout
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Use LayoutRendererBase as the base class for custom layout renders. The class
-	 * provides a number of facilities:
+	 * LayoutRendererBase is the base class for custom layout renderers
+	 *
+	 * @private The rest of the class comment consists of implementation details.
+	 *  
+	 * The class provides a number of facilities:
 	 * 
 	 *  * A base implementation for collecting and managing layout layoutTargets.
 	 *  * A base implementation for metadata watching: override usedMetadataFacets to
@@ -56,7 +59,7 @@ package org.osmf.layout
 	 * 
 	 * Optionally, the following protected methods may be overridden:
 	 * 
-	 *  * get usedMetadataFacets, used when layoutTargets get added or removed, to add
+	 *  * get usedMetadatas, used when layoutTargets get added or removed, to add
 	 *    change watchers that will trigger invalidation of the renderer.
 	 *  * compareTargets, which is used to put the layoutTargets in a particular display
 	 *    list index order.

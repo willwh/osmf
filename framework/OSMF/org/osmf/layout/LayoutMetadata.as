@@ -27,8 +27,8 @@ package org.osmf.layout
 	import org.osmf.metadata.NullMetadataSynthesizer;
 	
 	/**
-	 * Defines a metadata object that contains the properties that a layout
-	 * renderer will base its layout on.
+	 * Defines a metadata object that contains the properties upon which a layout
+	 * renderer will base its layout.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -38,7 +38,9 @@ package org.osmf.layout
 	public class LayoutMetadata extends Metadata
 	{
 		/**
-		 * Namespace URL for LayoutMetadata objects when added to a MediaElement.
+		 * Namespace URL for LayoutMetadata objects when added to a MediaElement or
+		 * MediaContainer.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -48,6 +50,7 @@ package org.osmf.layout
 
 		/**
 		 * Constructor.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -62,8 +65,6 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired position of the target in the display list
 		 * of its context.
 		 *  
@@ -82,9 +83,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired scale layoutMode to be applied to the target.
+		 * Defines the desired scaleMode to be applied to the target.
 		 * 
 		 * Possible values are on org.osmf.layout.ScaleMode.
 		 *  
@@ -103,9 +102,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired horizontal alignment layoutMode to be applied to the
+		 * Defines the desired horizontal alignment to be applied to the
 		 * target when layout of the target leaves surplus horizontal blank
 		 * space.
 		 *  
@@ -124,9 +121,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired vertical alignment layoutMode to be applied to the
+		 * Defines the desired vertical alignment to be applied to the
 		 * target when layout of the target leaves surplus vertical blank
 		 * space.
 		 *  
@@ -145,9 +140,7 @@ package org.osmf.layout
 		}
 
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * If set to true, the target's calculated position and size will
+		 * When set to true, the target's calculated position and size will
 		 * be rounded.
 		 *  
 		 *  @langversion 3.0
@@ -165,12 +158,10 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * When set to LayoutMode.HORIZONTAL or LayoutMode.VERTICAL,
-		 * then the renderer will ignore its targets positioning settings (either
+		 * then the renderer will ignore its target's positioning settings (either
 		 * influencing X or Y, depending on the layoutMode chosen), laying out its elements
-		 * adjecent in the index specified by the 'index' property.
+		 * adjacent in the index specified by the 'index' property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -187,8 +178,6 @@ package org.osmf.layout
 		}
 
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * When set to true (default), the target will participate in the layout
 		 * process. When set to false, it will be ignored.
 		 *  
@@ -210,8 +199,6 @@ package org.osmf.layout
 		//
 
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired horizontal offset of a target expressed in
 		 * pixels.
 		 *  
@@ -230,8 +217,6 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired vertical offset of a target expressed in
 		 * pixels.
 		 *  
@@ -250,8 +235,6 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired horizontal size of a target expressed in
 		 * pixels.
 		 *  
@@ -270,8 +253,6 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired vertical offset of a target expressed in
 		 * pixels.
 		 *  
@@ -293,10 +274,8 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired horizontal offset of a target expressed as
-		 * a percentage of its context's width.
+		 * a percentage of its container's width.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -313,10 +292,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired vertical offset of a target expressed as
-		 * a percentage of its context's height.
+		 * a percentage of its container's height.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -333,10 +310,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired width of a target expressed as
-		 * a percentage of its context's width.
+		 * a percentage of its container's width.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -353,10 +328,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired height of a target expressed as
-		 * a percentage of its context's height.
+		 * a percentage of its container's height.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -376,8 +349,6 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired horizontal offset of the target in pixels. 
 		 *  
 		 *  @langversion 3.0
@@ -395,8 +366,6 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired vertical offset of the target in pixels.
 		 *  
 		 *  @langversion 3.0
@@ -414,11 +383,9 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines how many pixels should be present between the right-hand 
-		 * side bindex of the target's bounding box, and the right-hand side
-		 * bindex of its context.
+		 * side of the target's bounding box, and the right-hand side
+		 * of its container.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -435,11 +402,9 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines how many pixels should be present between the bottom
-		 * side bindex of the target's bounding box, and the bottom side
-		 * bindex of its context.
+		 * side of the target's bounding box, and the bottom side
+		 * of its container.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -459,8 +424,6 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's left-hand side.
 		 *  
@@ -479,8 +442,6 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's top side.
 		 *  
@@ -499,8 +460,6 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's right-hand side.
 		 *  
@@ -519,8 +478,6 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's bottom side.
 		 *  

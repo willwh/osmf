@@ -24,7 +24,7 @@ package org.osmf.layout
 {
 	/**
 	 * Defines an enumeration of horizontal align modes as supported by the
-	 * default layour renderer.
+	 * layout renderer.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

@@ -36,18 +36,10 @@ package org.osmf.layout
 	}
 
 	/**
-	 * Defines a layout renderer that sizes and positions its targets using the folowing
-	 * metadata facets it looks for on its targets:
+	 * A layout renderer that sizes and positions its targets using the LayoutMetadata
+	 * that it looks for on its targets.
 	 * 
-	 *  * LayoutAttributesMetadata
-	 *  * AbsoluteLayoutMetadata
-	 *  * RelativeLayoutMetadata
-	 *  * AnchorLayoutMetadata
-	 *  * PaddingLayoutMetadata
-	 * 
-	 * The documentation on each of these classes states how their respective properties
-	 * are interpreted by this renderer.
-	 * 
+	 * @see org.osmf.layout.LayoutMetadata 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

@@ -162,7 +162,7 @@ package org.osmf.layout
 	[Event(name="removeChild",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
-	 * LayoutTargetSprite defines a Sprite based ILayoutTarget implementation.
+	 * LayoutTargetSprite defines a Sprite-based ILayoutTarget implementation.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
