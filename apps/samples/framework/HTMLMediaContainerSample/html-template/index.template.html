@@ -118,6 +118,51 @@ function onHTMLMediaContainerConstructed(container)
 			}
 		}
 	}
+	else if (container.containerId == "bannerContainer1")
+	{
+		container.onElementAdd = function(element)
+		{
+			element.load = function(url)
+			{
+				bannerImage.src = url;
+			}
+			
+			element.unload = function()
+			{
+				bannerImage.src = null;
+			}
+		}
+	}
+	else if (container.containerId == "bannerContainer2")
+	{
+		container.onElementAdd = function(element)
+		{
+			element.load = function(url)
+			{
+				bannerImage2.src = url;
+			}
+			
+			element.unload = function()
+			{
+				bannerImage2.src = null;
+			}
+		}
+	}
+	else if (container.containerId == "bannerContainer3")
+	{
+		container.onElementAdd = function(element)
+		{
+			element.load = function(url)
+			{
+				bannerImage3.src = url;
+			}
+			
+			element.unload = function()
+			{
+				bannerImage3.src = null;
+			}
+		}
+	}
 }
 
 function onBannerClick()
@@ -220,5 +265,9 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			</embed>
 	</object>
 </noscript>
+<div id="bannerRegion2">
+	<img id="bannerImage2" src="" alt="banner" name="banner">
+	<img id="bannerImage3" src="" alt="banner" name="banner">
+</div>
 </body>
 </html>

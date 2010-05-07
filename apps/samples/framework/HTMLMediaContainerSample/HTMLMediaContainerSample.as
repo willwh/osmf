@@ -36,8 +36,23 @@ package
 		public function HTMLMediaContainerSample()
 		{
 			runSample1();
+			runSample2();
 		}
 		
+		/**
+		 * Sample 1 demonstrates how a banner area in HTML can be controlled from
+		 * the framework using composition:
+		 * 
+		 * A parallel element gets defined that holds a video element, and a serial
+		 * element. The serial element contains three HTMLElements that reference the
+		 * URLs to banner images. The serial element gets assigned to an HTMLContainer
+		 * instance.
+		 * 
+		 * On the JavaScript side (see [project root]/html-template/index.template.html)
+		 * the HTMLElements have a load, play- and time trait implemented. This way, each
+		 * of the three banner images assigned will show for 5 seconds. After the last
+		 * image was shown, it gets removed. 
+		 */		
 		private function runSample1():void
 		{
 			var htmlContainer:HTMLMediaContainer = new HTMLMediaContainer("bannerContainer");
@@ -66,6 +81,53 @@ package
 			htmlContainer.addMediaElement(banner1);
 			htmlContainer.addMediaElement(banner2);
 			htmlContainer.addMediaElement(banner3);
+			
+			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			mediaPlayer.autoPlay = true;
+			mediaPlayer.media = rootElement;
+		}
+		
+		/**
+		 * Sample 2 demonstrates how multiple HTMLContainer instances can be used
+		 * in parallel.
+		 * 
+		 * A parallel element gets defined that holds a video element, and three
+		 * HTMLElement instance. Each of the HTMLElements gets assigned to an
+		 * individual HTMLContainer instance.
+		 * 
+		 * On the JavaScript side (see [project root]/html-template/index.template.html),
+		 * the HTMLElements have a load trait implemented. This results in all of
+		 * the banners showing in parallel at different locations (defined in HTML as
+		 * image tags that the JavaScript load trait implementation interacts with).
+		 */		
+		private function runSample2():void
+		{
+			var htmlContainer1:HTMLMediaContainer = new HTMLMediaContainer("bannerContainer1");
+			var htmlContainer2:HTMLMediaContainer = new HTMLMediaContainer("bannerContainer2");
+			var htmlContainer3:HTMLMediaContainer = new HTMLMediaContainer("bannerContainer3");
+			
+			var rootElement:ParallelElement = new ParallelElement();
+			
+				var banner1:HTMLElement = new HTMLElement();
+				banner1.resource = new URLResource(BANNER_1);
+				rootElement.addChild(banner1);
+					
+				var banner2:HTMLElement = new HTMLElement();
+				banner2.resource = new URLResource(BANNER_2);
+				rootElement.addChild(banner2);
+				
+				var banner3:HTMLElement = new HTMLElement();
+				banner3.resource = new URLResource(BANNER_3);
+				rootElement.addChild(banner3);
+					
+				var video:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
+				rootElement.addChild(video);
+			
+			addMediaElement(rootElement);
+			
+			htmlContainer1.addMediaElement(banner1);
+			htmlContainer2.addMediaElement(banner2);
+			htmlContainer3.addMediaElement(banner3);
 			
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;
