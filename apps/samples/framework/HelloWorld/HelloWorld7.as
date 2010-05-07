@@ -53,7 +53,7 @@ package
 			stage.align = StageAlign.TOP_LEFT;
  
  			// Create the container class that displays the media.
- 			var container:MediaContainer = new MediaContainer();
+ 			container = new MediaContainer();
 			addChild(container);
 
 			// Set the container's size to match that of the stage, and
@@ -63,7 +63,7 @@ package
 
 			// Make sure we resize the container when the stage dimensions
 			// change.
-			container.addEventListener(Event.RESIZE, onStageResize);
+			stage.addEventListener(Event.RESIZE, onStageResize);
 
 			// Create the resource to play.
 			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
