@@ -455,7 +455,7 @@
 			
 		</widget>
 		
-		<!-- widget
+		<widget
 			id="memoryMeter"
 			type="memoryMeter"
 			top="10"
@@ -468,7 +468,18 @@
 			top="24"
 			left="10"
 			width="200"
-			/ -->
+			/>
+			
+		<widget
+			id="videoQoSFPS"
+			type="metadataLabel"
+			metadataNamespace="org.osmf.qos.VideoQoSPluginMetadata"
+			metadataKey="currentFPS"
+			postfix=" video frames/sec." 
+			top="38"
+			left="10"
+			width="200"
+			/>	
 		
 	</widgets>
 </chrome>

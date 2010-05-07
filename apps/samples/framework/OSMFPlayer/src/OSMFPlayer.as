@@ -41,6 +41,7 @@ package
 	import org.osmf.player.configuration.*;
 	import org.osmf.player.debug.*;
 	import org.osmf.player.preloader.*;
+	import org.osmf.qos.VideoQoSPluginInfo;
 	import org.osmf.traits.*;
 	
 	CONFIG::DEBUG 
@@ -54,6 +55,9 @@ package
 	{
 		public function OSMFPlayer(preloader:Preloader)
 		{
+			// Get a reference to the stage from the preloader (ours isn't set yet).
+			_stage = preloader.stage;
+			
 			// Store pre-loader references:
 			CONFIG::DEBUG
 			{
@@ -65,7 +69,6 @@ package
 			
 			// Set the SWF scale mode, and listen to the stage change
 			// dimensions:
-			_stage = preloader.stage;
 			_stage.scaleMode = StageScaleMode.NO_SCALE;
 			_stage.align = StageAlign.TOP_LEFT;
 			_stage.addEventListener(Event.RESIZE, onStageResize);
@@ -158,7 +161,6 @@ package
 					}
 				}
 				 
-				
 				// When in debugging mode, wrap the element in a debugger proxy:
 				CONFIG::DEBUG
 				{
@@ -170,10 +172,13 @@ package
 			return result;
 		}
 		
-		CONFIG::FLASH_10_1
-		{		
-			override protected function constructMediaFactory():MediaFactory
-			{
+		override protected function constructMediaFactory():MediaFactory
+		{
+			var factory:DefaultMediaFactory = new DefaultMediaFactory();
+			var item:MediaFactoryItem;
+			
+			CONFIG::FLASH_10_1
+			{		
 				/**
 				 * Here, we want to replace the standard http streaming media factory item
 				 * with our "home made" media factory item which used HTTPStreamingNetLoaderWithBufferControl
@@ -184,8 +189,7 @@ package
 				 * we want to rename the id of the item to be something other than org.osmf...
 				 * This way the media factory will put this item in front of any osmf item. 
 				 */
-				var factory:DefaultMediaFactory = new DefaultMediaFactory();
-				var item:MediaFactoryItem = factory.getItemById(HTTPSTREAM_ITEM_ID);
+				item = factory.getItemById(HTTPSTREAM_ITEM_ID);
 				if (item != null)
 				{
 					factory.removeItem(item);
@@ -203,9 +207,14 @@ package
 						);
 						
 				factory.addItem(item);
-				
-				return factory;
 			}
+			
+			CONFIG::DEBUG
+			{				
+				factory.addItem(VideoQoSPluginInfo.mediaFactoryItem);
+			}
+			
+			return factory;
 		}
 
 		// Handlers
