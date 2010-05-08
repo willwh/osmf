@@ -29,6 +29,7 @@ package org.osmf.qos
 	{
 		public static const NAMESPACE:String = "org.osmf.qos.VideoQoSPluginMetadata";
 		public static const CURRENT_FPS:String = "currentFPS";
+		public static const DROPPED_FRAMES:String = "droppedFrames";
 		
 		override public function get synthesizer():MetadataSynthesizer
 		{

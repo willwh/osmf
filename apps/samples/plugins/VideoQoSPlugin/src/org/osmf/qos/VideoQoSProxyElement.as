@@ -23,11 +23,14 @@
 package org.osmf.qos
 {
 	import flash.events.TimerEvent;
+	import flash.net.NetStreamInfo;
 	import flash.utils.Timer;
 	
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
+	import org.osmf.net.NetStreamLoadTrait;
+	import org.osmf.traits.MediaTraitType;
 
 	public class VideoQoSProxyElement extends ProxyElement
 	{
@@ -82,20 +85,40 @@ package org.osmf.qos
 		
 		private function onTimer(event:TimerEvent):void
 		{
+			var loadTrait:NetStreamLoadTrait
+				=	videoElement.getTrait(MediaTraitType.LOAD)
+				as	NetStreamLoadTrait;
+				
 			var metadata:VideoQoSPluginMetadata
 				= videoElement.getMetadata(VideoQoSPluginMetadata.NAMESPACE)
 				as VideoQoSPluginMetadata;
-				
-			if (metadata == null)
+			
+			if (metadata != null && (loadTrait == null || loadTrait.netStream == null))
+			{
+				removeMetadata(VideoQoSPluginMetadata.NAMESPACE);
+				metadata = null;
+			}
+			else if (metadata == null)
 			{
 				metadata = new VideoQoSPluginMetadata();
 				addMetadata(VideoQoSPluginMetadata.NAMESPACE, metadata);
 			}
 			
-			metadata.addValue
-				( VideoQoSPluginMetadata.CURRENT_FPS
-				, videoElement.currentFPS..toFixed(3).toString()
-				);
+			if (metadata != null)
+			{
+				var qos:NetStreamInfo = loadTrait.netStream.info;
+				
+				metadata.addValue
+					( VideoQoSPluginMetadata.CURRENT_FPS
+					, loadTrait.netStream.currentFPS.toFixed(3)
+					);
+					
+				metadata.addValue
+					( VideoQoSPluginMetadata.DROPPED_FRAMES
+					, qos.droppedFrames.toString() 
+					);
+				
+			}
 		}
 		
 		private var instanceNumber:int;

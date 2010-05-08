@@ -78,13 +78,6 @@ package
 			
 			// Setup the ChromeApplication (base class):		
 			setup(preloader.configuration);
-			
-			// Simulate the stage resizing, to update the dimensions of the
-			// container:
-			onStageResize();
-			
-			// Try to load the URL set on the configuration:
-			url = configuration.url;
 		}
 		
 		// Internals
@@ -125,6 +118,13 @@ package
 			}
 			
 			alert = widgets.getWidget("alert") as AlertDialog;
+			
+			// Simulate the stage resizing, to update the dimensions of the
+			// container:
+			onStageResize();
+			
+			// Try to load the URL set on the configuration:
+			url = configuration.url;
 		}
 		
 		override protected function processNewMedia(value:MediaElement):MediaElement

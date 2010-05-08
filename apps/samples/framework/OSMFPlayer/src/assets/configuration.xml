@@ -1,5 +1,12 @@
 <chrome>
 
+	<!-- plug-ins -->
+	<!--
+	<plugins>
+		<plugin url="file:///Users/edwin/osadobe/osmf_public/trunk/apps/samples/plugins/VideoQoSPlugin/bin-debug/VideoQoSPlugin.swf"/>
+	</plugins>
+	-->
+
 	<!-- image assets -->
 	
 	<assets baseURL="assets/images/">
@@ -455,7 +462,7 @@
 			
 		</widget>
 		
-		<!--
+		<!-- debugging controls
 		<widget
 			id="memoryMeter"
 			type="memoryMeter"
@@ -478,6 +485,17 @@
 			metadataKey="currentFPS"
 			postfix=" video frames/sec." 
 			top="38"
+			left="10"
+			width="200"
+			/>
+			
+		<widget
+			id="videoQoSFPS"
+			type="metadataLabel"
+			metadataNamespace="org.osmf.qos.VideoQoSPluginMetadata"
+			metadataKey="droppedFrames"
+			postfix=" dropped frames" 
+			top="52"
 			left="10"
 			width="200"
 			/>
