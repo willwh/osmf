@@ -1,8 +1,32 @@
+/*****************************************************
+*  
+*  Copyright 2010 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
+
 package org.osmf.chrome.application
 {
 	import flash.display.Sprite;
+	import flash.events.Event;
 	
 	import org.osmf.chrome.configuration.Configuration;
+	import org.osmf.chrome.configuration.PluginsParser;
 	import org.osmf.chrome.configuration.WidgetsParser;
 	import org.osmf.chrome.widgets.Widget;
 	import org.osmf.containers.MediaContainer;
@@ -28,6 +52,8 @@ package org.osmf.chrome.application
 			_renderer = constructLayoutRenderer();
 			_container = constructMediaContainer(renderer);
 			_widgets = constructWidgetsParser();
+			
+			pluginsParser = constructPluginsParser();
 			
 			addChild(_container);
 		}
@@ -73,9 +99,19 @@ package org.osmf.chrome.application
 					widget.layoutMetadata.index = index++;
 					_renderer.addTarget(widget);
 				}
+				
+				pluginsParser.addEventListener(Event.COMPLETE, onPluginsParserComplete);
+				pluginsParser.parse(configuration.configuration.plugins.plugin, _factory);
+				
+				function onPluginsParserComplete(event:Event):void
+				{
+					processSetupComplete();
+				}
 			}
-			
-			processSetupComplete();
+			else
+			{
+				processSetupComplete();
+			}
 		}
 		
 		public function set media(value:MediaElement):void
@@ -156,6 +192,11 @@ package org.osmf.chrome.application
 			return new WidgetsParser();
 		}
 		
+		protected function constructPluginsParser():PluginsParser
+		{
+			return new PluginsParser();
+		}
+		
 		protected function processSetupComplete():void
 		{
 		}
@@ -187,5 +228,6 @@ package org.osmf.chrome.application
 		private var _player:MediaPlayer;
 		private var _media:MediaElement;
 		private var _widgets:WidgetsParser;
+		private var pluginsParser:PluginsParser;
 	}
 }
