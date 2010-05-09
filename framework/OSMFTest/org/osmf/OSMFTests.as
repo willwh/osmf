@@ -264,6 +264,11 @@ package org.osmf
 			addTestSuite(TestDVRInfo);			
 			addTestSuite(TestHTTPStreamingDVRCastTimeTrait);
 			addTestSuite(TestHTTPStreamingDVRCastDVRTrait);
+			addTestSuite(TestHTTPStreamingFileHandlerBase);
+			addTestSuite(TestHTTPStreamingIndexHandlerBase);
+			addTestSuite(TestHTTPStreamRequest);
+			addTestSuite(TestHTTPStreamingUtils);
+			addTestSuite(TestHTTPNetStreamMetrics);
 			
 			// DVR
 			//

@@ -21,16 +21,15 @@
 *****************************************************/
 package org.osmf.net.httpstreaming.dvr
 {
-	import flash.net.NetConnection;
 	import flash.events.NetStatusEvent;
+	import flash.net.NetConnection;
 	
+	import org.osmf.events.*;
 	import org.osmf.net.*;
 	import org.osmf.net.httpstreaming.HTTPNetStream;
 	import org.osmf.net.httpstreaming.f4f.*;
-	import org.osmf.net.httpstreaming.dvr.*;
-	import org.osmf.events.*;
 	
-	internal class MockHTTPNetStream extends HTTPNetStream
+	public class MockHTTPNetStream extends HTTPNetStream
 	{
 		public function MockHTTPNetStream(nc:NetConnection, time:Number)
 		{
@@ -52,6 +51,16 @@ package org.osmf.net.httpstreaming.dvr
 			_dvrInfo = info;
 		}
 		
+		public function set downloadRatio(value:Number):void
+		{
+			_downloadRatio = value;
+		}
+		
+		override public function get downloadRatio():Number
+		{
+			return _downloadRatio;
+		} 
+		
 		override public function DVRGetStreamInfo(streamName:Object):void
 		{
 			this.dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, _dvrInfo));
@@ -71,5 +80,6 @@ package org.osmf.net.httpstreaming.dvr
 		
 		private var _time:Number;
 		private var _dvrInfo:DVRInfo;
+		private var _downloadRatio:Number;
 	}
 }

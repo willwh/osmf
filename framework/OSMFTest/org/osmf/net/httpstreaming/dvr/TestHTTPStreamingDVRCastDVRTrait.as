@@ -70,8 +70,11 @@ package org.osmf.net.httpstreaming.dvr
 			_info.isRecording = !_isRecording;
 			_ns.dvrInfo = _info;
 			_ns.DVRGetStreamInfo(null);
-			
 			assertTrue(_dvrTrait.isRecording != _isRecording);
+			
+			_ns.dvrInfo = null;
+			_ns.DVRGetStreamInfo(null);
+			assertTrue(_dvrTrait.isRecording == false);
 		}
 
 		private var _ns:MockHTTPNetStream;
