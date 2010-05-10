@@ -24,13 +24,18 @@ package org.osmf.media
 	import flash.utils.Dictionary;
 	
 	/**
-	 * An MediaResourceBase is a base class for media that serves as input
+	 * A MediaResourceBase is a base class for media that serves as input
 	 * to a MediaElement.
 	 * 
-	 * <p>Different MediaElement instances can "handle" (i.e. input) different
-	 * resource types (e.g. a URL vs. an array of streams), or even different
-	 * variations of the same resource type (e.g. a URL with the ".jpg"
-	 * extension vs. a URL with a ".mp3" extension).</p>
+	 * <p>Different MediaElement instances can "handle" (i.e. process and
+	 * present) different resource types (e.g. a URL vs. an array of streams),
+	 * or even different variations of the same resource type (e.g. a URL with
+	 * the ".jpg" extension vs. a URL with a ".mp3" extension).</p>
+	 * 
+	 * <p>A MediaResourceBase can also have an arbitrary set of descriptive
+	 * metadata.  Metadata is typically used to further qualify the resource
+	 * so that each MediaElement can determine whether (and how) to present
+	 * and process the resource.</p> 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

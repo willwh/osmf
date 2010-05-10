@@ -93,13 +93,14 @@ package org.osmf.metadata
 	[Event (name="markerDurationReached", type="org.osmf.events.TimelineMetadataEvent")]
 
 	/**
-	 * The TimelineMetadata class manages metadata associated with the timeline of a
-	 * <code>MediaElement</code>.  The TimelineMetadata uses the TimelineMarker class
-	 * to represent both keys and values (i.e. a TimelineMarker will be stored as
-	 * both key and value).  A TimelineMetadata object dispatches events of type
-	 * <code>TimelineMetadataEvent</code> when the currentTime property (via the
-	 * TimeTrait) of the MediaElement matches any of the time values in its
-	 * collection of <code>TimelineMarker</code> objects. 
+	 * The TimelineMetadata class encapsulates metadata associated with the
+	 * timeline of a MediaElement.
+	 * 
+	 * <p>TimelineMetadata uses the TimelineMarker class to represent both
+	 * keys and values (i.e. a TimelineMarker will be stored as both key and
+	 * value).  A TimelineMetadata object dispatches a TimelineMetadataEvent
+	 * when the currentTime property of the MediaElement's TimeTrait matches
+	 * any of the time values in its collection of TimelineMarker objects.</p> 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -113,7 +114,7 @@ package org.osmf.metadata
 		 * 
 		 * @param media The media element this timeline metadata applies to.
 		 * 
-		 * @throws ArgumentError If media argument is null.
+		 * @throws ArgumentError If the media argument is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

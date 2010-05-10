@@ -22,8 +22,11 @@
 package org.osmf.media
 {
 	/**
-	 * MediaType identifies the various media types that the Open Source Media Framework
-	 * can handle out of the box. 
+	 * MediaType identifies the various media types that the Open Source Media
+	 * Framework can handle out of the box.  A MediaType is typically
+	 * associated with a MediaResourceBase.
+	 * 
+	 * @see MediaResourceBase
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -33,7 +36,7 @@ package org.osmf.media
 	public final class MediaType
 	{	
 		/**
-		 * Video media
+		 * The type constant for video.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -43,7 +46,7 @@ package org.osmf.media
 		public static const VIDEO:String	= "video";
 		
 		/**
-		 * Audio media
+		 * The type constant for audio.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -53,7 +56,7 @@ package org.osmf.media
 		public static const AUDIO:String	= "audio";
 		
 		/**
-		 * Image media
+		 * The type constant for images.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -63,7 +66,7 @@ package org.osmf.media
 		public static const IMAGE:String	= "image";
 		
 		/**
-		 * SWF format media
+		 * The type constant for SWFs.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -71,6 +74,5 @@ package org.osmf.media
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const SWF:String		= "swf";
-				
 	}
 }

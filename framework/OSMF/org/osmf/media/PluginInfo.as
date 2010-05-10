@@ -31,8 +31,8 @@ package org.osmf.media
 	 * PluginInfo is the encapsulation of the set of MediaFactoryItem objects
 	 * that will be available to the application after the plugin has been
 	 * successfully loaded.
-	 * Every Open Source Media Framework plugin must define a subclass of PluginInfo
-	 * to provide the application with the information it needs
+	 * Every Open Source Media Framework plugin must define an instance or subclass
+	 * of PluginInfo to provide the application with the information it needs
 	 * to create and load the plugin's MediaElement.
 	 * <p>
 	 * From the point of view of the Open Source Media Framework,
@@ -51,7 +51,7 @@ package org.osmf.media
 	 * </p>
 	 * <p>A PluginInfo also gives the plugin an opportunity to accept or reject a specific
 	 * Open Source Media Framework version through its <code>isFrameworkVersionSupported()</code> method.</p>
-	 * <p>A dynamic plugin is loaded at runtime from a SWF or SWC.
+	 * <p>A dynamic plugin is loaded at runtime from a SWF.
 	 * A static plugin is compiled as part of the Open Source Media Framework application.
 	 * An application attempting to load a dynamic plugin accesses the class
 	 * that extends PluginInfo through
@@ -62,7 +62,7 @@ package org.osmf.media
 	 * exposed by the PluginInfoResource object.</p>
 	 * 
 	 * @see PluginInfoResource
-	 * @see org.osmf.media.MediaFactoryItem
+	 * @see MediaFactoryItem
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -73,9 +73,12 @@ package org.osmf.media
 	{
 		/**
 		 * Metadata namespace URL for a MediaFactory that is passed from player
-		 * to plugin.  Client code can set this on the MediaResourceBase that
-		 * is passed to MediaFactory.loadPlugin, and it will be exposed to the
-		 * on the MediaResourceBase that is passed to PluginInfo.initializePlugin.
+		 * to plugin.
+		 * 
+		 * <p>Client code can set this on the MediaResourceBase that is passed
+		 * to <code>MediaFactory.loadPlugin</code>, and it will be exposed to
+		 * the plugin on the MediaResourceBase that is passed to
+		 * <code>PluginInfo.initializePlugin</code>.</p>
 		 **/
 		public static const PLUGIN_MEDIAFACTORY_NAMESPACE:String = "http://www.osmf.org/plugin/mediaFactory/1.0";
 
@@ -88,8 +91,8 @@ package org.osmf.media
 		 * if specified, is invoked for each MediaElement that is created from the
 		 * MediaFactory to which this MediaFactoryItem is added.  If specified,
 		 * the function must take one param of type MediaElement, and return void.
-		 * This callback function is useful for MediaFactoryItems who want to be
-		 * notified when other MediaElement are created (e.g. so as to listen to
+		 * This callback function is useful for MediaFactoryItems which need to be
+		 * notified when other MediaElements are created (e.g. so as to listen to
 		 * or control them).
 		 *  
 		 *  @langversion 3.0
@@ -106,7 +109,7 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Returns the number of MediaFactoryItem objects that the plugin
+		 * The number of MediaFactoryItem objects that the plugin
 		 * exposes to the loading application.
 		 *  
 		 *  @langversion 3.0
@@ -120,7 +123,7 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Returns the version of the framework that this plugin was compiled against.  The
+		 * The version of the framework that this plugin was compiled against.  The
 		 * current version can be obtained from org.osmf.utils.Version.version.
 		 *  
 		 *  @langversion 3.0
@@ -189,10 +192,18 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Data from the player passed to the plugin to initialize the plugin.
-		 * This method is called before getMediaFactoryItemAt or get numMediaFactoryItems.
+		 * Initialization method invoked by the media framework when this plugin
+		 * is being initialized, and which provides the plugin the resource which
+		 * was used to request the plugin.  By default does nothing, but plugins
+		 * can override this method to specify their own initialization logic.
 		 * 
-		 * Subclasses can override this method to do custom initialization.
+		 * <p>Note that an instance of PluginInfo may be instantiated before the
+		 * framework has determined that that plugin is truly going to be used, so
+		 * it is strongly recommended that any initialization logic be placed
+		 * within an override of this method to avoid duplicate initialization.</p>
+		 * 
+		 * <p>This method is called before getMediaFactoryItemAt or get
+		 * numMediaFactoryItems.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

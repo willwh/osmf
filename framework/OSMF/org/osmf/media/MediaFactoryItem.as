@@ -24,8 +24,14 @@ package org.osmf.media
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Encapsulation of all information needed to dynamically create and
-	 * initialize a MediaElement from a MediaFactory.
+	 * MediaFactoryItem is the encapsulation of all information needed to dynamically
+	 * create and initialize a MediaElement from a MediaFactory.
+	 * 
+	 * <p>MediaFactoryItem objects are exposed by plugins (on the PluginInfo class),
+	 * and used by the framework to create the MediaElement(s) specified by the
+	 * plugin.</p>
+	 * 
+	 * @see PluginInfo 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -39,6 +45,7 @@ package org.osmf.media
 		
 		/**
 		 * Constructor.
+		 * 
 		 * @param id An identifier that represents this MediaFactoryItem.  Identifiers should reflect
 		 * the plugin makers name, and the specific name of the element it generates.  The convention
 		 * is to use the package namespace scheme. Two examples:

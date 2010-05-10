@@ -22,7 +22,15 @@
 package org.osmf.metadata
 {
 	/**
-	 * The CuePoint class represents a cue point in a media element.
+	 * The CuePoint class represents a cue point in the timeline of a media
+	 * element.
+	 * 
+	 * <p>A cue point is a media time value that has an associated action or
+	 * piece of information.  Typically, cue points are associated with video
+	 * timelines to represent navigation points or event triggers.</p>
+	 * 
+	 * <p>The CuePoint class extends TimelineMarker, and as such can be added
+	 * to a TimelineMetadata object.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -32,13 +40,13 @@ package org.osmf.metadata
 	public class CuePoint extends TimelineMarker
 	{
 		/**
-		 * Namespace URL for a TimelineProperties class that exposes
+		 * Namespace URL for a TimelineMetadata class that exposes
 		 * embedded cue points.
 		 **/
 		public static const EMBEDDED_CUEPOINTS_NAMESPACE:String	= "http://www.osmf.org/timeline/embeddedCuePoints/1.0";
 
 		/**
-		 * Namespace URL for a TimelineProperties class that exposes
+		 * Namespace URL for a TimelineMetadata class that exposes
 		 * dynamic cue points.
 		 **/
 		public static const DYNAMIC_CUEPOINTS_NAMESPACE:String	= "http://www.osmf.org/timeline/dynamicCuePoints/1.0";
@@ -66,6 +74,7 @@ package org.osmf.metadata
 			)
 		{
 			super(time, duration);
+			
 			_type = type;
 			_name = name;
 			_parameters = parameters;

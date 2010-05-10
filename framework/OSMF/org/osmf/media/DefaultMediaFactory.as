@@ -41,8 +41,8 @@ package org.osmf.media
 
 	
 	/**
-	 * <p>Defines a default media factory.</p>
-	 * <p/>
+	 * DefaultMediaFactory is the default implementation of MediaFactory.
+	 * 
 	 * <p>
      * The default media factory can construct media elements of
 	 * the following types:
@@ -58,10 +58,13 @@ package org.osmf.media
 	 * 	 RTMPDynamicStreamingNetLoader (MBR streaming)
 	 * </li>
 	 * <li>
-	 * 	 HTTPStreamingNetLoader (HTTP streaming)
+	 * 	 HTTPStreamingNetLoader (HTTP streaming), if the CONFIG::FLASH_10_1 compiler flag is set to true
 	 * </li>
 	 * <li>
 	 * 	 F4MLoader (Flash Media Manifest files)
+	 * </li>
+	 * <li>
+	 *   DVRCastNetLoader (DVRCast)
 	 * </li>
 	 * </ul>
 	 * </li>

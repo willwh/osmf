@@ -32,9 +32,9 @@ package org.osmf.media
 	import org.osmf.layout.VerticalAlign;
 	
 	/**
-	 * <code>MediaPlayerSprite</code> provides MediaPlayer, MediaContainer, and MediaFactory
-	 * capabilities all in one Sprite-based class.  It also provides convenience methods to generate
-	 * MediaElements from a resource, as well as a scaleMode setter.
+	 * MediaPlayerSprite provides MediaPlayer, MediaContainer, and MediaFactory
+	 * capabilities all in one Sprite-based class.  It also provides convenience
+	 * methods to generate MediaElements from a resource and set the ScaleMode.
 	 * 
 	 *  @includeExample MediaPlayerSpriteExample.as
 	 * 
@@ -48,9 +48,9 @@ package org.osmf.media
 		/**
 		 * Constructor.
 		 * 
-		 * @param mediaPlayer A custom MediaPlayer can be provided. if null, defaults to new MediaPlayer
-		 * @param mediaContainer A custom MediaContainer can be provided. if null defaults to a new MediaContainer
-		 * @param mediaFactory A custom MediaFactory can be provided. if null defaults to a new DefaultMediaFactory
+		 * @param mediaPlayer A custom MediaPlayer can be provided. If null, defaults to new MediaPlayer.
+		 * @param mediaContainer A custom MediaContainer can be provided. If null defaults to a new MediaContainer.
+		 * @param mediaFactory A custom MediaFactory can be provided. If null defaults to a new DefaultMediaFactory.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -72,11 +72,12 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code> .  
-		 * Setting the element will set it as the media on the mediaPlayer, 
+		 * Source MediaElement presented by this MediaPlayerSprite.
+		 * 
+		 * <p>Setting the element will set it as the media on the mediaPlayer, 
 		 * and add it to the media container.  Setting this property to null will remove it
 		 * both from the player and container.  Existing in properties, such as layout will be
-		 * preserved on media.
+		 * preserved on media.</p>
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -116,12 +117,15 @@ package org.osmf.media
 		}
 					
 		/**
-		 * This function creates a new media element from the supplied
-		 * media resource.  It uses the media factory, and sets the mediaElement
-		 * property on this MediaPlayerSprite.  If null, it will remove the existing 
-		 * mediaElement and resource from the player and container.  If the MediaFactory 
-		 * can't create a MediaElement from the given resource, it will set the media 
-		 * and resource to null.
+		 * The resource corresponding to the media element that is currently
+		 * being presented by this MediaPlayerSprite.
+		 * 
+		 * <p>When set, this property uses the MediaFactory to generate a new
+		 * MediaElement, and sets it as the MediaElement on this MediaPlayerSprite.
+		 * If null, it will remove the existing MediaElement and resource from
+		 * the player and container.  If the MediaFactory can't create a
+		 * MediaElement from the given resource, it will set the media and 
+		 * to null.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -139,9 +143,11 @@ package org.osmf.media
 		}
 			
 		/**
-		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.media.MediaPlayer. 
-		 * When an element is set directly on the mediaPlayer, the media element is propogated to the MediaPlayerSprite,
-		 * and the MediaContainer.
+		 * The MediaPlayer that controls this media element.
+		 * 
+		 * <p>Defaults to an instance of MediaPlayer. When an element is set
+		 * directly on the MediaPlayer, the media element is propagated to
+		 * the MediaPlayerSprite, and the MediaContainer.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -154,10 +160,12 @@ package org.osmf.media
 		}
 		
 		/**
-		 * The MediaContainer that is used with this class.  Defaults to an instance of 
-		 * org.osmf.MediaContainer.  Any media elements added or removed through 
-		 * addMediaElement() or removeMediaElement() are not propagated to the mediaPlayer
-		 * In order to set the mediaElement, use the setter on the MediaPlayerSprite.
+		 * The MediaContainer that is used with this class.
+		 * 
+		 * <p>Defaults to an instance of MediaContainer.  Any media elements
+		 * added or removed through addMediaElement() or removeMediaElement()
+		 * are not set on the MediaPlayer.  In order to set the MediaElement,
+		 * use the setter on the MediaPlayerSprite.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -170,11 +178,13 @@ package org.osmf.media
 		}
 		
 		/**
-		 * The MediaFactory that is used with this class.  Defaults to an instance of 
-		 * org.osmf.DefaultMediaFactory.  Plugins should be loaded through this media 
-		 * factory.  Media elements created through this factory aren't added
-		 * to the mediaPlayer or mediaContainer.  To associate a new element, set the element 
-		 * property on this class.
+		 * The MediaFactory that is used with this class.
+		 * 
+		 * <p>Defaults to an instance of DefaultMediaFactory.  Plugins should
+		 * be loaded through this media factory.  Media elements created
+		 * directly through this factory aren't added to the MediaPlayer or
+		 * MediaContainer.  To associate a new media element with the
+		 * MediaPlayerSprite, set the media property on this class.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -188,12 +198,12 @@ package org.osmf.media
 		}
 			
 		/**
-		 * The <code>scaleMode</code> property describes different ways of laying out the media content within this sprite.
-		 * <code>scaleMode</code> can be set to <code>none</code>, <code>stretch</code>, <code>letterbox</code> or <code>zoom</code>.
-		 * <code>MediaElementSprite</code> uses the value to calculate the layout.   This property is persistent between media element.
-		 * By default the MediaContainer sets the layout to be 100% width, 100% height , and centered.  
-		 * The default value is <code>letterbox</code>.
-		 * @see org.osmf.layout.ScaleMode for usage examples.
+		 * Defines how content within the MediaPlayerSprite will be laid out.
+		 * 
+		 * <p>The default value is <code>letterbox</code>.</p>
+		 * 
+		 * <p>Note that by default the MediaContainer sets the layout to be 100%
+		 * width, 100% height, and centered.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -257,8 +267,6 @@ package org.osmf.media
 		private var _media:MediaElement;
 		private var _mediaPlayer:MediaPlayer;
 		private var _mediaFactory:MediaFactory;
-		private var _mediaContainer:MediaContainer;
-		
-								
+		private var _mediaContainer:MediaContainer;			
 	}
 }

@@ -191,19 +191,14 @@ package org.osmf.media
 	[Event(name="mediaError",type="org.osmf.events.MediaErrorEvent")]
 
 	/**
-	 * The MediaPlayer is the controller class used for interaction with all media types.
+	 * MediaPlayer is the controller class used for interaction with all media types.
 	 * <p>It is a high level class that shields the developer from the low level details of the
 	 * media framework. The MediaPlayer class also provides some convenient features such as loop, 
-	 * auto play and auto rewind.</p>
+	 * auto-play and auto-rewind.</p>
 	 *  
 	 * <p>The MediaPlayer can play back all media types supported by the Open Source Media Framework, 
 	 * including media compositions.</p>
 	 * 
-	 * <p>The generic MediaPlayer is designed to be subclassed to enable creation of
-	 * type-specific  players. 
-	 * Such a subclass can expose a simpler API targeted to support
-	 * its particular media type.</p>
-	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5

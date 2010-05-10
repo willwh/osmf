@@ -27,8 +27,8 @@ package org.osmf.logging
 	 * application there is one instance of LoggerFactory and multiple instances
 	 * of Logger.
 	 * 
-	 * Clients are expected to subclass LoggerFactory to generate their own Logger
-	 * objects.
+	 * <p>Clients are expected to subclass LoggerFactory to generate their own Logger
+	 * objects.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -40,7 +40,7 @@ package org.osmf.logging
 		/**
 		 * Creates and returns a logger for the specified category.
 		 * 
-		 * @param category the category of the logger
+		 * @param category The category of the logger.
 		 * @return the logger
 		 *  
 		 *  @langversion 3.0

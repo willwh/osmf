@@ -22,9 +22,11 @@
 package org.osmf.media
 {
 	/**
-	 * PluginInfoResource implements MediaResourceBase for static 
-	 * plugins. A static plugin is a plugin that is compiled within the application that uses it,
-	 * in contrast to a dynamic plugin, which is loaded at runtime.
+	 * PluginInfoResource is a media resource that represents a static plugin. 
+	 * 
+	 * <p>A static plugin is a plugin that is compiled within the application
+	 * that uses it, in contrast to a dynamic plugin, which is loaded at
+	 * runtime.</p>
 	 * 
 	 * @see PluginInfo
 	 *  
@@ -37,12 +39,9 @@ package org.osmf.media
 	{
 		
 		/**
-		 * Constructor. 
-		 * <p>The default constructor must be able to instantiate the class
-		 * referenced by <code>pluginInfo</code>.</p>
+		 * Constructor.
+		 * 
 		 * @param pluginInfo Reference to an instance of PluginInfo.
-		 * @param parameters the list of initialization paramerers
-		 *  to pass to the IPlugin info once loaded
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

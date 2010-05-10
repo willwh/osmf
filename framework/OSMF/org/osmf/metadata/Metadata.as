@@ -29,7 +29,7 @@ package org.osmf.metadata
 	import org.osmf.utils.OSMFStrings;
 		 
      /**
-	 * Signals that a new value has been added to the Metadata object.
+	 * Dispatched when a new value is added to the Metadata object.
 	 * 
 	 * @eventType org.osmf.events.MetadataEvent.VALUE_ADD
 	 *  
@@ -41,7 +41,7 @@ package org.osmf.metadata
      [Event(name='valueAdd', type='org.osmf.events.MetadataEvent')]
 	
      /**
-	 * Signals that a value has been removed from the Metadata object.
+	 * Dispatched when a value is removed from the Metadata object.
 	 * 
 	 * @eventType org.osmf.events.MetadataEvent.VALUE_REMOVE
 	 *  
@@ -53,7 +53,7 @@ package org.osmf.metadata
      [Event(name='valueRemove', type='org.osmf.events.MetadataEvent')]
 	
      /**
-	 * Signals that a value within the Metadata object has changed.
+	 * Dispatched when a value within the Metadata object changes.
 	 * 
 	 * @eventType org.osmf.events.MetadataEvent.VALUE_CHANGE
 	 *  
@@ -65,10 +65,12 @@ package org.osmf.metadata
      [Event(name='valueChange', type='org.osmf.events.MetadataEvent')]
 	
 	/**
-	 * Repository for metadata.  Metadata consists of key-value pairs,
-	 * where keys are Strings and value are arbitrary objects.  This class
-	 * provides a strongly-typed API for working with these key-value
-	 * pairs, as well as events for detecting changes to the metadata.
+	 * The Metadata class encapsulates a related collection of metadata.
+	 * 
+	 * <p>Metadata consists of key-value pairs, where keys are Strings
+	 * and values are arbitrary Objects.  The Metadata class provides a
+	 * strongly-typed API for working with these key-value pairs, as well
+	 * as events for detecting changes to the metadata.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -208,7 +210,7 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * All of the keys stored in this Metadata object.
+		 * The keys stored in this Metadata object.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -22,11 +22,12 @@
 package org.osmf.media
 {
 	/**
-	 * Enumeration of different types of MediaFactoryItems.
+	 * MediaFactoryItemType is the enumeration of possible types of MediaFactoryItems.
 	 * 
-	 * <p>Most MediaFactoryItems encapsulate media with a standard creation policy,
-	 * but in some cases a MediaFactoryItem needs some additional, custom setup.
-	 * This class enables the distinction between these types.</p> 
+	 * <p>Most MediaFactoryItems encapsulate media that is created and returned
+	 * directly, but in some cases a MediaFactoryItem needs to be integrated with
+	 * previously-created MediaElements.  This class enables the distinction between
+	 * these types.</p> 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

@@ -28,7 +28,10 @@ package org.osmf.media
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
-	 * A base implementation of a MediaElement that has a LoadTrait.
+	 * LoadableElementBase is the base class for media elements that
+	 * have a LoadTrait.  It manages the registration of event listeners,
+	 * and provides protected hook methods to simplify the load workflow
+	 * for subclasses.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

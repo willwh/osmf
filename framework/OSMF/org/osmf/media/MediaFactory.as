@@ -69,18 +69,18 @@ package org.osmf.media
 	[Event(name="mediaElementCreate", type="org.osmf.events.MediaFactoryEvent")]
 
 	/**
-	 * A MediaFactory represents a factory class for media elements.
+	 * MediaFactory represents a factory class for media elements.
 	 * 
-	 * <p>The factory operation takes an MediaResourceBase as input and produces a MediaElement
+	 * <p>The factory operation takes a MediaResourceBase as input and produces a MediaElement
 	 * as output.</p>
 	 * <p>The MediaFactory maintains a list of MediaFactoryItem objects,
 	 * each of which encapsulates all the information necessary to create 
 	 * a specific MediaElement. The MediaFactory relies on
-	 * the canHandleResourceFunction method on each MediaFactoryItem to find a
-	 * MediaFactoryItem object than can handle the specified MediaResourceBase.</p>
+	 * the canHandleResourceFunction method of each MediaFactoryItem to find a
+	 * MediaFactoryItem object that can handle the specified MediaResourceBase.</p>
 	 *
 	 * <p>The factory interface also exposes methods for querying for specific MediaFactoryItem 
-	 * objects, and for loading plugins (which hold MediaFactoryItems objects).</p>
+	 * objects, and for loading plugins (which hold MediaFactoryItem objects).</p>
 	 * 
 	 * @see MediaFactoryItem
 	 * @see MediaResourceBase

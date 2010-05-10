@@ -22,7 +22,12 @@
 package org.osmf.metadata
 {
 	/**
-	 * An individual marker in a timeline.
+	 * The TimelineMarker class represents an individual marker in the timeline
+	 * of a MediaElement.
+	 * 
+	 * <p>TimelineMarker objects are aggregated by a TimelineMetadata object.</p>
+	 * 
+	 * @see TimelineMetadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

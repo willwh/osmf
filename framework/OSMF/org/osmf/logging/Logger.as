@@ -24,40 +24,6 @@ package org.osmf.logging
 	/**
 	 * Logger defines the capabilities of a logger, the object that OSMF
 	 * applications interact with to write logging messages.
-	 * 
-	 * Logging messages are designated with the following levels:
-	 * 
-	 * DEBUG: Designates informational level messages that are fine 
-	 * 		grained and most helpful when debugging an application.
-	 * 
-	 * INFO: Designates informational messages that highlight the progress 
-	 * 		of the application at coarse-grained level.
-	 * 
-	 * WARN: Designates events that could be harmful to the application operation.
-	 * 
-	 * ERROR: Designates error events that might still allow the application 
-	 * 		to continue running.
-	 * 
-	 * FATAL: Designates events that are very harmful and will eventually lead 
-	 * 		to application failure.
-	 * 
-	 * The message logging functions take the format of 
-	 * 	function_name(message:String, ...rest):void
-	 * 
-	 * Where:
-	 * 		message:String — The information to log. This string can contain 
-	 * 			special marker characters of the form {x}, where x is a zero 
-	 * 			based index that will be replaced with the additional parameters 
-	 * 			found at that index if specified.
-	 * 
-	 * 		...rest — Additional parameters that can be subsituted in the str 
-	 * 			parameter at each "{x}" location, where x is an integer (zero based) 
-	 * 			index value into the Array of values specified. 
-	 * 
-	 * 			for instance:       
-	 * 				logger.debug("here is some channel info {0} and {1}", 15.4, true);
-	 * 				This will log the following String:
-	 * 					"here is some channel info 15.4 and true"
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -93,7 +59,19 @@ package org.osmf.logging
 		
 		/**
 		 * Logs a message with a "debug" level.
-		 *  
+		 * 
+		 * <p>Debug messages are informational messages that are fine-grained,
+		 * and intended to be helpful when debugging.</p>
+		 * 
+		 * @param message The information to log. This string can contain special 
+	 	 * special marker characters of the form {x}, where x is a zero-based
+	 	 * index that will be replaced with the additional parameters found at 
+	 	 * that index if specified.
+	 	 * 
+	 	 * @param ...rest Additional parameters that can be subsituted in the  
+	 	 * message parameter at each "{x}" location, where x is an zero-based
+	 	 * integer index into the Array of values specified.
+	 	 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -106,7 +84,19 @@ package org.osmf.logging
 		/**
 		 * Logs a message with a "info" level.
 		 *  
-		 *  @langversion 3.0
+		 * <p>Info messages are intended to be informational, as opposed to
+		 * indicating a concern.</p>
+	 	 * 
+		 * @param message The information to log. This string can contain special 
+	 	 * special marker characters of the form {x}, where x is a zero-based
+	 	 * index that will be replaced with the additional parameters found at 
+	 	 * that index if specified.
+	 	 * 
+	 	 * @param ...rest Additional parameters that can be subsituted in the  
+	 	 * message parameter at each "{x}" location, where x is an zero-based
+	 	 * integer index into the Array of values specified.
+		 *
+  		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
@@ -118,6 +108,18 @@ package org.osmf.logging
 		/**
 		 * Logs a message with a "warn" level.
 		 *  
+		 * <p>Warn messages are intended to warn of events that could be
+		 * harmful to the operation of the application.</p>
+	 	 * 
+		 * @param message The information to log. This string can contain special 
+	 	 * special marker characters of the form {x}, where x is a zero-based
+	 	 * index that will be replaced with the additional parameters found at 
+	 	 * that index if specified.
+	 	 * 
+	 	 * @param ...rest Additional parameters that can be subsituted in the  
+	 	 * message parameter at each "{x}" location, where x is an zero-based
+	 	 * integer index into the Array of values specified.
+	 	 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -130,6 +132,18 @@ package org.osmf.logging
 		/**
 		 * Logs a message with a "error" level.
 		 *  
+		 * <p>Error messages are intended to capture error events that might
+		 * still allow the application to continue running.</p>
+	 	 * 
+		 * @param message The information to log. This string can contain special 
+	 	 * special marker characters of the form {x}, where x is a zero-based
+	 	 * index that will be replaced with the additional parameters found at 
+	 	 * that index if specified.
+	 	 * 
+	 	 * @param ...rest Additional parameters that can be subsituted in the  
+	 	 * message parameter at each "{x}" location, where x is an zero-based
+	 	 * integer index into the Array of values specified.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -142,6 +156,18 @@ package org.osmf.logging
 		/**
 		 * Logs a message with a "fatal" level.
 		 *  
+		 * <p>Fatal messages are intended to capture error events that are
+		 * likely to lead to application failure.</p>
+	 	 * 
+		 * @param message The information to log. This string can contain special 
+	 	 * special marker characters of the form {x}, where x is a zero-based
+	 	 * index that will be replaced with the additional parameters found at 
+	 	 * that index if specified.
+	 	 * 
+	 	 * @param ...rest Additional parameters that can be subsituted in the  
+	 	 * message parameter at each "{x}" location, where x is an zero-based
+	 	 * integer index into the Array of values specified.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

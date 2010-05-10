@@ -22,7 +22,7 @@
 package org.osmf.metadata
 {
 	/**
-	 * A utility class for cue point types.
+	 * CuePointType is the enumeration of possible types of CuePoint objects.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
