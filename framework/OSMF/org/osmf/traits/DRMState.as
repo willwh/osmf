@@ -22,7 +22,8 @@
 package org.osmf.traits
 {
 	/**
-	 * DRMState specifies the different DRM states a piece of media can be in.
+	 * DRMState is the enumeration of possible DRM-specific states that a
+	 * piece of media can be in.
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
@@ -32,8 +33,7 @@ package org.osmf.traits
 	public final class DRMState
 	{		
 		/**
-		 * The DRMTrait is preparing to use the DRM
-		 * for media playback.
+		 * The media has not yet been initialized for DRM.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -43,7 +43,7 @@ package org.osmf.traits
 		public static const UNINITIALIZED:String 			= "uninitialized"; 
 		
 		/**
-		 * The DRMTrait needs credential-based authentication.  Call authenticate()
+		 * The media needs credential-based authentication.  Call authenticate()
 		 * on the DRMTrait to provide authentication.
 		 *  
 		 *  @langversion 3.0
@@ -54,11 +54,9 @@ package org.osmf.traits
 		public static const AUTHENTICATION_NEEDED:String	= "authenticationNeeded"; 
 		
 		/**
-		 * The DRMTrait is authenticating when the authentication 
-		 * information has been received and the DRM subsystem
-		 * is in the process of validating the credentials.  If
-		 * the media is anonymously authenticated, the DRM subsystem
-		 * is validating that the content is still valid to play.
+		 * The media is authenticating (the DRM system is in the process
+		 * of validating the credentials, or for anonymous content, of
+		 * validating that the content is still valid to play).
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -68,18 +66,17 @@ package org.osmf.traits
 		public static const AUTHENTICATING:String	 		= "authenticating";
 		
 		/**
-		 * The authenticated state is entered when the right to
-		 * play back the media has been received.
+		 * The media has been successfully authenticated.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const AUTHENTICATION_COMPLETE:String			= "authenticationComplete"; 
+		public static const AUTHENTICATION_COMPLETE:String	= "authenticationComplete"; 
 		
 		/**
-		 *  The authentication attempt failed.
+		 *  The media's authentication attempt failed.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -89,14 +86,14 @@ package org.osmf.traits
 		public static const AUTHENTICATION_ERROR:String		= "authenticationError";
 		
 		/**
-		 *  The DRM subsystem is updating itself.
+		 *  The DRM system is currently being updated.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const DRM_SYSTEM_UPDATING:String					= "drmSystemUpdating";
+		public static const DRM_SYSTEM_UPDATING:String		= "drmSystemUpdating";
 
 	}
 }

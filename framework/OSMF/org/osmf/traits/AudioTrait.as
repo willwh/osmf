@@ -61,7 +61,7 @@ package org.osmf.traits
 	
 	/**
 	 * AudioTrait defines the trait interface for media that have audio.  It
-	 * can also be used as the base class for a specific audible trait class.
+	 * can also be used as the base class for a specific AudioTrait class.
 	 * 
 	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.AUDIO_TRAIT)</code> method to query
 	 * whether a media element has this trait. 
@@ -69,11 +69,6 @@ package org.osmf.traits
 	 * use the <code>MediaElement.getTrait(MediaTraitType.AUDIO_TRAIT)</code> method
 	 * to get an object of this type.</p>
 	 * 
-	 * <p>Through its MediaElement, an AudioTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
-	 * 
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 *  
 	 *  @langversion 3.0

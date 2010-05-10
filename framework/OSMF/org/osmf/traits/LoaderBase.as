@@ -42,7 +42,7 @@ package org.osmf.traits
 	[Event(name="loadStateChange", type="org.osmf.events.LoaderEvent")]
 	
 	/**
-	 * A LoaderBase is the base class for objects that are capable of loading
+	 * LoaderBase is the base class for objects that are capable of loading
 	 * and unloading LoadTraits.
 	 * 
 	 * <p>A MediaElement that has the LoadTrait uses a LoaderBase to perform the
@@ -58,7 +58,7 @@ package org.osmf.traits
 	public class LoaderBase extends EventDispatcher
 	{
 		/**
-		 * Indicates whether this loader is capable of handling (i.e. loading)
+		 * Indicates whether this loader is capable of handling (loading)
 		 * the given MediaResourceBase.
 		 * 
 		 * @param resource The media resource in question.
@@ -180,8 +180,8 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Updates the given LoadTrait with the given info, dispatching the
-		 * appropriate events.
+		 * Updates the given LoadTrait with the given info, and dispatches the
+		 * state change event if necessary.
 		 * 
 		 * @param loadTrait The LoadTrait to update.
 		 * @param newState The new LoadState of the LoadTrait.

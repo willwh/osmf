@@ -39,7 +39,7 @@ package org.osmf.traits
 	[Event(name="canPauseChange",type="org.osmf.events.PlayEvent")]
 
 	/**
-	 * Dispatched when the state of the PlayTrait has changed.
+	 * Dispatched when the playState of the PlayTrait has changed.
 	 * 
 	 * @eventType org.osmf.events.PlayEvent.PLAY_STATE_CHANGE
 	 *  
@@ -60,11 +60,7 @@ package org.osmf.traits
 	 * If <code>hasTrait(MediaTraitType.PLAY)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.PLAY)</code> method
 	 * to get an object of this type.</p>
-	 * <p>Through its MediaElement, a PlayTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
 	 * 
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 *  
 	 *  @langversion 3.0
@@ -77,6 +73,9 @@ package org.osmf.traits
 		// Public Interface
 		//
 		
+		/**
+		 * Constructor.
+		 **/
 		public function PlayTrait()
 		{
 			super(MediaTraitType.PLAY);

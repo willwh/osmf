@@ -49,18 +49,14 @@ package org.osmf.traits
 
 	/**
 	 * BufferTrait defines the trait interface for media that can use a data buffer.
-	 * It can also be used as the base class for a specific bufferable trait subclass.
+	 * It can also be used as the base class for a specific BufferTrait subclass.
 	 * 
 	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.BUFFER)</code> method to query
 	 * whether a media element has this trait. 
 	 * If <code>hasTrait(MediaTraitType.BUFFER)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.BUFFER)</code> method
 	 * to get an object of this type.</p>
-	 * <p>Through its MediaElement, a BufferTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
 	 * 
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement 
 	 *  
 	 *  @langversion 3.0

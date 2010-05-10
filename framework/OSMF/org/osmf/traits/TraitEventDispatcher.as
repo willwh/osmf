@@ -100,7 +100,7 @@ package org.osmf.traits
 	[Event(name="panChange", type="org.osmf.events.AudioEvent")]
 
 	/**
-	 * Dispatched when the <code>playing</code> or <code>paused></code>property of the media has changed.
+	 * Dispatched when the <code>playing</code> or <code>paused</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.PlayEvent.PLAY_STATE_CHANGE
 	 *  
@@ -112,7 +112,7 @@ package org.osmf.traits
 	[Event(name="playStateChange", type="org.osmf.events.PlayEvent")]
 	
 	/**
-	 * Dispatched when the canPause property has changed.
+	 * Dispatched when the <code>canPause</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.PlayEvent.CAN_PAUSE_CHANGE
 	 * 
@@ -186,7 +186,7 @@ package org.osmf.traits
 	[Event(name="numDynamicStreamsChange",type="org.osmf.events.DynamicStreamEvent")]
 	
 	/**
-	 * Dispatched when the autoDynamicStreamSwitch property has changed.
+	 * Dispatched when the <code>autoSwitch</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.DynamicStreamEvent.AUTO_SWITCH_CHANGE
 	 *  
@@ -222,7 +222,7 @@ package org.osmf.traits
 	[Event(name="bufferTimeChange", type="org.osmf.events.BufferEvent")]
 
 	/**
-	 * Dispatched when the value of bytesTotal property has changed.
+	 * Dispatched when the <code>bytesTotal</code> property has changed.
 	 *
 	 * @eventType org.osmf.events.LoadEvent
 	 *  
@@ -246,8 +246,7 @@ package org.osmf.traits
 	[Event(name="loadStateChange", type="org.osmf.events.LoadEvent")]
 
 	/**
-	 * Dispatched when either anonymous or credential-based authentication is needed in order
-	 * to playback the media.
+	 * Dispatched when the state of the DRMTrait has changed.
 	 *
 	 * @eventType org.osmf.events.DRMEvent.DRM_STATE_CHANGE
  	 *  
@@ -256,7 +255,7 @@ package org.osmf.traits
  	 *  @playerversion AIR 1.5
  	 *  @productversion OSMF 1.0
  	 */ 
-	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
+	[Event(name="drmStateChange", type="org.osmf.events.DRMEvent")]
 	
 	/**
 	 * Dispatched when the <code>isRecording</code> property has changed.
@@ -268,12 +267,14 @@ package org.osmf.traits
  	 *  @playerversion AIR 1.5
  	 *  @productversion OSMF 1.0
  	 */ 
-	[Event(name='isRecordingChange', type='org.osmf.events.DVREvent')]
+	[Event(name="isRecordingChange", type="org.osmf.events.DVREvent")]
 		
 	/**
-	 * TraitEventDispatcher is a utility class for redispatching
-	 * all trait events on a media element.  The trait events redispatched are 
-	 * an amalgamation of all trait events.  
+	 * TraitEventDispatcher is a utility class that exposes a uniform
+	 * interface for receiving trait events from a MediaElement.  This
+	 * class monitors the MediaElement for traits being added and
+	 * removed, and dispatches any events that the MediaElement's traits
+	 * dispatch, and for which the client has registered listeners. 
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -283,8 +284,7 @@ package org.osmf.traits
 	public class TraitEventDispatcher extends EventDispatcher
 	{
 		/**
-		 * Constructs a new TraitEventDispatcher.  Set a mediaElement
-		 * in order to allow event redispatching.
+		 * Constructor.
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -322,10 +322,8 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Specifies the object to listen for trait changes and 
-		 * events with.  All of the mediaElement's trait events
-		 * such as SeekEvent.SEEKING_CHANGE or PlayEvent.PLAY_STATE_CHANGE
-		 * are redispatched from this class.
+		 * The MediaElement which will be monitored, and whose trait events
+		 * will be redispatched.
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

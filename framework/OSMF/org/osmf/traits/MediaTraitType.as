@@ -24,9 +24,9 @@ package org.osmf.traits
 	import __AS3__.vec.Vector;
 	
 	/**
-	 * MediaTraitType enumerates all available media trait types.
+	 * MediaTraitType is the enumeration of all possible media trait types.
 	 * 
-	 * <p>The set of traits in the system are fixed:  clients are not expected
+	 * <p>The set of traits in the framework are fixed:  clients are not expected
 	 * to introduce their own, as they form the core vocabulary of the system.</p>
 	 *  
 	 *  @langversion 3.0

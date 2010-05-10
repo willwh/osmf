@@ -42,11 +42,17 @@ package org.osmf.traits
 	 * protected by digital rights management (DRM) technology.  It can also be
 	 * used as the base class for a more specific DRMTrait subclass.
 	 * 
-	 * Both anonymous and credential-based authentication are supported.
+	 * <p>Both anonymous and credential-based authentication are supported.</p>
 	 * 
-	 * The workflow for media which has a DRMTrait is that the media undergoes
+	 * <p>The workflow for media which has a DRMTrait is that the media undergoes
 	 * some type of authentication, after which it is valid (i.e. able to be played)
-	 * for a specific time window.
+	 * for a specific time window.</p>
+	 * 
+	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.DRM)</code> method to query
+	 * whether a media element has this trait. 
+	 * If <code>hasTrait(MediaTraitType.DRM)</code> returns <code>true</code>,
+	 * use the <code>MediaElement.getTrait(MediaTraitType.DRM)</code> method
+	 * to get an object of this type.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
@@ -103,8 +109,9 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * The current state of the DRM for this media.  The states are explained
+		 * The current state of the DRM for this media.  The states are described
 		 * in the DRMState enumeration.
+		 * 
 		 * @see DRMState
 		 *  
 		 *  @langversion 3.0
@@ -118,8 +125,8 @@ package org.osmf.traits
 		}  
 
 		/**
-		 * Returns the start date for the playback window.  Returns null if authentication 
-		 * hasn't taken place.
+		 * The start date for the playback window.  Returns null if authentication 
+		 * has not yet occurred.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -132,8 +139,8 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Returns the end date for the playback window.  Returns null if authentication 
-		 * hasn't taken place.
+		 * The end date for the playback window.  Returns null if authentication 
+		 * has not yet occurred.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -146,13 +153,13 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Returns the length of the playback window, in seconds.  Returns NaN if
+		 * The length of the playback window, in seconds.  Returns NaN if
 		 * authentication hasn't taken place.
 		 * 
-		 * Note that this property will generally be the difference between startDate
+		 * <p>Note that this property will generally be the difference between startDate
 		 * and endDate, but is included as a property because there may be times where
 		 * the duration is known up front, but the start or end dates are not (e.g. a
-		 * one week rental).
+		 * one week rental).</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -168,7 +175,9 @@ package org.osmf.traits
 		//
 		
 		/**
-		 * Called to update the period value
+		 * Updates the period.
+		 * 
+		 * @param value The new value for period.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -181,7 +190,9 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Called to update the start date
+		 * Updates the start date.
+		 * 
+		 * @param period The new value for startDate.
 		 *   
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -194,7 +205,9 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Called to update the end date
+		 * Updates the end date.
+		 * 
+		 * @param value The new value for endDate.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -208,24 +221,25 @@ package org.osmf.traits
 		
 		
 		/**
-		 * Updates the drm state.  
-		 * Doesn't dispatch the state change event.
+		 * Updates the drm state.
+		 * 
+		 * <p>Note that this method doesn't dispatch the drmStateChange event.</p>
+		 * 
+		 * @param value The new value for drmState.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function setDrmState(newState:String):void
+		protected final function setDrmState(value:String):void
 		{
-			_drmState = newState;
+			_drmState = value;
 		}
 
 		private var _drmState:String = DRMState.UNINITIALIZED;	
 		private var _period:Number = 0;	
 		private var _endDate:Date;	
 		private var _startDate:Date;	
-		
-			
 	}
 }

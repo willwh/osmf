@@ -61,7 +61,7 @@ package org.osmf.traits
 	 * expressed through a core set of media traits.
 	 * </li>
 	 * <li>Traits allow for uniform, media-agnostic <i>client</i> classes.  For
-	 * example, if a client class is capable of rendering the "view" trait,
+	 * example, if a client class is capable of rendering the "display object" trait,
 	 * then it's capable of rendering any and all media that host that trait. </li>
 	 * </ul>
 	 * 
@@ -86,6 +86,9 @@ package org.osmf.traits
 	{
 		/**
 		 * Constructor.
+		 * 
+		 * @param traitType The MediaTraitType for this trait.  All possible values
+		 * are described on the MediaTraitType enumeration.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -116,7 +119,8 @@ package org.osmf.traits
 		 * Disposes of any resources used by this trait.  Called by the framework
 		 * whenever a trait is removed from a MediaElement.
 		 * 
-		 * Subclasses should override to do any disposal logic specific to their case.
+		 * <p>Subclasses should override to do any disposal logic specific to their
+		 * implementation.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -58,11 +58,7 @@ package org.osmf.traits
 	 * If <code>hasTrait(MediaTraitType.TIME)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.TIME)</code> method
 	 * to get an object that is of this type.</p>
-	 * <p>Through its MediaElement, a TimeTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
 	 * 
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 *  
 	 *  @langversion 3.0
@@ -74,6 +70,9 @@ package org.osmf.traits
 	{
 		/**
 		 * Constructor.
+		 * 
+		 * @param duration The duration of the media, in seconds.  The default
+		 * is NaN (no duration).
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -88,8 +87,7 @@ package org.osmf.traits
 		}
 
 		/**
-		 * The duration of the associated media element in
-		 * seconds.
+		 * The duration of the media, in seconds.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -102,8 +100,8 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * The current time of the associated media element's cursor 
-		 * in seconds.  Must never exceed the <code>duration</code>.
+		 * The current time of the media, in seconds.  Must never
+		 * exceed the <code>duration</code>.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

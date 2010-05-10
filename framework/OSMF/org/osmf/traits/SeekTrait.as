@@ -45,11 +45,7 @@ package org.osmf.traits
 	 * If <code>hasTrait(MediaTraitType.SEEK)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.SEEK)</code> method
 	 * to get an object that is guaranteed to be of this type.</p>
-	 * <p>Through its MediaElement, a SeekTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
 	 * 
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 *  
 	 *  @langversion 3.0
@@ -59,6 +55,11 @@ package org.osmf.traits
 	 */	
 	public class SeekTrait extends MediaTraitBase
 	{
+		/**
+		 * Constructor.
+		 * 
+		 * @timeTrait The TimeTrait used by this SeekTrait.
+		 **/
 		public function SeekTrait(timeTrait:TimeTrait)
 		{
 			super(MediaTraitType.SEEK);
@@ -80,7 +81,7 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Instructs the media's cursor to jump to the specified <code>time</code>.
+		 * Instructs the media to jump to the specified <code>time</code>.
 		 * 
 		 * If a seek is attempted, dispatches a seekingChange event.
 		 * If <code>time</code> is non numerical or negative, does not attempt to seek. 

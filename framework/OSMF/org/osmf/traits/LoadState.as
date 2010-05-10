@@ -22,7 +22,8 @@
 package org.osmf.traits
 {
 	/**
-	 * The state of a LoadTrait.
+	 * LoadState is the enumeration of possible states that a LoadTrait
+	 * can be in.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -53,8 +54,7 @@ package org.osmf.traits
 		public static const LOADING:String			= "loading";
 		
 		/**
-		 * The LoadTrait has begun unloading. Dispatched before any in memory
-		 * media representations are released.
+		 * The LoadTrait has begun unloading.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -60,11 +60,8 @@ package org.osmf.traits
 	 * <p>If <code>hasTrait(MediaTraitType.LOAD)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method
 	 * to get an object of this type.</p>
-	 * <p>Through its MediaElement, a LoadTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
+	 * 
 	 * @see LoadState
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 *  
 	 *  @langversion 3.0
@@ -81,7 +78,6 @@ package org.osmf.traits
 		 * media for the media element that owns this trait.
 		 * @param resource The MediaResourceBase instance that represents the media resource 
 		 * to be loaded.
-		 * 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -74,11 +74,7 @@ package org.osmf.traits
 	 * If <code>hasTrait(MediaTraitType.DYNAMIC_STREAM)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.DYNAMIC_STREAM)</code> method
 	 * to get an object of this type.</p>
-	 * <p>Through its MediaElement, a DynamicStreamTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
 	 * 
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 *  
 	 *  @langversion 3.0
@@ -92,7 +88,7 @@ package org.osmf.traits
 		 * Constructor.
 		 * 
 		 * @param autoSwitch The initial autoSwitch state for the trait.  The default is true.
-		 * @param currentIndex The initial stream index for the trait.
+		 * @param currentIndex The initial stream index for the trait.  The default is zero.
 		 * @param numDynamicStreams The total number of dynamic streams.
 		 *  
 		 *  @langversion 3.0

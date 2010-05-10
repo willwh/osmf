@@ -27,13 +27,21 @@ package org.osmf.traits
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Dispatched when the object's snapToLive property changed. 
+	 * Dispatched when the object's isRecording property changes. 
 	 */	
 	[Event(name="isRecordingChange", type="org.osmf.events.DVREvent")]
 	
 	/**
-	 * The DVRTrait object defines a set of methods and properties to operate
-	 * on media that might be in the process of being recorded.
+	 * DVRTrait defines the trait interface for media that can be played
+	 * while in the process of being recorded, as if with a digital video
+	 * recorder (DVR). It can also be used as the base class foor a specific
+	 * DVRTrait class.
+	 * 
+	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.DVR)</code> method to query
+	 * whether a media element has this trait. 
+	 * If <code>hasTrait(MediaTraitType.DVR)</code> returns <code>true</code>,
+	 * use the <code>MediaElement.getTrait(MediaTraitType.DVR)</code> method
+	 * to get an object of this type.</p>
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -43,7 +51,9 @@ package org.osmf.traits
 	public class DVRTrait extends MediaTraitBase
 	{
 		/**
-		 * Constructor
+		 * Constructor.
+		 * 
+		 * @param isRecording Defines whether the recording is ongoing.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -59,9 +69,6 @@ package org.osmf.traits
 		
 		/**
 		 * Defines if the recording is ongoing.
-		 * 
-		 * It is mandatory for subclasses to provide an override for this
-		 * method.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

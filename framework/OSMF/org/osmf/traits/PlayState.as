@@ -22,7 +22,8 @@
 package org.osmf.traits
 {
 	/**
-	 * The state of a PlayTrait.
+	 * PlayState is the enumeration of possible states that a PlayTrait
+	 * can be in.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -52,7 +53,7 @@ package org.osmf.traits
 		public static const PAUSED:String = "paused";
 		
 		/**
-		 * The trait is stopped (i.e. neither playing nor paused).
+		 * The trait is stopped (neither playing nor paused).
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

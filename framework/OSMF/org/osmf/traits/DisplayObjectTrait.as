@@ -64,11 +64,7 @@ package org.osmf.traits
 	 * If <code>hasTrait(MediaTraitType.DISPLAY_OBJECT)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT)</code> method
 	 * to get an object that is of this type.</p>
-	 * <p>Through its MediaElement, a DisplayObjectTrait can participate in media compositions.
-	 * See the applicable class in the composition package for details about its behavior
-	 * in this context.</p>
 	 * 
-	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 * @see flash.display.DisplayObject
 	 *  
