@@ -44,7 +44,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.traits.LoadState;
 
 	/**
-	 * A NetLoader subclass which adds support for HTTP streaming.
+	 * HTTPStreamingNetLoader is a NetLoader that can load HTTP streams.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

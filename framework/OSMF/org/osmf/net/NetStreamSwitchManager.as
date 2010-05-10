@@ -43,8 +43,9 @@ package org.osmf.net
 	}
 	
 	/**
-	 * Class which manages transitions between multi-bitrate (MBR) streams
-	 * using configurable switching rules.
+	 * NetStreamSwitchManager is a default implementation of
+	 * NetStreamSwitchManagerBase.   It manages transitions between
+	 * multi-bitrate (MBR) streams using configurable switching rules.
 	 *
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

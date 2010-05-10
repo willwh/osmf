@@ -22,18 +22,8 @@
 package org.osmf.utils
 {
 	/**
-	 * Class that contains Open Source Media Framework version information. There are two fields:
-	 * major and minor. The version comparison rules are as follows, assuming there are v1 and v2:
-	 * <listing>
-	 * v1 &#62; v2, if ((v1.major &#62; v2.major) || 
-	 *              (v1.major == v2.major &#38;&#38; v1.minor &#62; v2.minor)
+	 * Utility class that exposes OSMF version information.
 	 * 
-	 * v1 == v2, if (v1.major == v2.major &#38;&#38; 
-	 *              v1.minor == v2.minor) 
-	 * 
-	 * v1 &#60; v2 //otherwise
-	 * </listing>
-	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
@@ -42,8 +32,19 @@ package org.osmf.utils
 	public class Version
 	{
 		/**
-		 * returns the version string in the format of 
-		 * 	[major][FIELD_SEPARATOR][minor]
+		 * The version string in the format of {major}.{minor}.
+		 * 
+		 * <p>The version comparison rules are as follows, assuming there are v1 and v2:
+	 	 * <listing>
+	 	 * v1 &#62; v2, if ((v1.major &#62; v2.major) || 
+	 	 *              (v1.major == v2.major &#38;&#38; v1.minor &#62; v2.minor)
+	 	 * 
+	 	 * v1 == v2, if (v1.major == v2.major &#38;&#38; 
+	 	 *              v1.minor == v2.minor) 
+	 	 * 
+	 	 * v1 &#60; v2 //otherwise
+	 	 * </listing>
+	 	 * </p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

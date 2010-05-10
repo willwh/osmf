@@ -28,10 +28,16 @@ package org.osmf.net
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * DynamicStreamingResource represents a dynamic streaming profile.
-	 * This class provides an object representation of a dynamic streaming
-	 * profile without any knowledge or assumption of any file format, 
-	 * such as SMIL, Media RSS, etc.
+	 * DynamicStreamingResource encapsulates multiple representations of a
+	 * piece of media, such that the player application can dynamically
+	 * switch from one representation to another.  Typically (though not
+	 * always), each representation is encoded at a different bitrate,
+	 * and the player application switches between representations based
+	 * on changes to the client's available bandwidth.
+	 * 
+	 * <p>This class provides an object representation of a dynamic streaming
+	 * resource without any knowledge or assumption of any file format, 
+	 * such as SMIL, Media RSS, F4M, etc.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -70,7 +76,7 @@ package org.osmf.net
 		{
 			return url;
 		}
-		
+				
 		/**
 		 * Vector of DynamicStreamingItems.  Each item represents a
 		 * different bitrate stream.

@@ -22,7 +22,8 @@
 package org.osmf.net
 {
 	/**
-	 * Base class for defining a switching rule.
+	 * SwitchingRuleBase is a base class for classes that define multi-bitrate
+	 * (MBR) switching rules.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -49,11 +50,13 @@ package org.osmf.net
 		}
 
 		/**
-		 * Returns the index value in the active <code>DynamicStreamingResource</code> to which this 
-		 * heuristics implementation thinks the bitrate should shift.  It's up to the calling function 
-		 * to act on this. This index will range in value from -1 to n-1,where n is the number of bitrate items available.
-		 * A value of -1 means that this rule does not suggest a switch away from the current item. A
-		 * value from 0 to n-1 indicates that the caller should switch to that index immediately.
+		 * Returns the index value in the active DynamicStreamingResource to
+		 * which this switching rule thinks the bitrate should shift.  It's up
+		 * to the calling function to act on this. This index will range in
+		 * value from -1 to n-1,where n is the number of bitrate items available.
+		 * A value of -1 means that this rule does not suggest a switch away from
+		 * the current item. A value from 0 to n-1 indicates that the caller
+		 * should switch to that index immediately.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

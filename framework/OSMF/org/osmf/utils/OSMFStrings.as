@@ -24,7 +24,7 @@ package org.osmf.utils
 	import flash.utils.Dictionary;
 	
 	/**
-	 * Client class for accessing all user-facing strings.
+	 * Utility class that exposes all user-facing strings.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -50,12 +50,13 @@ package org.osmf.utils
 		
 		/**
 		 * Function that the getString methods uses to retrieve a user-facing string.
-		 * This function takes a String parameter (which is expected to be one of
-		 * the static consts on this class) and an optional Array of parameters
-		 * which can be substituted into the String (formatted as {0}, {1}, etc.).
 		 * 
-		 * Clients can supply their own getString function to localize the strings.
-		 * By default, the getString function returns an English-language String.
+		 * <p>This function takes a String parameter (which is expected to be one of
+		 * the static consts on this class) and an optional Array of parameters
+		 * which can be substituted into the String (formatted as {0}, {1}, etc.).</p>
+		 * 
+		 * <p>Clients can supply their own getString function to localize the strings.
+		 * By default, the getString function returns an English-language String.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

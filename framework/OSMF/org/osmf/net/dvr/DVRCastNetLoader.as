@@ -34,7 +34,7 @@ package org.osmf.net.dvr
 	import org.osmf.traits.LoadState;
 	
 	/**
-	 * Defines a NetLoader sublcass for loading streams from a DVRCast equiped
+	 * DVRCastNetLoader is a NetLoader that can load streams from a DVRCast-equipped
 	 * FMS server.
 	 * 
 	 * @langversion 3.0

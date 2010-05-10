@@ -37,8 +37,9 @@ package org.osmf.net
 
 	/**
 	 * The NetStreamMetricsBase class serves as a base class for a provider of
-	 * run-time metrics to the switching rules.  It calculates running averages
-	 * for metrics that apply to all delivery methods.
+	 * run-time metrics to the NetStreamSwitchManager and its set of switching
+	 * rules.  It calculates running averages for metrics that apply to all
+	 * delivery methods.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

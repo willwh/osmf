@@ -34,7 +34,7 @@ package org.osmf.net.rtmpstreaming
 	}
 	
 	/**
-	 * Metrics provide for an RTMP-based NetStream.
+	 * RTMPNetStreamMetrics is a metrics provider for RTMP-based NetStreams.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

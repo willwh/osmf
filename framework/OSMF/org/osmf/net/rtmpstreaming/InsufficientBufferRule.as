@@ -34,7 +34,8 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Switching rule for Buffer detection.
+	 * InsufficientBufferRule is a switching rule that switches down when
+	 * the buffer has insufficient data.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -46,9 +47,11 @@ package org.osmf.net.rtmpstreaming
 		/**
 		 * Constructor.
 		 * 
-		 * @param metrics Provider of runtime metrics.
-		 * @param minBufferLength The minimum buffer length that must be maintained before the
-		 * rule suggests a switch down.  The default value is 2 seconds.
+		 * @param metrics The metrics provider used by this rule to determine
+		 * whether to switch.
+		 * @param minBufferLength The minimum buffer length that must be
+		 * maintained before the rule suggests a switch down.  The default
+		 * value is 2 seconds.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -66,14 +69,6 @@ package org.osmf.net.rtmpstreaming
 				
 		/**
 		 * @private
-		 * 
-		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
-		 * return a value of -1. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int
 		{

@@ -28,12 +28,13 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	
 	/**
-	 * A URLResource which is capable of being streamed. StreamingURLResource adds a streamType property. 
-	 * This property allows player code to specify whether the resource being streamed is live or recorded.
+	 * StreamingURLResource is a URLResource which is capable of being
+	 * streamed.  It exposes some additional properties which are specific
+	 * to streaming media.
 	 * 
-	 * It is possible for live and recorded streams to have identical URLs.
-	 * This subclass was added to support this unusual case. 
-	 * When necessary, the streamType property should be used to disambiguate live and recorded streams.
+	 * <p>Note that it is possible for live and recorded streams to have
+	 * identical URLs.  In such a case, the streamType property should be
+	 * used to disambiguate live and recorded streams.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -46,7 +47,8 @@ package org.osmf.net
 		 * Constructor.
 		 * 
 		 * @param url The URL of the resource. For details about how to format this
-		 * URL for flv, mp4, and other file formats, see Adobe® Flash® Media Server documentation link below.
+		 * URL for flv, mp4, and other file formats, see the Adobe® Flash® Media Server
+		 * documentation link below.
 		 * @see http://www.adobe.com/go/learn_OSMF_fms_url_format_en
 		 * @param streamType The type of the stream. If null, defaults to
 		 * StreamType.RECORDED.

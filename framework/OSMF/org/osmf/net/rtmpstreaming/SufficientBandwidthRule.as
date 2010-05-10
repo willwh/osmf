@@ -30,7 +30,8 @@ package org.osmf.net.rtmpstreaming
 	}
 	
 	/**
-	 * Switching rule that switches up when the user has sufficient bandwidth to do so.
+	 * SufficientBandwidthRule is a switching rule that switches up when the
+	 * user has sufficient bandwidth to do so.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -41,6 +42,9 @@ package org.osmf.net.rtmpstreaming
 	{
 		/**
 		 * Constructor.
+		 * 
+		 * @param metrics The metrics provider used by this rule to determine
+		 * whether to switch.
 		 **/
 		public function SufficientBandwidthRule(metrics:RTMPNetStreamMetrics)
 		{
@@ -49,15 +53,6 @@ package org.osmf.net.rtmpstreaming
 
 		/**
 		 * @private
-		 * 
-		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
-		 * return a value of -1. 
-		 * 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
         override public function getNewIndex():int 
         {

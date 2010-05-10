@@ -24,20 +24,21 @@ package org.osmf.net
 	import flash.events.EventDispatcher;
 	
 	/**
-	 * Base class for managing transitions between multi-bitrate (MBR) streams.
+	 * NetStreamSwitchManagerBase is a base class for classes that need to
+	 * manage transitions between multi-bitrate (MBR) streams.
 	 * 
-	 * A NetStreamSwitchManagerBase can work in manual or auto mode.  For the
-	 * former, it will execute the NetStream call that performs the switch
-	 * upon request.  For the latter, it will execute the switch based on
-	 * its own internal logic.
+	 * <p>A NetStreamSwitchManagerBase can work in manual or auto mode.  For
+	 * the former, it will execute upon request the NetStream call that
+	 * performs the switch.  For the latter, it will execute the switch based
+	 * on its own internal logic.</p>
 	 * 
-	 * A NetStreamSwitchManagerBase doesn't dispatch any events indicating state
-	 * changes.  The assumption is that a client will already be listening
+	 * <p>A NetStreamSwitchManagerBase doesn't dispatch any events indicating
+	 * state changes.  The assumption is that a client will already be listening
 	 * to events on the NetStream, so there's no need for duplicative events
-	 * here.
+	 * here.</p>
 	 * 
-	 * This is an abstract base class, clients must subclass it to implement
-	 * their own switching logic.
+	 * <p>This is an abstract base class, clients must subclass it to implement
+	 * their own switching logic.</p>
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

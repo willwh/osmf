@@ -38,14 +38,14 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.net.SwitchingRuleBase;
 	
 	/**
-	 * RTMPDynamicStreamingNetLoader extends NetLoader to provide dynamic stream
+	 * RTMPDynamicStreamingNetLoader is a NetLoader that provides dynamic stream
 	 * switching functionality for RTMP streams. It does this by creating a
 	 * NetStreamSwitchManager for each LoadTrait that is loaded through this
 	 * object.
 	 * 
 	 * <p>This class is "backwards compatible", meaning if it is not handed an
 	 * RTMP DynamicStreamingResource then it will call the base class
-	 * implementation for both <code>load</code> and <code>unload</code> methods.</p>
+	 * implementation for the <code>load</code> and <code>unload</code> methods.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -61,7 +61,7 @@ package org.osmf.net.rtmpstreaming
 		 * If factory is null, a NetConnectionFactory will be created and used. Since the
 		 * NetConnectionFactory class facilitates connection sharing, this is an easy way of
 		 * enabling global sharing, by creating a single NetConnectionFactory instance within
-		 * the player and then handing it to all NetLoader instances.
+		 * the player and then handing it to all RTMPDynamicStreamingNetLoader instances.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

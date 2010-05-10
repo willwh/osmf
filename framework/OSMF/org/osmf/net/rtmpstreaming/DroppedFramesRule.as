@@ -33,9 +33,8 @@ package org.osmf.net.rtmpstreaming
 	}
 
 	/**
-	 * Switching rule for frame drop detection. Monitors frame drops using the data 
-	 * provided by the MetricsProvider object provided to the constructor and
-	 * recommends switching down if necessary.
+	 * DroppedFramesRule is a switching rule that switches down when frame drop
+	 * crosses a certain threshold.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -47,7 +46,8 @@ package org.osmf.net.rtmpstreaming
 		/**
 		 * Constructor.
 		 * 
-		 * @param metrics The provider of NetStream metrics.
+		 * @param metrics The metrics provider used by this rule to determine
+		 * whether to switch.
 		 * @param downSwitchByOne The number of dropped frames per second that
 		 * need to occur to cause a switch down by one index.
 		 * The default is 10 frames per second.
@@ -82,14 +82,6 @@ package org.osmf.net.rtmpstreaming
 		
 		/**
 		 * @private
-		 * 
-		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
-		 * return a value of -1. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int
 		{

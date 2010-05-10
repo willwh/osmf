@@ -31,11 +31,11 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * Switching rule for Bandwidth detection. This rule switches down when
-	 * bandwidth is insufficient for the current stream.  When comparing stream bitrates 
-	 * to available bandwidth, the class uses a "bitrate multiplier", the stream bitrate
-	 * is multiplied by this number. The default is 1.15, but can be overridden in the
-	 * class constructor.
+	 * InsufficientBandwidthRule is a switching rule that switches down when
+	 * the bandwidth is insufficient for the current stream.
+	 * 
+	 * <p>When comparing stream bitrates to available bandwidth, the class uses
+	 * a "bitrate multiplier" against which the stream bitrate is multiplied.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -47,9 +47,11 @@ package org.osmf.net.rtmpstreaming
 		/**
 		 * Constructor.
 		 * 
-		 * @param metrics The provider of NetStream metrics.
-		 * @param bitrateMultiplier A multiplier that is used when the stream bitrate is compared against
-		 * available bandwidth.  The stream bitrate is multiplied by this amount. The default is 1.15.
+		 * @param metrics The metrics provider used by this rule to determine
+		 * whether to switch.
+		 * @param bitrateMultiplier A multiplier that is used when the stream
+		 * bitrate is compared against available bandwidth.  The stream bitrate
+		 * is multiplied by this amount.  The default is 1.15.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -65,14 +67,6 @@ package org.osmf.net.rtmpstreaming
 
 		/**
 		 * @private
-		 * 
-		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
-		 * return a value of -1. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int
 		{

@@ -28,7 +28,8 @@ package org.osmf.net
 	/**
 	 * The NetClient class provides support for handling
 	 * callbacks dynamically from an RTMP server that is streaming
-	 * to an AudioElement or VideoElement. 
+	 * to a MediaElement that works with NetStream under the hood (such
+	 * as VideoElement). 
 	 * 
 	 * <p>Use this class to listen for callbacks on the NetConnection
 	 * and NetStream created by a NetLoader's load operation.</p>
@@ -58,12 +59,12 @@ package org.osmf.net
 		 * of each handler's invocation.
 		 * </p>
 		 * <p>
-		 * This example sets up handler for the <code>ON_METADATA</code>
+		 * This example sets up handler for the <code>onMetaData</code>
 		 * callback.
 		 * <listing>
 		 * function onMetaData(value:Object):void
 		 * {
-		 * 	trace("Got metadata.");
+		 * 	  trace("Got metadata.");
 		 * }
 		 * 
 		 * var stream:NetStream;

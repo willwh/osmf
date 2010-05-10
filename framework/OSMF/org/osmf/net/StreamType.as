@@ -22,12 +22,12 @@
 package org.osmf.net
 {
 	/**
-	 * The StreamType class is an enumeration of constant values that you can use to set the streamType property of the StreamingURLResource class.
-	 * This property allows the player to specify whether the resource should be streamed from the live or recorded connection. 
-	 * By default any available connection will be used.
+	 * The StreamType class is an enumeration of constant values that you can
+	 * use to set the streamType property of the StreamingURLResource class.
+	 * This property allows the player to specify over which connection type
+	 * the resource should be streamed.
 	 *
 	 * @see StreamingURLResource
-	 * 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -39,7 +39,6 @@ package org.osmf.net
 	{
 		/**
 		 * The LIVE stream type represents a live stream.
-		 * 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -51,7 +50,6 @@ package org.osmf.net
 
 		/**
 		 * The RECORDED stream type represents a recorded stream.
-		 * 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -63,7 +61,6 @@ package org.osmf.net
 
 		/**
 		 * The LIVE_OR_RECORDED stream type represents a live or a recorded stream.
-		 * 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
