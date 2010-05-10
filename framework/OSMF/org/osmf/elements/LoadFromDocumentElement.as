@@ -53,7 +53,7 @@ package org.osmf.elements
 	 * the LoadFromDocumentElement.  If you work directly with a LoadFromDocumentElement, then
 	 * it's important to listen for events related to traits being added and removed.  If you
 	 * use the MediaPlayer class with a LoadFromDocumentElement, then the MediaPlayer will
-	 * automatically listen for these events for you.<p>
+	 * automatically listen for these events for you.</p>
 	 * 
 	 * @see org.osmf.elements.ProxyElement
 	 * @see org.osmf.media.MediaElement

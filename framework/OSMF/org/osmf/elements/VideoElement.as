@@ -78,13 +78,14 @@ package org.osmf.elements
 	* Note that the <code>startDate</code>, <code>endDate</code>, and <code>period</code>
 	* properties of the DRMTrait on this element correspond to the voucher validity before
 	* playback starts.  Once playback begins, these properties correspond to the playback
-	* time window (as found on flash.net.drm.DRMVoucher).
+	* time window (as found on flash.net.drm.DRMVoucher). </p>
 	* 
 	* @see org.osmf.elements.LightweightVideoElement
 	* @see org.osmf.media.URLResource
 	* @see org.osmf.media.MediaElement
 	* @see org.osmf.media.MediaPlayer
 	* @see org.osmf.net.NetLoader
+	* @see flash.net.drm.DRMVoucher
 	* 
 	*  @langversion 3.0
 	*  @playerversion Flash 10
