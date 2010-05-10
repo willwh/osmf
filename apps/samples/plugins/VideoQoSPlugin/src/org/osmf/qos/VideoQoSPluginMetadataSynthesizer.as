@@ -47,12 +47,21 @@ package org.osmf.qos
 			else
 			{
 				result = new VideoQoSPluginMetadata();
-				var currentFPS:Array = [];
+				
+				var keys:Array = [];
 				for each (var metadata:Metadata in metadatas)
 				{
-					currentFPS.push(metadata.getValue(VideoQoSPluginMetadata.CURRENT_FPS));
+					for each (var key:String in metadata.keys)
+					{
+						keys[key] ||= [];
+						keys[key].push(metadata.getValue(key));
+					}
 				}
-				result.addValue(VideoQoSPluginMetadata.CURRENT_FPS, currentFPS.toString());
+				
+				for (key in keys)
+				{
+					result.addValue(key, keys[key].toString());
+				}
 			}
 			
 			return result;	
