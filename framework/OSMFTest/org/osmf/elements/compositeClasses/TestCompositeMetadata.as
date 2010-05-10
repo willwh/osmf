@@ -139,11 +139,29 @@ package org.osmf.elements.compositeClasses
 			assertEquals(metadataGroup, e.metadataGroup);
 			assertEquals(metadataSynthesizer, e.suggestedMetadataSynthesizer);
 		}
+		
+		public function testAnotherMetadataSynthesizer():void // FM-848.
+		{
+			var key1:String = "key1";
+			var cmd:CompositeMetadata = new CompositeMetadata();
+			cmd.mode = CompositionMode.PARALLEL;
+			
+			var m1:Metadata = new SynthesizingMetadata();
+			m1.addValue(key1,"1");
+			var m2:Metadata = new SynthesizingMetadata();
+			m2.addValue(key1,"2");
+			
+			cmd.addChild(m1);
+			cmd.addChild(m2);
+			
+			//trace(cmd.getValue(key1)); --> returns null: expected "1, 2";
+		}
 	}
 }
 
 import org.osmf.metadata.MetadataSynthesizer;
 import org.osmf.metadata.Metadata;
+import org.osmf.elements.compositeClasses.CompositionMode;
 import __AS3__.vec.Vector;
 
 class AMetadataSynthesizer extends MetadataSynthesizer
@@ -162,5 +180,53 @@ class AMetadataSynthesizer extends MetadataSynthesizer
 		):Metadata
 	{
 		return null;
+	}
+}
+
+class AnotherMetadataSynthesizer extends MetadataSynthesizer
+{
+	override public function synthesize
+							( namespaceURL:String
+							, targetParentMetadata:Metadata
+							, metadatas:Vector.<Metadata>
+							, mode:String
+							, serialElementActiveChildMetadata:Metadata
+							):Metadata
+	{
+		var result:Metadata;
+		
+		if (mode == CompositionMode.SERIAL)
+		{
+			result = serialElementActiveChildMetadata;
+		}
+		else
+		{
+			result = new Metadata();
+			
+			var keys:Array = [];
+			for each (var metadata:Metadata in metadatas)
+			{
+				for each (var key:String in metadata.keys)
+				{
+					keys[key] ||= [];
+					keys[key].push(metadata.getValue(key));
+				}
+			}
+			
+			for (key in keys)
+			{
+				result.addValue(key, keys[key].toString());
+			}
+		}
+		
+		return result;	
+	}
+}
+
+class SynthesizingMetadata extends Metadata
+{
+	override public function get synthesizer():MetadataSynthesizer
+	{
+		return new AnotherMetadataSynthesizer();
 	}
 }
