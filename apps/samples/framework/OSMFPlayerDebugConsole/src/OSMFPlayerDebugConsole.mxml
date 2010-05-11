@@ -81,6 +81,12 @@
 				{
 					for each (var args:Array in items)
 					{
+						if (args.length > 4)
+						{
+							var params:Array = args.slice(4)
+							args = args.slice(0,4);
+							args[4] = params.toString();
+						}
 						log.addItemAt(args, 0);
 					}
 				}
