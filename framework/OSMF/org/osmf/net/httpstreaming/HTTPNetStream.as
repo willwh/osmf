@@ -316,7 +316,7 @@ package org.osmf.net.httpstreaming
 			{
 				_playForDuration = -1;
 			}
-			
+
 			_unpublishNotifyPending = false;
 		}
 		
@@ -1175,10 +1175,25 @@ package org.osmf.net.httpstreaming
 					break;
 
 				case HTTPStreamingState.STOP:
-						if (bufferLength == 0)
+						var playCompleteInfo:Object = new Object();
+			            playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
+			            playCompleteInfo.level = "status";
+			                                    
+			            var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+			            playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
+			
+			            var tagBytes:ByteArray = new ByteArray();
+			            playCompleteInfoSDOTag.write(tagBytes);
+			
+			   			CONFIG::FLASH_10_1
 						{
-							finishStopProcess();
-				  		}
+							appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
+							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+						}
+			            
+			            attemptAppendBytes(tagBytes);
+			            setState(HTTPStreamingState.HALT);
+				  		
 			            break;
 			            
 				case HTTPStreamingState.HALT:
@@ -1428,7 +1443,7 @@ package org.osmf.net.httpstreaming
 		
 		private function onNetStatus(event:NetStatusEvent):void
 		{
-			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.STOP) 
+			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.HALT) 
 			{
 				finishStopProcess();
 			}
@@ -1436,25 +1451,6 @@ package org.osmf.net.httpstreaming
 		
 		private function finishStopProcess():void
 		{
-			var playCompleteInfo:Object = new Object();
-            playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
-            playCompleteInfo.level = "status";
-                                    
-            var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-            playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
-
-            var tagBytes:ByteArray = new ByteArray();
-            playCompleteInfoSDOTag.write(tagBytes);
-
-   			CONFIG::FLASH_10_1
-			{
-				appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
-				appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-			}
-            attemptAppendBytes(tagBytes);
-            
-            setState(HTTPStreamingState.HALT);
-
 			if (_unpublishNotifyPending)
 			{
 				dispatchEvent

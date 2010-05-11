@@ -61,7 +61,7 @@ package org.osmf
 
 			// Logging
 			//
-			
+
 			addTestSuite(TestLog);
 			addTestSuite(TestTraceLogger);
 			addTestSuite(TestTraceLoggerFactory);
@@ -260,6 +260,7 @@ package org.osmf
 			addTestSuite(TestAdobeSegmentRunTable);
 			addTestSuite(TestFLVHeader);
 			addTestSuite(TestFLVTagAudio);
+			addTestSuite(TestFLVTagVideo);
 			addTestSuite(TestFLVTagScriptDataObject);
 			addTestSuite(TestDVRInfo);			
 			addTestSuite(TestHTTPStreamingDVRCastTimeTrait);
@@ -269,6 +270,7 @@ package org.osmf
 			addTestSuite(TestHTTPStreamRequest);
 			addTestSuite(TestHTTPStreamingUtils);
 			addTestSuite(TestHTTPNetStreamMetrics);
+			addTestSuite(TestHTTPStreamingNetLoader);
 			
 			// DVR
 			//

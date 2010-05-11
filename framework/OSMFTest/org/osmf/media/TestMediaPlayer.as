@@ -579,6 +579,7 @@ package org.osmf.media
 				// before changing to PLAYING, so that we don't signal a
 				// PLAYING state before we're truly PLAYING.
 				assertTrue(		(mediaPlayer.state == MediaPlayerState.READY && mediaPlayer.canBuffer)
+							||	(mediaPlayer.state == MediaPlayerState.BUFFERING && mediaPlayer.canBuffer)
 							||	(mediaPlayer.state == MediaPlayerState.PLAYING && !mediaPlayer.canBuffer)
 						  );
 				
