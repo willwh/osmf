@@ -75,6 +75,8 @@ package org.osmf
 			addTestSuite(TestPluginManagerIntegration);
 
 			addTestSuite(TestF4MLoader);	
+			
+			addTestSuite(TestMediaPlayerWithHTTPStreamingVideo);
 		}
 	}
 }
