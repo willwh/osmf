@@ -597,34 +597,28 @@ package org.osmf.net.httpstreaming
 					tag.write(bytes);
 					_flvParserProcessed += bytes.length;
 					attemptAppendBytes(bytes);
-				} // else tag is FLVTagAudio, which we discard, unless...
-//
-// It is too late at this stage to make such a code change. Comment it out and wait for the next appropriate window.
-/*				
+				} // else tag is FLVTagAudio, which we discard, unless...			
 				else if (tag is FLVTagAudio) 
 				{
 					var aTag:FLVTagAudio = tag as FLVTagAudio;
-					if (aTag.soundFormat == FLVTagAudio.SOUND_FORMAT_AAC)	// is it AAC?
+					if (aTag.isCodecConfiguration)	// need to pass this through? (ex. AAC AudioConfig message)
 					{
-						if (aTag.isAACSequenceHeader)	// is it an AAC sequence header?
-						{
-							// yes, can never skip initialization...
-							bytes = new ByteArray();
-							_flvParserProcessed += bytes.length;
-							tag.write(bytes);
-							attemptAppendBytes(bytes);
-						}
+						// yes, can never skip initialization...
+						bytes = new ByteArray();
+						tag.write(bytes);
+						_flvParserProcessed += bytes.length;
+						attemptAppendBytes(bytes);
 					}
 				}
-*/				
+								
 				return true;
 			} // enhanced seek
 			
 			// finally, pass this one on to appendBytes...
 			
 			bytes = new ByteArray();
-			_flvParserProcessed += bytes.length;
 			tag.write(bytes);
+			_flvParserProcessed += bytes.length;
 			attemptAppendBytes(bytes);
 			
 			// probably done seeing the tags, unless we are in playForDuration mode...
@@ -1195,7 +1189,7 @@ package org.osmf.net.httpstreaming
 			            setState(HTTPStreamingState.HALT);
 				  		
 			            break;
-			            
+			    		
 				case HTTPStreamingState.HALT:
 					// do nothing. timer could run slower in this state.
 					break;

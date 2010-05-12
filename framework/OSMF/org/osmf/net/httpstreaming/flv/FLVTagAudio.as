@@ -215,6 +215,28 @@ package org.osmf.net.httpstreaming.flv
 				bytes[TAG_HEADER_BYTE_COUNT + 1] = 1;
 			}
 		}
+
+		public function get isCodecConfiguration():Boolean
+		{
+			// this function must be updated if other codecs are added which require configuration data
+			// be passed through even when audio is being skipped over
+			
+			// so far, only AAC has this behavior
+			
+			switch (soundFormat)
+			{
+				case FLVTagAudio.SOUND_FORMAT_AAC:
+					if (isAACSequenceHeader)	// is it an AAC sequence header?
+					{
+						return true;
+					}
+					break;
+				default:
+					break;
+			}
+			
+			return false;
+		}
 		
 		// XXX need warnings about get/set having different behavior after format is set to AAC		
 		override public function get data():ByteArray
