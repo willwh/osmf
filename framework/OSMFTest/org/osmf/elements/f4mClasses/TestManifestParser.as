@@ -23,7 +23,12 @@ package org.osmf.elements.f4mClasses
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.utils.ByteArray;
+	
 	import flexunit.framework.TestCase;
+	
+	import mx.utils.Base64Decoder;
+	import mx.utils.Base64Encoder;
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
@@ -535,9 +540,95 @@ package org.osmf.elements.f4mClasses
 			assertEquals(0, manifest.dvrInfo.beginOffset);
 			assertEquals(0, manifest.dvrInfo.endOffset);
 			assertEquals(false, manifest.dvrInfo.offline);			
+					
+		}
+		
+		public function testXMPMoovParsing():void
+		{
+			var encoder:Base64Encoder = new Base64Encoder();
+			var testMoov:String = "testMoov";
+			var testXMPMetadata:String = "testXMP";
 			
+			encoder.encode(testMoov);
+			var moovEncoded:String = encoder.drain();
 			
+			encoder.encode(testXMPMetadata);
+			var xmpEncoded:String = encoder.drain();
+						
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+											<id>myvideo</id>
+											<duration>253</duration>
+											<mimeType>video/x-flv</mimeType>
+											<streamType>recorded</streamType>
+											<media url="low"  bitrate="408" width="640" height="480" >
+												<xmpMetadata>
+													{xmpEncoded}
+												</xmpMetadata>	
+												<moov>
+													{moovEncoded}
+												</moov>
+											</media>
+										</manifest>;
+			var manifest:Manifest = parser.parse(test);
+						
+			assertEquals(manifest.media[0].moov.toString(),  testMoov);
+			assertEquals(manifest.media[0].xmp.toString(),  testXMPMetadata);
+				
+		}
+		
+		public function testMetadata():void
+		{
+			var metadata:String = "AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAalzXuQCuwwAFd2lkdGgAQIqgAAAAAAAABmhlaWdodABAfgAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDgAAAAAAAAAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVNOYgAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWNPAAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=";
 			
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<duration>253</duration>
+								<mimeType>video/x-flv</mimeType>
+								<streamType>recorded</streamType>
+								<media url="low"  bitrate="408" width="640" height="480" >
+									<metadata>
+										{metadata}
+									</metadata>						
+								</media>
+							</manifest>;
+			var manifest:Manifest = parser.parse(test);
+						
+			var decoder:mx.utils.Base64Decoder = new mx.utils.Base64Decoder();
+			decoder.decode(metadata);
+			
+			var data:ByteArray = decoder.drain();
+			data.position = 0;
+			data.objectEncoding = 0;
+			
+			var header:String = data.readObject() as String;
+			var metaInfo:Object = data.readObject();
+						
+			assertEquals(manifest.media.length, 1);
+			
+			for ( var key:Object in manifest.media[0].metadata)
+			{
+				if (manifest.media[0].metadata[key] is String ||
+					manifest.media[0].metadata[key] is Number )
+				{
+					assertEquals(manifest.media[0].metadata[key] , metaInfo[key]);
+				}
+			}
+						
+			var errorSeen:Boolean = false;
+			var resource:MediaResourceBase;
+			try
+			{
+				resource = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
+			}
+			catch(error:Error)
+			{
+				errorSeen = true;
+			}			
+			assertFalse(errorSeen);
+			
+			// With no URL, the stream items should be prefixed by the location of the manifest.
+			assertTrue(resource != null);
+						
 		}
 		
 				
