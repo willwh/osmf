@@ -36,7 +36,7 @@ package org.osmf.media
 	 * capabilities all in one Sprite-based class.  It also provides convenience
 	 * methods to generate MediaElements from a resource and set the ScaleMode.
 	 * 
-	 *  @includeExample MediaPlayerSpriteExample.as
+	 *  @includeExample examples\MediaPlayerSpriteExample.as -noswf
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
