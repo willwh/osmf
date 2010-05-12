@@ -448,7 +448,7 @@ package org.osmf.net.drm
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
 			
-			updateDRMState(DRMState.AUTHENTICATION_ERROR);
+			updateDRMState(DRMState.AUTHENTICATION_ERROR, new MediaError(event.errorID, event.toString()));
 		}
 		
 		private function toggleErrorListeners(updater:SystemUpdater, on:Boolean):void
