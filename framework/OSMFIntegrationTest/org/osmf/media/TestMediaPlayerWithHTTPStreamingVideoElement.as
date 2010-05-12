@@ -22,14 +22,15 @@ package org.osmf.media
 {
 	import org.osmf.elements.VideoElement;
 	import org.osmf.elements.f4mClasses.*;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.*;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
 	import org.osmf.utils.TestConstants;
 	
-	public class TestMediaPlayerWithHTTPStreamingVideo extends TestMediaPlayerWithLightweightVideoElement
+	public class TestMediaPlayerWithHTTPStreamingVideoElement extends TestMediaPlayerWithLightweightVideoElement
 	{
-		public function TestMediaPlayerWithHTTPStreamingVideo()
+		public function TestMediaPlayerWithHTTPStreamingVideoElement()
 		{
 			super();
 		}
@@ -39,7 +40,7 @@ package org.osmf.media
 			super.setUp();
 			
 			this.parser = new ManifestParser();
-			this.invalidResource = new URLResource("rtmp://cp67126.edgefcsfail.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv");
+			this.invalidResource = new StreamingURLResource("rtmp://cp67126.edgefcsfail.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv");
 		}
 
 		override public function tearDown():void
@@ -59,6 +60,11 @@ package org.osmf.media
 			 */
 		}
 		
+		protected function createHTTPStreamingNetLoader():HTTPStreamingNetLoader
+		{
+			return new HTTPStreamingNetLoader();
+		}
+		
 		override protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
 			if (resource == this.invalidResource)
@@ -76,11 +82,16 @@ package org.osmf.media
 				return super.createMediaElement(resource);
 			}
 			
-			var manifest:Manifest = createSingleStreamVODManifest();
-			var rs:URLResource = new URLResource(SINGLE_STREAM_VOD_F4M_URL);
-			var urlResource:URLResource = parser.createResource(manifest, rs) as URLResource;
 			
-			return new VideoElement(urlResource, new HTTPStreamingNetLoader());
+			return new VideoElement(resource as URLResource, createHTTPStreamingNetLoader());
+		}
+		
+		override protected function get resourceForMediaElement():MediaResourceBase
+		{
+			var manifest:Manifest = createSingleStreamVODManifest();
+			var rs:StreamingURLResource = new StreamingURLResource(SINGLE_STREAM_VOD_F4M_URL);
+			var urlResource:StreamingURLResource = parser.createResource(manifest, rs) as StreamingURLResource;
+			return urlResource;
 		}
 		
 		override protected function get invalidResourceForMediaElement():MediaResourceBase
@@ -111,7 +122,7 @@ package org.osmf.media
 						recorded
 					</streamType>
 					<duration>
-						6.0599999999999996
+						6
 					</duration>
 					<bootstrapInfo
 						 profile="named"

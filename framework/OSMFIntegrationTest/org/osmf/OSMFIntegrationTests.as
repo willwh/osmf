@@ -46,10 +46,13 @@ package org.osmf
 		
 			CONFIG::FLASH_10_1
 			{
+				addTestSuite(TestMediaPlayerWithHTTPStreamingVideoElementEnhancedSeek);
+				addTestSuite(TestMediaPlayerWithHTTPStreamingVideoElementSubclip);
+				addTestSuite(TestMediaPlayerWithHTTPStreamingVideoElement);
+			
 				addTestSuite(TestDRMServices);
 				addTestSuite(TestVideoElement);
 				addTestSuite(TestNetStreamDRMTrait);
-				
 			}
 			
 			// Tests that use mock objects, now to be run a second time without
@@ -75,8 +78,6 @@ package org.osmf
 			addTestSuite(TestPluginManagerIntegration);
 
 			addTestSuite(TestF4MLoader);	
-			
-			addTestSuite(TestMediaPlayerWithHTTPStreamingVideo);
 		}
 	}
 }
