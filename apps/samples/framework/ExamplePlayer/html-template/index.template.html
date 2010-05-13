@@ -13,18 +13,8 @@ Learn more about Flex at http://flex.org
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-<!--  BEGIN Browser History required section -->
-<link rel="stylesheet" type="text/css" href="history/history.css" />
-<!--  END Browser History required section -->
-
 <title>${title}</title>
 <script src="AC_OETags.js" language="javascript"></script>
-
-<!--  BEGIN Browser History required section -->
-<script src="history/history.js" language="javascript"></script>
-<!--  END Browser History required section -->
-
 <style>
 body { margin: 0px; overflow:hidden }
 </style>
@@ -40,10 +30,163 @@ var requiredMinorVersion = ${version_minor};
 var requiredRevision = ${version_revision};
 // -----------------------------------------------------------------------------
 // -->
+
+function onHTMLMediaContainerConstructed(container)
+{
+	var osmf = document["osmf"];
+	osmf.trace("Container " + container.containerId + " added.");
+		
+	if (container.containerId == "bannerContainer")
+	{
+		container.onElementAdd = function(element)
+		{
+			osmf.trace(element.elementId + " added.");
+			
+			// Elements must be loadable, so having a 'load' and 'unload'
+			// method defined on the object is mandatory:
+			element.load = function(url)
+			{
+				osmf.trace(element.elementId + " loading.");
+				
+				activeBanner = this;
+				
+				bannerImage.src = url;
+				bannerImage.onclick = onBannerClick;
+				
+				// Define that we support the play trait:
+				element.setPlayable(true);
+				element.setCanPause(true);
+				
+				// Define that we now support the temporal trait:
+				this.setTemporal(true);
+				
+				// Set the duration of the element.
+				this.setDuration(5);
+				this.setCurrentTime(0);
+
+				this.setLoadState(osmf.constants.loadState.READY);
+			}
+			
+			element.unload = function()
+			{
+				osmf.trace(element.elementId + " UNloading.");
+				
+				element.setPlayable(false);
+				element.setTemporal(false);
+				
+				if (activeBanner == element) 
+				{
+					activeBanner = null;
+				}
+				
+				osmf.trace(element.elementId + "unloading " + url);
+				bannerImage.src = null;
+				
+				this.setLoadState(osmf.constants.UNINITIALIZED);
+			}
+			
+			element.onPlayStateChange = function(newPlayState)
+			{
+				osmf.trace(element.elementId + " onPlayStateChange, new state: " + newPlayState);
+				
+				if (newPlayState == osmf.constants.playState.PLAYING)
+				{
+					// Cater for a callback that will signal
+					// when its duration is reached. This will
+					// cause the next banner to be loaded from
+					// Flash:
+					
+					function complete()
+					{
+						osmf.trace(element.elementId + " completion callback");
+						
+						bannerImage.src = null;
+						element.setCurrentTime(5); // seconds
+					}
+					
+					element.timeoutId = setTimeout(complete, 5 * 1000 /* milliseconds */);
+				}
+			}
+		}
+	}
+	else if (container.containerId == "bannerContainer1")
+	{
+		container.onElementAdd = function(element)
+		{
+			element.load = function(url)
+			{
+				bannerImage.src = url;
+			}
+			
+			element.unload = function()
+			{
+				bannerImage.src = null;
+			}
+		}
+	}
+	else if (container.containerId == "bannerContainer2")
+	{
+		container.onElementAdd = function(element)
+		{
+			element.load = function(url)
+			{
+				bannerImage2.src = url;
+			}
+			
+			element.unload = function()
+			{
+				bannerImage2.src = null;
+			}
+		}
+	}
+	else if (container.containerId == "bannerContainer3")
+	{
+		container.onElementAdd = function(element)
+		{
+			element.load = function(url)
+			{
+				bannerImage3.src = url;
+			}
+			
+			element.unload = function()
+			{
+				bannerImage3.src = null;
+			}
+		}
+	}
+}
+
+function onBannerClick()
+{
+	document.osmf.trace("Banner clicked.");
+	
+	if (activeBanner)
+	{
+		if (activeBanner.getPlayState() == document.osmf.constants.playState.PLAYING)
+		{
+			activeBanner.setPlayState(document.osmf.constants.playState.PAUSED);
+			clearTimeout(activeBanner.timeoutId);
+		}
+		else
+		{
+			activeBanner.setPlayState(document.osmf.constants.playState.PLAYING);
+			activeBanner.onPlayStateChange(document.osmf.constants.playState.PLAYING);
+		}
+	}
+}
+
+
+
+
+
+
 </script>
 </head>
 
 <body scroll="no">
+<div id="bannerRegion" align="center" height='0'>
+	<img id="bannerImage" src=""  name="banner">
+</div>
 <script language="JavaScript" type="text/javascript">
 <!--
 // Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
@@ -52,7 +195,11 @@ var hasProductInstall = DetectFlashVer(6, 0, 65);
 // Version check based upon the values defined in globals
 var hasRequestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
+
+// Check to see if a player with Flash Product Install is available and the version does not meet the requirements for playback
 if ( hasProductInstall && !hasRequestedVersion ) {
+	// MMdoctitle is the stored document.title value used by the installation process to close the window that started the process
+	// This is necessary in order to close browser windows that are still utilizing the older version of the player after installation has completed
 	// DO NOT MODIFY THE FOLLOWING FOUR LINES
 	// Location visited after installation is complete if installation is required
 	var MMPlayerType = (isIE == true) ? "ActiveX" : "PlugIn";
