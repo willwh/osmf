@@ -29,10 +29,12 @@ package org.osmf.examples
 	
 	import mx.collections.ArrayCollection;
 	
+	import org.osmf.containers.HTMLMediaContainer;
 	import org.osmf.elements.AudioElement;
 	import org.osmf.elements.BeaconElement;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.F4MElement;
+	import org.osmf.elements.HTMLElement;
 	import org.osmf.elements.ImageElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SWFElement;
@@ -355,10 +357,20 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), using the default layout settings.  Note that the duration of the second video is not incorporated into the SerialElement until its playback begins (because we don't know the duration until it is loaded)."
 				  	,  	function():MediaElement
 				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_PROGRESSIVE)));
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
-							return serialElement; 
+							var resource:URLResource = new URLResource(REMOTE_PROGRESSIVE);
+							var resource2:URLResource = new URLResource(REMOTE_PROGRESSIVE2);
+							
+							var serial:SerialElement = new SerialElement();
+							
+							var video1:VideoElement = new VideoElement(resource);
+							video1.defaultDuration = 32;
+							var video2:VideoElement = new VideoElement(resource2);
+							video2.defaultDuration = 27;
+							
+							serial.addChild(video1);
+							serial.addChild(video2);
+							
+							return serial; 
 				  	   	} 
 				  	)
 				);
@@ -728,11 +740,21 @@ package org.osmf.examples
 					( 	"Proxy-based Tracing (SerialElement)"
 					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a SerialElement containing two VideoElements.  All playback events are sent to the trace console."
 				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_PROGRESSIVE))); 
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
-				  	   		return new TraceListenerProxyElement(serialElement);
+				  	   	{							
+							var resource:URLResource = new URLResource(REMOTE_PROGRESSIVE);
+							var resource2:URLResource = new URLResource(REMOTE_PROGRESSIVE2);
+							
+							var serial:SerialElement = new SerialElement();
+							
+							var video1:VideoElement = new VideoElement(resource);
+							video1.defaultDuration = 32;
+							var video2:VideoElement = new VideoElement(resource2);
+							video2.defaultDuration = 27;
+							
+							serial.addChild(video1); 
+							serial.addChild(video2);
+																					
+				  	   		return new TraceListenerProxyElement(serial);
 				  	   	}
 				  	)
 				);
@@ -939,31 +961,7 @@ package org.osmf.examples
 				  	   	} 
 				  	)
 				);
-				
-			composition.addItem
-				( new Example
-					( 	"DefaultDuration Serial"
-					, 	"Demonstrates the defaultDuration feature on VideoElement, in a Serial Composition.  Note that the SerialElement is wrapped in an unseekable ProxyElement, to prevent seeking into the second child when it's not loaded."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var resource:URLResource = new URLResource(REMOTE_PROGRESSIVE);
-							var resource2:URLResource = new URLResource(REMOTE_PROGRESSIVE2);
-							
-							var serial:SerialElement = new SerialElement();
-							
-							var video1:VideoElement = new VideoElement(resource);
-							video1.defaultDuration = 32;
-							var video2:VideoElement = new VideoElement(resource2);
-							video2.defaultDuration = 27;
-														
-							serial.addChild(video1);
-							serial.addChild(video2);
-																	
-				  	   		return new UnseekableProxyElement(serial); 
-				  	   	}
-				  	)
-				);
-				
+			
 			media.addItem
 				( new Example
 					( 	"Flash Media Manifest Progressive"
@@ -1097,6 +1095,41 @@ package org.osmf.examples
 					)
 				);
 			
+			media.addItem(
+				new Example
+					(   "HTML Region",   "Demonstrates the use of HTML regions in an OSMF Player",
+						function():MediaElement
+						{
+							var htmlContainer:HTMLMediaContainer = new HTMLMediaContainer("bannerContainer");
+							
+							var rootElement:ParallelElement = new ParallelElement();
+							
+							var banners:SerialElement = new SerialElement();
+							rootElement.addChild(banners);
+							
+							var banner1:HTMLElement = new HTMLElement();
+							banner1.resource = new URLResource(BANNER_1);
+							banners.addChild(banner1);
+							
+							var banner2:HTMLElement = new HTMLElement();
+							banner2.resource = new URLResource(BANNER_2);
+							banners.addChild(banner2);
+							
+							var banner3:HTMLElement = new HTMLElement();
+							banner3.resource = new URLResource(BANNER_3);
+							banners.addChild(banner3);
+							
+							var video:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
+							rootElement.addChild(video);
+							
+							htmlContainer.addMediaElement(banner1);
+							htmlContainer.addMediaElement(banner2);
+							htmlContainer.addMediaElement(banner3);
+							return rootElement;							
+						}
+					)
+				)
+			
 			examples.addItem(media);
 			examples.addItem(composition);
 			examples.addItem(layout);
@@ -1106,7 +1139,10 @@ package org.osmf.examples
 		
 			return examples;
 		}
-				
+		
+		private static const BANNER_1:String					= "http://www.iab.net/media/image/468x60.gif";		
+		private static const BANNER_2:String					= "http://www.iab.net/media/image/234x60.gif";	
+		private static const BANNER_3:String					= "http://www.iab.net/media/image/120x60.gif";
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 		private static const REMOTE_PROGRESSIVE2:String 		= "http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv";
 		private static const REMOTE_STREAM:String 				= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
