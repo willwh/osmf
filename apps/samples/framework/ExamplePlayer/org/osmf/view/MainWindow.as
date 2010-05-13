@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.view
 {
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayCollection;
@@ -61,20 +62,20 @@ package org.osmf.view
 			//
 			
 			mediaPlayer = new MediaPlayer();
-			mediaPlayer.autoPlay = false;
+			mediaPlayer.autoPlay = true;
 			mediaPlayer.autoRewind = true;
 			
 			// Set up our list of examples.
 			//
 			
 			examples = AllExamples.examples;
-			exampleList.dataProvider = examples;
-			exampleList.labelField = "name";
+			exampleTree.dataProvider = examples;
+			exampleTree.labelField = "name";
 			
 			// Add UI event handlers.
 			//
 
-			exampleList.addEventListener(ListEvent.CHANGE, onExampleListSelect);
+			exampleTree.addEventListener(ListEvent.CHANGE, onExampleTreeSelect);
 			
 			buttonPlay.addEventListener(MouseEvent.CLICK, onPlayClick);
 			buttonPause.addEventListener(MouseEvent.CLICK, onPauseClick);
@@ -88,6 +89,8 @@ package org.osmf.view
 			
 			scaleModeButton.dataProvider = new ArrayCollection([ScaleMode.NONE, ScaleMode.LETTERBOX, ScaleMode.STRETCH, ScaleMode.ZOOM]);
 			scaleModeButton.addEventListener(MenuEvent.ITEM_CLICK, onScaleModeSelect);
+			
+			playOptions.addEventListener(Event.CHANGE, onPlayOptions);
 
 			// Add MediaPlayer event handlers.
 			//
@@ -125,6 +128,13 @@ package org.osmf.view
 					
 		// UI Event Handlers
 		//
+		
+		private function onPlayOptions(event:Event):void
+		{
+			mediaPlayer.autoPlay = playOptions.dataProvider[0].autoPlay.@toggled == "true";
+			mediaPlayer.autoRewind = playOptions.dataProvider[0].autoRewind.@toggled == "true";
+			mediaPlayer.loop = playOptions.dataProvider[0].loop.@toggled == "true";
+		}
 		
 		private function onPan(event:SliderEvent):void
 		{
@@ -200,7 +210,7 @@ package org.osmf.view
 			mediaPlayer.media = value;
 		}
 
-		private function onExampleListSelect(event:ListEvent = null):void
+		private function onExampleTreeSelect(event:ListEvent = null):void
 		{
 			if (example != null)
 			{
@@ -211,12 +221,12 @@ package org.osmf.view
 			errorID.text = errorMessage.text = errorDetail.text = "";
 			duration.text = "";
 			
-			if (exampleList.selectedIndex >= 0)
+			if (exampleTree.selectedItem != null &&
+				exampleTree.selectedItem is Example)
 			{
-				example = examples[exampleList.selectedIndex] as Example;
-				
+				example = exampleTree.selectedItem as Example;
 				setMediaElement(example.mediaElement);
-				exampleDescription.text = example.description;
+				exampleDescription.text = example.description;								
 			}
 			else
 			{
@@ -368,15 +378,15 @@ package org.osmf.view
 			{
 				if (example.name == value)
 				{
-					exampleList.selectedIndex = examples.indexOf(example);
-					onExampleListSelect();
+					exampleTree.selectedIndex = examples.getItemIndex(example);
+					onExampleTreeSelect();
 					break;
 				}		
 			}
 		}
 		
 		private var mediaPlayer:MediaPlayer;
-		private var examples:Array;
+		private var examples:ArrayCollection;
 		private var example:Example;
 		private var recommendationsWatcher:MetadataWatcher;
 		private var scaleMode:String = ScaleMode.NONE;

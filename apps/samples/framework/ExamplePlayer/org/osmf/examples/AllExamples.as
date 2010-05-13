@@ -27,6 +27,8 @@ package org.osmf.examples
 	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
+	import mx.collections.ArrayCollection;
+	
 	import org.osmf.elements.AudioElement;
 	import org.osmf.elements.BeaconElement;
 	import org.osmf.elements.DurationElement;
@@ -79,15 +81,23 @@ package org.osmf.examples
 		/**
 		 * All examples to be used in the player.
 		 **/
-		public static function get examples():Array
+		public static function get examples():ArrayCollection
 		{
-			var examples:Array = [];
+			var examples:ArrayCollection = new ArrayCollection();
 			var mediaElement:MediaElement = null;
 			
 			var timer:Timer = new Timer(1000);
 			var timerHandler:Function;
 			
-			examples.push
+			
+			var media:Category = new Category("Media");
+			var composition:Category = new Category("Composition");
+			var layout:Category = new Category("Layout");
+			var errorHandling:Category = new Category("Error Handling");
+			var proxies:Category = new Category("Proxies");
+						
+			
+			media.addItem
 				( new Example
 					( 	"Progressive Video"
 					, 	"Demonstrates playback of a progressive video using VideoElement and NetLoader."
@@ -98,7 +108,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Streaming Video"
 					, 	"Demonstrates playback of a streaming video using VideoElement and NetLoader."
@@ -109,7 +119,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Dynamic Streaming Video"
 					, 	"Demonstrates the use of dynamic streaming.  The player will automatically switch between five variations of the same stream, each encoded at a different bitrate (from 408 Kbps to 1708 Kbps), based on the available bandwidth.  Note that the switching behavior can be modified via custom switching rules."
@@ -119,14 +129,13 @@ package org.osmf.examples
 							for (var i:int = 0; i < 5; i++)
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
-							}
-							
+							}							
 				  	   		return new VideoElement(dsResource);
 				  	   	}
 					)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Live Streaming Video"
 					, 	"Demonstrates playback of a live video stream."
@@ -137,7 +146,7 @@ package org.osmf.examples
 					)
 				);
 				
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Streaming Video With Dual-Threshold Buffer"
 					, 	"Demonstrates playback of a streaming video with a dual-threshold buffer.  The buffer starts small, but increases once we've buffered enough data to enable playback.  The larger buffer reduces the chance that a rebuffer will need to occur."
@@ -150,7 +159,7 @@ package org.osmf.examples
 				);
 
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Progressive Video With Dynamic Buffer"
 					, 	"Demonstrates playback of a progressive video with a dynamic buffer.  The size of the buffer grows slowly as the video plays, then shrinks back down again."
@@ -196,7 +205,7 @@ package org.osmf.examples
 					)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Image"
 					, 	"Demonstrates display of an image using ImageElement and ImageLoader."
@@ -207,7 +216,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Timed Image"
 					, 	"Demonstrates display of an image for a fixed amount of time."
@@ -218,7 +227,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"SWF"
 					, 	"Demonstrates display of a SWF using SWFElement and SWFLoader."
@@ -229,7 +238,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Progressive Audio"
 					, 	"Demonstrates playback of a progressive audio file using AudioElement and SoundLoader."
@@ -240,7 +249,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Streaming Audio"
 					, 	"Demonstrates playback of a streaming audio file using AudioElement and NetLoader."
@@ -250,8 +259,20 @@ package org.osmf.examples
 				  	   	}
 				  	)
 				);
+			
+			media.addItem
+				( new Example
+					( 	"Connection level parameters"
+						, 	"Demonstrates how url parameters are passed to both the NetConnection.connect call, and NetStream.play()."
+						,  	function():MediaElement
+						{
+							var videoElement:VideoElement = new VideoElement(new URLResource(REMOTE_STREAM + "?param1=value1&param2=value2"));
+							return videoElement;
+						}
+					)
+				);
 
-			examples.push
+			errorHandling.addItem
 				( new Example
 					( 	"Invalid Progressive Video"
 					, 	"Demonstrates load failures and error handling for a progressive video with an invalid URL."
@@ -262,7 +283,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			errorHandling.addItem
 				( new Example
 					( 	"Invalid Streaming Video (Bad Server)"
 					, 	"Demonstrates load failures and error handling for a streaming video with an invalid server."
@@ -273,7 +294,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			errorHandling.addItem
 				( new Example
 					( 	"Invalid Streaming Video (Bad Stream)"
 					, 	"Demonstrates load failures and error handling for a streaming video with an valid server but an invalid stream."
@@ -284,7 +305,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			errorHandling.addItem
 				( new Example
 					( 	"Invalid Image"
 					, 	"Demonstrates load failures and error handling for an image with an invalid URL."
@@ -295,7 +316,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			errorHandling.addItem
 				( new Example
 					( 	"Invalid Progressive Audio"
 					, 	"Demonstrates load failures and error handling for a progressive audio file with an invalid URL."
@@ -306,7 +327,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			errorHandling.addItem
 				( new Example
 					( 	"Invalid Streaming Audio"
 					, 	"Demonstrates load failures and error handling for a streaming audio file with an invalid URL."
@@ -317,7 +338,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			errorHandling.addItem
 				( new Example
 					( 	"Invalid MediaElement/MediaResource Pair"
 					, 	"Demonstrates load failures and error handling for when the resource passed to a MediaElement is of the wrong type.  In this case, an MP3 resource is passed to a VideoElement."
@@ -328,7 +349,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Serial Composition"
 					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), using the default layout settings.  Note that the duration of the second video is not incorporated into the SerialElement until its playback begins (because we don't know the duration until it is loaded)."
@@ -342,7 +363,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Parallel Composition (Default Layout)"
 					, 	"Demonstrates playback of a ParallelElement that contains two videos (one progressive, one streaming), using the default layout settings.  Note that only one video is shown.  This is because both videos use the default layout settings, and thus overlap each other."
@@ -356,7 +377,7 @@ package org.osmf.examples
 				  	)
 				);
 				 
-			examples.push
+			layout.addItem
 				( new Example
 					( 	"Parallel Composition (Adjacent)"
 					, 	"Demonstrates playback of a ParallelElement that contains two videos (one progressive, one streaming), with the videos laid out adjacently."
@@ -392,7 +413,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Parallel Composition (Timed Banner)"
 					, 	"Demonstrates playback of a ParallelElement that contains a video and a banner.  The banner only shows during seconds 10 to 20 of the video."
@@ -435,7 +456,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Synchronized Parallel Composition"
 					, 	"Demonstrates playback of a ParallelElement that contains four videos, where all videos get paused when one of them is in a buffering state.  Note the use of LayoutMetadata to show the videos in a grid."
@@ -488,7 +509,7 @@ package org.osmf.examples
 				  	)
 				);
 				
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Invalid Serial Composition"
 				  	, 	"Demonstrates load failures and error handling for a SerialElement whose second element has an invalid URL."
@@ -505,7 +526,7 @@ package org.osmf.examples
 			/* This example requires a local video file to be present.  To run this,
 			uncomment this section and set a valid path for LOCAL_PROGRESSIVE.
 			
-			examples.push
+			examples.addItem
 				( new Example
 					( 	"Local Video"
 				  	, 	"Demonstrates playback of a local video file."
@@ -516,7 +537,7 @@ package org.osmf.examples
 				  	)
 				);
 			*/
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Poster Frame"
 					, 	"Demonstrates the use of a SerialElement to present a poster frame prior to playback.  Note that we use a subclass of ImageElement which adds the IPlayable trait to ensure that we can play through the image."
@@ -530,7 +551,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"RTMP Poster Frame"
 					, 	"Demonstrates the use of a SerialElement to present a poster frame prior to playback.  Note that we use a subclass of ImageElement which adds the IPlayable trait to ensure that we can play through the image."
@@ -546,7 +567,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Poster Frame At End"
 					, 	"Demonstrates the use of a SerialElement to present a poster frame at the end of playback."
@@ -560,7 +581,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Slideshow"
 				  	, 	"Demonstrates the use of DurationElement to present a set of images in sequence."
@@ -576,7 +597,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Text"
 					, 	"Demonstrates a custom MediaElement that displays text."
@@ -587,7 +608,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Captions"
 				  	, 	"Demonstrates the use of DurationElement to present a set of text elements in sequence."
@@ -618,7 +639,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Chromeless SWF (AS3)"
 					, 	"Demonstrates playback of a chromeless, AS3 SWF.  The SWF exposes an API that a custom MediaElement uses to control the video."
@@ -629,7 +650,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Chromeless SWF (Flex)"
 					, 	"Demonstrates playback of a chromeless, Flex-based SWF.  The SWF exposes an API that a custom MediaElement uses to control the video.  Note that the SWF also exposes some simple controls for playback (Play, Pause, Mute).  These buttons are included to demonstrate how the loaded SWF and the player can stay in sync."
@@ -640,7 +661,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			proxies.addItem
 				( new Example
 					( 	"Video URL Changer"
 					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the URL of the video is changed during the load operation, so that instead of playing a streaming video, we play a progressive video."
@@ -651,7 +672,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			proxies.addItem
 				( new Example
 					( 	"Preflight Video Loader"
 					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the custom ProxyElement performs some custom asynchronous logic after the video is loaded.  (In this case, it simply runs a Timer for 2 seconds.)  The proxy prevents the outside world from being aware that the video is loaded until that custom logic is completed."
@@ -662,7 +683,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			proxies.addItem
 				( new Example
 					( 	"Unseekable ProxyElement (Streaming Video)"
 					, 	"Demonstrates the use of a custom ProxyElement to prevent the user from seeking another MediaElement, in this case a progressive VideoElement."
@@ -673,7 +694,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			proxies.addItem
 				( new Example
 					( 	"Switching ProxyElement (Two Videos)"
 					, 	"Demonstrates the use of a custom ProxyElement to provide a means to seamlessly switch between two MediaElements.  In this case, we switch from one video to another every five seconds."
@@ -686,7 +707,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			proxies.addItem
 				( new Example
 					( 	"Proxy-based Tracing (Dynamic Streaming Video)"
 					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a VideoElement doing dynamic streaming.  All playback events are sent to the trace console."
@@ -702,7 +723,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			proxies.addItem
 				( new Example
 					( 	"Proxy-based Tracing (SerialElement)"
 					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a SerialElement containing two VideoElements.  All playback events are sent to the trace console."
@@ -716,7 +737,7 @@ package org.osmf.examples
 				  	)
 				);
 			
-			examples.push
+			layout.addItem
 				( new Example
 					( 	"Dynamic Layouts"
 					, 	"Demonstrates the use of the default OSMF layout renderer to dynamically change the spatial ordering of MediaElements within compositions."
@@ -788,7 +809,7 @@ package org.osmf.examples
 					)
 				);
 				
-			examples.push
+			media.addItem
 				( new Example
 					( 	"BeaconElement"
 					, 	"Demonstrates the use of BeaconElement to fire tracking events.  Every few seconds, a \"ping\" is made.  If you run this example while sniffing HTTP traffic, you can see the requests being made."
@@ -807,7 +828,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"BeaconElement with a VideoElement"
 					, 	"Demonstrates the use of BeaconElement to fire tracking events in parallel with a VideoElement."
@@ -829,7 +850,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Streaming Video As Subclip"
 					, 	"Demonstrates playback of a subclip of a streaming video using metadata to specify the start and end times."
@@ -843,7 +864,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Serial Composition With Subclips"
 					, 	"Demonstrates playback of a SerialElement that contains one video chopped up into several subclips, each separated by the 5 second display of an image."
@@ -875,7 +896,7 @@ package org.osmf.examples
 				  	)
 				);
 
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"Serial Composition With Dynamic Streaming Subclips"
 					, 	"Demonstrates playback of a SerialElement that contains one dynamic streaming video chopped up into several subclips, each separated by the 5 second display of an image."
@@ -919,7 +940,7 @@ package org.osmf.examples
 				  	)
 				);
 				
-			examples.push
+			composition.addItem
 				( new Example
 					( 	"DefaultDuration Serial"
 					, 	"Demonstrates the defaultDuration feature on VideoElement, in a Serial Composition.  Note that the SerialElement is wrapped in an unseekable ProxyElement, to prevent seeking into the second child when it's not loaded."
@@ -943,7 +964,7 @@ package org.osmf.examples
 				  	)
 				);
 				
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Flash Media Manifest Progressive"
 					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for a progressive video."
@@ -956,7 +977,7 @@ package org.osmf.examples
 				  	)
 				);	
 						
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Flash Media Manifest Dynamic Streaming"
 					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for dynamic streaming video."
@@ -969,7 +990,7 @@ package org.osmf.examples
 				  	)
 				);
 				
-			examples.push
+			media.addItem
 				( new Example
 					( 	"Video With an Injected NetConnection"
 						, 	"Demonstrates playback of a video where the NetConnection and NetStream are specified externally, rather than created by the NetLoader.  This approach is useful when you're integrating with an existing NetConnection framework.  For simplicity, this example plays a progressive video, but the approach should also work for streaming video."
@@ -982,7 +1003,7 @@ package org.osmf.examples
 						}
 					)
 				);
-			examples.push
+			composition.addItem
 				( new Example
 					(	"Recommendations"
 					,	"Demonstrates how a recommendations bumper can be implemented."
@@ -1007,7 +1028,7 @@ package org.osmf.examples
 					)
 				);
 							
-			examples.push
+			composition.addItem
 				( new Example
 					(	"Ad insertion"
 					,	"Demonstrates how pre-, post- and midroll ads can be added in such a way that the ad durations aren't included in the main timeline.  Instead, they're shown in an overlay countdown timer."
@@ -1026,7 +1047,63 @@ package org.osmf.examples
 						}
 					)
 				);
-				
+			
+			composition.addItem
+				( new Example
+					(	"Sequential Compostion Different MediaTypes"
+						,	"Demonstrates different types of MediaElements in a serial composition. Includes a 3 Second image, 5 second subclip, and a 3 second swf."
+						,	function():MediaElement
+						{
+							var elem:SerialElement= new SerialElement();
+							elem.addChild(new DurationElement(3, new ImageElement(new URLResource(REMOTE_IMAGE))));
+							elem.addChild(new VideoElement(new StreamingURLResource(REMOTE_STREAM, StreamType.RECORDED, 0, 5)));
+							elem.addChild(new DurationElement(3,new SWFElement(new URLResource(REMOTE_SWF))));														
+							return elem;
+						}
+					)
+				);
+			
+			layout.addItem
+				( new Example
+					(	"Picture in Picture"
+						,	"Demonstrates how to place two different videos in a composition, one large, and a small video in the corner."
+						,	function():MediaElement
+						{
+							var elem:ParallelElement= new ParallelElement();
+							var video1:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
+							var video2:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE2));
+							
+							var layout:LayoutMetadata = new LayoutMetadata();
+							layout.percentWidth = 100;
+							layout.percentHeight = 100;
+							layout.index = 0;
+							layout.scaleMode = ScaleMode.LETTERBOX;
+							video1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							
+							layout = new LayoutMetadata();
+							layout.percentWidth = 20;
+							layout.percentHeight = 20;
+							layout.index = 1;
+							layout.right = 15;
+							layout.top = 15;							
+							layout.scaleMode = ScaleMode.LETTERBOX;							
+							video2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+																			
+							elem.addChild(video1);
+							elem.addChild(video2);							
+												
+							return elem;
+						}
+					)
+				);
+			
+			examples.addItem(media);
+			examples.addItem(composition);
+			examples.addItem(layout);
+			examples.addItem(proxies);
+			examples.addItem(errorHandling);
+						
+		
 			return examples;
 		}
 				

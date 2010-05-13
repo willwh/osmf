@@ -26,76 +26,105 @@
 	xmlns:mx					="http://www.adobe.com/2006/mxml"
 	xmlns:samples				="org.osmf.samples.*"
 	>
-	
-	<samples:MediaContainerUIComponent
-		id 						="mediaContainerUIComponent"
-		top 					="0"
-		left 					="0"
-		bottom 					="0"
-		right 					="0"
-		/>
- 	
-	<!-- Upper Left Region -->
-	
-	<mx:VBox
-		styleName				="panel"
-		left					="0"
-		top						="0"
-		height					="100%"
-		width					="300"
-		verticalGap				="2"
-		>
 		
-		<mx:Label
-			text				="OSMF Examples"
-			color				="white"
-			fontWeight			="bold"
-			fontSize			="20"
-			/>
-		
-		<mx:Label
-			id					="version"
-			color				="white"
-			fontStyle			="italic"
-			fontSize			="8"
-			/>
-
-		<mx:Spacer
-			height				="30"
-			/>
-			
-		<mx:Label
-			text				="Select an example from the list:"
-			color				="gray"
-			fontSize			="12"
-			/>
-			
-		<mx:List
-			id					="exampleList"
-			color				="white"
-			backgroundAlpha		="0"
-			borderThickness		="0"
+	<mx:HBox 
 			width				="100%"
-			height				="100%"
-			alpha				="0.8"
-			/>
-
-	</mx:VBox>
+			height				="100%">
+				 	
+		<!-- Upper Left Region -->
+		
+		<mx:VBox
+			styleName				="panel"
+			height					="100%"
+			width					="300"
+			verticalGap				="2"
+			>
+				
+			<mx:Label
+				text				="OSMF Examples"
+				color				="white"
+				fontWeight			="bold"
+				fontSize			="20"
+				/>
+			
+			<mx:HBox width="100%">
+					
+				<mx:Label
+					id					="version"
+					color				="white"
+					fontStyle			="italic"
+					fontSize			="8"
+					/>
+				
+				<mx:Spacer width="100%" />
+				
+				<mx:MenuBar				
+					labelField			="@label"
+					id					="playOptions"
+					>
+					<mx:dataProvider>
+						<mx:XML format="e4x">
+							<root label="Play Options">			
+								<autoPlay label="Auto Play" type="check" toggled="true"/>
+								<autoRewind label="Auto Rewind" type="check" toggled="false"/>
+								<loop label="Loop" type="check" toggled="false"/>
+							</root>
+						</mx:XML>
+					</mx:dataProvider>
+					
+				</mx:MenuBar>
+							
+			</mx:HBox>	
+			
+			<mx:Label
+				text				="Select an example from the list:"
+				color				="gray"
+				fontSize			="12"
+				/>
+				
+			<mx:Tree
+				id					="exampleTree"
+				labelField			="name"
+				color				="white"
+				backgroundAlpha		="0"
+				borderThickness		="0"
+				width				="100%"
+				height				="100%"
+				alpha				="0.8"
+				/>
 	
+		</mx:VBox>
+		
+		<mx:HBox
+			width			="100%"
+			height			="100%"
+			borderStyle		="outset"
+			borderColor		="gray"
+			>	
+			<samples:MediaContainerUIComponent				
+				id 						="mediaContainerUIComponent"
+				width					="100%"
+				height					="100%"
+				/>
+		</mx:HBox>
+		
+	</mx:HBox>
 	<!-- Upper Right Region -->
 
 	<mx:Text
+		filters					="{textFilters}"
 		id						="exampleDescription"
 		top						="0"
 		right					="0"
 		width					="500"
-		color					="gray"
+		color					="white"
 		fontSize				="12"
 		/>
 	
 	<!-- Lower Right Region -->
 	
 	<mx:HBox
+		filters					="{textFilters}"
 		right					="0"
 		width					="500"
 		height					="30"
@@ -121,9 +150,10 @@
 
 	
 	<mx:HBox
+		filters					="{textFilters}"
 		id						="timeTraitControls" 
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="160"
@@ -131,14 +161,14 @@
 		horizontalScrollPolicy	="off"
 		>
 		
-		<mx:Label
+		<mx:Label			
 			text				="Position:"
 			/>
-		<mx:Label
+		<mx:Label			
 			id					="position"
 			text				="0"
 			/>
-		<mx:HSlider 				
+		<mx:HSlider 			
 			width				="100%" 			
 			id					="seekBar" 
 			/>			
@@ -149,9 +179,10 @@
 	</mx:HBox>
 	
 	<mx:HBox
+		filters					="{textFilters}"
 		id						="bufferTraitControls"
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="140"
@@ -181,9 +212,10 @@
 	</mx:HBox>
 	
 	<mx:HBox
+		filters					="{textFilters}"
 		id						="loadTraitControls"
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="120"
@@ -208,7 +240,8 @@
 	
 	<mx:HBox
 		id						="audioTraitControls" 
-		right					="0"
+		filters					="{textFilters}"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="100"
@@ -248,8 +281,9 @@
 	
 	<mx:HBox
 		id						="stateControls"
+		filters				="{textFilters}"
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="80"
@@ -269,8 +303,9 @@
 	
 	<mx:HBox
 		id						="scaleModeBox"
+		filters					="{textFilters}"
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="60"
@@ -290,9 +325,10 @@
 	</mx:HBox>
 
 	<mx:HBox
+		filters					="{textFilters}"
 		id						="errorIDBox"
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="40"
@@ -312,9 +348,10 @@
 	</mx:HBox>
 	
 	<mx:HBox
+		filters					="{textFilters}"
 		id						="errorMessageBox"
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="20"
@@ -327,15 +364,17 @@
 			text				="Error Message: "
 			/>
 		<mx:Label
+			
 			id					="errorMessage"
 			text				=""
 			/>
 	</mx:HBox>
 
 	<mx:HBox
+		filters				="{textFilters}"
 		id						="errorDetailBox"
 		color					="white"
-		right					="0"
+		right					="10"
 		width					="500"
 		height					="20"
 		bottom					="0"
@@ -347,12 +386,16 @@
 		<mx:Label
 			text				="Error Detail: "
 			/>
-		<mx:Label
+		<mx:Label			
 			id					="errorDetail"
 			width				="100%"
 			toolTip				="{errorDetail.text}"
 			/>
 	</mx:HBox>
+	
+	<mx:Array id="textFilters">
+		{[new DropShadowFilter(1.5,45,0,1.0,2.5,2.5,2)]}
+	</mx:Array>
 	
 </mx:Canvas>
 
