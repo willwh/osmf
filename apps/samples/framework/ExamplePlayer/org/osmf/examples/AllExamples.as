@@ -1155,7 +1155,7 @@ package org.osmf.examples
 		private static const REMOTE_SLIDESHOW_IMAGE1:String 	= "http://mediapm.edgesuite.net/osmf/swf/OSMFPlayer/images/vegetation.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE2:String 	= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE3:String 	= "http://mediapm.edgesuite.net/osmf/image/flex_48x45.gif";
-		private static const REMOTE_SWF:String 					= "http://mediapm.edgesuite.net/osmf/swf/ReferenceSampleSWF.swf";
+		private static const REMOTE_SWF:String 					= "http://mediapm.edgesuite.net/osmf/content/test/ten.swf";
 		private static const REMOTE_INVALID_PROGRESSIVE:String 	= "http://mediapm.edgesuite.net/strobe/content/test/fail.flv";
 		private static const REMOTE_INVALID_FMS_SERVER:String 	= "rtmp://cp67126.fail.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 		private static const REMOTE_INVALID_STREAM:String 		= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/fail/SpaceAloneHD_sounas_640_500_short";
