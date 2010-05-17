@@ -46,12 +46,22 @@ package org.osmf.vast.media
 	{
 		public function testPlay():void
 		{
-			doTestPlay(createProxyElementWithWrappedElement(), false);
+			doTestPlay(createProxyElementWithWrappedElement(false), false);
+		}
+
+		public function testPlayWithSetProperty():void
+		{
+			doTestPlay(createProxyElementWithWrappedElement(true), false);
 		}
 
 		public function testPlayWithReload():void
 		{
-			doTestPlay(createProxyElementWithWrappedElement(), true);
+			doTestPlay(createProxyElementWithWrappedElement(false), true);
+		}
+
+		public function testPlayWithReloadWithSetProperty():void
+		{
+			doTestPlay(createProxyElementWithWrappedElement(true), true);
 		}
 		
 		private function doTestPlay(proxyElement:ProxyElement, reload:Boolean):void
@@ -127,7 +137,7 @@ package org.osmf.vast.media
 			// We'll fail if we receive any pings.
 			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, dontCall);
 
-			var proxyElement:ProxyElement = createProxyElementWithWrappedElement();
+			var proxyElement:ProxyElement = createProxyElementWithWrappedElement(true);
 			
 			// Enter the buffering state.
 			var bufferTrait:DynamicBufferTrait = proxyElement.getTrait(MediaTraitType.BUFFER) as DynamicBufferTrait;
@@ -228,24 +238,34 @@ package org.osmf.vast.media
 			}
 		}
 
-		private function createProxyElementWithWrappedElement():ProxyElement
+		private function createProxyElementWithWrappedElement(setProperty:Boolean):ProxyElement
 		{
 			var vastURLs:Vector.<VASTUrl> = new Vector.<VASTUrl>();
 			vastURLs.push(VAST_URL1);
 			vastURLs.push(VAST_URL2);
+			
+			var proxiedElement:MediaElement =
+				new DynamicMediaElement
+					( [	  MediaTraitType.BUFFER
+				  		, MediaTraitType.PLAY
+				  		, MediaTraitType.LOAD
+					  ]
+					  , new SimpleLoader()
+					  , null
+					  , true
+					);
+					
 			var proxyElement:ProxyElement = new VASTImpressionProxyElement
 				( vastURLs
 				, httpLoader
-				, new DynamicMediaElement
-					( [	MediaTraitType.BUFFER
-					  , MediaTraitType.PLAY
-					  ,	MediaTraitType.LOAD
-					  ]
-					, new SimpleLoader()
-					, null
-					, true
-					)
+				, setProperty == false
+					? proxiedElement
+					: null
 				);
+			if (setProperty)
+			{
+				proxyElement.proxiedElement = proxiedElement;
+			}
 			return proxyElement;
 		}
 		
