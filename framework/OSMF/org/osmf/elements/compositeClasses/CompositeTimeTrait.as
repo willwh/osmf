@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
+	import org.osmf.elements.SerialElement;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
@@ -123,7 +124,7 @@ package org.osmf.elements.compositeClasses
 		
 		private function isSerialComplete():Boolean
 		{
-			// A serial element is only complete is it's truly at the end.
+			// A serial element is only complete if it's truly at the end.
 			//
 			
 			var childTimeTrait:TimeTrait = traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait;
@@ -142,6 +143,7 @@ package org.osmf.elements.compositeClasses
 			// complete but really isn't (FM-707).
 			if (	result
 				&&	childTimeTrait is CompositeTimeTrait
+				&&	traitAggregator.listenedChild is SerialElement
 			   )
 			{
 				result = CompositeTimeTrait(childTimeTrait).isSerialComplete();
