@@ -115,6 +115,8 @@ package org.osmf.elements
 	* playback starts.  Once playback begins, these properties correspond to the playback
 	* time window (as found on flash.net.drm.DRMVoucher).</p>
 	* 
+	* @includeExample LightweightVideoElementExample.as -noswf
+	* 
 	* @see org.osmf.elements.VideoElement
 	* @see org.osmf.media.URLResource
 	* @see org.osmf.media.MediaElement

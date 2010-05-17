@@ -49,6 +49,8 @@ package org.osmf.elements
 	 * </ol>
 	 * </p>
 	 * 
+	 * @includeExample SWFElementExample.as -noswf
+	 * 
 	 * @see org.osmf.elements.SWFLoader
 	 * @see org.osmf.media.MediaElement
 	 * @see org.osmf.media.MediaPlayer

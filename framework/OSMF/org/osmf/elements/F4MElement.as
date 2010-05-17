@@ -47,6 +47,8 @@ package org.osmf.elements
 	 * related to traits being added and removed.  If you use the MediaPlayer class with an
 	 * F4MElement, then the MediaPlayer will automatically listen for these events for you.</p>
 	 *
+	 * @includeExample F4MElementExample.as -noswf
+	 * 
 	 * @see http://opensource.adobe.com/wiki/display/osmf/Flash%2BMedia%2BManifest%2BFile%2BFormat%2BSpecification Flash Media Manifest File Format Specification
 	 *
 	 * @see org.osmf.media.MediaPlayer

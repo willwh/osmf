@@ -29,8 +29,10 @@ package org.osmf.elements
 	/**
 	 * BeaconElement is a media element which maps the "play" operation to the
 	 * request (via an HTTP GET) of a URL.
-	 *  
-	 *  @langversion 3.0
+	 *
+	 *  @includeExample BeaconElementExample.as -noswf
+	 * 
+  	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0

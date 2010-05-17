@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	
@@ -63,6 +65,8 @@ package org.osmf.elements
 	 * property to null.  This will unload the AudioElement.</li>
 	 * </ol>
 	 * </p>
+	 * 
+	 * @includeExample AudioElementExample.as -noswf
 	 * 
 	 * @see org.osmf.media.URLResource
 	 * @see org.osmf.media.MediaElement

@@ -53,6 +53,8 @@ package org.osmf.elements
 	 * </ol>
 	 * </p>
 	 * 
+	 * @includeExample ImageElementExample.as -noswf
+	 * 
 	 * @see org.osmf.elements.ImageLoader
 	 * @see org.osmf.media.MediaElement
 	 * @see org.osmf.media.MediaPlayer

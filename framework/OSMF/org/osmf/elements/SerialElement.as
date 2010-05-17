@@ -121,6 +121,8 @@ package org.osmf.elements
 	 * N fully complete children, plus the position of the next child.
 	 * </li>
 	 * </ul>
+	 * 
+	 * 	@includeExample SerialElementExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

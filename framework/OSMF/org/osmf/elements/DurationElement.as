@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -77,6 +79,8 @@ package org.osmf.elements
 	 * The DurationElement will not work with elements that already have a TimeTrait, such
 	 * as VideoElement.  To specify a start and end time for a VideoElement. use
 	 * StreamingURLResource's <code>clipStartTime</code> and <code>clipEndTime</code> properties.
+	 * 
+	 * @includeExample DurationElementExample.as -noswf
 	 * 
 	 * @see org.osmf.elements.ProxyElement
 	 * @see org.osmf.elements.SerialElement

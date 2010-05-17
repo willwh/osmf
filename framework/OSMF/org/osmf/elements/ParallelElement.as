@@ -116,7 +116,9 @@ package org.osmf.elements
 	 * greater than its duration.
 	 * </li>
 	 * </ul>
-	 *  
+	 * 
+	 * 	@includeExample ParallelElementExample.as  -noswf
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
