@@ -73,6 +73,31 @@ package org.osmf.net
 			assertTrue(seekTrait.canSeekTo(20) == false);
 		}
 		
+		public function testCanSeekToWithFractionalDurationAndBytesLoaded():void
+		{
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+			var stream:NetStream = netFactory.createNetStream(connection);
+			
+			if (stream is MockNetStream)
+			{
+				MockNetStream(stream).expectedDuration = 31.671;
+			}
+			
+			var loadTrait:DynamicLoadTrait = new DynamicLoadTrait(null, null);
+			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
+			var seekTrait:NetStreamSeekTrait =  new NetStreamSeekTrait(timeTrait, loadTrait, stream);	
+			
+			stream.play(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			stream.pause();
+			
+			// Verify that we don't truncate durations in the comparison (FM-875).
+			loadTrait.bytesTotal = 2660334;
+			loadTrait.bytesLoaded = 2660334;
+
+			assertTrue(seekTrait.canSeekTo(31.671));
+		}
+		
 		override public function setUp():void
 		{
 			netFactory = new NetFactory();

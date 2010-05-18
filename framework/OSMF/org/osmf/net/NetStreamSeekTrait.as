@@ -77,7 +77,7 @@ package org.osmf.net
 			{
 				// Check the progress of the download, as you can't seek past
 				// the last downloaded byte.
-				var maxSeekTime:Number = timeTrait.duration * loadTrait.bytesLoaded / loadTrait.bytesTotal;
+				var maxSeekTime:Number = timeTrait.duration * Number(loadTrait.bytesLoaded / loadTrait.bytesTotal);
 				result = time <= maxSeekTime;
 			}
 			
