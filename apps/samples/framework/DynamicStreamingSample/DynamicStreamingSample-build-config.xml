@@ -17,7 +17,7 @@
       <!-- List of path elements that form the roots of ActionScript class hierarchies. -->
       <source-path>
          <path-element>src</path-element>
-         <path-element>../../../../plugins/SMILPlugin</path-element>
+         <path-element>../../../../plugins/samples/SMILPlugin</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->

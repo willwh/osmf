@@ -23,26 +23,29 @@
 *****************************************************/
 -->
 <mx:Application
-	xmlns:mx		="http://www.adobe.com/2006/mxml"
-	xmlns:flexunit	="flexunit.flexui.*"
-	layout			="absolute"
-	creationComplete="runTests()"
-	>
+	xmlns:mx			="http://www.adobe.com/2006/mxml" 
+	layout				="absolute" 
+	creationComplete	="onComplete()">
 	
 	<mx:Script>
 		<![CDATA[
-
-			import org.osmf.*;
+			import org.osmf.OSMFTests;
 			import flexunit.framework.TestSuite;
-			
-			private function runTests():void
+			import flexunit.junit.JUnitTestRunner;
+		
+			private var _suite:TestSuite;
+		
+			private function onComplete():void
 			{
-				testRunner.test = new OSMFTests();
-				testRunner.startTest();
+				var runner:JUnitTestRunner = new JUnitTestRunner();
+				runner.run(new OSMFTests(), onTestComplete);
+			}
+		
+			private function onTestComplete():void
+			{
+				fscommand("quit");
 			}
 		]]>
 	</mx:Script>
-	
-	<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%"/>
-
+  	
 </mx:Application>
