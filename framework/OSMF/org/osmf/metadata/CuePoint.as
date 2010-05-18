@@ -31,6 +31,8 @@ package org.osmf.metadata
 	 * 
 	 * <p>The CuePoint class extends TimelineMarker, and as such can be added
 	 * to a TimelineMetadata object.</p>
+	 * 
+	 *  @includeExample CuePointExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

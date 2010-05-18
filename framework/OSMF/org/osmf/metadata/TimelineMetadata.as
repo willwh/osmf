@@ -100,7 +100,9 @@ package org.osmf.metadata
 	 * keys and values (i.e. a TimelineMarker will be stored as both key and
 	 * value).  A TimelineMetadata object dispatches a TimelineMetadataEvent
 	 * when the currentTime property of the MediaElement's TimeTrait matches
-	 * any of the time values in its collection of TimelineMarker objects.</p> 
+	 * any of the time values in its collection of TimelineMarker objects.</p>
+	 * 
+	 *  @includeExample TimelineMetadataExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
