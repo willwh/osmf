@@ -37,6 +37,8 @@ package org.osmf.net.dvr
 	 * DVRCastNetLoader is a NetLoader that can load streams from a DVRCast-equipped
 	 * FMS server.
 	 * 
+	 * @includeExample DVRCastNetLoaderExample.as -noswf
+	 * 
 	 * @langversion 3.0
 	 * @playerversion Flash 10
 	 * @playerversion AIR 1.5

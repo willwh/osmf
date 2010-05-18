@@ -38,6 +38,8 @@ package org.osmf.net
 	 * <p>This class provides an object representation of a dynamic streaming
 	 * resource without any knowledge or assumption of any file format, 
 	 * such as SMIL, Media RSS, F4M, etc.</p>
+	 * 
+	 * @includeExample DynamicStreamingResourceExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

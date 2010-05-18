@@ -46,6 +46,8 @@ package org.osmf.net.rtmpstreaming
 	 * <p>This class is "backwards compatible", meaning if it is not handed an
 	 * RTMP DynamicStreamingResource then it will call the base class
 	 * implementation for the <code>load</code> and <code>unload</code> methods.</p>
+	 * 
+	 * @includeExample RTMPDynamicStreamingNetLoaderExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

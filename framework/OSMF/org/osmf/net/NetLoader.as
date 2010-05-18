@@ -53,6 +53,7 @@ package org.osmf.net
 	 * The NetLoader supports Flash Media Token Authentication,  
 	 * for passing authentication tokens through the NetConnection.
 	 *
+	 * @includeExample NetLoaderExample.as -noswf
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
