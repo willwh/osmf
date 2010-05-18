@@ -1,4 +1,4 @@
-package asdoc.org.osmf.elements
+package
 {
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -25,7 +25,7 @@ package asdoc.org.osmf.elements
 			var imageElement:ImageElement = new ImageElement();
 			imageElement.resource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/train.jpg");
 			
-			//Plays to the video for the first 10 seconds.
+			// Shows the image for 10 seconds.
 			var durationElement:DurationElement = new DurationElement(10, imageElement);
 			
 			addChild(mediaPlayerSprite);

@@ -1,4 +1,4 @@
-package org.osmf.containers
+package
 {
 	import flash.display.Sprite;
 	

@@ -35,6 +35,8 @@ package org.osmf.containers
 	/**
 	 * HTMLMediaContainer is an IMediaContainer-implementing class that uses ExternalInterface
 	 * to expose the container's child media elements to JavaScript.
+	 * 
+	 * @includeExample HTMLMediaContainerExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

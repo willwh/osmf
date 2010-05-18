@@ -1,4 +1,4 @@
-package asdoc.org.osmf.elements
+package
 {
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -34,7 +34,7 @@ package asdoc.org.osmf.elements
 			parallelElement.addChild(videoElement);
 			parallelElement.addChild(videoElement2);
 			
-			//Add a vertical layout
+			// Add a vertical layout
 			var layout:LayoutMetadata = new LayoutMetadata();
 			layout.layoutMode = LayoutMode.VERTICAL;
 			parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);			

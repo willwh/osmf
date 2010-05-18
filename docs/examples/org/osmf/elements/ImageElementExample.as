@@ -1,4 +1,4 @@
-package asdoc.org.osmf.elements
+package
 {
 	import flash.display.Sprite;
 	import flash.display.StageAlign;

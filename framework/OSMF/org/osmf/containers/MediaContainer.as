@@ -38,6 +38,8 @@ package org.osmf.containers
 	
 	/**
 	 * MediaContainer defines a Sprite-based IMediaContainer implementation.
+	 * 
+	 * @includeExample MediaContainerExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

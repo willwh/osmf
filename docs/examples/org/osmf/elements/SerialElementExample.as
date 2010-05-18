@@ -1,7 +1,5 @@
-package asdoc.org.osmf.elements
+package
 {
-	import asdoc.org.osmf.elements.SerialElementExample;
-	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
