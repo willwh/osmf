@@ -35,6 +35,8 @@ package org.osmf.net
 	 * <p>Note that it is possible for live and recorded streams to have
 	 * identical URLs.  In such a case, the streamType property should be
 	 * used to disambiguate live and recorded streams.</p>
+	 * 
+	 * @includeExample StreamingURLResourceExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

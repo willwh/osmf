@@ -27,6 +27,8 @@ package org.osmf.media
 	 * URLResource is a media resource that has a URL. It serves as an input
 	 * object for MediaElements that can process and present media represented
 	 * by URLs.	 
+	 * 
+	 * @includeExample URLResourceExample.as -noswf
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
