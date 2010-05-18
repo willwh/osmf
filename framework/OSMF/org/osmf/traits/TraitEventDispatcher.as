@@ -274,7 +274,9 @@ package org.osmf.traits
 	 * interface for receiving trait events from a MediaElement.  This
 	 * class monitors the MediaElement for traits being added and
 	 * removed, and dispatches any events that the MediaElement's traits
-	 * dispatch, and for which the client has registered listeners. 
+	 * dispatch, and for which the client has registered listeners.
+	 * 
+	 *  @includeExample TraitEventDispatcherExample.as -noswf 
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
