@@ -38,6 +38,7 @@ package org.osmf.examples
 	import org.osmf.elements.ImageElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SWFLoader;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
@@ -235,7 +236,7 @@ package org.osmf.examples
 					, 	"Demonstrates display of a SWF using SWFElement and SWFLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new SWFElement(new URLResource(REMOTE_SWF));
+							return new SWFElement(new URLResource(REMOTE_SWF), new org.osmf.elements.SWFLoader(true) );
 				  	   	}
 				  	)
 				);
@@ -1055,7 +1056,7 @@ package org.osmf.examples
 							var elem:SerialElement= new SerialElement();
 							elem.addChild(new DurationElement(3, new ImageElement(new URLResource(REMOTE_IMAGE))));
 							elem.addChild(new VideoElement(new StreamingURLResource(REMOTE_STREAM, StreamType.RECORDED, 0, 5)));
-							elem.addChild(new DurationElement(3,new SWFElement(new URLResource(REMOTE_SWF))));														
+							elem.addChild(new DurationElement(3,new SWFElement(new URLResource(REMOTE_SWF), new SWFLoader(true))));														
 							return elem;
 						}
 					)
