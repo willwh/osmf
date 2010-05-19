@@ -22,24 +22,24 @@
     <pngDefaultName>1</pngDefaultName>
     <qtDefaultName>1</qtDefaultName>
     <rnwkDefaultName>1</rnwkDefaultName>
-    <flashFileName>DVRSample.swf</flashFileName>
-    <generatorFileName>DVRSample.swt</generatorFileName>
-    <projectorWinFileName>DVRSample.exe</projectorWinFileName>
-    <projectorMacFileName>DVRSample.app</projectorMacFileName>
-    <htmlFileName>DVRSample.html</htmlFileName>
-    <gifFileName>DVRSample.gif</gifFileName>
-    <jpegFileName>DVRSample.jpg</jpegFileName>
-    <pngFileName>DVRSample.png</pngFileName>
-    <qtFileName>DVRSample.mov</qtFileName>
-    <rnwkFileName>DVRSample.smil</rnwkFileName>
+    <flashFileName>HelloWorld.swf</flashFileName>
+    <generatorFileName>HelloWorld.swt</generatorFileName>
+    <projectorWinFileName>HelloWorld.exe</projectorWinFileName>
+    <projectorMacFileName>HelloWorld.app</projectorMacFileName>
+    <htmlFileName>HelloWorld.html</htmlFileName>
+    <gifFileName>HelloWorld.gif</gifFileName>
+    <jpegFileName>HelloWorld.jpg</jpegFileName>
+    <pngFileName>HelloWorld.png</pngFileName>
+    <qtFileName>HelloWorld.mov</qtFileName>
+    <rnwkFileName>HelloWorld.smil</rnwkFileName>
   </PublishFormatProperties>
   <PublishHtmlProperties enabled="true">
     <VersionDetectionIfAvailable>0</VersionDetectionIfAvailable>
     <VersionInfo>10,0,2,0;9,0,124,0;8,0,24,0;7,0,14,0;6,0,79,0;5,0,58,0;4,0,32,0;3,0,8,0;2,0,1,12;1,0,0,1;</VersionInfo>
     <UsingDefaultContentFilename>1</UsingDefaultContentFilename>
     <UsingDefaultAlternateFilename>1</UsingDefaultAlternateFilename>
-    <ContentFilename>DVRSample_content.html</ContentFilename>
-    <AlternateFilename>DVRSample_alternate.html</AlternateFilename>
+    <ContentFilename>HelloWorld_content.html</ContentFilename>
+    <AlternateFilename>HelloWorld_alternate.html</AlternateFilename>
     <UsingOwnAlternateFile>0</UsingOwnAlternateFile>
     <OwnAlternateFilename></OwnAlternateFilename>
     <Width>100</Width>
@@ -89,7 +89,7 @@
     <StreamUse8kSampleRate>0</StreamUse8kSampleRate>
     <EventUse8kSampleRate>0</EventUse8kSampleRate>
     <UseNetwork>0</UseNetwork>
-    <DocumentClass>DVRSample</DocumentClass>
+    <DocumentClass>HelloWorld</DocumentClass>
     <AS3Strict>1</AS3Strict>
     <AS3Coach>1</AS3Coach>
     <AS3AutoDeclare>1</AS3AutoDeclare>
