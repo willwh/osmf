@@ -236,7 +236,7 @@ package org.osmf.examples
 					, 	"Demonstrates display of a SWF using SWFElement and SWFLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new SWFElement(new URLResource(REMOTE_SWF), new org.osmf.elements.SWFLoader(true) );
+							return new SWFElement(new URLResource(REMOTE_SWF) );
 				  	   	}
 				  	)
 				);
@@ -1056,7 +1056,7 @@ package org.osmf.examples
 							var elem:SerialElement= new SerialElement();
 							elem.addChild(new DurationElement(3, new ImageElement(new URLResource(REMOTE_IMAGE))));
 							elem.addChild(new VideoElement(new StreamingURLResource(REMOTE_STREAM, StreamType.RECORDED, 0, 5)));
-							elem.addChild(new DurationElement(3,new SWFElement(new URLResource(REMOTE_SWF), new SWFLoader(true))));														
+							elem.addChild(new DurationElement(3,new SWFElement(new URLResource(REMOTE_SWF))));														
 							return elem;
 						}
 					)
