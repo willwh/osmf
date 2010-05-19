@@ -1095,6 +1095,8 @@ package org.osmf.examples
 						}
 					)
 				);
+			/*
+			Removed due to bug in the HTMLElement.  Throws an Error when unloading.
 			
 			media.addItem(
 				new Example
@@ -1130,6 +1132,8 @@ package org.osmf.examples
 						}
 					)
 				)
+			*/
+			
 			
 			examples.addItem(media);
 			examples.addItem(composition);
