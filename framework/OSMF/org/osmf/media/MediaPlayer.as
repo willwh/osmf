@@ -199,6 +199,8 @@ package org.osmf.media
 	 * <p>The MediaPlayer can play back all media types supported by the Open Source Media Framework, 
 	 * including media compositions.</p>
 	 * 
+	 *  @includeExample MediaPlayerExample.as -noswf
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
