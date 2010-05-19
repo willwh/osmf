@@ -25,6 +25,13 @@ package org.osmf.logging
 	 * Logger defines the capabilities of a logger, the object that OSMF
 	 * applications interact with to write logging messages.
 	 *  
+	 * @includeExample LoggerExample.as -noswf
+	 * @includeExample ExampleLoggerFactory.as -noswf
+	 * @includeExample ExampleLogger.as -noswf
+	 * 
+	 * @see org.osmf.logging.Log
+	 * @see org.osmf.logging.LoggerFactory
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5

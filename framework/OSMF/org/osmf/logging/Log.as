@@ -24,6 +24,13 @@ package org.osmf.logging
 	/**
 	 * Log is the central access point for logging messages.
 	 *  
+	 * @includeExample LoggerExample.as -noswf
+	 * @includeExample ExampleLoggerFactory.as -noswf
+	 * @includeExample ExampleLogger.as -noswf
+	 * 
+	 * @see org.osmf.logging.Logger
+	 * @see org.osmf.logging.LoggerFactory
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5

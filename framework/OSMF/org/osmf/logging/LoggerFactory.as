@@ -30,6 +30,13 @@ package org.osmf.logging
 	 * <p>Clients are expected to subclass LoggerFactory to generate their own Logger
 	 * objects.</p>
 	 *  
+	 * @includeExample LoggerExample.as -noswf
+	 * @includeExample ExampleLoggerFactory.as -noswf
+	 * @includeExample ExampleLogger.as -noswf
+	 * 
+	 * @see org.osmf.logging.Log
+	 * @see org.osmf.logging.Logger
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
