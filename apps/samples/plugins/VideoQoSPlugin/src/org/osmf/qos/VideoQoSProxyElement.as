@@ -104,7 +104,7 @@ package org.osmf.qos
 				addMetadata(VideoQoSPluginMetadata.NAMESPACE, metadata);
 			}
 			
-			if (metadata != null)
+			if (metadata != null && loadTrait.netStream != null)
 			{
 				var qos:NetStreamInfo = loadTrait.netStream.info;
 				
