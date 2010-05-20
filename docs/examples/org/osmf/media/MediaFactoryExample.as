@@ -1,13 +1,13 @@
+/**
+ * @exampleText This sample demonstrates how MediaFactory can be used to load a plug-in. Note
+ * that the sample uses a mock-up plug-in URL.
+ */
 package org.osmf.media
 {
 	import flash.display.Sprite;
 	
 	import org.osmf.events.MediaFactoryEvent;
 
-	/**
-	 * This sample demonstrates how MediaFactory can be used to load a plug-in. Note
-	 * that the sample uses a mock-up plug-in URL.
-	 */
 	public class MediaFactoryExample extends Sprite
 	{
 		public function MediaFactoryExample()

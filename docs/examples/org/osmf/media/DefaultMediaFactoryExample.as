@@ -1,13 +1,13 @@
+/**
+ * @exampleText This example demonstrates how to manually use the DefaultMediaFactory
+ * class to instantiate a video element.
+ */	
 package org.osmf.media
 {
 	import flash.display.Sprite;
 	
 	import org.osmf.containers.MediaContainer;
 
-	/**
-	 * This example demonstrates how to manually use the DefaultMediaFactory
-	 * class to instantiate a video element.
-	 */	
 	public class DefaultMediaFactoryExample extends Sprite
 	{
 		public function DefaultMediaFactoryExample()
