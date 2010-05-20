@@ -93,6 +93,8 @@ package org.osmf.media
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
+	 * 
+	 *  @includeExample DefaultMediaFactoryExample.as -noswf
 	 */	
 	public class DefaultMediaFactory extends MediaFactory
 	{
