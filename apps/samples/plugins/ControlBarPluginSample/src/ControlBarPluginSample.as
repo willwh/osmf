@@ -154,7 +154,7 @@ package
 		private static var ID:String = "ID";
 		
 		// Comment out to load the plug-in for a SWF (instead of using static linking, for testing):	
-		//private static const pluginResource:URLResource = new URLResource(new URL("ControlBarPlugin.swf"));
+		//private static const pluginResource:URLResource = new URLResource("http://mediapm.edgesuite.net/osmf/swf/ControlBarPlugin.swf");
 		
 		private static const pluginResource:PluginInfoResource = new PluginInfoResource(new ControlBarPlugin().pluginInfo);
 	}
