@@ -1,28 +1,25 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>MASTSample</title>
-<script language="JavaScript" type="text/javascript">
-<!--
-//v1.7
-// Flash Player Version Detection
+// Flash Player Version Detection - Rev 1.6
 // Detect Client Browser type
-// Copyright 2005-2008 Adobe Systems Incorporated.  All rights reserved.
+// Copyright(c) 2005-2006 Adobe Macromedia Software, LLC. All rights reserved.
 var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
 var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
 var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
+
 function ControlVersion()
 {
 	var version;
 	var axo;
 	var e;
+
 	// NOTE : new ActiveXObject(strFoo) throws an exception if strFoo isn't in the registry
+
 	try {
 		// version will be set for 7.X or greater players
 		axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
 		version = axo.GetVariable("$version");
 	} catch (e) {
 	}
+
 	if (!version)
 	{
 		try {
@@ -35,13 +32,17 @@ function ControlVersion()
 			
 			// default to the first public version
 			version = "WIN 6,0,21,0";
+
 			// throws if AllowScripAccess does not exist (introduced in 6.0r47)		
 			axo.AllowScriptAccess = "always";
+
 			// safe to call for 6.0r47 or greater
 			version = axo.GetVariable("$version");
+
 		} catch (e) {
 		}
 	}
+
 	if (!version)
 	{
 		try {
@@ -51,6 +52,7 @@ function ControlVersion()
 		} catch (e) {
 		}
 	}
+
 	if (!version)
 	{
 		try {
@@ -60,6 +62,7 @@ function ControlVersion()
 		} catch (e) {
 		}
 	}
+
 	if (!version)
 	{
 		try {
@@ -73,6 +76,7 @@ function ControlVersion()
 	
 	return version;
 }
+
 // JavaScript helper required to detect Flash Player PlugIn version information
 function GetSwfVer(){
 	// NS/Opera version >= 3 check for Flash plugin in plugin array
@@ -97,6 +101,8 @@ function GetSwfVer(){
 				if (versionRevision.indexOf("d") > 0) {
 					versionRevision = versionRevision.substring(0, versionRevision.indexOf("d"));
 				}
+			} else if (versionRevision[0] == "b") {
+				versionRevision = versionRevision.substring(1);
 			}
 			var flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
 		}
@@ -109,9 +115,10 @@ function GetSwfVer(){
 	else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
 	else if ( isIE && isWin && !isOpera ) {
 		flashVer = ControlVersion();
-	}	
+	}
 	return flashVer;
 }
+
 // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
 function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 {
@@ -130,6 +137,7 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 		var versionMajor      = versionArray[0];
 		var versionMinor      = versionArray[1];
 		var versionRevision   = versionArray[2];
+
         	// is the major.revision >= requested major.revision AND the minor version >= requested minor
 		if (versionMajor > parseFloat(reqMajorVer)) {
 			return true;
@@ -144,41 +152,51 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 		return false;
 	}
 }
+
 function AC_AddExtension(src, ext)
 {
-  if (src.indexOf('?') != -1)
-    return src.replace(/\?/, ext+'?'); 
+  var qIndex = src.indexOf('?');
+  if ( qIndex != -1)
+  {
+    // Add the extention (if needed) before the query params
+    var path = src.substring(0, qIndex);
+    if (path.length >= ext.length && path.lastIndexOf(ext) == (path.length - ext.length))
+      return src;
+    else
+      return src.replace(/\?/, ext+'?'); 
+  }
   else
-    return src + ext;
+  {
+    // Add the extension (if needed) to the end of the URL
+    if (src.length >= ext.length && src.lastIndexOf(ext) == (src.length - ext.length))
+      return src;  // Already have extension
+    else
+      return src + ext;
+  }
 }
+
 function AC_Generateobj(objAttrs, params, embedAttrs) 
 { 
-  var str = '';
-  if (isIE && isWin && !isOpera)
-  {
-    str += '<object ';
-    for (var i in objAttrs)
+    var str = '';
+    if (isIE && isWin && !isOpera)
     {
-      str += i + '="' + objAttrs[i] + '" ';
+  		str += '<object ';
+  		for (var i in objAttrs)
+  			str += i + '="' + objAttrs[i] + '" ';
+  		str += '>';
+  		for (var i in params)
+  			str += '<param name="' + i + '" value="' + params[i] + '" /> ';
+  		str += '</object>';
+    } else {
+  		str += '<embed ';
+  		for (var i in embedAttrs)
+  			str += i + '="' + embedAttrs[i] + '" ';
+  		str += '> </embed>';
     }
-    str += '>';
-    for (var i in params)
-    {
-      str += '<param name="' + i + '" value="' + params[i] + '" /> ';
-    }
-    str += '</object>';
-  }
-  else
-  {
-    str += '<embed ';
-    for (var i in embedAttrs)
-    {
-      str += i + '="' + embedAttrs[i] + '" ';
-    }
-    str += '> </embed>';
-  }
-  document.write(str);
+
+    document.write(str);
 }
+
 function AC_FL_RunContent(){
   var ret = 
     AC_GetArgs
@@ -187,14 +205,7 @@ function AC_FL_RunContent(){
     );
   AC_Generateobj(ret.objAttrs, ret.params, ret.embedAttrs);
 }
-function AC_SW_RunContent(){
-  var ret = 
-    AC_GetArgs
-    (  arguments, ".dcr", "src", "clsid:166B1BCA-3F9C-11CF-8075-444553540000"
-     , null
-    );
-  AC_Generateobj(ret.objAttrs, ret.params, ret.embedAttrs);
-}
+
 function AC_GetArgs(args, ext, srcParamName, classid, mimeType){
   var ret = new Object();
   ret.embedAttrs = new Object();
@@ -202,6 +213,7 @@ function AC_GetArgs(args, ext, srcParamName, classid, mimeType){
   ret.objAttrs = new Object();
   for (var i=0; i < args.length; i=i+2){
     var currArg = args[i].toLowerCase();    
+
     switch (currArg){	
       case "classid":
         break;
@@ -219,7 +231,7 @@ function AC_GetArgs(args, ext, srcParamName, classid, mimeType){
       case "onblur":
       case "oncellchange":
       case "onclick":
-      case "ondblclick":
+      case "ondblClick":
       case "ondrag":
       case "ondragend":
       case "ondragenter":
@@ -253,9 +265,9 @@ function AC_GetArgs(args, ext, srcParamName, classid, mimeType){
       case "ondeactivate":
       case "type":
       case "codebase":
-      case "id":
         ret.objAttrs[args[i]] = args[i+1];
         break;
+      case "id":
       case "width":
       case "height":
       case "align":
@@ -276,43 +288,5 @@ function AC_GetArgs(args, ext, srcParamName, classid, mimeType){
   if (mimeType) ret.embedAttrs["type"] = mimeType;
   return ret;
 }
-// -->
-</script>
-</head>
-<body bgcolor="#ffffff">
-<!--url's used in the movie-->
-<!--text used in the movie-->
-<!-- saved from url=(0013)about:internet -->
-<script language="JavaScript" type="text/javascript">
-	AC_FL_RunContent(
-		'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,0,0',
-		'width', '100%',
-		'height', '100%',
-		'src', 'MASTSample',
-		'quality', 'high',
-		'pluginspage', 'http://www.adobe.com/go/getflashplayer',
-		'align', 'middle',
-		'play', 'true',
-		'loop', 'false',
-		'scale', 'noscale',
-		'wmode', 'window',
-		'devicefont', 'false',
-		'id', 'MASTSample',
-		'bgcolor', '#ffffff',
-		'name', 'MASTSample',
-		'menu', 'true',
-		'allowFullScreen', 'true',
-		'allowScriptAccess','sameDomain',
-		'movie', 'MASTSample',
-		'salign', ''
-		); //end AC code
-</script>
-<noscript>
-	<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,0,0" width="100%" height="100%" id="MASTSample" align="middle">
-	<param name="allowScriptAccess" value="sameDomain" />
-	<param name="allowFullScreen" value="true" />
-	<param name="movie" value="MASTSample.swf" /><param name="loop" value="false" /><param name="quality" value="high" /><param name="scale" value="noscale" /><param name="bgcolor" value="#ffffff" />	<embed src="MASTSample.swf" loop="false" quality="high" scale="noscale" bgcolor="#ffffff" width="100%" height="100%" name="MASTSample" align="middle" allowScriptAccess="sameDomain" allowFullScreen="true" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer" />
-	</object>
-</noscript>
-</body>
-</html>
+
+

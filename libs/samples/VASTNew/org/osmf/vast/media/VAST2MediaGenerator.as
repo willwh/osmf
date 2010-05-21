@@ -33,6 +33,7 @@ package org.osmf.vast.media
 	import org.osmf.elements.beaconClasses.Beacon;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -69,7 +70,7 @@ package org.osmf.vast.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function VAST2MediaGenerator(mediaFileResolver:IVAST2MediaFileResolver=null)
+		public function VAST2MediaGenerator(mediaFileResolver:IVAST2MediaFileResolver=null, mediaFactory:MediaFactory=null)
 		{
 			super();
 			
@@ -77,7 +78,7 @@ package org.osmf.vast.media
 				 mediaFileResolver != null
 				 ? mediaFileResolver
 				 : new DefaultVAST2MediaFileResolver();
-				 
+			this.mediaFactory = mediaFactory;	 
 			
 		}
 		
@@ -482,9 +483,17 @@ package org.osmf.vast.media
 					}
 					else 
 					{
+						if (mediaFactory != null)
+						{
+							rootElement = mediaFactory.createMediaElement(new URLResource(mediaURL)) as VideoElement;
+							//VideoElement(rootElement).smoothing = true;
+						}
+						else
+						{
+							rootElement = new VideoElement(new URLResource(mediaURL));
+							//VideoElement(rootElement).smoothing = true;
+						}
 						
-						rootElement = new VideoElement(new URLResource(mediaURL));
-						VideoElement(rootElement).smoothing = true;
 
 					}
 					
@@ -549,7 +558,8 @@ package org.osmf.vast.media
 		{
 			return (vastDocument.adPlacement == VAST2Translator.PLACEMENT_NONLINEAR);
 		}
-			
+		
+		private var mediaFactory:MediaFactory;	
 		private var clickThru:String;
 		private var httpLoader:HTTPLoader;
 		private var vastDocument:VAST2Translator;

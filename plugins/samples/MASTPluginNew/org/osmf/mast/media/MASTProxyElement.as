@@ -28,13 +28,13 @@ package org.osmf.mast.media
 	import flash.events.MouseEvent;
 	
 	import org.osmf.containers.MediaContainer;
-	import flash.events.Event;
-	
 	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaElementEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.mast.MASTPluginInfo;
 	import org.osmf.mast.loader.MASTDocumentProcessedEvent;
 	import org.osmf.mast.loader.MASTDocumentProcessor;
@@ -225,7 +225,6 @@ package org.osmf.mast.media
 		
 		private function onDocumentProcessed(event:MASTDocumentProcessedEvent):void
 		{
-			
 			var serialElement:SerialElement = proxiedElement as SerialElement;
 			var parellelElement:ParallelElement;
 			// Each inline element needs to be inserted into the location that
@@ -239,8 +238,7 @@ package org.osmf.mast.media
 				var mediaElement:MediaElement;
 				if (inlineElement is VASTTrackingProxyElement)
 				{
-					mediaElement = ProxyElement(ProxyElement(inlineElement).proxiedElement).proxiedElement ;
-							
+					mediaElement = ProxyElement(ProxyElement(inlineElement).proxiedElement).proxiedElement;		
 				}	
 							
 				//Check to see if we have a nonlinear VPAIDElemet
@@ -256,9 +254,8 @@ package org.osmf.mast.media
 							(mediaElement as VPAIDElement).MASTHeight = container["height"];
 						}
 					}
-					catch(e:Event) {}
+					catch(error:Error) {}
 				}
-				
 				if(nonlinear)
 				{
 					//Currently we support running only 1 nonlinear Ad per ad call.
@@ -287,9 +284,23 @@ package org.osmf.mast.media
 						
 						if (!(mediaElement is VPAIDElement))
 						{
-							var tempContainer:MediaContainer = container as MediaContainer;
-							tempContainer.buttonMode = true;
-							tempContainer.addEventListener(MouseEvent.MOUSE_UP, onContainerClick);
+							mediaContainer = container as MediaContainer;
+							mediaContainer.buttonMode = true;
+							mediaContainer.addEventListener(MouseEvent.MOUSE_UP, onContainerClick);
+							
+							if(mediaElement is VideoElement)
+							{
+								
+								if(mediaElement.hasTrait(MediaTraitType.TIME))
+								{
+									
+									var timeTrait:TimeTrait = mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+									timeTrait.addEventListener(TimeEvent.COMPLETE, onTimeComplete);
+									
+								}
+							}	
+
+					
 						}
 						serialElement.addChildAt(inlineElement, insertionIndex);
 						
@@ -311,6 +322,13 @@ package org.osmf.mast.media
 			// Now we can remove the custom PlayTrait
 			this.removeCustomPlayTrait();
 		}
+		
+		private function onTimeComplete(e:TimeEvent):void
+		{
+			
+			mediaContainer.buttonMode = false;
+			mediaContainer.removeEventListener(MouseEvent.MOUSE_UP, onContainerClick);
+		}	
 		
 		private function onContainerClick(event:MouseEvent):void
 		{
@@ -363,7 +381,7 @@ package org.osmf.mast.media
 		
 		private var loadTrait:MASTLoadTrait;
 		private var mediaFactory:MediaFactory;
-		
+		private var mediaContainer:MediaContainer;
 		private static const ERROR_MISSING_MAST_METADATA:String = "Media Element is missing MAST metadata";
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";
 		

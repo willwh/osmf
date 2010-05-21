@@ -77,13 +77,6 @@ package org.osmf.vast.media
 			waitForBufferingExit = false;
 			
 			super(wrappedElement);
-			dispatcher = new TraitEventDispatcher();
-			dispatcher.media = wrappedElement;
-			
-			dispatcher.addEventListener(LoadEvent.LOAD_STATE_CHANGE, processLoadStateChange);
-			dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
-			dispatcher.addEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
-			
 			
 			if (urls == null)
 			{
@@ -93,6 +86,32 @@ package org.osmf.vast.media
 		
 		// Overrides
 		//
+		
+		override public function set proxiedElement(value:MediaElement):void
+		{
+			if (value != proxiedElement)
+			{
+				if (dispatcher != null)
+				{
+					dispatcher.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, processLoadStateChange);
+					dispatcher.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+					dispatcher.removeEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
+					dispatcher.media = null;
+					dispatcher = null;
+				}
+	
+				if (value != null)
+				{
+					dispatcher = new TraitEventDispatcher();
+					dispatcher.media = value;
+					dispatcher.addEventListener(LoadEvent.LOAD_STATE_CHANGE, processLoadStateChange);
+					dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+					dispatcher.addEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
+				}
+			}
+
+			super.proxiedElement = value;
+		}
 		
 		/**
 		 * @private

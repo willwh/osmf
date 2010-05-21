@@ -154,7 +154,8 @@ package org.osmf.vast.media
 			return mediaElements;
 		}
 		
-		private var mediaFileResolver:IVASTMediaFileResolver;
 		private var mediaFactory:MediaFactory;
+		private var mediaFileResolver:IVASTMediaFileResolver;
+		
 	}
 }

@@ -24,19 +24,25 @@
 
 package
 {
+	import fl.controls.Slider;
+	import fl.events.SliderEvent;
+	
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import fl.events.SliderEvent;
 	import flash.utils.getDefinitionByName;
 	
 	import org.osmf.containers.MediaContainer;
+	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.*;
 	import org.osmf.layout.ScaleMode;
 	import org.osmf.mast.MASTPluginInfo;
+	import org.osmf.mast.media.MASTProxyElement;
+	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
@@ -46,13 +52,10 @@ package
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.*;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.LoadState;
-	import org.osmf.traits.PlayState;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.vast.metadata.VASTMetadata;
 
-	[SWF(backgroundColor="0x333333")]
+	[SWF(width="480",height="360", backgroundColor="0x333333")]
 	public class MASTSample extends Sprite
 	{
 		public function MASTSample()
@@ -60,22 +63,20 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			
-			mediaFactory = new MediaFactory();
+			mediaFactory = new DefaultMediaFactory();
             
   			// Create the Sprite class that holds our MediaPlayer.
   			// Set the Sprite's size to match that of the stage, and
 			// prevent the content from being scaled.
-			
  			sprite = new MediaContainer();		
 			sprite.layoutMetadata.width = 480;
 			sprite.layoutMetadata.height = 360;
 			sprite.layoutMetadata.scaleMode = ScaleMode.NONE;	
 			addChild(sprite);
 			
-			mediaPlayer.volume = .2;
-			vol = .2;
-			volSlider.value = vol * 10;
+			createPlayerButtons();
 			
+			mediaPlayer.volume = vol = volSlider.value/10;
 			mediaPlayer.autoPlay = true;
 			
 			// Make sure we resize the Sprite when the stage dimensions
@@ -94,12 +95,53 @@ package
 			stopBtn.addEventListener(MouseEvent.CLICK, onStopClicked);
 			fullscreenBtn.addEventListener(MouseEvent.CLICK, onFSClicked);
 			volSlider.addEventListener(SliderEvent.CHANGE, onVolChanged);
-			mute_btn.addEventListener(MouseEvent.CLICK, onMutePressed);
+			muteBtn.addEventListener(MouseEvent.CLICK, onMutePressed);
+			unmuteBtn.addEventListener(MouseEvent.CLICK, onMutePressed);
 			
 			loadPlugin(MAST_PLUGIN_INFOCLASS);
+		}
+
+		private function createPlayerButtons():void
+		{
+			playBtn = new PlayButton();
+			playBtn.y = stage.stageHeight - (playBtn.height + 5);
+			playBtn.x = 10;
+			addChild(playBtn);
 			
+			stopBtn = new StopButton();
+			stopBtn.y = playBtn.y;
+			stopBtn.x = playBtn.x + playBtn.width + 5;
+			addChild(stopBtn);
 			
+			pauseBtn = new PauseButton();
+			pauseBtn.y = playBtn.y;
+			pauseBtn.x = 10;
+			pauseBtn.visible = false;
+			addChild(pauseBtn);
 			
+			volSlider = new Slider();
+			volSlider.y = playBtn.y + 20;
+			volSlider.x = stopBtn.x + stopBtn.width + 10;
+			volSlider.value = 7.5;
+			vol = volSlider.value/10;
+			addChild(volSlider);
+			
+			fullscreenBtn = new FullScreenButton();
+			fullscreenBtn.y = playBtn.y;
+			fullscreenBtn.x = volSlider.x + volSlider.width + 10;
+			fullscreenBtn.visible = false;
+			addChild(fullscreenBtn);
+			
+			muteBtn = new MuteButton();
+			muteBtn.y = playBtn.y;
+			muteBtn.x = fullscreenBtn.x + fullscreenBtn.width + 5;
+			addChild(muteBtn);
+			
+			unmuteBtn = new UnmuteButton();
+			unmuteBtn.y = muteBtn.y;
+			unmuteBtn.x = muteBtn.x;
+			unmuteBtn.visible = false;
+			addChild(unmuteBtn);
 		}
 		
 		private function loadPlugin(source:String):void
@@ -130,9 +172,7 @@ package
 		private function onPluginLoaded(event:MediaFactoryEvent):void
 		{
 			trace(">>> Plugin successfully loaded.");
-			
 			loadMainVideo(REMOTE_STREAM);
-			
 		}
 		
 		private function onPluginLoadFailed(event:MediaFactoryEvent):void
@@ -147,32 +187,46 @@ package
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
 			var metadata:Metadata = new Metadata();
-			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, MAST_VAST_2_NONLINEAR_VPAID);
-			
+			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, MAST_VAST_2_LINEAR_FLV);
 			
 			resource.addMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata);
 			
+			videoElement = mediaFactory.createMediaElement(resource);
 			
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 			
-			
-			if (mediaElement == null)
+			if (videoElement == null)
 			{
 				var netLoader:NetLoader = new NetLoader();
-				
 				// Add a default VideoElement
 				mediaFactory.addItem(new MediaFactoryItem("org.osmf.elements.video", netLoader.canHandleResource, createVideoElement));
-				mediaElement = mediaFactory.createMediaElement(resource);
-				
+				videoElement = mediaFactory.createMediaElement(resource) as VideoElement;
 			}
 			
-			mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
-			
-			sprite.addMediaElement(mediaElement);
-			mediaPlayer.media = mediaElement;
+			sprite.addMediaElement(videoElement);
+			mediaPlayer.media = videoElement;
 			onStageResize();
+			videoElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 			
+
 		}
+		
+		private function onTraitAdd(e:MediaElementEvent):void
+		{
+			trace("OSMF_Player.onTraitAdd -  " + e.traitType);
+			if(e.traitType == MediaTraitType.PLAY)
+			{
+				
+				trace("OSMF_Player.onTraitAdd -- Content Play Trait Added " );
+				playContent();
+			}
+        }
+        
+        private function playContent():void
+		{
+			trace("Playing Content Video");
+			mediaPlayer.play();
+		}
+		
 		
 		private function createVideoElement():MediaElement
 		{
@@ -182,43 +236,49 @@ package
    		private function onMediaError(event:MediaErrorEvent):void
    		{
    			var errMsg:String = "Media error : code="+event.error.errorID+" description="+event.error.message;
-   			
    			trace(errMsg);
+   			
+			
+			var mediaElement:VideoElement = SerialElement(MASTProxyElement(videoElement).proxiedElement).getChildAt(1) as VideoElement;
+			sprite.addMediaElement(mediaElement);
+   			mediaPlayer.media = mediaElement;
+   			
+   			videoElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
    		}
 		
 		private function onStageResize(event:Event = null):void
 		{
-			trace(" onStageResize " );
 			sprite.layoutMetadata.width = stage.stageWidth;
 			sprite.layoutMetadata.height = stage.stageHeight;
-			trace("width " + stage.stageWidth + " height " + stage.stageHeight);
 		}
 		
 		private function onMutePressed(event:MouseEvent):void
 		{
-			//trace("onMutePressed " + mediaPlayer.muted + "\nVOLUME SLIDER = " + volSlider.value/10);
-			//trace("mediaPlayer.Volume = " + mediaPlayer.volume + "\nMEDIA ELEMENT AUDIO = " + mediaElementAudio.volume)
+			if(muteBtn.visible){
+				muteBtn.visible = false;
+				unmuteBtn.visible = true;
+			}else{
+				muteBtn.visible = true;
+				unmuteBtn.visible = false;				
+			}
+			
 			if(vol != 0)
 			{
-				if(mediaPlayer.muted)
-				{
-					mediaPlayer.muted = false;
-					
-				}
-				else
+				if(mediaPlayer.muted){
+					mediaPlayer.muted = false;		
+				}else{
 					mediaPlayer.muted = true;
+				}
 			}
-
-			
-			
+			/*
 			//This is the second use case for muting the VAST/VPAID creative
 			if(mediaPlayer.volume != 0)
 				mediaPlayer.volume	= 0;
 			else
 				mediaPlayer.volume = vol;
+			*/
 		}
-	
-	
+
 		private function onPauseClicked(e:MouseEvent):void
 		{
 			mediaPlayer.pause();			
@@ -231,11 +291,9 @@ package
 			mediaPlayer.stop();
 		}
 		
-	
 		private function onPlayClicked(e:MouseEvent):void
 		{
-			trace("OSMF_Player.onPlayClicked " );
-					
+			trace("OSMF_Player.onPlayClicked " );		
 			mediaPlayer.play();			
 			playBtn.visible = false;
 			pauseBtn.visible = true;
@@ -247,28 +305,20 @@ package
 			{
                 case "normal":
                     stage.displayState = "fullScreen";
-                    
- 
                     break;
                 case "fullScreen":
                 default:
                     stage.displayState = "normal";
-
                     break;
             }
-
 		}
 		
 		private function onVolChanged(e:SliderEvent):void
 		{
 			trace("In onVolChanged()");
-			
 			vol = (e.currentTarget.value/10);
 			mediaPlayer.volume = vol;
 			trace("Slider Volume Changed " + vol );
-			//mediaElementAudio = playInMediaPlayer.getTrait(MediaTraitType.AUDIO) as AudioTrait;
-			//mediaElementAudio.volume = vol;
-			
 		}
 		
 		private var mediaFactory:MediaFactory;	
@@ -277,6 +327,14 @@ package
 		private var vol:Number;
 		private var playInMediaPlayer:MediaElement;
 		private var mediaElementAudio:AudioTrait;
+		private var videoElement:MediaElement;
+		private var playBtn:MovieClip;
+		private var pauseBtn:MovieClip;
+		private var fullscreenBtn:MovieClip;
+		private var stopBtn:MovieClip;
+		private var volSlider:Slider;
+		private var muteBtn:MovieClip;
+		private var unmuteBtn:MovieClip;
 
 		private static const MAST_PLUGIN_INFOCLASS:String = "org.osmf.mast.MASTPluginInfo";		
 		private static const loadTestRef:MASTPluginInfo = null;
@@ -285,7 +343,7 @@ package
 		// MAST documents
         private static const AKAMAI_MAST_URL_POSTROLL:String 		= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemend.xml";
         private static const AKAMAI_MAST_URL_PREROLL:String 		= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemstart.xml";
-		
+		private static const MAST_VAST_1_BROKEN_FLV:String					= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_1_linear_flv_broken.xml";
 		private static const MAST_INVALID_VAST:String 				= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_invalid_vast.xml";
 		private static const MAST_VAST_1_LINEAR_FLV:String 			= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_1_linear_flv.xml";
 		private static const MAST_VAST_1_WRAPPER:String 			= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_1_wrapper.xml";
@@ -295,7 +353,7 @@ package
 		private static const MAST_VAST_2_LINEAR_FLV:String 			= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_2_linear_flv_nonlinear_vpaid.xml";
 		private static const MAST_VAST_2_LINEAR_VPAID:String 		= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_2_linear_vpaid.xml";
 		private static const MAST_VAST_2_VPAID_TRACKING_TEST:String = "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_2_linear_vpaid_tracking_test.xml";
-		private static const MAST_VAST_2_NONLINEAR_VPAID:String 	= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_2_nonlinear_vpaid.xml";
+		private static const MAST_VAST_2_NONLINEAR_VPAID:String 	= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_2_nonlinear_vpaid.xml?ewbust=12341234";
 		private static const MAST_VAST_2_WRAPPER:String 			= "http://cdn1.eyewonder.com/200125/instream/osmf/mast_vast_2_wrapper.xml";
 		
 		private static const REMOTE_STREAM:String

@@ -386,10 +386,7 @@ package org.osmf.vpaid.elements
 			{
 				_timeTrait.removeEventListener(TimeEvent.COMPLETE, onTimerChange);
 				_timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, onTimerChange);	
-				
 			}
-
-			
 		}
 		
 		//The VPAID swf is loaded, time to start up the VPAID before dispatching READY
@@ -462,20 +459,14 @@ package org.osmf.vpaid.elements
 					logger.debug("[VPAID] Audio Change: event.muted=" + event.muted);
 				}
 				if(event.muted)
-				{
-					_oldVolume = _vpaid.volumeVPAID;
 					_vpaid.volumeVPAID = 0;
-				}
 				else
-					_vpaid.volumeVPAID = _oldVolume;
-			}
-			else
-			{
+					_vpaid.volumeVPAID = _audioTrait.volume;
+			}else{
 				CONFIG::LOGGING
 				{
 					logger.debug("[VPAID] Audio Change: event.volume=" + event.volume);
 				}
-				_oldVolume = _vpaid.volumeVPAID;
 				_vpaid.volumeVPAID = event.volume;
 				_vpaidMetadata.addValue(VPAIDMetadata.AD_VOLUME_CHANGE, event.volume);
 			}	
@@ -759,7 +750,6 @@ package org.osmf.vpaid.elements
 		private var _vpaid:IVPAIDBase;
 		private var _supportedVersion:Array = ["1.1"];
 		private var _firstRun:Boolean = true;
-		private var _oldVolume:Number = 0;
 		
 		// Just temporary, for MASTProxyElement to make initial size be correct(should use Metadata in the future)
 		private var _MASTWidth:Number = -1;

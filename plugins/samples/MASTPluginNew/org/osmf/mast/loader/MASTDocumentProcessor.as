@@ -170,7 +170,7 @@ package org.osmf.mast.loader
 				if (event.loadState == LoadState.READY)
 				{
 					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-					vastMediaGenerator = new VASTMediaGenerator();
+					vastMediaGenerator = new VASTMediaGenerator(null, mediaFactory);
 					
 					if(placement == "nonlinear")
 						dispatchEvent(new MASTDocumentProcessedEvent(vastMediaGenerator.createMediaElements(loadTrait.vastDocument, VASTMediaGenerator.PLACEMENT_NONLINEAR), condition));

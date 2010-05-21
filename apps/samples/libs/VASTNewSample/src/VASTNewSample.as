@@ -1,49 +1,35 @@
-/*****************************************************
-*  
-*  Copyright 2010 Eyewonder, LLC.  All Rights Reserved.
-*  
-*****************************************************
-*  The contents of this file are subject to the Mozilla Public License
-*  Version 1.1 (the "License"); you may not use this file except in
-*  compliance with the License. You may obtain a copy of the License at
-*  http://www.mozilla.org/MPL/
-*   
-*  Software distributed under the License is distributed on an "AS IS"
-*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-*  License for the specific language governing rights and limitations
-*  under the License.
-*   
-*  
-*  The Initial Developer of the Original Code is Eyewonder, LLC.
-*  Portions created by Eyewonder, LLC. are Copyright (C) 2010 
-*  Eyewonder, LLC. A Limelight Networks Business. All Rights Reserved. 
-*  
-*****************************************************/
-package
-{
+package {
+	import fl.controls.Slider;
+	import fl.events.SliderEvent;
+	
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import fl.events.SliderEvent;
-	import org.osmf.layout.ScaleMode;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.media.*
-	import org.osmf.traits.LoadState;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.layout.ScaleMode;
+	import org.osmf.media.*;
 	import org.osmf.traits.AudioTrait;
+	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.vast.loader.VASTLoadTrait;
 	import org.osmf.vast.loader.VASTLoader;
 	import org.osmf.vast.media.CompanionElement;
 	import org.osmf.vast.media.VASTMediaGenerator;
-	
+	import org.osmf.events.TimeEvent;
+	import org.osmf.traits.TimeTrait;
 	
 	/**
 	 * Sample OSMF Player
 	 * 
-	 * */
-	
+	 */
+	[SWF(width="480",height="360", backgroundColor="0x333333")]
 	public class VASTNewSample extends Sprite
 	{
 		public static const OVERLAY_DELAY:Number = 2;
@@ -58,7 +44,9 @@ package
 		private var vastMediaGenerator:VASTMediaGenerator;
 		private var playInMediaPlayer:MediaElement;
 		private var mediaElementAudio:AudioTrait;
+		private var serialElement:SerialElement;
 		
+		public static const CONTENT_VIDEO:String	= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 		public static const MAX_NUMBER_REDIRECTS:int 		= 5;
 		
 		public static const INVALID_VAST:String 						= "http://cdn1.eyewonder.com/200125/instream/osmf/invalid_vast.xml";
@@ -76,33 +64,50 @@ package
 		public static const chosenFile:String = VAST_2_WRAPPER;	// Change me
 		public static const chosenPlacement:String = VASTMediaGenerator.PLACEMENT_LINEAR;	// Change me
 		
+		private var vol:Number;
+		
+		private var playBtn:MovieClip;
+		private var pauseBtn:MovieClip;
+		private var fullscreenBtn:MovieClip;
+		private var stopBtn:MovieClip;
+		private var volSlider:Slider;
+		private var muteBtn:MovieClip;
+		private var unmuteBtn:MovieClip;
+		
 		public function VASTNewSample()
 		{
-			trace("Starting VASTNewSample Player");
-			
-			mute_btn.addEventListener(MouseEvent.CLICK, onMutePressed);
-			
+			trace("Starting VAST2Sample Player");
 			mediaPlayer = new MediaPlayer();
+		
+			//create an instance of the media container for the videoElement
+			container = new MediaContainer();
+			container.layoutMetadata.width = 480;
+			container.layoutMetadata.height = 360;
+			container.layoutMetadata.scaleMode = ScaleMode.NONE;
+			addChild(container);			
+
+			createPlayerButtons();
 			
 			playBtn.visible = true;
 			pauseBtn.visible = false;
 			playBtn.buttonMode = true;
 			pauseBtn.buttonMode = true;
 			stopBtn.buttonMode = true;
+			fullscreenBtn.visible = false; //VAST2Sample doesn't support fullscreen.
 			
 			playBtn.addEventListener(MouseEvent.CLICK, onPlayClicked);
 			pauseBtn.addEventListener(MouseEvent.CLICK, onPauseClicked);
 			stopBtn.addEventListener(MouseEvent.CLICK, onStopClicked);
-			fullscreenBtn.addEventListener(MouseEvent.CLICK, onFSClicked);
+			//fullscreenBtn.addEventListener(MouseEvent.CLICK, onFSClicked);
 			volSlider.addEventListener(SliderEvent.CHANGE, onVolChanged);	
-			volSlider.value = 2;
+			muteBtn.addEventListener(MouseEvent.CLICK, onMutePressed);
+			unmuteBtn.addEventListener(MouseEvent.CLICK, onMutePressed);
 			
-			//create an instance of the media container for the videoElement
-			container = new MediaContainer();
-			container.layoutMetadata.width = 640;
-			container.layoutMetadata.height = 480;
-			container.layoutMetadata.scaleMode = ScaleMode.NONE;
-			addChild(container);			
+			mediaFactory = new DefaultMediaFactory();
+			serialElement = new SerialElement();
+			
+			mediaPlayer.volume = vol = volSlider.value/10;
+			container.addMediaElement(serialElement);	
 			
 			//create a new url resource including the path to a video as a parameter.
 			var vastResource:URLResource = new URLResource(chosenFile);
@@ -110,60 +115,155 @@ package
 			vastLoadTrait = new VASTLoadTrait(vastLoader, vastResource);
 			vastLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onVASTLoadStateChange);
 			vastLoader.load(vastLoadTrait);
-			
-			
 		}
 		
+		private function createPlayerButtons():void
+		{
+			playBtn = new PlayButton();
+			playBtn.y = stage.stageHeight - (playBtn.height + 5);
+			playBtn.x = 10;
+			addChild(playBtn);
+			
+			stopBtn = new StopButton();
+			stopBtn.y = playBtn.y;
+			stopBtn.x = playBtn.x + playBtn.width + 5;
+			addChild(stopBtn);
+			
+			pauseBtn = new PauseButton();
+			pauseBtn.y = playBtn.y;
+			pauseBtn.x = 10;
+			pauseBtn.visible = false;
+			addChild(pauseBtn);
+			
+			volSlider = new Slider();
+			volSlider.y = playBtn.y + 20;
+			volSlider.x = stopBtn.x + stopBtn.width + 10;
+			volSlider.value = 7.5;
+			vol = volSlider.value/10;
+			addChild(volSlider);
+			
+			fullscreenBtn = new FullScreenButton();
+			fullscreenBtn.y = playBtn.y;
+			fullscreenBtn.x = volSlider.x + volSlider.width + 10;
+			addChild(fullscreenBtn);
+			
+			muteBtn = new MuteButton();
+			muteBtn.y = playBtn.y;
+			muteBtn.x = fullscreenBtn.x + fullscreenBtn.width + 5;
+			addChild(muteBtn);
+			
+			unmuteBtn = new UnmuteButton();
+			unmuteBtn.y = muteBtn.y;
+			unmuteBtn.x = muteBtn.x;
+			unmuteBtn.visible = false;
+			addChild(unmuteBtn);
+		}
+				
 		private function onVASTLoadStateChange(event:LoaderEvent):void
 		{
+			trace("onVASTLoadStateChange " + event.newState);
+			
+			videoElement = mediaFactory.createMediaElement(new URLResource(CONTENT_VIDEO));
+			container.addMediaElement(videoElement);
+			
 			if(event.newState == LoadState.READY)
 			{
-				vastMediaGenerator = new VASTMediaGenerator();
+							
+				vastMediaGenerator = new VASTMediaGenerator(null, mediaFactory);
+				
 				var vastElements:Vector.<MediaElement> = vastMediaGenerator.createMediaElements(vastLoadTrait.vastDocument, chosenPlacement);
-			
 				
 				
 				for each(var mediaElement:MediaElement in vastElements)
 				{
 					if(mediaElement is ProxyElement)
-						playInMediaPlayer = mediaElement;
+					{
+						
+						playInMediaPlayer = mediaElement;					
+						serialElement.addChild(playInMediaPlayer);
+						serialElement.addChild(videoElement);
+						
+					}
 					if(mediaElement is CompanionElement)
 						trace("Found Companion Element: " + mediaElement);
 				}
-				trace("VASTNewSample - " + playInMediaPlayer);
+				
 				if (playInMediaPlayer != null)
 				{
 					container.addMediaElement(playInMediaPlayer);
+					
 					mediaPlayer = new MediaPlayer();
 					mediaPlayer.autoPlay = false;
 					mediaPlayer.volume = (volSlider.value/10);
-					mediaPlayer.media = playInMediaPlayer;
+					mediaPlayer.media = serialElement;
 					mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				}
-				else
+				else{
 					trace("MediaElement not found! Check tag and placement for errors!");
-				
+					mediaPlayer.media = videoElement;
+				}
 			}
+			else if(event.newState == LoadState.LOAD_ERROR)
+			{
+				mediaPlayer.media = videoElement;
+				
+				videoElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			}
+
 		}
+		
+		private function onTraitAdd(e:MediaElementEvent):void
+		{
+			trace("OSMF_Player.onTraitAdd -  " + e.traitType);
+			if(e.traitType == MediaTraitType.PLAY)
+			{
+				
+				trace("OSMF_Player.onTraitAdd -- Content Play Trait Added " );
+				playContent();
+			}
+        }
+        
+        private function playContent():void
+		{
+			trace("Playing Content Video");
+			mediaPlayer.play();
+		}
+		
+		private function loadDocument():void
+		{
+			
+		}        
+		
+		private function onContainerChange(e:ContainerChangeEvent):void
+		{
+			trace("VAST2Sample.onContainerChange ");	
+		}	
 		
 		private function onMutePressed(event:MouseEvent):void
 		{
-			trace("onMutePressed " + mediaPlayer.muted);
-			/*
-			//This is the first use case for muting the VAST/VPAID creative
-			if(mediaPlayer.muted)
-				mediaPlayer.muted = false;
-			else
-				mediaPlayer.muted = true;
-			*/
+			if(muteBtn.visible){
+				muteBtn.visible = false;
+				unmuteBtn.visible = true;
+			}else{
+				muteBtn.visible = true;
+				unmuteBtn.visible = false;				
+			}
 			
-			//This is the second use case for muting the VAST/VPAID creative
-			if(mediaPlayer.volume != 0)
-				mediaPlayer.volume	= 0;
-			else
-				mediaPlayer.volume = volSlider.value/10;
+			if(vol != 0){
+				if(mediaPlayer.muted){
+					mediaPlayer.muted = false;	
+				}else{
+					mediaPlayer.muted = true;
+				}
+			}
 		}
-	
+		
+		private function onTimeComplete(e:TimeEvent):void
+		{
+			
+			
+		
+		}		
 	
 		private function onPauseClicked(e:MouseEvent):void
 		{
@@ -180,9 +280,17 @@ package
 	
 		private function onPlayClicked(e:MouseEvent):void
 		{
-			trace("OSMF_Player.onPlayClicked " );
+			trace("OSMF_Player.onPlayClicked " );	
+			mediaPlayer.play();	
+			
+			if(playInMediaPlayer != null)
+			{
+				var videoElement:MediaElement = MediaElement(ProxyElement(ProxyElement(playInMediaPlayer).proxiedElement).proxiedElement);
+				var timeTrait:TimeTrait = videoElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+				timeTrait.addEventListener(TimeEvent.COMPLETE, onTimeComplete);
+			}
+
 					
-			mediaPlayer.play();			
 			playBtn.visible = false;
 			pauseBtn.visible = true;
 		}
@@ -190,8 +298,8 @@ package
 		private function onMediaError(e:MediaErrorEvent):void
 		{
 			trace("OSMF_Player.onMediaError - There is an error with the player or the specified media cannot be played ");
-			//mediaPlayer.media = videoElement;
-			//videoElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			mediaPlayer.media = videoElement;	
+			videoElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 		}
 		
 		private function onFSClicked(e:MouseEvent):void
@@ -200,30 +308,18 @@ package
 			{
                 case "normal":
                     stage.displayState = "fullScreen";
-                    
- 
                     break;
                 case "fullScreen":
                 default:
                     stage.displayState = "normal";
-
                     break;
             }
-
 		}
 		
 		private function onVolChanged(e:SliderEvent):void
 		{
-			
-			
-			var vol:Number = (e.currentTarget.value/10);
-			//mediaPlayer.volume = vol;
-			trace("Slider Volume Changed " + vol );
-			mediaElementAudio = playInMediaPlayer.getTrait(MediaTraitType.AUDIO) as AudioTrait;
-			mediaElementAudio.volume = vol;
-			
+			vol = (e.currentTarget.value/10);
+			mediaPlayer.volume = vol;
 		}
-		
 	}
-		
 }

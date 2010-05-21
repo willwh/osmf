@@ -79,12 +79,6 @@ package org.osmf.vast.media
 			playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);
 			
 			super(wrappedElement);
-			dispatcher = new TraitEventDispatcher();
-			dispatcher.media = wrappedElement;
-			dispatcher.addEventListener(AudioEvent.MUTED_CHANGE, processMutedChange);
-			dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
-			dispatcher.addEventListener(TimeEvent.COMPLETE, processComplete);
-			
 			
 			if (events == null)
 			{
@@ -95,8 +89,36 @@ package org.osmf.vast.media
 		// Overrides
 		//
 		
+		override public function set proxiedElement(value:MediaElement):void
+		{
+			trace("VASTTrackingProxyElement code is running ");
+			
+			if (value != proxiedElement)
+			{
+				if (dispatcher != null)
+				{
+					dispatcher.removeEventListener(AudioEvent.MUTED_CHANGE, processMutedChange);
+					dispatcher.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+					dispatcher.removeEventListener(TimeEvent.COMPLETE, processComplete);
+					dispatcher.media = null;
+					dispatcher = null;
+				}
+	
+				if (value != null)
+				{
+					dispatcher = new TraitEventDispatcher();
+					dispatcher.media = value;
+					dispatcher.addEventListener(AudioEvent.MUTED_CHANGE, processMutedChange);
+					dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+					dispatcher.addEventListener(TimeEvent.COMPLETE, processComplete);
+				}
+			}
+
+			super.proxiedElement = value;
+		}
+		
 		/**
-		 * @private
+		 * @private 
 		 */
 		private function processMutedChange(event:AudioEvent):void
 		{
@@ -172,6 +194,7 @@ package org.osmf.vast.media
 				{
 					if (vastURL.url != null)
 					{
+						
 						var beacon:Beacon = new Beacon(vastURL.url, httpLoader);
 						beacon.ping();
 					}

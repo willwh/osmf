@@ -128,6 +128,8 @@ package org.osmf.vast.media
 				addMetadata(VASTMetadata.NAMESPACE, vastMetadata);
 				vastMetadata.addEventListener(MetadataEvent.VALUE_CHANGE, onMetadataValueChange);
 				vastMetadata.addEventListener(MetadataEvent.VALUE_ADD, onMetadataValueAdded);
+				
+				
 			}
 			
 			
@@ -368,6 +370,12 @@ package org.osmf.vast.media
 			}
 		}
 		
+		private function onTimeComplete(e:TimeEvent):void
+		{
+			mediaContainer.buttonMode = false;
+			mediaContainer.removeEventListener(MouseEvent.MOUSE_UP,onMediaElementClick);		
+		}		
+		
 		private function onLoadStateChange(e:LoadEvent):void
 		{
 			//If VAST and load error fire off load tracker
@@ -421,6 +429,13 @@ package org.osmf.vast.media
 						//trace("Firing Creative View");
 						fireEventOfType(VASTTrackingEventType.CREATIVE_VIEW);//Want to fire only for linear creatives. Nonlinear fires it's own AD_CREATIVE_VIEW
 						createClickTrhu();
+						if(ProxyElement(this.proxiedElement).proxiedElement.hasTrait(MediaTraitType.TIME))
+						{
+							
+							var timeTrait:TimeTrait = ProxyElement(this.proxiedElement).proxiedElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+							timeTrait.addEventListener(TimeEvent.COMPLETE, onTimeComplete);
+						}
+				
 					}
 				}
 				if(playTrait.playState == PlayState.PLAYING)
@@ -433,9 +448,9 @@ package org.osmf.vast.media
 		private function createClickTrhu():void
 		{
 			//Add a mouse event to the media container for clickThru support
-			var container:MediaContainer = container as MediaContainer;
-			container.buttonMode = true;
-			container.addEventListener(MouseEvent.MOUSE_UP,onMediaElementClick);		
+			mediaContainer = container as MediaContainer;
+			mediaContainer.buttonMode = true;
+			mediaContainer.addEventListener(MouseEvent.MOUSE_UP,onMediaElementClick);		
 		}
 		
 		/**
@@ -649,5 +664,6 @@ package org.osmf.vast.media
 		private var cacheBuster:CacheBuster;
 		private var mute:Boolean = false;
 		private var playerVolume:Number = 0;
+		private var mediaContainer:MediaContainer;
 	}
 }

@@ -65,9 +65,10 @@ package org.osmf.vast.media
 				 mediaFileResolver != null
 				 ? mediaFileResolver
 				 : new DefaultVASTMediaFileResolver();
+			this.mediaFactory = mediaFactory;	 
 				 
 				 vast1MediaGenerator = new VAST1MediaGenerator(mediaFileResolver, mediaFactory);
-				 vast2MediaGenerator = new VAST2MediaGenerator();
+				 vast2MediaGenerator = new VAST2MediaGenerator(DefaultVAST2MediaFileResolver(mediaFileResolver), mediaFactory);
 		}
 		
 		/**
@@ -99,6 +100,7 @@ package org.osmf.vast.media
 				}			
 		}
 		
+		private var mediaFactory:MediaFactory;
 		private var mediaFileResolver:IVASTMediaFileResolver;
 		private var vast1MediaGenerator:VAST1MediaGenerator;
 		private var vast2MediaGenerator:VAST2MediaGenerator;
