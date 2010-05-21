@@ -76,19 +76,41 @@ package org.osmf.vast.media
 			impressionsRecorded = false;
 			waitForBufferingExit = false;
 			
-			super(wrappedElement);
-			dispatcher = new TraitEventDispatcher();
-			dispatcher.media = wrappedElement;
-			
-			dispatcher.addEventListener(LoadEvent.LOAD_STATE_CHANGE, processLoadStateChange);
-			dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
-			dispatcher.addEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
-			
+			super(wrappedElement);			
 			
 			if (urls == null)
 			{
 				throw new ArgumentError(OSMFStrings.INVALID_PARAM);
 			}
+		}
+		
+		/**
+		 * @private
+		 */
+		override public function set proxiedElement(value:MediaElement):void
+		{
+			if (value != proxiedElement)
+			{
+				if (dispatcher != null)
+				{
+					dispatcher.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, processLoadStateChange);
+					dispatcher.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+					dispatcher.removeEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
+					dispatcher.media = null;
+					dispatcher = null;
+				}
+	
+				if (value != null)
+				{
+					dispatcher = new TraitEventDispatcher();
+					dispatcher.media = value;
+					dispatcher.addEventListener(LoadEvent.LOAD_STATE_CHANGE, processLoadStateChange);
+					dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+					dispatcher.addEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
+				}
+			}
+
+			super.proxiedElement = value;
 		}
 		
 		// Overrides

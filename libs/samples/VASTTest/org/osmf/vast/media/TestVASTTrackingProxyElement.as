@@ -48,7 +48,7 @@ package org.osmf.vast.media
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 6000));
 
-			var proxyElement:ProxyElement = createProxyElementWithWrappedElement();
+			var proxyElement:ProxyElement = createProxyElementWithWrappedElement(false);
 			
 			var timeTrait:TimeTrait = proxyElement.getTrait(MediaTraitType.TIME) as TimeTrait;
 			assertTrue(timeTrait != null);
@@ -116,7 +116,7 @@ package org.osmf.vast.media
 		
 		public function testPlayWithPause():void
 		{
-			doTestPlayWithPause(createProxyElementWithWrappedElement());
+			doTestPlayWithPause(createProxyElementWithWrappedElement(true));
 		}
 
 		private function doTestPlayWithPause(proxyElement:ProxyElement):void
@@ -173,7 +173,7 @@ package org.osmf.vast.media
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 
-			var proxyElement:ProxyElement = createProxyElementWithWrappedElement();
+			var proxyElement:ProxyElement = createProxyElementWithWrappedElement(false);
 						
 			var timeTrait:TimeTrait = proxyElement.getTrait(MediaTraitType.TIME) as TimeTrait;
 			assertTrue(timeTrait != null);
@@ -259,7 +259,7 @@ package org.osmf.vast.media
 			}
 		}
 
-		private function createProxyElementWithWrappedElement():ProxyElement
+		private function createProxyElementWithWrappedElement(setProperty:Boolean):ProxyElement
 		{
 			var mediaElement:DynamicMediaElement = new DynamicMediaElement
 				( [	MediaTraitType.PLAY
@@ -272,8 +272,12 @@ package org.osmf.vast.media
 			var proxyElement:ProxyElement = new VASTTrackingProxyElement
 				( createTrackingEvents()
 				, httpLoader
-				, mediaElement
+				, setProperty ? null : mediaElement
 				);
+			if (setProperty)
+			{
+				proxyElement.proxiedElement = mediaElement;
+			}
 			return proxyElement;
 		}
 		
