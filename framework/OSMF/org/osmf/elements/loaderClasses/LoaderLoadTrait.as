@@ -53,7 +53,11 @@ package org.osmf.elements.loaderClasses
 		
 		override protected function loadStateChangeStart(newState:String):void
 		{
-			if (newState == LoadState.READY)
+			if (newState == LoadState.LOADING)
+			{
+				loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onContentLoadProgress, false, 0, true);
+			}
+			else if (newState == LoadState.READY)
 			{
 				// Update to current values.
 				setBytesTotal(loader.contentLoaderInfo.bytesTotal);
