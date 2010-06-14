@@ -39,6 +39,7 @@ package org.osmf.view
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.examples.AllExamples;
+	import org.osmf.examples.Category;
 	import org.osmf.examples.Example;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
@@ -374,14 +375,17 @@ package org.osmf.view
 		
 		private function onRecomendationsOpenChange(value:String):void
 		{
-			for each (var example:Example in examples)
+			for each (var category:Category in examples)
 			{
-				if (example.name == value)
+				for each (var example:Example in category)
 				{
-					exampleTree.selectedIndex = examples.getItemIndex(example);
-					onExampleTreeSelect();
-					break;
-				}		
+					if (example.name == value)
+					{
+						exampleTree.selectedItem = example;
+						onExampleTreeSelect();
+						return;
+					}		
+				}
 			}
 		}
 		

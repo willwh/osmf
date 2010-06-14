@@ -95,10 +95,12 @@ package org.osmf.examples
 			
 			var media:Category = new Category("Media");
 			var composition:Category = new Category("Composition");
+			var proxies:Category = new Category("Proxies");
 			var layout:Category = new Category("Layout");
 			var errorHandling:Category = new Category("Error Handling");
-			var proxies:Category = new Category("Proxies");
-						
+			
+			// Core Media Examples
+			//
 			
 			media.addItem
 				( new Example
@@ -160,7 +162,6 @@ package org.osmf.examples
 				  	   	}
 				  	)
 				);
-
 
 			media.addItem
 				( new Example
@@ -265,9 +266,9 @@ package org.osmf.examples
 			
 			media.addItem
 				( new Example
-					( 	"Connection level parameters"
-						, 	"Demonstrates how url parameters are passed to both the NetConnection.connect call, and NetStream.play()."
-						,  	function():MediaElement
+					( 	"Streaming Video with Connection-level Parameters"
+					, 	"Demonstrates how parameters can be passed to both the NetConnection.connect call, and NetStream.play()."
+					,  	function():MediaElement
 						{
 							var videoElement:VideoElement = new VideoElement(new URLResource(REMOTE_STREAM + "?param1=value1&param2=value2"));
 							return videoElement;
@@ -275,83 +276,111 @@ package org.osmf.examples
 					)
 				);
 
-			errorHandling.addItem
+			media.addItem
 				( new Example
-					( 	"Invalid Progressive Video"
-					, 	"Demonstrates load failures and error handling for a progressive video with an invalid URL."
+					( 	"Streaming Video As Subclip"
+					, 	"Demonstrates playback of a subclip of a streaming video using metadata to specify the start and end times."
 				  	,  	function():MediaElement
 				  	   	{
-							return new VideoElement(new URLResource(REMOTE_INVALID_PROGRESSIVE));
+				  	   		var resource:StreamingURLResource = new StreamingURLResource(REMOTE_STREAM);
+				  	   		resource.clipStartTime = 10;
+				  	   		resource.clipEndTime = 25;
+				  	   		return new VideoElement(resource);
 				  	   	}
 				  	)
 				);
 
-			errorHandling.addItem
+			media.addItem
 				( new Example
-					( 	"Invalid Streaming Video (Bad Server)"
-					, 	"Demonstrates load failures and error handling for a streaming video with an invalid server."
+					( 	"Flash Media Manifest (F4M) with Progressive Video"
+					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for a progressive video."
 				  	,  	function():MediaElement
 				  	   	{
-							return new VideoElement(new StreamingURLResource(REMOTE_INVALID_FMS_SERVER));
+				  	   		var elem:F4MElement = new F4MElement();
+				  	   		elem.resource = new URLResource(REMOTE_MANIFEST);																
+				  	   		return elem; 
+				  	   	}
+				  	)
+				);	
+						
+			media.addItem
+				( new Example
+					( 	"Flash Media Manifest (F4M) with Dynamic Streaming Video"
+					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for dynamic streaming video."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var elem:F4MElement = new F4MElement();
+				  	   		elem.resource = new URLResource(REMOTE_MBR_MANIFEST);																
+				  	   		return elem; 
+				  	   	}
+				  	)
+				);
+				
+			media.addItem
+				( new Example
+					( 	"Streaming Video With an Injected NetConnection"
+					, 	"Demonstrates playback of a video where the NetConnection and NetStream are specified externally, rather than created by the NetLoader.  This approach is useful when you're integrating with an existing NetConnection framework.  For simplicity, this example plays a progressive video, but the approach should also work for streaming video."
+					,  	function():MediaElement
+						{
+							var netConnection:NetConnection = new NetConnection();
+							netConnection.connect(null);
+							var netStream:NetStream = new NetStream(netConnection);
+							return new VideoElement(new URLResource(REMOTE_PROGRESSIVE), new SimpleNetLoader(netConnection, netStream));
+						}
+					)
+				);
+			
+			media.addItem
+				( new Example
+					( 	"Text"
+					, 	"Demonstrates a custom MediaElement that displays text."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		return new TextElement("Hello world!"); 
 				  	   	}
 				  	)
 				);
 
-			errorHandling.addItem
+			media.addItem
 				( new Example
-					( 	"Invalid Streaming Video (Bad Stream)"
-					, 	"Demonstrates load failures and error handling for a streaming video with an valid server but an invalid stream."
+					( 	"Chromeless SWF (AS3)"
+					, 	"Demonstrates playback of a chromeless, AS3 SWF.  The SWF exposes an API that a custom MediaElement uses to control the video."
 				  	,  	function():MediaElement
 				  	   	{
-							return new VideoElement(new StreamingURLResource(REMOTE_INVALID_STREAM));
-				  	   	}
+				  	   		return new ChromelessPlayerElement(new URLResource(CHROMELESS_SWF_AS3));
+				  	   	} 
 				  	)
 				);
 
-			errorHandling.addItem
+			media.addItem
 				( new Example
-					( 	"Invalid Image"
-					, 	"Demonstrates load failures and error handling for an image with an invalid URL."
+					( 	"Chromeless SWF (Flex)"
+					, 	"Demonstrates playback of a chromeless, Flex-based SWF.  The SWF exposes an API that a custom MediaElement uses to control the video.  Note that the SWF also exposes some simple controls for playback (Play, Pause, Mute).  These buttons are included to demonstrate how the loaded SWF and the player can stay in sync."
 				  	,  	function():MediaElement
 				  	   	{
-							return new ImageElement(new URLResource(REMOTE_INVALID_IMAGE));
-				  	   	}
+				  	   		return new ChromelessPlayerElement(new URLResource(CHROMELESS_SWF_FLEX));
+				  	   	} 
 				  	)
 				);
-
-			errorHandling.addItem
+			
+			/* This example requires a local video file to be present.  To run this,
+			uncomment this section and set a valid path for LOCAL_PROGRESSIVE.
+			
+			media.addItem
 				( new Example
-					( 	"Invalid Progressive Audio"
-					, 	"Demonstrates load failures and error handling for a progressive audio file with an invalid URL."
+					( 	"Local Video"
+				  	, 	"Demonstrates playback of a local video file."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new URLResource(REMOTE_INVALID_MP3));
-				  	   	}
+				  	   		return new VideoElement(new URLResource(LOCAL_PROGRESSIVE)));
+				  	   	} 
 				  	)
 				);
+			*/
 
-			errorHandling.addItem
-				( new Example
-					( 	"Invalid Streaming Audio"
-					, 	"Demonstrates load failures and error handling for a streaming audio file with an invalid URL."
-				  	,  	function():MediaElement
-				  	   	{
-							return new AudioElement(new StreamingURLResource(REMOTE_INVALID_STREAM));
-				  	   	}
-				  	)
-				);
-
-			errorHandling.addItem
-				( new Example
-					( 	"Invalid MediaElement/MediaResource Pair"
-					, 	"Demonstrates load failures and error handling for when the resource passed to a MediaElement is of the wrong type.  In this case, an MP3 resource is passed to a VideoElement."
-				  	,  	function():MediaElement
-				  	   	{
-							return new VideoElement(new URLResource(REMOTE_MP3));
-				  	   	}
-				  	)
-				);
-
+			// Composition Examples
+			//
+			
 			composition.addItem
 				( new Example
 					( 	"Serial Composition"
@@ -378,7 +407,22 @@ package org.osmf.examples
 
 			composition.addItem
 				( new Example
-					( 	"Parallel Composition (Default Layout)"
+					(	"Serial Composition with Different Media Types"
+					,	"Demonstrates different types of MediaElements in a serial composition. Includes a 3 Second image, 5 second subclip, and a 3 second SWF."
+					,	function():MediaElement
+						{
+							var elem:SerialElement= new SerialElement();
+							elem.addChild(new DurationElement(3, new ImageElement(new URLResource(REMOTE_IMAGE))));
+							elem.addChild(new VideoElement(new StreamingURLResource(REMOTE_STREAM, StreamType.RECORDED, 0, 5)));
+							elem.addChild(new DurationElement(3,new SWFElement(new URLResource(REMOTE_SWF))));														
+							return elem;
+						}
+					)
+				);
+
+			composition.addItem
+				( new Example
+					( 	"Parallel Composition"
 					, 	"Demonstrates playback of a ParallelElement that contains two videos (one progressive, one streaming), using the default layout settings.  Note that only one video is shown.  This is because both videos use the default layout settings, and thus overlap each other."
 				  	,  	function():MediaElement
 				  	   	{
@@ -389,43 +433,7 @@ package org.osmf.examples
 				  	   	}
 				  	)
 				);
-				 
-			layout.addItem
-				( new Example
-					( 	"Parallel Composition (Adjacent)"
-					, 	"Demonstrates playback of a ParallelElement that contains two videos (one progressive, one streaming), with the videos laid out adjacently."
-				  	,  	function():MediaElement
-				  	   	{
-							var parallelElement:ParallelElement = new ParallelElement();
-							var layout:LayoutMetadata = new LayoutMetadata();
-							layout.layoutMode = LayoutMode.HORIZONTAL;
-							layout.horizontalAlign = HorizontalAlign.CENTER;
-							layout.verticalAlign = VerticalAlign.MIDDLE;
-							layout.width = 640
-							layout.height = 352;
-							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							
-							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							layout = new LayoutMetadata();
-							layout.percentWidth = 50;
-							layout.percentHeight = 50;
-							layout.scaleMode = ScaleMode.LETTERBOX;
-							mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							parallelElement.addChild(mediaElement1);
-							
-							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
-							layout = new LayoutMetadata();
-							layout.percentWidth = 50;
-							layout.percentHeight = 50;
-							layout.scaleMode = ScaleMode.LETTERBOX;
-							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							parallelElement.addChild(mediaElement2);
-							
-							return parallelElement;
-				  	   	} 
-				  	)
-				);
-
+				
 			composition.addItem
 				( new Example
 					( 	"Parallel Composition (Timed Banner)"
@@ -468,425 +476,7 @@ package org.osmf.examples
 				  	   	} 
 				  	)
 				);
-
-			composition.addItem
-				( new Example
-					( 	"Synchronized Parallel Composition"
-					, 	"Demonstrates playback of a ParallelElement that contains four videos, where all videos get paused when one of them is in a buffering state.  Note the use of LayoutMetadata to show the videos in a grid."
-				  	,  	function():MediaElement
-				  	   	{
-							var parallelElement:SynchronizedParallelElement = new SynchronizedParallelElement();
-							var layout:LayoutMetadata = new LayoutMetadata();
-							layout.horizontalAlign = HorizontalAlign.CENTER;
-							layout.verticalAlign = VerticalAlign.MIDDLE;
-							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							
-							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							layout = new LayoutMetadata();
-							layout.left = 0;
-							layout.top = 0;
-							layout.percentWidth = 50;
-							layout.percentHeight = 50;
-							mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							parallelElement.addChild(mediaElement1);
-							
-							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
-							layout = new LayoutMetadata();
-							layout.left = 0;
-							layout.bottom = 0;
-							layout.percentWidth = 50;
-							layout.percentHeight = 50;
-							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							parallelElement.addChild(mediaElement2);
-
-							var mediaElement3:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
-							layout = new LayoutMetadata();
-							layout.right = 0;
-							layout.top = 0;
-							layout.percentWidth = 50;
-							layout.percentHeight = 50;
-							mediaElement3.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							parallelElement.addChild(mediaElement3);
-							
-							var mediaElement4:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE2));
-							layout = new LayoutMetadata();
-							layout.right = 0;
-							layout.bottom = 0;
-							layout.percentWidth = 50;
-							layout.percentHeight = 50;
-							mediaElement4.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-							parallelElement.addChild(mediaElement4);
-							
-							return parallelElement;
-				  	   	} 
-				  	)
-				);
 				
-			composition.addItem
-				( new Example
-					( 	"Invalid Serial Composition"
-				  	, 	"Demonstrates load failures and error handling for a SerialElement whose second element has an invalid URL."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_PROGRESSIVE))); 
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_INVALID_STREAM)));
-							return serialElement;
-				  	   	} 
-				  	)
-				);
-
-			/* This example requires a local video file to be present.  To run this,
-			uncomment this section and set a valid path for LOCAL_PROGRESSIVE.
-			
-			examples.addItem
-				( new Example
-					( 	"Local Video"
-				  	, 	"Demonstrates playback of a local video file."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		return new VideoElement(new URLResource(LOCAL_PROGRESSIVE)));
-				  	   	} 
-				  	)
-				);
-			*/
-			composition.addItem
-				( new Example
-					( 	"Poster Frame"
-					, 	"Demonstrates the use of a SerialElement to present a poster frame prior to playback.  Note that we use a subclass of ImageElement which adds the IPlayable trait to ensure that we can play through the image."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new PosterFrameElement(new URLResource(REMOTE_IMAGE)));
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
-							return serialElement;
-				  	   	} 
-				  	)
-				);
-
-			composition.addItem
-				( new Example
-					( 	"RTMP Poster Frame"
-					, 	"Demonstrates the use of a SerialElement to present a poster frame prior to playback.  Note that we use a subclass of ImageElement which adds the IPlayable trait to ensure that we can play through the image."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var netLoader:NetLoader = new NetLoader();
-				  	   		
-							var serialElement:SerialElement = new SerialElement();
-				  	   		serialElement.addChild(new RTMPPosterFrameElement(new StreamingURLResource(REMOTE_STREAM), 5, netLoader));
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM), netLoader));
-							return serialElement; 
-				  	   	} 
-				  	)
-				);
-
-			composition.addItem
-				( new Example
-					( 	"Poster Frame At End"
-					, 	"Demonstrates the use of a SerialElement to present a poster frame at the end of playback."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
-							serialElement.addChild(new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1)));
-							return serialElement;
-						} 
-				  	)
-				);
-
-			composition.addItem
-				( new Example
-					( 	"Slideshow"
-				  	, 	"Demonstrates the use of DurationElement to present a set of images in sequence."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
-							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
-							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE3))));
-							
-							return serialElement;
-				  	   	}
-				  	)
-				);
-
-			media.addItem
-				( new Example
-					( 	"Text"
-					, 	"Demonstrates a custom MediaElement that displays text."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		return new TextElement("Hello world!"); 
-				  	   	}
-				  	)
-				);
-
-			media.addItem
-				( new Example
-					( 	"Captions"
-				  	, 	"Demonstrates the use of DurationElement to present a set of text elements in sequence."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new DurationElement(3, new TextElement("War was Beginning.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What happen ?")));
-							serialElement.addChild(new DurationElement(4, new TextElement("Mechanic: Somebody set up us the bomb.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Operator: We get signal.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What !")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Operator: Main screen turn on.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: It's you !!")));
-							serialElement.addChild(new DurationElement(3, new TextElement("CATS: How are you gentlemen !!")));
-							serialElement.addChild(new DurationElement(5, new TextElement("CATS: All your base are belong to us.")));
-							serialElement.addChild(new DurationElement(5, new TextElement("CATS: You are on the way to destruction.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What you say !!")));
-							serialElement.addChild(new DurationElement(4, new TextElement("CATS: You have no chance to survive make your time.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("CATS: Ha ha ha ha ...")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Operator: Captain !!")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: Take off every 'ZIG'!!")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: You know what you doing.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: Move 'ZIG'.")));
-							serialElement.addChild(new DurationElement(3, new TextElement("Captain: For great justice.")));
-							
-							return serialElement;
-				  	   	}
-				  	)
-				);
-
-			media.addItem
-				( new Example
-					( 	"Chromeless SWF (AS3)"
-					, 	"Demonstrates playback of a chromeless, AS3 SWF.  The SWF exposes an API that a custom MediaElement uses to control the video."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		return new ChromelessPlayerElement(new URLResource(CHROMELESS_SWF_AS3));
-				  	   	} 
-				  	)
-				);
-
-			media.addItem
-				( new Example
-					( 	"Chromeless SWF (Flex)"
-					, 	"Demonstrates playback of a chromeless, Flex-based SWF.  The SWF exposes an API that a custom MediaElement uses to control the video.  Note that the SWF also exposes some simple controls for playback (Play, Pause, Mute).  These buttons are included to demonstrate how the loaded SWF and the player can stay in sync."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		return new ChromelessPlayerElement(new URLResource(CHROMELESS_SWF_FLEX));
-				  	   	} 
-				  	)
-				);
-
-			proxies.addItem
-				( new Example
-					( 	"Video URL Changer"
-					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the URL of the video is changed during the load operation, so that instead of playing a streaming video, we play a progressive video."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		return new VideoProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
-				  	   	} 
-				  	)
-				);
-
-			proxies.addItem
-				( new Example
-					( 	"Preflight Video Loader"
-					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the custom ProxyElement performs some custom asynchronous logic after the video is loaded.  (In this case, it simply runs a Timer for 2 seconds.)  The proxy prevents the outside world from being aware that the video is loaded until that custom logic is completed."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		return new AsynchLoadingProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
-				  	   	} 
-				  	)
-				);
-
-			proxies.addItem
-				( new Example
-					( 	"Unseekable ProxyElement (Streaming Video)"
-					, 	"Demonstrates the use of a custom ProxyElement to prevent the user from seeking another MediaElement, in this case a progressive VideoElement."
-					,	function():MediaElement
-				  	   	{
-				  	  		return new UnseekableProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
-				  	   	}
-				  	)
-				);
-
-			proxies.addItem
-				( new Example
-					( 	"Switching ProxyElement (Two Videos)"
-					, 	"Demonstrates the use of a custom ProxyElement to provide a means to seamlessly switch between two MediaElements.  In this case, we switch from one video to another every five seconds."
-					,	function():MediaElement
-				  	   	{
-				  	   		var firstElement:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
-				  	   		var secondElement:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-				  	  		return new SwitchingProxyElement(firstElement, secondElement, 5, 10);
-				  	   	}
-				  	)
-				);
-
-			proxies.addItem
-				( new Example
-					( 	"Proxy-based Tracing (Dynamic Streaming Video)"
-					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a VideoElement doing dynamic streaming.  All playback events are sent to the trace console."
-					,	function():MediaElement
-				  	   	{
-							var dsResource:DynamicStreamingResource = new DynamicStreamingResource(REMOTE_MBR_STREAM_HOST);
-							for (var i:int = 0; i < 5; i++)
-							{
-								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
-							}
-				  	  		return new TraceListenerProxyElement(new VideoElement(dsResource));
-				  	   	}
-				  	)
-				);
-
-			proxies.addItem
-				( new Example
-					( 	"Proxy-based Tracing (SerialElement)"
-					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a SerialElement containing two VideoElements.  All playback events are sent to the trace console."
-				  	,  	function():MediaElement
-				  	   	{							
-							var resource:URLResource = new URLResource(REMOTE_PROGRESSIVE);
-							var resource2:URLResource = new URLResource(REMOTE_PROGRESSIVE2);
-							
-							var serial:SerialElement = new SerialElement();
-							
-							var video1:VideoElement = new VideoElement(resource);
-							video1.defaultDuration = 32;
-							var video2:VideoElement = new VideoElement(resource2);
-							video2.defaultDuration = 27;
-							
-							serial.addChild(video1); 
-							serial.addChild(video2);
-																					
-				  	   		return new TraceListenerProxyElement(serial);
-				  	   	}
-				  	)
-				);
-			
-			layout.addItem
-				( new Example
-					( 	"Dynamic Layouts"
-					, 	"Demonstrates the use of the default OSMF layout renderer to dynamically change the spatial ordering of MediaElements within compositions."
-				  	,  	function():MediaElement
-				  	   	{
-							var parallelElement:ParallelElement = new ParallelElement();
-							
-							var video1:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							var video2:VideoElement = new VideoElement(new URLResource(REMOTE_STREAM)); 
-							parallelElement.addChild(video1);
-							parallelElement.addChild(video2);
-				  	   		
-				  	   		var layoutVideo1:LayoutMetadata = new LayoutMetadata();
-							layoutVideo1.percentWidth = 50;
-							layoutVideo1.percentHeight = 50;
-							video1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutVideo1);
-							
-							var layoutVideo2:LayoutMetadata = new LayoutMetadata();
-							layoutVideo2.percentWidth = 50;
-							layoutVideo2.percentHeight = 50;
-							layoutVideo2.percentX = 50;
-							layoutVideo2.percentY = 25;
-							video2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutVideo2);
-							
-							var layoutParallelElement:LayoutMetadata = new LayoutMetadata();
-							layoutParallelElement.width = 640;
-							layoutParallelElement.height = 358;
-							layoutParallelElement.horizontalAlign = HorizontalAlign.CENTER;
-							layoutParallelElement.verticalAlign = VerticalAlign.MIDDLE;
-							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutParallelElement);
-				  	   		
-				  	   		var delta:int = 1;
-							
-							timer.delay = 20;
-							timer.repeatCount = 0;
-							timer.addEventListener
-								( TimerEvent.TIMER
-								, timerHandler = onTimer
-								);
-								
-							function onTimer(event:Event):void
-							{
-								layoutVideo1.percentWidth += delta;
-								layoutVideo1.percentHeight += delta;
-								
-								layoutVideo2.percentY += delta / 2;
-									
-								if 	(	layoutVideo1.percentWidth < 25
-									||	layoutVideo1.percentWidth > 75
-									)
-								{
-									delta = -delta;
-								}
-							}
-								
-							timer.start();
-								  	   	
-							return parallelElement;
-						}
-					,	function():void
-						{
-							timer.stop();
-							timer.reset();
-							timer.removeEventListener
-								( TimerEvent.TIMER
-								, timerHandler
-								);
-						}
-					)
-				);
-				
-			media.addItem
-				( new Example
-					( 	"BeaconElement"
-					, 	"Demonstrates the use of BeaconElement to fire tracking events.  Every few seconds, a \"ping\" is made.  If you run this example while sniffing HTTP traffic, you can see the requests being made."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var serialElement:SerialElement = new SerialElement();
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		serialElement.addChild(new DurationElement(5));
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		serialElement.addChild(new DurationElement(10));
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		serialElement.addChild(new DurationElement(2));
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		return serialElement; 
-				  	   	}
-				  	)
-				);
-
-			media.addItem
-				( new Example
-					( 	"BeaconElement with a VideoElement"
-					, 	"Demonstrates the use of BeaconElement to fire tracking events in parallel with a VideoElement."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var parallelElement:ParallelElement = new ParallelElement();
-				  	   		parallelElement.addChild(new VideoElement(new URLResource(REMOTE_PROGRESSIVE)));
-				  	   		var serialElement:SerialElement = new SerialElement();
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		serialElement.addChild(new DurationElement(5));
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		serialElement.addChild(new DurationElement(10));
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		serialElement.addChild(new DurationElement(2));
-				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
-				  	   		parallelElement.addChild(serialElement);
-				  	   		return parallelElement; 
-				  	   	}
-				  	)
-				);
-
-			media.addItem
-				( new Example
-					( 	"Streaming Video As Subclip"
-					, 	"Demonstrates playback of a subclip of a streaming video using metadata to specify the start and end times."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var resource:StreamingURLResource = new StreamingURLResource(REMOTE_STREAM);
-				  	   		resource.clipStartTime = 10;
-				  	   		resource.clipEndTime = 25;
-				  	   		return new VideoElement(resource);
-				  	   	}
-				  	)
-				);
-
 			composition.addItem
 				( new Example
 					( 	"Serial Composition With Subclips"
@@ -963,48 +553,81 @@ package org.osmf.examples
 				  	)
 				);
 			
-			media.addItem
+			composition.addItem
 				( new Example
-					( 	"Flash Media Manifest Progressive"
-					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for a progressive video."
+					( 	"BeaconElement for Analytics"
+					, 	"Demonstrates the use of BeaconElement to fire tracking events.  Every few seconds, a \"ping\" is made.  If you run this example while sniffing HTTP traffic, you can see the requests being made."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		var elem:F4MElement = new F4MElement();
-				  	   		elem.resource = new URLResource(REMOTE_MANIFEST);																
-				  	   		return elem; 
+				  	   		var serialElement:SerialElement = new SerialElement();
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		serialElement.addChild(new DurationElement(5));
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		serialElement.addChild(new DurationElement(10));
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		serialElement.addChild(new DurationElement(2));
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		return serialElement; 
 				  	   	}
 				  	)
-				);	
-						
-			media.addItem
+				);
+
+			composition.addItem
 				( new Example
-					( 	"Flash Media Manifest Dynamic Streaming"
-					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for dynamic streaming video."
+					( 	"BeaconElement with a VideoElement"
+					, 	"Demonstrates the use of BeaconElement to fire tracking events in parallel with a VideoElement."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		var elem:F4MElement = new F4MElement();
-				  	   		elem.resource = new URLResource(REMOTE_MBR_MANIFEST);																
-				  	   		return elem; 
+				  	   		var parallelElement:ParallelElement = new ParallelElement();
+				  	   		parallelElement.addChild(new VideoElement(new URLResource(REMOTE_PROGRESSIVE)));
+				  	   		var serialElement:SerialElement = new SerialElement();
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		serialElement.addChild(new DurationElement(5));
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		serialElement.addChild(new DurationElement(10));
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		serialElement.addChild(new DurationElement(2));
+				  	   		serialElement.addChild(new BeaconElement(BEACON_URL + "?random=" + Math.random()));
+				  	   		parallelElement.addChild(serialElement);
+				  	   		return parallelElement; 
 				  	   	}
 				  	)
 				);
 				
-			media.addItem
-				( new Example
-					( 	"Video With an Injected NetConnection"
-						, 	"Demonstrates playback of a video where the NetConnection and NetStream are specified externally, rather than created by the NetLoader.  This approach is useful when you're integrating with an existing NetConnection framework.  For simplicity, this example plays a progressive video, but the approach should also work for streaming video."
-						,  	function():MediaElement
-						{
-							var netConnection:NetConnection = new NetConnection();
-							netConnection.connect(null);
-							var netStream:NetStream = new NetStream(netConnection);
-							return new VideoElement(new URLResource(REMOTE_PROGRESSIVE), new SimpleNetLoader(netConnection, netStream));
-						}
-					)
-				);
 			composition.addItem
 				( new Example
-					(	"Recommendations"
+					( 	"Text Sequencing"
+				  	, 	"Demonstrates the use of DurationElement to present a set of text elements in sequence."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new DurationElement(3, new TextElement("War was Beginning.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What happen ?")));
+							serialElement.addChild(new DurationElement(4, new TextElement("Mechanic: Somebody set up us the bomb.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Operator: We get signal.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What !")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Operator: Main screen turn on.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: It's you !!")));
+							serialElement.addChild(new DurationElement(3, new TextElement("CATS: How are you gentlemen !!")));
+							serialElement.addChild(new DurationElement(5, new TextElement("CATS: All your base are belong to us.")));
+							serialElement.addChild(new DurationElement(5, new TextElement("CATS: You are on the way to destruction.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What you say !!")));
+							serialElement.addChild(new DurationElement(4, new TextElement("CATS: You have no chance to survive make your time.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("CATS: Ha ha ha ha ...")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Operator: Captain !!")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: Take off every 'ZIG'!!")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: You know what you doing.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: Move 'ZIG'.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: For great justice.")));
+							
+							return serialElement;
+				  	   	}
+				  	)
+				);
+			
+			composition.addItem
+				( new Example
+					(	"Video with Recommendations Bumper"
 					,	"Demonstrates how a recommendations bumper can be implemented."
 					,	function():MediaElement
 						{
@@ -1029,7 +652,7 @@ package org.osmf.examples
 							
 			composition.addItem
 				( new Example
-					(	"Ad insertion"
+					(	"Video with Timed Ad Insertion"
 					,	"Demonstrates how pre-, post- and midroll ads can be added in such a way that the ad durations aren't included in the main timeline.  Instead, they're shown in an overlay countdown timer."
 					,	function():MediaElement
 						{
@@ -1046,18 +669,316 @@ package org.osmf.examples
 						}
 					)
 				);
-			
+
 			composition.addItem
 				( new Example
-					(	"Sequential Compostion Different MediaTypes"
-						,	"Demonstrates different types of MediaElements in a serial composition. Includes a 3 Second image, 5 second subclip, and a 3 second swf."
-						,	function():MediaElement
+					( 	"Synchronized Parallel Composition (Video Grid)"
+					, 	"Demonstrates playback of a ParallelElement that contains four videos, where all videos get paused when one of them is in a buffering state.  Note the use of LayoutMetadata to show the videos in a grid."
+				  	,  	function():MediaElement
+				  	   	{
+							var parallelElement:SynchronizedParallelElement = new SynchronizedParallelElement();
+							var layout:LayoutMetadata = new LayoutMetadata();
+							layout.horizontalAlign = HorizontalAlign.CENTER;
+							layout.verticalAlign = VerticalAlign.MIDDLE;
+							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							
+							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
+							layout = new LayoutMetadata();
+							layout.left = 0;
+							layout.top = 0;
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement1);
+							
+							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
+							layout = new LayoutMetadata();
+							layout.left = 0;
+							layout.bottom = 0;
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement2);
+
+							var mediaElement3:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
+							layout = new LayoutMetadata();
+							layout.right = 0;
+							layout.top = 0;
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							mediaElement3.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement3);
+							
+							var mediaElement4:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE2));
+							layout = new LayoutMetadata();
+							layout.right = 0;
+							layout.bottom = 0;
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							mediaElement4.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement4);
+							
+							return parallelElement;
+				  	   	} 
+				  	)
+				);
+
+			composition.addItem
+				( new Example
+					( 	"Poster Frame"
+					, 	"Demonstrates the use of a SerialElement to present a poster frame prior to playback.  To see the poster frame, set Auto Play to false in the 'Play Options' dropdown.  Note that we use a subclass of ImageElement which adds the PlayTrait to ensure that we can play through the image."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new PosterFrameElement(new URLResource(REMOTE_IMAGE)));
+							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
+							return serialElement;
+				  	   	} 
+				  	)
+				);
+
+			composition.addItem
+				( new Example
+					( 	"RTMP Poster Frame"
+					, 	"Demonstrates the use of a SerialElement to present a poster frame from an RTMP stream prior to playback.  To see the poster frame, set Auto Play to false in the 'Play Options' dropdown.  Note that we use a subclass of ImageElement which adds the PlayTrait to ensure that we can play through the image."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var netLoader:NetLoader = new NetLoader();
+				  	   		
+							var serialElement:SerialElement = new SerialElement();
+				  	   		serialElement.addChild(new RTMPPosterFrameElement(new StreamingURLResource(REMOTE_STREAM), 5, netLoader));
+							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM), netLoader));
+							return serialElement; 
+				  	   	} 
+				  	)
+				);
+
+			composition.addItem
+				( new Example
+					( 	"Poster Frame At End"
+					, 	"Demonstrates the use of a SerialElement to present a poster frame at the end of playback."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
+							serialElement.addChild(new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1)));
+							return serialElement;
+						} 
+				  	)
+				);
+
+			composition.addItem
+				( new Example
+					( 	"Slideshow"
+				  	, 	"Demonstrates the use of DurationElement to present a set of images in sequence."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE3))));
+							
+							return serialElement;
+				  	   	}
+				  	)
+				);
+
+			// Proxy Examples
+			//
+			
+			proxies.addItem
+				( new Example
+					( 	"Unseekable ProxyElement (Streaming Video)"
+					, 	"Demonstrates the use of a custom ProxyElement to prevent the user from seeking another MediaElement, in this case a progressive VideoElement."
+					,	function():MediaElement
+				  	   	{
+				  	  		return new UnseekableProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
+				  	   	}
+				  	)
+				);
+
+			proxies.addItem
+				( new Example
+					( 	"Switching ProxyElement (Two Videos)"
+					, 	"Demonstrates the use of a custom ProxyElement to provide a means to seamlessly switch between two MediaElements.  In this case, we switch from one video to another every five seconds."
+					,	function():MediaElement
+				  	   	{
+				  	   		var firstElement:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
+				  	   		var secondElement:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
+				  	  		return new SwitchingProxyElement(firstElement, secondElement, 5, 10);
+				  	   	}
+				  	)
+				);
+
+			proxies.addItem
+				( new Example
+					( 	"Proxy-based Tracing (Dynamic Streaming Video)"
+					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a VideoElement doing dynamic streaming.  All playback events are sent to the trace console."
+					,	function():MediaElement
+				  	   	{
+							var dsResource:DynamicStreamingResource = new DynamicStreamingResource(REMOTE_MBR_STREAM_HOST);
+							for (var i:int = 0; i < 5; i++)
+							{
+								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
+							}
+				  	  		return new TraceListenerProxyElement(new VideoElement(dsResource));
+				  	   	}
+				  	)
+				);
+
+			proxies.addItem
+				( new Example
+					( 	"Proxy-based Tracing (SerialElement)"
+					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a SerialElement containing two VideoElements.  All playback events are sent to the trace console."
+				  	,  	function():MediaElement
+				  	   	{							
+							var resource:URLResource = new URLResource(REMOTE_PROGRESSIVE);
+							var resource2:URLResource = new URLResource(REMOTE_PROGRESSIVE2);
+							
+							var serial:SerialElement = new SerialElement();
+							
+							var video1:VideoElement = new VideoElement(resource);
+							video1.defaultDuration = 32;
+							var video2:VideoElement = new VideoElement(resource2);
+							video2.defaultDuration = 27;
+							
+							serial.addChild(video1); 
+							serial.addChild(video2);
+																					
+				  	   		return new TraceListenerProxyElement(serial);
+				  	   	}
+				  	)
+				);
+			
+			proxies.addItem
+				( new Example
+					( 	"Video URL Changer"
+					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the URL of the video is changed during the load operation, so that instead of playing a streaming video, we play a progressive video."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		return new VideoProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
+				  	   	} 
+				  	)
+				);
+
+			proxies.addItem
+				( new Example
+					( 	"Preflight Video Loader"
+					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the custom ProxyElement performs some custom asynchronous logic after the video is loaded.  (In this case, it simply runs a Timer for 2 seconds.)  The proxy prevents the outside world from being aware that the video is loaded until that custom logic is completed."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		return new AsynchLoadingProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
+				  	   	} 
+				  	)
+				);
+
+			// Layout Examples
+			//
+
+			layout.addItem
+				( new Example
+					( 	"Parallel Composition (Adjacent)"
+					, 	"Demonstrates playback of a ParallelElement that contains two videos (one progressive, one streaming), with the videos laid out adjacently."
+				  	,  	function():MediaElement
+				  	   	{
+							var parallelElement:ParallelElement = new ParallelElement();
+							var layout:LayoutMetadata = new LayoutMetadata();
+							layout.layoutMode = LayoutMode.HORIZONTAL;
+							layout.horizontalAlign = HorizontalAlign.CENTER;
+							layout.verticalAlign = VerticalAlign.MIDDLE;
+							layout.width = 640
+							layout.height = 352;
+							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							
+							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
+							layout = new LayoutMetadata();
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							layout.scaleMode = ScaleMode.LETTERBOX;
+							mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement1);
+							
+							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
+							layout = new LayoutMetadata();
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							layout.scaleMode = ScaleMode.LETTERBOX;
+							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement2);
+							
+							return parallelElement;
+				  	   	} 
+				  	)
+				);
+
+			layout.addItem
+				( new Example
+					( 	"Dynamic Layouts"
+					, 	"Demonstrates the use of the default OSMF layout renderer to dynamically change the spatial ordering of MediaElements within compositions."
+				  	,  	function():MediaElement
+				  	   	{
+							var parallelElement:ParallelElement = new ParallelElement();
+							
+							var video1:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
+							var video2:VideoElement = new VideoElement(new URLResource(REMOTE_STREAM)); 
+							parallelElement.addChild(video1);
+							parallelElement.addChild(video2);
+				  	   		
+				  	   		var layoutVideo1:LayoutMetadata = new LayoutMetadata();
+							layoutVideo1.percentWidth = 50;
+							layoutVideo1.percentHeight = 50;
+							video1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutVideo1);
+							
+							var layoutVideo2:LayoutMetadata = new LayoutMetadata();
+							layoutVideo2.percentWidth = 50;
+							layoutVideo2.percentHeight = 50;
+							layoutVideo2.percentX = 50;
+							layoutVideo2.percentY = 25;
+							video2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutVideo2);
+							
+							var layoutParallelElement:LayoutMetadata = new LayoutMetadata();
+							layoutParallelElement.width = 640;
+							layoutParallelElement.height = 358;
+							layoutParallelElement.horizontalAlign = HorizontalAlign.CENTER;
+							layoutParallelElement.verticalAlign = VerticalAlign.MIDDLE;
+							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutParallelElement);
+				  	   		
+				  	   		var delta:int = 1;
+							
+							timer.delay = 20;
+							timer.repeatCount = 0;
+							timer.addEventListener
+								( TimerEvent.TIMER
+								, timerHandler = onTimer
+								);
+								
+							function onTimer(event:Event):void
+							{
+								layoutVideo1.percentWidth += delta;
+								layoutVideo1.percentHeight += delta;
+								
+								layoutVideo2.percentY += delta / 2;
+									
+								if 	(	layoutVideo1.percentWidth < 25
+									||	layoutVideo1.percentWidth > 75
+									)
+								{
+									delta = -delta;
+								}
+							}
+								
+							timer.start();
+								  	   	
+							return parallelElement;
+						}
+					,	function():void
 						{
-							var elem:SerialElement= new SerialElement();
-							elem.addChild(new DurationElement(3, new ImageElement(new URLResource(REMOTE_IMAGE))));
-							elem.addChild(new VideoElement(new StreamingURLResource(REMOTE_STREAM, StreamType.RECORDED, 0, 5)));
-							elem.addChild(new DurationElement(3,new SWFElement(new URLResource(REMOTE_SWF))));														
-							return elem;
+							timer.stop();
+							timer.reset();
+							timer.removeEventListener
+								( TimerEvent.TIMER
+								, timerHandler
+								);
 						}
 					)
 				);
@@ -1065,8 +986,8 @@ package org.osmf.examples
 			layout.addItem
 				( new Example
 					(	"Picture in Picture"
-						,	"Demonstrates how to place two different videos in a composition, one large, and a small video in the corner."
-						,	function():MediaElement
+					,	"Demonstrates how to place two different videos in a composition, one large, and a small video in the corner."
+					,	function():MediaElement
 						{
 							var elem:ParallelElement= new ParallelElement();
 							var video1:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
@@ -1095,52 +1016,106 @@ package org.osmf.examples
 						}
 					)
 				);
-			/*
-			Removed due to bug in the HTMLElement.  Throws an Error when unloading.
 			
-			media.addItem(
-				new Example
-					(   "HTML Region",   "Demonstrates the use of HTML regions in an OSMF Player",
-						function():MediaElement
-						{
-							var htmlContainer:HTMLMediaContainer = new HTMLMediaContainer("bannerContainer");
-							
-							var rootElement:ParallelElement = new ParallelElement();
-							
-							var banners:SerialElement = new SerialElement();
-							rootElement.addChild(banners);
-							
-							var banner1:HTMLElement = new HTMLElement();
-							banner1.resource = new URLResource(BANNER_1);
-							banners.addChild(banner1);
-							
-							var banner2:HTMLElement = new HTMLElement();
-							banner2.resource = new URLResource(BANNER_2);
-							banners.addChild(banner2);
-							
-							var banner3:HTMLElement = new HTMLElement();
-							banner3.resource = new URLResource(BANNER_3);
-							banners.addChild(banner3);
-							
-							var video:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							rootElement.addChild(video);
-							
-							htmlContainer.addMediaElement(banner1);
-							htmlContainer.addMediaElement(banner2);
-							htmlContainer.addMediaElement(banner3);
-							return rootElement;							
-						}
-					)
-				)
-			*/
+			// Error Handling Examples
+			//
+
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid Progressive Video"
+					, 	"Demonstrates load failures and error handling for a progressive video with an invalid URL."
+				  	,  	function():MediaElement
+				  	   	{
+							return new VideoElement(new URLResource(REMOTE_INVALID_PROGRESSIVE));
+				  	   	}
+				  	)
+				);
 			
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid Streaming Video (Bad Server)"
+					, 	"Demonstrates load failures and error handling for a streaming video with an invalid server."
+				  	,  	function():MediaElement
+				  	   	{
+							return new VideoElement(new StreamingURLResource(REMOTE_INVALID_FMS_SERVER));
+				  	   	}
+				  	)
+				);
+
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid Streaming Video (Bad Stream)"
+					, 	"Demonstrates load failures and error handling for a streaming video with an valid server but an invalid stream."
+				  	,  	function():MediaElement
+				  	   	{
+							return new VideoElement(new StreamingURLResource(REMOTE_INVALID_STREAM));
+				  	   	}
+				  	)
+				);
+
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid Image"
+					, 	"Demonstrates load failures and error handling for an image with an invalid URL."
+				  	,  	function():MediaElement
+				  	   	{
+							return new ImageElement(new URLResource(REMOTE_INVALID_IMAGE));
+				  	   	}
+				  	)
+				);
+
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid Progressive Audio"
+					, 	"Demonstrates load failures and error handling for a progressive audio file with an invalid URL."
+				  	,  	function():MediaElement
+				  	   	{
+							return new AudioElement(new URLResource(REMOTE_INVALID_MP3));
+				  	   	}
+				  	)
+				);
+
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid Streaming Audio"
+					, 	"Demonstrates load failures and error handling for a streaming audio file with an invalid URL."
+				  	,  	function():MediaElement
+				  	   	{
+							return new AudioElement(new StreamingURLResource(REMOTE_INVALID_STREAM));
+				  	   	}
+				  	)
+				);
+
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid MediaElement/MediaResource Pair"
+					, 	"Demonstrates load failures and error handling for when the resource passed to a MediaElement is of the wrong type.  In this case, an MP3 resource is passed to a VideoElement."
+				  	,  	function():MediaElement
+				  	   	{
+							return new VideoElement(new URLResource(REMOTE_MP3));
+				  	   	}
+				  	)
+				);
 			
+			errorHandling.addItem
+				( new Example
+					( 	"Invalid Serial Composition"
+				  	, 	"Demonstrates load failures and error handling for a SerialElement whose second element has an invalid URL."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new VideoElement(new URLResource(REMOTE_PROGRESSIVE))); 
+							serialElement.addChild(new VideoElement(new URLResource(REMOTE_INVALID_STREAM)));
+							return serialElement;
+				  	   	} 
+				  	)
+				);
+				
 			examples.addItem(media);
 			examples.addItem(composition);
-			examples.addItem(layout);
 			examples.addItem(proxies);
-			examples.addItem(errorHandling);
-						
+			examples.addItem(layout);
+			examples.addItem(errorHandling);	
 		
 			return examples;
 		}
