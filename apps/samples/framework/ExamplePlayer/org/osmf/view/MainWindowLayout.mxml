@@ -371,7 +371,7 @@
 	</mx:HBox>
 
 	<mx:HBox
-		filters				="{textFilters}"
+		filters					="{textFilters}"
 		id						="errorDetailBox"
 		color					="white"
 		right					="10"

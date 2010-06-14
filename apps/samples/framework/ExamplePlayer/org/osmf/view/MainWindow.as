@@ -70,8 +70,12 @@ package org.osmf.view
 			//
 			
 			examples = AllExamples.examples;
-			exampleTree.dataProvider = examples;
 			exampleTree.labelField = "name";
+			exampleTree.dataTipField = "name";
+			exampleTree.showDataTips = true;
+			exampleTree.dataProvider = examples;
+			exampleTree.validateNow();
+			exampleTree.expandChildrenOf(examples[0], true);
 			
 			// Add UI event handlers.
 			//
