@@ -47,6 +47,7 @@ package org.osmf.view
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
+	import org.osmf.media.MediaPlayerState;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.Version;
 	
@@ -277,7 +278,7 @@ package org.osmf.view
 
 		private function onCurrentTimeChange(event:TimeEvent):void
 		{
-			if (mediaPlayer.seeking == false && mediaPlayer.buffering == false)
+			if (mediaPlayer.state != MediaPlayerState.BUFFERING)
 			{
 				position.text = "" + Math.round(event.time);
 	
