@@ -116,6 +116,26 @@ package org.osmf.net
 			assertEquals(-1, index);
 		}
 		
+		public function testDynamicStreamingResourceFM925():void
+		{
+			var dsr:DynamicStreamingResource = new DynamicStreamingResource(HOSTNAME);
+			
+			// Test adding items. 
+			dsr.streamItems.push(new DynamicStreamingItem("stream_1?arg1=15&arg2=20", bitrates[3]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_2", bitrates[5]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_3?arg1=15&arg2=20", bitrates[0]));
+			dsr.streamItems.push(new DynamicStreamingItem("mp4:stream_4", bitrates[2]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_5?arg1=15&arg2=20", bitrates[4]));
+			dsr.streamItems.push(new DynamicStreamingItem("mp4:stream_6", bitrates[1]));
+			
+			assertTrue(dsr.indexFromName("stream_1") == 0);
+			assertTrue(dsr.indexFromName("stream_2") == 1);
+			assertTrue(dsr.indexFromName("stream_3") == 2);
+			assertTrue(dsr.indexFromName("stream_4") == 3);
+			assertTrue(dsr.indexFromName("stream_5") == 4);
+			assertTrue(dsr.indexFromName("stream_6") == 5);
+		}
+		
 		private var bitrates:Array = [400, 900, 900, 1200, 3000, 3500]; 
 		private const HOSTNAME:String = "rtmp://hostname.com/ondemand";
 	}
