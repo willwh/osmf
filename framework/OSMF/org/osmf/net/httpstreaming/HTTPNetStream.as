@@ -1431,7 +1431,7 @@ package org.osmf.net.httpstreaming
 			// Do nothing if this is not an Argo player.
 			CONFIG::FLASH_10_1
 			{
-				super.appendBytes(bytes);
+				appendBytes(bytes);
 			}
 		}
 		

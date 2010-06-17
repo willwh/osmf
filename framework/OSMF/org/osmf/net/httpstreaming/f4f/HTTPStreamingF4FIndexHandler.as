@@ -202,7 +202,13 @@ package org.osmf.net.httpstreaming.f4f
 				if (pendingIndexUpdates == 0)
 				{
 					fragmentRunTablesUpdating = false;
-					notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale, indexContext as int);
+// FM-924, onMetadata is called twice on http streaming live/dvr content 
+// It is really unnecessary to call onMetadata multiple times. The change of
+// media length is fixed for VOD, and is informed by the call dispatchDVRStreamInfo
+// for DVR. For "pure live", it does not really matter. Whenever MBR switching
+// happens, onMetadata will be called by invoking checkMetadata method.
+// 
+//					notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale, indexContext as int);
 					dispatchDVRStreamInfo(bootstrapBox);
 				}
 			}
