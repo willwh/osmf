@@ -146,7 +146,9 @@ package org.osmf.net
 		{
 			for (var i:int = 0; i < _streamItems.length; i++) 
 			{
-				if (name == _streamItems[i].streamName || "mp4:" + name == _streamItems[i].streamName) 
+				// FM-925, stream name may be appended with parameters.
+				if (_streamItems[i].streamName.indexOf(name) == 0 ||
+					_streamItems[i].streamName.indexOf("mp4:" + name) == 0)  
 				{
 					return i;
 				}
