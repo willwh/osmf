@@ -32,10 +32,10 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
-	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
@@ -243,7 +243,15 @@ package org.osmf.elements.f4mClasses
 			}
 			if (value.attribute("endOffset").length() > 0)
 			{
-				dvrInfo.endOffset =  Math.max(0, parseInt(value.@endOffset));
+				var v:Number = new Number(value.@endOffset);
+				if (v > 0 && v < 1.0)
+				{
+					dvrInfo.endOffset = 1;
+				}
+				else
+				{
+					dvrInfo.endOffset =  Math.max(0, v);
+				}
 			}
 			if (value.attribute("offline").length() > 0)
 			{
