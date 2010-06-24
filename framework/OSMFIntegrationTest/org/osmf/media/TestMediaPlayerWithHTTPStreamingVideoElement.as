@@ -51,14 +51,16 @@ package org.osmf.media
 			this.invalidResource = null;
 		}
 
-		override public function testAutoPlay():void
-		{
 			/*
 			 * There is a bug with MediaPlayer that causes this test to fail, FM-853.
 			 * It is too late to fix MediaPlayer. Therefore, we temporarily disable
 			 * the test for HTTPNetStream unit tests. 
 			 */
+/*
+		override public function testAutoPlay():void
+		{
 		}
+*/
 		
 		protected function createHTTPStreamingNetLoader():HTTPStreamingNetLoader
 		{
@@ -122,7 +124,7 @@ package org.osmf.media
 						recorded
 					</streamType>
 					<duration>
-						6
+						6.0599999999999996
 					</duration>
 					<bootstrapInfo
 						 profile="named"
@@ -144,9 +146,9 @@ package org.osmf.media
 			return parser.parse(xml.toXMLString(), SINGLE_STREAM_VOD_F4M_URL);
 		}
 
-		private var parser:ManifestParser;
+		protected var parser:ManifestParser;
 		private var invalidResource:URLResource;
 		
-		private static const SINGLE_STREAM_VOD_F4M_URL:String = "http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Unprotected/235/barsandtone.f4m";
+		private static const SINGLE_STREAM_VOD_F4M_URL:String = "http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Unprotected/235/testVideoElement/barsandtone.f4m";
 	}
 }

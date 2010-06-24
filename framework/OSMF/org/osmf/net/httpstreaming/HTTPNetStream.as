@@ -48,9 +48,9 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
+	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
-	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 
 	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
 	
@@ -259,6 +259,7 @@ package org.osmf.net.httpstreaming
 			super.play(null);
 			
 			// Playback is considered to start when we first append some bytes.
+/*			
 			dispatchEvent
 				( new NetStatusEvent
 					( NetStatusEvent.NET_STATUS
@@ -266,7 +267,10 @@ package org.osmf.net.httpstreaming
 					, false
 					, {code:NetStreamCodes.NETSTREAM_PLAY_START, level:"status"}
 					)
-				); 
+				);
+*/				 
+			
+			_signalPlayStartPending = true;
 			
 			// Before we feed any TCMessages to the Flash Player, we must feed
 			// an FLV header first.
@@ -318,6 +322,18 @@ package org.osmf.net.httpstreaming
 			}
 
 			_unpublishNotifyPending = false;
+		}
+		
+		private function signalPlayStart():void
+		{
+			dispatchEvent
+				( new NetStatusEvent
+					( NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_START, level:"status"}
+					)
+				); 
 		}
 		
 		/**
@@ -964,6 +980,11 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.LOAD:
 					
 					var nextRequest:HTTPStreamRequest;
+					if (_signalPlayStartPending)
+					{
+						signalPlayStart();
+						_signalPlayStartPending = false;
+					}
 			
 					// XXX the double test of _prevState in here is a little weird... might want to factor differently
 					
@@ -1505,6 +1526,7 @@ package org.osmf.net.httpstreaming
 		
 		private var _dvrInfo:DVRInfo = null;
 		private var _unpublishNotifyPending:Boolean = false;
+		private var _signalPlayStartPending:Boolean = false;
 		
 		CONFIG::LOGGING
 		{
