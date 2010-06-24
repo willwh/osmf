@@ -22,7 +22,6 @@
 package org.osmf.net.httpstreaming
 {
 	import flash.events.NetStatusEvent;
-	import flash.net.NetStream;
 	
 	import org.osmf.net.*;
 	
@@ -44,6 +43,14 @@ package org.osmf.net.httpstreaming
 		override protected function processFinishLoading(loadTrait:NetStreamLoadTrait):void
 		{
 			netStream = loadTrait.netStream as HTTPNetStream;
+			var resource:StreamingURLResource = loadTrait.resource as StreamingURLResource;
+			if (resource != null)
+			{
+				if (resource.streamType == "live")
+				{
+					netStream.bufferTime = 4;
+				}
+			}
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);			
 			super.processFinishLoading(loadTrait);			
 		}
@@ -59,7 +66,7 @@ package org.osmf.net.httpstreaming
 				else
 				{
 					netStream.bufferTime = 2.0;
-				}						
+				}	
 			}
 		}
 		
