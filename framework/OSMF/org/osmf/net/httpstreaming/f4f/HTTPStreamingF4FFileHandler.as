@@ -26,7 +26,13 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
-
+	
+	CONFIG::LOGGING
+	{			
+		import org.osmf.logging.Log;
+		import org.osmf.logging.Logger;
+	}
+	
 	[ExcludeClass]
 
 	/**
@@ -188,6 +194,12 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (this._bytesNeeded > 0)
 			{
+				CONFIG::LOGGING
+				{			
+					logger.error("_bytesNeeded: " + this._bytesNeeded );
+					logger.error( "******* bytesNeeded bigger than expected potentially because fragment format is wrong!" );
+				}
+				
 				dispatchEvent(
 					new HTTPStreamingFileHandlerEvent(
 						HTTPStreamingFileHandlerEvent.NOTIFY_ERROR, 
@@ -317,5 +329,10 @@ package org.osmf.net.httpstreaming.f4f
 		private var _processRequestWasSeek:Boolean = false;
 		
 		private static const MAX_BYTES_PER_MDAT_READ:uint = 5*1024;
+		
+		CONFIG::LOGGING
+		{
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler");
+		}
 	}
 }

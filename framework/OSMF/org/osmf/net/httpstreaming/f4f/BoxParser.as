@@ -202,6 +202,12 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (_ba == null || _ba.bytesAvailable < 8)
 			{
+				CONFIG::LOGGING
+				{
+					logger.error( "******* not enough length for readLongUIntToNumer" );
+					logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+				}
+				
 				throw new IllegalOperationError("not enough length for readLongUIntToNumer");
 			}
 			
@@ -226,6 +232,12 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (_ba == null || _ba.bytesAvailable < 4)
 			{
+				CONFIG::LOGGING
+				{
+					logger.error( "******* not enough length for readUnsignedInt" );
+					logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+				}
+				
 				throw new IllegalOperationError("not enough length for readUnsignedInt");
 			}
 			
@@ -253,6 +265,12 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (_ba == null || _ba.bytesAvailable < length)
 			{ 
+				CONFIG::LOGGING
+				{
+					logger.error( "******* not enough length for readBytes: " + length );
+					logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+				}
+				
 				throw new IllegalOperationError("not enough length for readBytes: " + length);
 			}
 			
@@ -275,6 +293,12 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (_ba == null || _ba.bytesAvailable < 1)
 			{
+				CONFIG::LOGGING
+				{
+					logger.error( "not enough length for readUnsingedByte" );
+					logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+				}
+				
 				throw new IllegalOperationError("not enough length for readUnsingedByte");
 			}
 			
@@ -298,11 +322,23 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (_ba == null || _ba.bytesAvailable < length)
 			{
+				CONFIG::LOGGING
+				{
+					logger.error( "not enough length for readUnsingedByte" );
+					logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+				}
+				
 				throw new IllegalOperationError("not enough length for readUnsingedByte");
 			}
 			
 			if (length > 4) 
 			{
+				CONFIG::LOGGING
+				{
+					logger.error( "length for readUnsingedByte must be equal or less than 4 bytes; length: " + length );
+					logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+				}
+				
 				throw new IllegalOperationError("number of bytes to read must be equal or less than 4");
 			}
 	
@@ -428,6 +464,12 @@ package org.osmf.net.httpstreaming.f4f
 				}
 				else
 				{
+					CONFIG::LOGGING
+					{
+						logger.error( "Unexpected data structure: " + boxInfo.type );
+						logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+					}
+					
 					throw new IllegalOperationError("Unexpected data structure: " + boxInfo.type);
 				}
 			}
@@ -446,6 +488,12 @@ package org.osmf.net.httpstreaming.f4f
 				}
 				else
 				{
+					CONFIG::LOGGING
+					{
+						logger.error( "Unexpected data structure: " + boxInfo.type );
+						logger.error( "******* probable cause: malformed BOOTSTRAP data" );
+					}
+					
 					throw new IllegalOperationError("Unexpected data structure: " + boxInfo.type);
 				}
 			}

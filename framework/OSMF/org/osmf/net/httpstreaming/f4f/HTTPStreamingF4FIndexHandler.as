@@ -100,6 +100,12 @@ package org.osmf.net.httpstreaming.f4f
 			f4fIndexInfo = indexInfo as HTTPStreamingF4FIndexInfo;
 			if (f4fIndexInfo == null || f4fIndexInfo.streamInfos == null || f4fIndexInfo.streamInfos.length <= 0)
 			{
+				CONFIG::LOGGING
+				{			
+					logger.error("f4fIndexInfo: " + f4fIndexInfo );
+					logger.error( "******* F4M wrong or contains insufficient information!" );
+				}
+				
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
 				return;					
 			}
@@ -119,6 +125,12 @@ package org.osmf.net.httpstreaming.f4f
 				var bootstrap:BootstrapInfo = streamInfos[i].bootstrapInfo;
 				if (bootstrap == null || (bootstrap.url == null && bootstrap.data == null))
 				{
+					CONFIG::LOGGING
+					{			
+						logger.error("bootstrap: " + bootstrap );
+						logger.error( "******* bootstrap null or contains inadequate information!" );
+					}
+					
 					dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
 					return;					
 				}
@@ -127,6 +139,12 @@ package org.osmf.net.httpstreaming.f4f
 					bootstrapBox = processBootstrapData(bootstrap.data, null);
 					if (bootstrapBox == null)
 					{
+						CONFIG::LOGGING
+						{			
+							logger.error("bootstrap.data: " + bootstrap.data );
+							logger.error( "******* bootstrapBox is null, potentially from bad bootstrap data!" );
+						}
+						
 						dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
 						return;					
 					}
@@ -178,6 +196,18 @@ package org.osmf.net.httpstreaming.f4f
 			var index:int = indexContext as int;
 			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, index);
 
+			if (bootstrapBox == null)
+			{
+				CONFIG::LOGGING
+				{			
+					logger.error( "******* bootstrapBox is null when attempting to process index data during a bootstrap update for" +
+						"live or live+dvr stream!" );
+				}
+				
+				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+				return;					
+			}
+			
 			CONFIG::LOGGING
 			{			
 				logger.debug("processIndexData: " + index + " pendingIndexUpdates: " + pendingIndexUpdates);
@@ -186,12 +216,6 @@ package org.osmf.net.httpstreaming.f4f
 					" fragments from segment run table: " + bootstrapBox.segmentRunTables[0].totalFragments);
 			}
 			
-			if (bootstrapBox == null)
-			{
-				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
-				return;					
-			}
-
 			if (!fragmentRunTablesUpdating) 
 			{
 				pendingIndexLoads--;

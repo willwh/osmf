@@ -48,9 +48,9 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
-	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
+	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 
 	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
 	
@@ -1262,6 +1262,13 @@ package org.osmf.net.httpstreaming
 			
 			function onIndexURLError(errorEvent:Event):void
 			{
+				CONFIG::LOGGING
+				{			
+					logger.error("URLStream: " + _urlStreamVideo );
+					logger.error("index url error: " + errorEvent );
+					logger.error( "******* attempting to download the index file (bootstrap) caused error!" );
+				}
+				
 				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadComplete);
 				urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexURLError);
 				urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLError);
@@ -1309,7 +1316,14 @@ package org.osmf.net.httpstreaming
 		}
 		
 		private function onVideoURLError(event:Event):void
-		{			
+		{		
+			CONFIG::LOGGING
+			{			
+				logger.error("URLStream: " + _urlStreamVideo );
+				logger.error("video error event: " + event );
+				logger.error( "******* attempting to download video fragment caused error event!" );
+			}
+				
 			handleURLError();
 		}
 		
