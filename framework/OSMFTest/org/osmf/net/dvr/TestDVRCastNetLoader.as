@@ -22,6 +22,7 @@
 package org.osmf.net.dvr
 {
 	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.net.StreamingURLResource;
 
 	public class TestDVRCastNetLoader extends TestCaseEx
 	{
@@ -29,6 +30,21 @@ package org.osmf.net.dvr
 		{
 			var nl:DVRCastNetLoader = new DVRCastNetLoader();
 			assertNotNull(nl);
+		}
+		
+		
+		public function testFM934():void
+		{
+			// This unit test is derived based on bug FM-934. It makes sure that
+			// DVRCastNetLoader.canHandleResource is not fooled by a bogus dvr streamType
+			// without corresponding metadata under DVRCastConstants.STREAM_INFO_KEY and
+			// DVRCastConstants.RECORDING_INFO_KEY.
+			var nl:DVRCastNetLoader = new DVRCastNetLoader();
+			assertNotNull(nl);
+			
+			var resource:StreamingURLResource 
+				= new StreamingURLResource("http://catherine.corp.adobe.com/seq/bmw_beacons.f4v", "dvr");
+			assertTrue(!nl.canHandleResource(resource));
 		}
 		
 	}
