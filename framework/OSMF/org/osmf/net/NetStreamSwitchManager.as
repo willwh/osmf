@@ -271,8 +271,22 @@ package org.osmf.net
 
 			nso.start = playArgs.start;
 			nso.len = playArgs.len;
+
 			nso.streamName = dsResource.streamItems[targetIndex].streamName;
-			nso.oldStreamName = oldStreamName;
+			//
+			// FM-925, it seems that the oldStreamName cannot contain parameters,
+			// therefore we must remove them
+			//
+			var sn:String = oldStreamName;
+			if (sn != null && sn.indexOf("?") >= 0)
+			{
+				nso.oldStreamName = sn.substr(0, sn.indexOf("?"));
+			}
+			else
+			{
+				nso.oldStreamName = oldStreamName;
+			}
+
 			nso.transition = NetStreamPlayTransitions.SWITCH;
 			
 			CONFIG::LOGGING
