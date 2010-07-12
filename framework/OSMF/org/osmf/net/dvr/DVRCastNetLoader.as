@@ -80,11 +80,7 @@ package org.osmf.net.dvr
 				var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
 				if (streamingURLResource)
 				{
-					var streamInfo:DVRCastStreamInfo = resource.getMetadataValue(DVRCastConstants.STREAM_INFO_KEY) as DVRCastStreamInfo;
-					var recordingInfo:DVRCastRecordingInfo = resource.getMetadataValue(DVRCastConstants.RECORDING_INFO_KEY) as DVRCastRecordingInfo;
-					
-					result = 
-						(streamingURLResource.streamType == StreamType.DVR && streamInfo != null && recordingInfo != null);
+					result = (streamingURLResource.streamType == StreamType.DVR && streamingURLResource.url.indexOf("rtmp") == 0);
 				}
 			}
 			
