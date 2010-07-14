@@ -211,6 +211,7 @@ package org.osmf.net
 				case PROTOCOL_RTMPT:
 				case PROTOCOL_RTMPE:
 				case PROTOCOL_RTMPTE:
+				case PROTOCOL_RTMFP:
 					startLoadingRTMP(loadTrait);
 					break;
 				case PROTOCOL_HTTP:
@@ -391,6 +392,7 @@ package org.osmf.net
 		private static const PROTOCOL_RTMPT:String = "rtmpt";
 		private static const PROTOCOL_RTMPE:String = "rtmpe";
 		private static const PROTOCOL_RTMPTE:String = "rtmpte";
+		private static const PROTOCOL_RTMFP:String = "rtmfp";
 		private static const PROTOCOL_HTTP:String = "http";
 		private static const PROTOCOL_HTTPS:String = "https";
 		private static const PROTOCOL_FILE:String = "file";

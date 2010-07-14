@@ -362,6 +362,15 @@ package org.osmf.utils
 		 **/
 		public static const DVRCAST_STREAM_INFO_RETRIEVAL_FAILED:String	= "dvrCastStreamInfoRetrievalFailed";
 		
+		/**
+		 * @private
+		 **/
+		public static const MULTICAST_NETGROUP_CONNECT_FAILED:String	= "multicastNetGroupConnectFailed";
+		
+		/**
+		 * @private
+		 **/
+		public static const MULTICAST_NETGROUP_CONNECT_REJECTED:String	= "multicastNetGroupConnectRejected";
 		
 		private static const resourceDict:Dictionary = new Dictionary();
 		{
@@ -430,6 +439,8 @@ package org.osmf.utils
 			resourceDict[DVRCAST_SUBSCRIBE_FAILED]					= "DVRCast subscribe failed";
 			resourceDict[DVRCAST_CONTENT_OFFLINE]					= "DVRCast content is offline and unavailable";
 			resourceDict[DVRCAST_STREAM_INFO_RETRIEVAL_FAILED]		= "Unable to retrieve DVRCast stream info";
+			resourceDict[MULTICAST_NETGROUP_CONNECT_FAILED]			= "The NetGroup connection attempt failed";
+			resourceDict[MULTICAST_NETGROUP_CONNECT_REJECTED]		= "The NetGroup is not authorized to function";
 			
 			resourceDict["missingStringResource"]					= "No string for resource {0}";
 		}

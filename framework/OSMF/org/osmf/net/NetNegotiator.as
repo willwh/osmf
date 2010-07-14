@@ -38,12 +38,19 @@ package org.osmf.net
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.utils.Timer;
+	CONFIG::FLASH_10_1	
+	{
+		import flash.net.NetGroup;
+	}
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.net.multicast.MulticastInfo;
+	import org.osmf.net.multicast.MulticastNetLoader;
 	
 	/**
 	 * Dispatched when the factory has successfully created and connected a NetConnection.
@@ -149,6 +156,14 @@ package org.osmf.net
     		netConnections[attemptIndex].addEventListener(SecurityErrorEvent.SECURITY_ERROR, onNetSecurityError, false, 0, true);
     		netConnections[attemptIndex].addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError, false, 0, true);
 			netConnections[attemptIndex].client = new NetClient();
+			
+			var info:MulticastInfo = resource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo;
+			if (info != null)
+			{
+				NetConnection(netConnections[attemptIndex]).connect(info.serverUrl);
+				return;
+			}
+			
 			try 
 			{
 				var host:String = netConnectionURLs[attemptIndex];
@@ -253,6 +268,29 @@ package org.osmf.net
 					}
 					
 					shutDownUnsuccessfulConnections();
+					
+					var info:MulticastInfo = resource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo;
+					if (info != null)
+					{
+						CONFIG::FLASH_10_1	
+						{
+							formNetGroup(event.currentTarget as NetConnection, info, resource);
+						}
+					}
+					else
+					{
+						dispatchEvent
+							( new NetConnectionFactoryEvent
+								( NetConnectionFactoryEvent.CREATION_COMPLETE
+								, false
+								, false
+								, event.currentTarget as NetConnection
+								, resource
+								)
+							);
+					}
+					break;					
+				case "NetGroup.Connect.Success":
 					dispatchEvent
 						( new NetConnectionFactoryEvent
 							( NetConnectionFactoryEvent.CREATION_COMPLETE
@@ -262,10 +300,64 @@ package org.osmf.net
 							, resource
 							)
 						);
+					break;		
+				case "NetGroup.Connect.Failed":
+					CONFIG::LOGGING
+					{
+						logger.info(event.info.code);
+					}				
+					dispatchEvent(new MediaErrorEvent(
+						MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.MULTICAST_NETGROUP_CONNECT_FAILED)));
+					break;
+				case "NetGroup.Connect.Rejected":
+					CONFIG::LOGGING
+					{
+						logger.info(event.info.code);
+					}				
+					dispatchEvent(new MediaErrorEvent(
+						MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.MULTICAST_NETGROUP_CONNECT_REJECTED)));
+					break;
+				case "NetGroup.MulticastStream.PublishNotify":
+				case "NetGroup.MulticastStream.UnpublishNotify":
+				case "NetStream.Publish.Start":
+				case "NetGroup.Neighbor.Connect":
+				case "NetGroup.Neighbor.Disconnect":
+				case "NetGroup.Posting.Notify":
+				case "NetGroup.LocalCoverage.Notify":
+				case "NetGroup.SendTo.Notify":
+					CONFIG::LOGGING
+					{
+						logger.info(event.info.code);
+					}				
+					// additional events that could fire, but nothing we're concerned about right now
+					// the MulticastStream events can be useful if more streams are published into the group
+					// or if you want to do something when streams start/stop
 					break;
 			}
 		}
-
+		
+		CONFIG::FLASH_10_1	
+		{
+			private function formNetGroup(connection:NetConnection, info:MulticastInfo, resource:URLResource):void
+			{
+				var ng:NetGroup;
+				var loader:MulticastNetLoader = resource.getMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER) as MulticastNetLoader;
+				if (loader == null)
+				{
+					ng = new NetGroup(connection, info.rtmfpGroupspec);
+					CONFIG::LOGGING
+					{
+						logger.info("MulticastNetLoader/derived class returns null NetGroup, NetNegotiator will create one");
+					}				
+				}
+				
+				if (ng == null)
+				{
+					ng = loader.createNetGroup(connection, info.rtmfpGroupspec);
+				}
+			}
+		}
+		
   		/** 
 		 * Closes down all parallel connections in the netConnections vector which are not connected.
 		 * Also shuts down the master timeout and attempt timers. 

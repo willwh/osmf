@@ -98,6 +98,16 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 **/
+		public static const MULTICAST_INFO:String						= "http://www.osmf.org/multicast/info/1.0";
+		
+		/**
+		 * @private
+		 **/
+		public static const MULTICAST_NET_LOADER:String						= "http://www.osmf.org/multicast/netloader/1.0";
+
+		/**
+		 * @private
+		 **/
 		public static const DVR_METADATA:String							= "http://www.osmf.org/dvr/1.0";
 
 		/**

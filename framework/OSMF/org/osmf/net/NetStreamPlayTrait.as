@@ -34,6 +34,8 @@ package org.osmf.net
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.net.multicast.MulticastInfo;
 
 	[ExcludeClass]
 	
@@ -124,8 +126,16 @@ package org.osmf.net
 					}
 					else
 					{
-						// Play the clip (or the requested portion of the clip).
-						doPlay(streamName, startTime, len);
+						var info:MulticastInfo = urlResource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo;
+						if (info != null)
+						{
+							doPlay(info.rtmfpStreamName, startTime, len);
+						}
+						else
+						{
+							// Play the clip (or the requested portion of the clip).
+							doPlay(streamName, startTime, len);
+						}
 					}
 				}
 			}

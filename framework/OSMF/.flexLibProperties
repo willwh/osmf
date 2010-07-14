@@ -250,6 +250,7 @@
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagAudio"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagVideo"/>
+    <classEntry path="org.osmf.net.multicast.MulticastNetLoader"/>
     <classEntry path="org.osmf.net.rtmpstreaming.DroppedFramesRule"/>
     <classEntry path="org.osmf.net.rtmpstreaming.InsufficientBandwidthRule"/>
     <classEntry path="org.osmf.net.rtmpstreaming.InsufficientBufferRule"/>
