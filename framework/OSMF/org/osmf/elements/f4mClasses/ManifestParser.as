@@ -152,7 +152,6 @@ package org.osmf.elements.f4mClasses
 			if (value.attribute('url').length() > 0)
 			{
 				media.url = value.@url;
-				media.multicastInfo.serverUrl = media.url;
 			}
 			else  // Raise parse error
 			{
@@ -187,12 +186,12 @@ package org.osmf.elements.f4mClasses
 			
 			if (value.attribute('rtmfpGroupspec').length() > 0)
 			{
-				media.multicastInfo.rtmfpGroupspec = value.@rtmfpGroupspec;
+				media.rtmfpGroupspec = value.@rtmfpGroupspec;
 			}
 			
 			if (value.attribute('rtmfpStreamName').length() > 0)
 			{
-				media.multicastInfo.rtmfpStreamName = value.@rtmfpStreamName;
+				media.rtmfpStreamName = value.@rtmfpStreamName;
 			}
 			
 			if (value.xmlns::moov.length() > 0)
@@ -499,13 +498,8 @@ package org.osmf.elements.f4mClasses
 				{
 					resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
 				}								
-				if (media.multicastInfo != null && 
-					media.multicastInfo.rtmfpGroupspec.length > 0 && 
-					media.multicastInfo.rtmfpStreamName.length > 0 &&
-					media.multicastInfo.serverUrl.length > 0)
-				{
-					resource.addMetadataValue(MetadataNamespaces.MULTICAST_INFO, media.multicastInfo);
-				}			
+				resource.rtmfpGroupspec = media.rtmfpGroupspec;
+				resource.rtmfpStreamName = media.rtmfpStreamName;
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
 			{

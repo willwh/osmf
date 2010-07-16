@@ -87,6 +87,8 @@ package org.osmf.net
 							, connectionArguments:Vector.<Object> = null
 							, urlIncludesFMSApplicationInstance:Boolean = false
 							, drmContentData:ByteArray = null
+							, rtmfpGroupspec:String = null
+							, rtmfpStreamName:String = null
 							)
 		{
 			_streamType = streamType || StreamType.RECORDED;
@@ -97,6 +99,8 @@ package org.osmf.net
 			
 			_connectionArguments = connectionArguments;
 			
+			_rtmfpGroupspec = rtmfpGroupspec;
+			_rtmfpStreamName = rtmfpStreamName;
 			
 			super(url);
 		}
@@ -227,11 +231,39 @@ package org.osmf.net
 			_urlIncludesFMSApplicationInstance = value;
 		}
 		
+		/**
+		 * The group spec string for RTMFP multicasting.
+		 **/
+		public function get rtmfpGroupspec():String
+		{
+			return _rtmfpGroupspec;
+		}
+		
+		public function set rtmfpGroupspec(value:String):void
+		{
+			_rtmfpGroupspec = value;
+		}
+		
+		/**
+		 * The stream name string for RTMFP multicasting.
+		 **/
+		public function get rtmfpStreamName():String
+		{
+			return _rtmfpStreamName;
+		}
+		
+		public function set rtmfpStreamName(value:String):void
+		{
+			_rtmfpStreamName = value;
+		}
+		
 		private var _streamType:String; // StreamType
 		private var _clipStartTime:Number;
 		private var _clipEndTime:Number;
 		private var _connectionArguments:Vector.<Object>;
 		private var _drmContentData:ByteArray;
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
+		private var _rtmfpGroupspec:String;
+		private var _rtmfpStreamName:String;
 	}
 }

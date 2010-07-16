@@ -49,7 +49,6 @@ package org.osmf.net
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.multicast.MulticastInfo;
 	import org.osmf.net.multicast.MulticastNetLoader;
 	
 	/**
@@ -157,10 +156,14 @@ package org.osmf.net
     		netConnections[attemptIndex].addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError, false, 0, true);
 			netConnections[attemptIndex].client = new NetClient();
 			
-			var info:MulticastInfo = resource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo;
-			if (info != null)
+			var rs:StreamingURLResource = resource as StreamingURLResource;
+			var loader:MulticastNetLoader = resource.getMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER) as MulticastNetLoader;
+			if (loader != null &&
+				rs != null &&
+				rs.rtmfpGroupspec != null &&
+				rs.rtmfpGroupspec.length > 0)
 			{
-				NetConnection(netConnections[attemptIndex]).connect(info.serverUrl);
+				NetConnection(netConnections[attemptIndex]).connect(rs.url);
 				return;
 			}
 			
@@ -269,12 +272,16 @@ package org.osmf.net
 					
 					shutDownUnsuccessfulConnections();
 					
-					var info:MulticastInfo = resource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo;
-					if (info != null)
+					var rs:StreamingURLResource = resource as StreamingURLResource;
+					var loader:MulticastNetLoader = resource.getMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER) as MulticastNetLoader;
+					if (loader != null && 
+						rs != null &&
+						rs.rtmfpGroupspec != null &&
+						rs.rtmfpGroupspec.length > 0)
 					{
 						CONFIG::FLASH_10_1	
 						{
-							formNetGroup(event.currentTarget as NetConnection, info, resource);
+							formNetGroup(event.currentTarget as NetConnection, rs.rtmfpGroupspec, loader);
 						}
 					}
 					else
@@ -338,22 +345,18 @@ package org.osmf.net
 		
 		CONFIG::FLASH_10_1	
 		{
-			private function formNetGroup(connection:NetConnection, info:MulticastInfo, resource:URLResource):void
+			private function formNetGroup(connection:NetConnection, rtmfpGroupspec:String, loader:MulticastNetLoader):void
 			{
 				var ng:NetGroup;
-				var loader:MulticastNetLoader = resource.getMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER) as MulticastNetLoader;
-				if (loader == null)
+				ng = loader.createNetGroup(connection, rtmfpGroupspec);
+
+				if (ng == null)
 				{
-					ng = new NetGroup(connection, info.rtmfpGroupspec);
 					CONFIG::LOGGING
 					{
 						logger.info("MulticastNetLoader/derived class returns null NetGroup, NetNegotiator will create one");
-					}				
-				}
-				
-				if (ng == null)
-				{
-					ng = loader.createNetGroup(connection, info.rtmfpGroupspec);
+					}
+					ng = new NetGroup(connection, rtmfpGroupspec);
 				}
 			}
 		}

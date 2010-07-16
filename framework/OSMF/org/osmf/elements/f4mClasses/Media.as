@@ -131,13 +131,23 @@ package org.osmf.elements.f4mClasses
 		public var height:Number;
 		
 		/**
-		 * Store multicast relevant information if the media is an RTMFP multicast stream
+		 * Store multicast group spec string
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var multicastInfo:MulticastInfo = new MulticastInfo();
+		public var rtmfpGroupspec:String;
+		
+		/**
+		 * Store multicast stream name
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var rtmfpStreamName:String;
 	}
 }

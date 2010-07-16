@@ -33,6 +33,7 @@ package org.osmf.net.multicast
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.net.StreamingURLResource;
 
 	public class MulticastNetLoader extends NetLoader
 	{
@@ -51,7 +52,9 @@ package org.osmf.net.multicast
 		
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
-			return (resource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo) != null;
+			var rs:StreamingURLResource = resource as StreamingURLResource;
+
+			return rs != null && rs.rtmfpGroupspec != null && rs.rtmfpGroupspec.length > 0 && rs.rtmfpStreamName != null && rs.rtmfpStreamName.length > 0;
 		}
 
 		override protected function executeLoad(loadTrait:LoadTrait):void
@@ -62,8 +65,8 @@ package org.osmf.net.multicast
 		
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			var info:MulticastInfo = resource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo;
-			var ns:NetStream = new NetStream(connection, info.rtmfpGroupspec);
+			var rs:StreamingURLResource = resource as StreamingURLResource;
+			var ns:NetStream = new NetStream(connection, rs.rtmfpGroupspec);
 			ns.bufferTime = 5.0;
 			
 			return ns;

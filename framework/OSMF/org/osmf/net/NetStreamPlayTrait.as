@@ -35,7 +35,6 @@ package org.osmf.net
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.multicast.MulticastInfo;
 
 	[ExcludeClass]
 	
@@ -126,10 +125,10 @@ package org.osmf.net
 					}
 					else
 					{
-						var info:MulticastInfo = urlResource.getMetadataValue(MetadataNamespaces.MULTICAST_INFO) as MulticastInfo;
-						if (info != null)
+						var rs:StreamingURLResource = urlResource as StreamingURLResource;
+						if (rs != null && rs.rtmfpGroupspec != null && rs.rtmfpGroupspec.length > 0)
 						{
-							doPlay(info.rtmfpStreamName, startTime, len);
+							doPlay(rs.rtmfpStreamName, startTime, len);
 						}
 						else
 						{
