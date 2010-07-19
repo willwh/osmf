@@ -207,18 +207,6 @@ package
 						);
 						
 				factory.addItem(item);
-				
-				var multicastLoader:MulticastNetLoader = new MulticastNetLoader();
-				item = new MediaFactoryItem
-						( MULTICAST_ID
-						, multicastLoader.canHandleResource
-						, function():MediaElement
-							{
-								return new VideoElement(null, multicastLoader);
-							}
-						);
-
-				factory.addItem(item);
 			}
 			
 			return factory;
@@ -306,7 +294,6 @@ package
 		{
 			private const HTTPSTREAM_ITEM_ID:String = "org.osmf.elements.video.httpstreaming";
 			private const HTTPSTREAM_WITH_BUFFER_CONTROL_ITEM_ID:String = "com.adobe.osmfplayer.elements.video.httpstreaming";
-			private const MULTICAST_ID:String = "com.adobe.osmfplayer.elements.video.multicast";
 		}
 		
 		private var httpStreamingLoader:HTTPStreamingNetLoaderWithBufferControl;
