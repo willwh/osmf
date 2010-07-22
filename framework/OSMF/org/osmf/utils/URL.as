@@ -340,8 +340,12 @@ package org.osmf.utils
 				return;
 			}
 			
+			if (_rawUrl == "rtmfp:")
+			{
+				protocol = "rtmfp";
+			}
 			// Check to see if this is a relative path, meaning there is no protocol specified
-			if (_rawUrl.search(/:\//) == -1)
+			else if (_rawUrl.search(/:\//) == -1)
 			{
 				path = _rawUrl;
 			}

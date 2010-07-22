@@ -428,7 +428,7 @@ package org.osmf.elements.f4mClasses
 					baseURLString = manifestFolder;
 				}
 				
-				if (isAbsoluteURL(url))
+				if (isAbsoluteURL(url) || multicastURL(url))
 				{
 					resource = new StreamingURLResource(url, value.streamType);
 				}				
@@ -612,6 +612,11 @@ package org.osmf.elements.f4mClasses
 		{
 			var theURL:URL = new URL(url);
 			return theURL.absolute;
+		}
+		
+		private function multicastURL(url:String):Boolean
+		{
+			return url.indexOf("rtmfp:") == 0;
 		}
 		
 		private function extractDRMMetadata(data:ByteArray):ByteArray
