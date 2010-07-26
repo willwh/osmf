@@ -449,9 +449,18 @@ package org.osmf.elements
 			var timeTrait:TimeTrait = (trait = loadTrait.getTrait(MediaTraitType.TIME)) as TimeTrait; 
 			if (timeTrait == null)
 			{
-				timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration)
+				var streamingURLResource:StreamingURLResource = loadTrait.resource as StreamingURLResource;
+				if (streamingURLResource == null ||
+					streamingURLResource.rtmfpGroupspec == null ||
+					streamingURLResource.rtmfpGroupspec.length <= 0)
+				{
+					timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration)
+				}
 			}
-			addTrait(MediaTraitType.TIME, timeTrait);
+			if (timeTrait != null)
+			{
+				addTrait(MediaTraitType.TIME, timeTrait);
+			}
 			
 			trait = loadTrait.getTrait(MediaTraitType.DISPLAY_OBJECT);
 			addTrait
