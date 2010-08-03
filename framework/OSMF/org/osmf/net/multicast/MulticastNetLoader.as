@@ -125,6 +125,9 @@ package org.osmf.net.multicast
 			return ns;
 		}
 		
-		private var netGroups:Vector.<NetGroup>;
+		CONFIG::FLASH_10_1	
+		{
+			private var netGroups:Vector.<NetGroup>;
+		}
 	}
 }
