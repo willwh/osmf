@@ -115,7 +115,10 @@ package org.osmf.net.multicast
 		{
 			var rs:StreamingURLResource = resource as StreamingURLResource;
 			var ns:NetStream = new NetStream(connection, rs.rtmfpGroupspec);
-			ns.bufferTime = 5.0;
+			if (ns != null)
+			{
+				ns.bufferTime = 5.0;
+			}
 			
 			return ns;
 		}
