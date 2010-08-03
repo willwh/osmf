@@ -57,7 +57,10 @@ package org.osmf.net.multicast
 		{
 			super(factory);
 			
-			netGroups = new Vector.<NetGroup>();
+			CONFIG::FLASH_10_1	
+			{
+				netGroups = new Vector.<NetGroup>();
+			}
 		}
 		
 		CONFIG::FLASH_10_1	
