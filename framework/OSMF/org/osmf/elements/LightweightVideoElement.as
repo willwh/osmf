@@ -447,20 +447,13 @@ package org.osmf.elements
 	    	addTrait(MediaTraitType.BUFFER, trait || new NetStreamBufferTrait(stream));
 			
 			var timeTrait:TimeTrait = (trait = loadTrait.getTrait(MediaTraitType.TIME)) as TimeTrait; 
+
 			if (timeTrait == null)
 			{
-				var streamingURLResource:StreamingURLResource = loadTrait.resource as StreamingURLResource;
-				if (streamingURLResource == null ||
-					streamingURLResource.rtmfpGroupspec == null ||
-					streamingURLResource.rtmfpGroupspec.length <= 0)
-				{
-					timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration)
-				}
+				timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration);
 			}
-			if (timeTrait != null)
-			{
-				addTrait(MediaTraitType.TIME, timeTrait);
-			}
+			addTrait(MediaTraitType.TIME, timeTrait);
+			
 			
 			trait = loadTrait.getTrait(MediaTraitType.DISPLAY_OBJECT);
 			addTrait

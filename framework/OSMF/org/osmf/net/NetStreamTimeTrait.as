@@ -60,6 +60,13 @@ package org.osmf.net
 			{
 				setDuration(defaultDuration);
 			}
+			
+			var streamResource:StreamingURLResource = resource as StreamingURLResource;
+			if (streamResource != null && streamResource.rtmfpGroupspec != null && streamResource.rtmfpGroupspec.length > 0)
+			{
+				multicast = true;
+				setDuration(Number.MAX_VALUE);
+			}	
 		}
 		
 		/**
@@ -67,6 +74,11 @@ package org.osmf.net
 		 */
 		override public function get currentTime():Number
 		{
+			if (multicast)
+			{
+				return 0;
+			}
+			
 			// If at the end of the video, make sure the duration matches the currentTime.  
 			// Work around for FP-3724.  Only apply duration offset at the end - or else the seek(0) doesn't goto 0.
 			if (durationOffset == (duration - (netStream.time - audioDelay)))  
@@ -156,5 +168,6 @@ package org.osmf.net
 		private var audioDelay:Number = 0;
 		private var netStream:NetStream;
 		private var resource:MediaResourceBase;
+		private var multicast:Boolean = false;
 	}
 }
