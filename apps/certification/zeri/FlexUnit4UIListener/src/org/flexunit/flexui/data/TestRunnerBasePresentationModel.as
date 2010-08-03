@@ -295,7 +295,7 @@ package org.flexunit.flexui.data
 			 mediaRow.streamType = mediaDescription.streamType;
 			 mediaRow.description = mediaDescription.description;
 			 mediaRow.testStep = failure ? mediaDescription.testStep : -1;
-			 rowToAdd = mediaRow;
+			 rowToAdd = mediaRow as TestFunctionRowData;
 			 descriptor = getMediaDescriptorFromDescription( mediaDescription );
 		 }
 		 else

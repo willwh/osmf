@@ -4,17 +4,7 @@
       <!-- Turn on generatation of accessible swfs. -->
       <accessible>false</accessible>
       
-      <define>
-        <name>CONFIG::LOGGING</name>
-        <value>false</value>
-      </define>
-
-      <define>
-        <name>CONFIG::FLASH_10_1</name>
-        <value>false</value>
-      </define>
-
-	  <!-- Specifies the locales for internationalization. -->
+      <!-- Specifies the locales for internationalization. -->
       <locale>
           <locale-element>en_US</locale-element>
       </locale>
@@ -60,7 +50,7 @@
       <library-path>
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
-         <path-element>../../../build/lib/OSMF.swc</path-element>
+         <path-element>../../../../build/certification/zeri/OSMF.swc</path-element>
          <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
          <path-element>${flexlib}/libs/air/airframework.swc</path-element>
       </library-path>
@@ -321,10 +311,10 @@
 	 
    <!-- Metadata added to SWFs via the SWF Metadata tag. -->
    <metadata>
-      <title>MediaFrameworkTest</title>
-      <description>MediaFrameworkTest</description>
-      <publisher>Wei Zhang</publisher>
-      <creator>Wei Zhang</creator>
+      <title>MediaContainerUIComponent</title>
+      <description>MediaContainerUIComponent</description>
+      <publisher>Brian Riggs</publisher>
+      <creator>Brian Riggs</creator>
       <language>EN</language>
    </metadata>
    
