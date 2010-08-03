@@ -34,22 +34,62 @@ package org.osmf.net.multicast
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.net.StreamingURLResource;
+	import __AS3__.vec.Vector;
+	import flash.net.NetGroup;
 
+	/**
+	 * The MulticastNetLoader class extends NetLoader to provide
+	 * loading support to multicast video playback.
+	 * <p> It expects the media resource to be StreamingURLResource, in which
+	 * rtmfpGroupspec and rtmfpStreamName are specified.
+	 *
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.5
+	 */
 	public class MulticastNetLoader extends NetLoader
 	{
+		/**
+		 * @private
+		 * @inheritDoc
+		**/
 		public function MulticastNetLoader(factory:NetConnectionFactoryBase=null)
 		{
 			super(factory);
+			
+			netGroups = new Vector.<NetGroup>();
 		}
 		
 		CONFIG::FLASH_10_1	
 		{
+			/**
+			 * The factory function for creating a NetGroup.
+			 * 
+			 * @param connection The NetConnection that's associated with the NetStreamSwitchManagerBase.
+			 * @param rtmfpGroupspec The rtmfp GroupSpec that is used to create the NetGroup.
+			 * 
+			 * @return The NetGroup.
+			 **/
 			public function createNetGroup(connection:NetConnection, rtmfpGroupspec:String):NetGroup
 			{
-				return new NetGroup(connection, rtmfpGroupspec);
+				var ng:NetGroup = new NetGroup(connection, rtmfpGroupspec);
+				netGroups.push(ng);
+				
+				return ng;
 			}
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * The MulticastNetLoader returns true if the resource is an instance of StreamingURLResource with
+		 * both rtmfpGroupspec and rtmfpStreamName set.
+		 * 
+		 * @param resource The URL of the source media.
+		 * @return Returns <code>true</code> for StreamingURLResource which it can load
+		 * @inheritDoc
+		**/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var rs:StreamingURLResource = resource as StreamingURLResource;
@@ -57,12 +97,20 @@ package org.osmf.net.multicast
 			return rs != null && rs.rtmfpGroupspec != null && rs.rtmfpGroupspec.length > 0 && rs.rtmfpStreamName != null && rs.rtmfpStreamName.length > 0;
 		}
 
+		/**
+		 * @private
+		 * @inheritDoc
+		**/
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
 			loadTrait.resource.addMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER, this);
 			super.executeLoad(loadTrait);
 		}
 		
+		/**
+		 * @private
+		 * @inheritDoc
+		**/
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
 			var rs:StreamingURLResource = resource as StreamingURLResource;
@@ -71,5 +119,7 @@ package org.osmf.net.multicast
 			
 			return ns;
 		}
+		
+		private var netGroups:Vector.<NetGroup>;
 	}
 }
