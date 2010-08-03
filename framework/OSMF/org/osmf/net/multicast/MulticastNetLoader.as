@@ -75,13 +75,10 @@ package org.osmf.net.multicast
 			 **/
 			public function createNetGroup(connection:NetConnection, rtmfpGroupspec:String):NetGroup
 			{
-/*				
 				var ng:NetGroup = new NetGroup(connection, rtmfpGroupspec);
 				netGroups.push(ng);
 				
 				return ng;
-*/
-				return new NetGroup(connection, rtmfpGroupspec);
 			}
 		}
 		
