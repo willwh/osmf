@@ -35,7 +35,6 @@ package org.osmf.net.multicast
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.net.StreamingURLResource;
 	import __AS3__.vec.Vector;
-	import flash.net.NetGroup;
 
 	/**
 	 * The MulticastNetLoader class extends NetLoader to provide
@@ -73,10 +72,13 @@ package org.osmf.net.multicast
 			 **/
 			public function createNetGroup(connection:NetConnection, rtmfpGroupspec:String):NetGroup
 			{
+/*				
 				var ng:NetGroup = new NetGroup(connection, rtmfpGroupspec);
 				netGroups.push(ng);
 				
 				return ng;
+*/
+				return new NetGroup(connection, rtmfpGroupspec);
 			}
 		}
 		
