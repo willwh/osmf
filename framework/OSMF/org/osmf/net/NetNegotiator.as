@@ -163,6 +163,11 @@ package org.osmf.net
 				rs.rtmfpGroupspec != null &&
 				rs.rtmfpGroupspec.length > 0)
 			{
+				CONFIG::LOGGING
+				{
+					logger.info("Attempting multicast connection to " + rs.url);
+				}
+
 				NetConnection(netConnections[attemptIndex]).connect(rs.url);
 				return;
 			}
@@ -298,6 +303,10 @@ package org.osmf.net
 					}
 					break;					
 				case "NetGroup.Connect.Success":
+					CONFIG::LOGGING
+					{
+						logger.info("NetGroup connected");
+					}
 					dispatchEvent
 						( new NetConnectionFactoryEvent
 							( NetConnectionFactoryEvent.CREATION_COMPLETE
@@ -347,6 +356,11 @@ package org.osmf.net
 		{
 			private function formNetGroup(connection:NetConnection, rtmfpGroupspec:String, loader:MulticastNetLoader):void
 			{
+				CONFIG::LOGGING
+				{
+					logger.info("Attempting create a NetGroup with rtmfpGroupspec " + rtmfpGroupspec);
+				}
+
 				var ng:NetGroup;
 				ng = loader.createNetGroup(connection, rtmfpGroupspec);
 
