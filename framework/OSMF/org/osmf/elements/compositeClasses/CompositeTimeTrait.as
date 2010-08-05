@@ -212,7 +212,14 @@ package org.osmf.elements.compositeClasses
 				
 				if (allHaveReachedDuration)
 				{
-					dispatchEvent(new TimeEvent(TimeEvent.COMPLETE));
+					if (super.currentTime != this.duration)	
+					{
+						this.updateCurrentTime();				
+					}
+					else
+					{
+						dispatchEvent(new TimeEvent(TimeEvent.COMPLETE));
+					}
 				}
 			}
 			else // SERIAL
