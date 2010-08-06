@@ -61,6 +61,7 @@ package org.osmf.elements.f4mClasses
 		public function parse(value:String, rootUrl:String=null):Manifest
 		{
 			var manifest:Manifest = new Manifest();
+			var isMulticast:Boolean = false;
 			
 			var root:XML = new XML(value);
 						
@@ -115,9 +116,18 @@ package org.osmf.elements.f4mClasses
 			for each (var media:XML in root.xmlns::media)
 			{
 				var newMedia:Media = parseMedia(media, baseUrl);
+				if (newMedia.rtmfpGroupspec != null && newMedia.rtmfpGroupspec.length > 0)
+				{
+					isMulticast = true;
+				}
 				manifest.media.push(newMedia);
 				bitrateMissing ||= isNaN(newMedia.bitrate);
 			}	
+			
+			if (isMulticast)
+			{
+				manifest.streamType = StreamType.LIVE;
+			}
 			
 			if (manifest.media.length > 1 && bitrateMissing)
 			{
