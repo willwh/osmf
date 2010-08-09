@@ -34,6 +34,7 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.net.httpstreaming.HTTPStreamRequest;
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 
 	CONFIG::LOGGING 
@@ -162,7 +163,7 @@ package org.osmf.net.httpstreaming.f4f
 								, NaN
 								, null
 								, null
-								, new URLRequest(bootstrap.url)
+								, new URLRequest(HTTPStreamingUtils.normalizeURL(bootstrap.url))
 								, i
 								, true
 								)
@@ -541,7 +542,7 @@ package org.osmf.net.httpstreaming.f4f
 						, NaN
 						, null
 						, null
-						, new URLRequest((streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url)
+						, new URLRequest(HTTPStreamingUtils.normalizeURL((streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url))
 						, quality
 						, true
 						)

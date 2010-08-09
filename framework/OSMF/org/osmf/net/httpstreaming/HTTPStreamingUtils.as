@@ -29,9 +29,9 @@ package org.osmf.net.httpstreaming
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
-	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	
 	[ExcludeClass]
 	
@@ -106,6 +106,54 @@ package org.osmf.net.httpstreaming
 			}
 			
 			return indexInfo;
+		}
+		
+		public static function normalizeURL(url:String):String
+		{
+			var ret:String = "";
+			var protocol:String = "";
+			var temp:String;
+			
+			if (url.indexOf("http://") == 0)
+			{
+				protocol = "http://";
+			}
+			else if (url.indexOf("https://") == 0)
+			{
+				protocol = "https://";
+			}
+			
+			if (protocol.length > 0)
+			{
+				temp = url.substr(protocol.length);
+			}
+			else
+			{
+				temp = url;
+			}
+			
+			var items:Array = temp.split("/");
+			var index:int = items.indexOf("..");
+			while (index >= 0)
+			{
+				items.splice(index - 1, 2);
+				index = items.indexOf("..");
+			}				
+			
+			ret = protocol;
+			if (items.length > 0)
+			{
+				for (var i:int = 0; i < items.length; i++)
+				{
+					if (i != 0)
+					{
+						ret += "/";
+					}
+					ret += items[i] as String;
+				}
+			}
+			
+			return ret;
 		}
 		
 		private static function generateDVRInfo(metadata:Metadata):DVRInfo

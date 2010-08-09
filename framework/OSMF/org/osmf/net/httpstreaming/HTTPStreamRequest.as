@@ -47,7 +47,7 @@ package org.osmf.net.httpstreaming
 			
 			if (url)
 			{
-				_urlRequest = new URLRequest(url);
+				_urlRequest = new URLRequest(HTTPStreamingUtils.normalizeURL(url));
 			}
 			else
 			{
