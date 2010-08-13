@@ -516,7 +516,14 @@ package org.osmf.net.httpstreaming
 			{
 				if (_initialTime < 0)
 				{
-					_initialTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
+					if (_dvrInfo != null)
+					{
+						_initialTime = _dvrInfo.startTime;
+					}
+					else
+					{
+						_initialTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
+					}
 				}
 				
 				if (_seekTime < 0)
