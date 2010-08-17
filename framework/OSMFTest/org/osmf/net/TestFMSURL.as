@@ -318,5 +318,22 @@ package org.osmf.net
 			assertEquals(fmsURL.origins.length, 1);
 			assertEquals(fmsURL.origins[0].host, "myorigin");
 		}
+		
+		public function testFM943():void
+		{
+			var fmsURL:FMSURL = new FMSURL("rtmp://llnwqa.fcod.llnwd.net/a1218/o18/mp4:lexsamplecontent/king_500.f4v", true);
+			assertEquals(fmsURL.protocol, "rtmp");			
+			assertEquals(fmsURL.host, "llnwqa.fcod.llnwd.net");
+			assertEquals(fmsURL.streamName, "mp4:lexsamplecontent/king_500.f4v");
+			var serverUrl:String = fmsURL.protocol + "://" + fmsURL.host + ((fmsURL.port != null && fmsURL.port.length > 0)? ":" + fmsURL.port : "") + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:""); 
+			assertEquals(serverUrl, "rtmp://llnwqa.fcod.llnwd.net/a1218/o18");
+				
+			fmsURL = new FMSURL("rtmp://llnwqa.fcod.llnwd.net/a1218/o18/_definst_/mp4:lexsamplecontent/king_500.f4v", true);
+			assertEquals(fmsURL.protocol, "rtmp");			
+			assertEquals(fmsURL.host, "llnwqa.fcod.llnwd.net");
+			assertEquals(fmsURL.streamName, "mp4:lexsamplecontent/king_500.f4v");
+			serverUrl = fmsURL.protocol + "://" + fmsURL.host + ((fmsURL.port != null && fmsURL.port.length > 0)? ":" + fmsURL.port : "") + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:""); 
+			assertEquals(serverUrl, "rtmp://llnwqa.fcod.llnwd.net/a1218/o18/_definst_");
+		}
 	}
 }

@@ -57,6 +57,16 @@ package org.osmf.elements.f4mClasses
 		public var baseURL:String;
 				
 		/**
+		 * Indicate whether the media URL includes FMS application instance. This is only applicable to RTMP URLs.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var urlIncludesFMSApplicationInstance:Boolean = false;
+
+		/**
 		 * The &lt;duration&gt; element represents the duration of the media, in seconds. 
 		 * It is assumed that all representations of the media have the same duration, 
 		 * hence its placement under the document root. It is optional.

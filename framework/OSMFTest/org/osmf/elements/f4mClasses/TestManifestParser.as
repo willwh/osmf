@@ -631,6 +631,36 @@ package org.osmf.elements.f4mClasses
 						
 		}
 		
-				
+		public function testFM956():void
+		{
+			var test:XML = 
+				<manifest xmlns="http://ns.adobe.com/f4m/1.0"> 
+					<id>Stream with instance name</id> 
+					<baseURL>rtmp://llnwqa.fcod.llnwd.net/a1218/o18/_definst_/</baseURL> 
+					<urlIncludesFMSApplicationInstance>true</urlIncludesFMSApplicationInstance>
+					<media url="mp4:lexsamplecontent/king_500.f4v" width="480" height="270"/> 
+				</manifest>; 
+			var manifest:Manifest = parser.parse(test);
+			assertTrue(manifest.urlIncludesFMSApplicationInstance);
+
+			test = 
+				<manifest xmlns="http://ns.adobe.com/f4m/1.0"> 
+					<id>Stream with instance name</id> 
+					<baseURL>rtmp://llnwqa.fcod.llnwd.net/a1218/o18/_definst_/</baseURL> 
+					<urlIncludesFMSApplicationInstance>false</urlIncludesFMSApplicationInstance>
+					<media url="mp4:lexsamplecontent/king_500.f4v" width="480" height="270"/> 
+				</manifest>; 
+			manifest = parser.parse(test);
+			assertTrue(!manifest.urlIncludesFMSApplicationInstance);
+
+			test = 
+				<manifest xmlns="http://ns.adobe.com/f4m/1.0"> 
+					<id>Stream with instance name</id> 
+					<baseURL>rtmp://llnwqa.fcod.llnwd.net/a1218/o18/_definst_/</baseURL> 
+					<media url="mp4:lexsamplecontent/king_500.f4v" width="480" height="270"/> 
+				</manifest>; 
+			manifest = parser.parse(test);
+			assertTrue(!manifest.urlIncludesFMSApplicationInstance);
+		}				
 	}
 }

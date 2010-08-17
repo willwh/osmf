@@ -100,6 +100,11 @@ package org.osmf.elements.f4mClasses
 				manifest.baseURL = root.xmlns::baseURL.text();
 			}
 			
+			if (root.xmlns::urlIncludesFMSApplicationInstance.length() > 0)
+			{
+				manifest.urlIncludesFMSApplicationInstance = (root.xmlns::urlIncludesFMSApplicationInstance.text() == "true");
+			}
+			
 			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL :  rootUrl;
 			
 			// DVRInfo
@@ -451,6 +456,8 @@ package org.osmf.elements.f4mClasses
 					resource = new StreamingURLResource(manifestFolder + "/" + url, streamType(value));
 				}
 				
+				resource.urlIncludesFMSApplicationInstance = value.urlIncludesFMSApplicationInstance;
+				
 				if (media.bootstrapInfo	!= null)
 				{
 					serverBaseURLs = new Vector.<String>();
@@ -522,6 +529,7 @@ package org.osmf.elements.f4mClasses
 				// assumes the latter.  For now, we only support the latter input, but we should
 				// add support for the former (absolute URLs with no base URL).
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, streamType(value));
+				dynResource.urlIncludesFMSApplicationInstance = value.urlIncludesFMSApplicationInstance;
 				
 				var streamItems:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();
 				

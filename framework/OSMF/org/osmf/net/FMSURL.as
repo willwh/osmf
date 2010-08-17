@@ -251,6 +251,14 @@ package org.osmf.net
 	 				_fileFormat = getParamValue(QUERY_STRING_STREAMTYPE);
 	 			}					 		
  			}		
+			
+			var prefixStart:int = _streamName.indexOf("/mp4:");
+			if (useInstance && prefixStart > 0)
+			{
+				_instanceName += "/";
+				_instanceName += _streamName.substr(0, prefixStart);
+				_streamName = streamName.substr(prefixStart + 1);
+			} 
 		}
 		
 		/**
@@ -373,6 +381,14 @@ package org.osmf.net
 					}
 					_edges.push(new FMSHost(tempSN, tempPN));
 				}
+			}
+
+			var prefixStart:int = _streamName.indexOf("/mp4:");
+			if (useInstance && prefixStart > 0)
+			{
+				_instanceName += "/";
+				_instanceName += _streamName.substr(0, prefixStart);
+				_streamName = streamName.substr(prefixStart + 1);
 			} 
 		}
 		

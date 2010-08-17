@@ -296,7 +296,7 @@ package org.osmf.net
 		protected function createNetConnectionKey(resource:URLResource):String
 		{
 			var fmsURL:FMSURL = new FMSURL(resource.url);
-			return fmsURL.protocol + fmsURL.host + fmsURL.port + fmsURL.appName;
+			return fmsURL.protocol + fmsURL.host + fmsURL.port + fmsURL.appName + fmsURL.instanceName;
 		}
 		
 		/**
