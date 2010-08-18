@@ -464,10 +464,10 @@ package org.osmf.net
 				
 				nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
 				
-				var streamingResource:StreamingURLResource = loadTrait.resource as StreamingURLResource;
+				var resource:URLResource = loadTrait.resource as URLResource;
 				var urlIncludesFMSApplicationInstance:Boolean = 
-						streamingResource ? streamingResource.urlIncludesFMSApplicationInstance : false;
-				var streamName:String = NetStreamUtils.getStreamNameFromURL(streamingResource.url, urlIncludesFMSApplicationInstance);
+						(resource as StreamingURLResource) != null ? (resource as StreamingURLResource).urlIncludesFMSApplicationInstance : false;
+				var streamName:String = NetStreamUtils.getStreamNameFromURL(resource.url, urlIncludesFMSApplicationInstance);
 				
 				nsPlayOptions.streamName = streamName; 			
 				loadTrait.netStream.play2(nsPlayOptions);

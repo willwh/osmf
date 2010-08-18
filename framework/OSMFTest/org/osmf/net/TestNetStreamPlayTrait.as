@@ -52,7 +52,7 @@ package org.osmf.net
 
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new NetStreamPlayTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
+			return new NetStreamPlayTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO), false);
 		}
 
 		private var netFactory:NetFactory;
