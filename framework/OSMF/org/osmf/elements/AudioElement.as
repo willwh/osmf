@@ -201,7 +201,17 @@ package org.osmf.elements
 				
 				stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 				
-				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
+				var reconnectStreams:Boolean = false;
+
+				CONFIG::FLASH_10_1	
+				{
+					if (loader is NetLoader)
+					{
+						reconnectStreams = (loader as NetLoader).reconnectStreams;
+					}
+				}
+				
+				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource, reconnectStreams));
 				timeTrait = new NetStreamTimeTrait(stream, resource, defaultDuration);
 				addTrait(MediaTraitType.TIME, timeTrait);
 				addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, loadTrait, stream));

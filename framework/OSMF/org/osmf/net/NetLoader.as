@@ -25,9 +25,14 @@ package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.NetStatusEvent;
+	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
+	import flash.net.NetStreamPlayTransitions;
 	import flash.utils.Dictionary;
+	import flash.utils.Timer;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -41,6 +46,11 @@ package org.osmf.net
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.URL;
+	CONFIG::LOGGING
+	{			
+		import org.osmf.logging.Log;
+	}
+	
 
 	/**
 	 * The NetLoader class extends LoaderBase to provide
@@ -70,20 +80,70 @@ package org.osmf.net
 		 * NetConnectionFactory class facilitates connection sharing, this is an easy way of
 		 * enabling global sharing, by creating a single NetConnectionFactory instance within
 		 * the player and then handing it to all NetLoader instances.
-		 *  
+		 * 
+		 * @param reconnectStreams Specifies whether or not the class should attempt to reconnect
+		 * to the stream. Both Flash Player 10.1 and Flash Media Server 3.5.3 are required.
+		 *   
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetLoader(factory:NetConnectionFactoryBase=null)
+		public function NetLoader(factory:NetConnectionFactoryBase=null, reconnectStreams:Boolean=true)
 		{
 			super();
 
+			CONFIG::FLASH_10_1	
+			{
+				_reconnectStreams = reconnectStreams;
+				_reconnectStreamsTimeout = STREAM_RECONNECT_TIMEOUT;
+				_reconnectStreamsWhenPaused = false;
+			}
+			
 			netConnectionFactory = factory || new NetConnectionFactory();
 			netConnectionFactory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
 			netConnectionFactory.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR, onCreationError);
 		}
+
+		CONFIG::FLASH_10_1	
+		{
+			/**
+			 * Returns <code>true</code> if stream recconnect is enabled.
+			 **/
+			public function get reconnectStreams():Boolean
+			{
+				return _reconnectStreams;
+			}
+				
+			/**
+			 * The stream reconnect timeout in seconds. The class will 
+			 * give up trying to reconnect the stream is success does not
+			 * occur within this time period. The default is 120 seconds.
+			 **/		
+			public function get reconnectStreamsTimeout():int
+			{
+				return _reconnectStreamsTimeout;
+			}
+			
+			public function set reconnectStreamsTimeout(value:int):void
+			{
+				_reconnectStreamsTimeout = value;
+			}
+			
+			/**
+			 * Specifies whether or not the class should attempt to reconnect 
+			 * if the player is paused. the default is <code>false</code>.
+			 **/
+			public function get reconnectStreamsWhenPaused():Boolean
+			{
+				return _reconnectStreamsWhenPaused;
+			}
+			
+			public function set reconnectStreamsWhenPaused(value:Boolean):void
+			{
+				_reconnectStreamsWhenPaused = value;
+			}
+		}				
 		
 		/**
 		 * @private
@@ -106,7 +166,7 @@ package org.osmf.net
 			}			
 
 			/*
-			 * The rules for URL checking is outlined as below:
+			 * The rules for URL checking are outlined below:
 			 * 
 			 * If the URL is null or empty, we assume being unable to handle the resource
 			 * If the URL has no protocol, we check for file extensions
@@ -262,7 +322,7 @@ package org.osmf.net
 			}
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED); 				
 		}
-		
+						
 		/**
 		 *  Establishes a new NetStream on the connected NetConnection and signals that loading is complete.
 		 *
@@ -280,10 +340,140 @@ package org.osmf.net
 				netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
 				netLoadTrait.netConnectionFactory = factory;
 				
+				CONFIG::FLASH_10_1	
+				{				
+					// Set up stream reconnect logic
+					if (_reconnectStreams && NetStreamUtils.isStreamingResource(loadTrait.resource))
+					{
+						setupStreamReconnect(loadTrait as NetStreamLoadTrait);
+					}				
+				}
+				
 				processFinishLoading(loadTrait as NetStreamLoadTrait);
 			}
 		}	
 		
+		CONFIG::FLASH_10_1	
+		{				
+			private function setupStreamReconnect(loadTrait:NetStreamLoadTrait, add:Boolean=true):void
+			{
+				var netConnection:NetConnection = loadTrait.connection;
+				var netStream:NetStream = loadTrait.netStream;
+				var reconnectTimer:Timer;
+				var currentURI:String = netConnection.uri;
+				
+				setupNetConnectionListeners(add);
+				setupReconnectTimer(add);
+				
+				function setupReconnectTimer(add:Boolean=true):void
+				{
+					if (add)
+					{
+						reconnectTimer = new Timer(1000, 1);
+						reconnectTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onReconnectTimer);
+					}
+					else
+					{
+						reconnectTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, onReconnectTimer);
+						reconnectTimer = null;
+					}
+				}
+				
+				function setupNetConnectionListeners(add:Boolean=true):void
+				{
+					if (add)
+					{
+						netConnection.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);				
+					}
+					else
+					{
+						netConnection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);				
+					}
+				}			
+				
+				function onNetStatus(event:NetStatusEvent):void
+				{
+					CONFIG::LOGGING
+					{			
+						logger.info("onNetStatus: " +event.info.code);
+					}
+					
+					switch(event.info.code)
+					{
+						case "NetConnection.Connect.Success":
+							if (event.info.data && event.info.data.version)
+							{
+								CONFIG::LOGGING
+								{
+									logger.info("FMS version "+event.info.data.version);
+								}
+							}
+							loadTrait.connection = netConnection;
+							reconnectStream(loadTrait);
+							break;
+						case "NetConnection.Connect.Closed":
+						case "NetConnection.Connect.Failed":
+							if (loadTrait.loadState == LoadState.READY)
+							{
+								reconnectTimer.start();
+							}
+							else
+							{
+								setupReconnectTimer(false);
+								setupNetConnectionListeners(false);
+							}
+							break;
+					}
+				}
+				
+				function onReconnectTimer(event:TimerEvent):void
+				{
+					if (netConnection === loadTrait.connection)
+					{
+						setupNetConnectionListeners(false);
+						
+						CONFIG::LOGGING
+						{
+							logger.debug("About to create a new NetConnection...");
+						}
+						
+						netConnection = new NetConnection();
+						netConnection.client = new NetClient();
+						setupNetConnectionListeners();
+					}
+					
+					CONFIG::LOGGING
+					{
+						logger.info("Calling netConnection.connect() to try to reconnect...");
+					}
+
+					netConnection.connect(currentURI);
+				}
+			}
+			
+			/**
+			 * Override this method to provide custom reconnect behavior.
+			 * 
+			 * @private
+			 **/
+			protected function reconnectStream(loadTrait:NetStreamLoadTrait):void
+			{
+				var nsPlayOptions:NetStreamPlayOptions = new NetStreamPlayOptions();
+				 
+				loadTrait.netStream.attach(loadTrait.connection);
+				
+				nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
+				
+				var streamingResource:StreamingURLResource = loadTrait.resource as StreamingURLResource;
+				var urlIncludesFMSApplicationInstance:Boolean = 
+						streamingResource ? streamingResource.urlIncludesFMSApplicationInstance : false;
+				var streamName:String = NetStreamUtils.getStreamNameFromURL(streamingResource.url, urlIncludesFMSApplicationInstance);
+				
+				nsPlayOptions.streamName = streamName; 			
+				loadTrait.netStream.play2(nsPlayOptions);
+			}
+		}
+				
 		/**
 		 * Initiates the process of creating a connected NetConnection
 		 * 
@@ -387,6 +577,13 @@ package org.osmf.net
 		private var netConnectionFactory:NetConnectionFactoryBase;
 		private var pendingLoads:Dictionary = new Dictionary();
 		
+		CONFIG::FLASH_10_1	
+		{					
+			private var _reconnectStreams:Boolean;
+			private var _reconnectStreamsTimeout:int;
+			private var _reconnectStreamsWhenPaused:Boolean;
+		}
+		
 		private static const PROTOCOL_RTMP:String = "rtmp";
 		private static const PROTOCOL_RTMPS:String = "rtmps";
 		private static const PROTOCOL_RTMPT:String = "rtmpt";
@@ -410,6 +607,13 @@ package org.osmf.net
 			"video/3gpp2", 
 			"video/quicktime", 
 		]);
+		
+		CONFIG::FLASH_10_1	
+		{				
+			private static const STREAM_RECONNECT_TIMEOUT:int = 120;	// in seconds
+		}
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetLoader");
+				
 	}
 }
-

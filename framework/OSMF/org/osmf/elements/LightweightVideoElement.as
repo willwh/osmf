@@ -463,7 +463,18 @@ package org.osmf.elements
 				);
 			
 			trait = loadTrait.getTrait(MediaTraitType.PLAY);
-			addTrait(MediaTraitType.PLAY, trait || new NetStreamPlayTrait(stream, resource));
+			
+			var reconnectStreams:Boolean = false;
+
+			CONFIG::FLASH_10_1	
+			{
+				if (loader is NetLoader)
+				{
+					reconnectStreams = (loader as NetLoader).reconnectStreams;
+				}
+			}
+			
+			addTrait(MediaTraitType.PLAY, trait || new NetStreamPlayTrait(stream, resource, reconnectStreams));
 			
 			trait = loadTrait.getTrait(MediaTraitType.SEEK);
 			if (trait == null && NetStreamUtils.getStreamType(resource) != StreamType.LIVE)

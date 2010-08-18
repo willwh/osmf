@@ -27,13 +27,17 @@ package org.osmf.net.rtmpstreaming
 	
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
+	import flash.net.NetStreamPlayTransitions;
 	
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamSwitchManager;
 	import org.osmf.net.NetStreamSwitchManagerBase;
+	import org.osmf.net.NetStreamLoadTrait;	
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.SwitchingRuleBase;
 	
@@ -111,6 +115,36 @@ package org.osmf.net.rtmpstreaming
 			return null;
 		}
 		
+		CONFIG::FLASH_10_1	
+		{				
+			/**
+			 * @private
+			 * 
+			 * Overridden to reconnect to the stream that was last playing.
+			 **/
+			override protected function reconnectStream(loadTrait:NetStreamLoadTrait):void
+			{
+				var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
+				if (dsResource == null)
+				{
+					super.reconnectStream(loadTrait);
+				}
+				else
+				{
+					var nsPlayOptions:NetStreamPlayOptions = new NetStreamPlayOptions();
+					 
+					loadTrait.netStream.attach(loadTrait.connection);
+					nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
+					
+					var currentStreamItem:DynamicStreamingItem = dsResource.streamItems[loadTrait.switchManager.currentIndex]; 
+					var streamName:String = currentStreamItem.streamName;
+					
+					nsPlayOptions.streamName = streamName; 			
+					loadTrait.netStream.play2(nsPlayOptions);
+				}
+			}
+		}
+						
 		private function getDefaultSwitchingRules(metrics:RTMPNetStreamMetrics):Vector.<SwitchingRuleBase>
 		{
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
@@ -120,5 +154,6 @@ package org.osmf.net.rtmpstreaming
 			rules.push(new InsufficientBufferRule(metrics));
 			return rules;
 		}
+		
 	}
 }

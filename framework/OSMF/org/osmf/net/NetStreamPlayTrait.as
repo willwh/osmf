@@ -34,7 +34,6 @@ package org.osmf.net
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.metadata.MetadataNamespaces;
 
 	[ExcludeClass]
 	
@@ -55,7 +54,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function NetStreamPlayTrait(netStream:NetStream, resource:MediaResourceBase)
+		public function NetStreamPlayTrait(netStream:NetStream, resource:MediaResourceBase, reconnectStreams:Boolean)
 		{
 			super();
 			
@@ -65,6 +64,7 @@ package org.osmf.net
 			}
 			this.netStream = netStream;
 			this.urlResource = resource as URLResource;
+			this.reconnectStreams = reconnectStreams;
 			
 			// Live streams can't be paused.
 			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
@@ -112,15 +112,28 @@ package org.osmf.net
 					var len:Number = playArgs.len;
 					
 					var dsResource:DynamicStreamingResource = urlResource as DynamicStreamingResource;
+					var nso:NetStreamPlayOptions;
+
 					if (dsResource != null)
 					{
 						// Play the clip (or the requested portion of the clip).
-						var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
+						nso = new NetStreamPlayOptions();
 						nso.start = startTime;
 						nso.len = len;
 						nso.streamName = dsResource.streamItems[dsResource.initialIndex].streamName;
 						nso.transition = NetStreamPlayTransitions.RESET;
 					
+						doPlay2(nso);
+					}
+					else if (reconnectStreams && streamingResource != null &&
+								NetStreamUtils.isRTMPStream(streamingResource.url))
+					{
+						nso = new NetStreamPlayOptions();
+						nso.start = startTime;
+						nso.len = len;
+						nso.transition = NetStreamPlayTransitions.RESET;
+						nso.streamName = streamName;
+						
 						doPlay2(nso);
 					}
 					else
@@ -223,5 +236,6 @@ package org.osmf.net
 		private var streamStarted:Boolean;
 		private var netStream:NetStream;
 		private var urlResource:URLResource;
+		private var reconnectStreams:Boolean;
 	}
 }
