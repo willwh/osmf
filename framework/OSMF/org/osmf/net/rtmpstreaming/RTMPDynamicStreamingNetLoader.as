@@ -74,9 +74,9 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function RTMPDynamicStreamingNetLoader(factory:NetConnectionFactoryBase=null)
+		public function RTMPDynamicStreamingNetLoader(factory:NetConnectionFactoryBase=null, reconnectStreams:Boolean=true)
 		{
-			super(factory);
+			super(factory, reconnectStreams);
 		}
 		
 		/**

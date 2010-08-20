@@ -117,8 +117,9 @@ package org.osmf.net
 				
 			/**
 			 * The stream reconnect timeout in seconds. The class will 
-			 * give up trying to reconnect the stream is success does not
-			 * occur within this time period. The default is 120 seconds.
+			 * give up trying to reconnect the stream if a successful
+			 * reconnect does not occur within this time period. 
+			 * The default is 120 seconds.
 			 **/		
 			public function get reconnectStreamsTimeout():int
 			{
@@ -355,15 +356,17 @@ package org.osmf.net
 		
 		CONFIG::FLASH_10_1	
 		{				
-			private function setupStreamReconnect(loadTrait:NetStreamLoadTrait, add:Boolean=true):void
+			private function setupStreamReconnect(loadTrait:NetStreamLoadTrait):void
 			{
 				var netConnection:NetConnection = loadTrait.connection;
 				var netStream:NetStream = loadTrait.netStream;
 				var reconnectTimer:Timer;
 				var currentURI:String = netConnection.uri;
+				var streamIsPaused:Boolean = false;
 				
-				setupNetConnectionListeners(add);
-				setupReconnectTimer(add);
+				setupNetConnectionListeners(true);
+				setupNetStreamListeners(true);
+				setupReconnectTimer(true);
 				
 				function setupReconnectTimer(add:Boolean=true):void
 				{
@@ -389,7 +392,19 @@ package org.osmf.net
 					{
 						netConnection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);				
 					}
-				}			
+				}
+				
+				function setupNetStreamListeners(add:Boolean=true):void
+				{
+					if (add)
+					{
+						netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					}
+					else
+					{
+						netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					}
+				}
 				
 				function onNetStatus(event:NetStatusEvent):void
 				{
@@ -400,7 +415,7 @@ package org.osmf.net
 					
 					switch(event.info.code)
 					{
-						case "NetConnection.Connect.Success":
+						case NetConnectionCodes.CONNECT_SUCCESS:
 							if (event.info.data && event.info.data.version)
 							{
 								CONFIG::LOGGING
@@ -408,20 +423,38 @@ package org.osmf.net
 									logger.info("FMS version "+event.info.data.version);
 								}
 							}
+							var oldConnection:NetConnection = loadTrait.connection;
 							loadTrait.connection = netConnection;
 							reconnectStream(loadTrait);
+							// Close the old connection
+							if (loadTrait.netConnectionFactory != null)
+							{
+								loadTrait.netConnectionFactory.closeNetConnection(oldConnection);
+							}
+							else
+							{
+								oldConnection.close();
+							}
 							break;
-						case "NetConnection.Connect.Closed":
-						case "NetConnection.Connect.Failed":
+						case NetConnectionCodes.CONNECT_CLOSED:
+						case NetConnectionCodes.CONNECT_FAILED:
 							if (loadTrait.loadState == LoadState.READY)
 							{
 								reconnectTimer.start();
 							}
 							else
 							{
+								// Clean up
 								setupReconnectTimer(false);
 								setupNetConnectionListeners(false);
+								setupNetStreamListeners(false);
 							}
+							break;
+						case NetStreamCodes.NETSTREAM_PAUSE_NOTIFY:
+							streamIsPaused = true;
+							break;
+						case NetStreamCodes.NETSTREAM_UNPAUSE_NOTIFY:
+							streamIsPaused = false;
 							break;
 					}
 				}
@@ -436,7 +469,7 @@ package org.osmf.net
 						{
 							logger.debug("About to create a new NetConnection...");
 						}
-						
+
 						netConnection = new NetConnection();
 						netConnection.client = new NetClient();
 						setupNetConnectionListeners();
@@ -447,7 +480,10 @@ package org.osmf.net
 						logger.info("Calling netConnection.connect() to try to reconnect...");
 					}
 
-					netConnection.connect(currentURI);
+					if (!streamIsPaused || (streamIsPaused && reconnectStreamsWhenPaused))
+					{
+						netConnection.connect(currentURI);
+					}
 				}
 			}
 			
