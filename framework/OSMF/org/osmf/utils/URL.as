@@ -100,7 +100,7 @@ package org.osmf.utils
 		{
 			if (value != null)
 			{
-				_protocol = value.replace(/:\/\/$/, "");
+				_protocol = value.replace(/:\/?\/?$/, "");
 				_protocol = _protocol.toLowerCase();
 			}
 		}
@@ -340,12 +340,10 @@ package org.osmf.utils
 				return;
 			}
 			
-			if (_rawUrl == "rtmfp:")
-			{
-				protocol = "rtmfp";
-			}
 			// Check to see if this is a relative path, meaning there is no protocol specified
-			else if (_rawUrl.search(/:\//) == -1)
+			if (	_rawUrl.search(/:\//) == -1
+				&&	_rawUrl.indexOf(":") != _rawUrl.length - 1
+			   )
 			{
 				path = _rawUrl;
 			}
@@ -377,11 +375,11 @@ package org.osmf.utils
 	 			* 
 	 			* Here are the individual patterns of the regular expression:
 	 			* 
-	 			* protocol : ^([a-z+\w\+\.\-]+:\/\/)?
+	 			* protocol : ^([a-z+\w\+\.\-]+:\/?\/?)?
 	 			*	The caret (^) means start at the beginnning of the string.
 	 			*	The "[a-z+\w\+\.\-]+" pattern means match the following group of characters 1 or more times: letters from a to z, followed by any letter
 	 			*		from a to z, a number from 0 to 9, an underscore (-), a plus sign (+), a period (.), or a dash (-).
-	 			*	The ":\/\/" pattern means match the string "://".
+	 			*	The ":\/?\/?" pattern means match the string ":" or ":/" or "://".
 	 			*	The question mark '?' at the end means the entire sequence can appear once or not at all.
 	 			*
 	 			* path: (\/[^?#]*)
@@ -394,7 +392,7 @@ package org.osmf.utils
 	 			*	This pattern matches a sequence starting with a '#' character followed by any character zero or more times.
 	 			*/
 				
-				var pattern:RegExp = /^([a-z+\w\+\.\-]+:\/\/)?([^\/?#]*)?(\/[^?#]*)?(\?[^#]*)?(\#.*)?/i;		
+				var pattern:RegExp = /^([a-z+\w\+\.\-]+:\/?\/?)?([^\/?#]*)?(\/[^?#]*)?(\?[^#]*)?(\#.*)?/i;		
 				var result:Array = tempUrl.match(pattern);
 				var hostName:String;
 				
@@ -439,4 +437,3 @@ package org.osmf.utils
 		private var _fragment:String;	// From the first # to the end of the url		
 	}
 }
-

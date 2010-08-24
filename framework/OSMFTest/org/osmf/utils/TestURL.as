@@ -61,6 +61,40 @@ package org.osmf.utils
 			assertEquals(url.extension, "flv");
 			assertFalse(url.absolute);
 			
+			// A URL with no slashes
+			url = new URL("rtmfp:");
+			assertEquals(url.protocol, "rtmfp");
+			assertEquals(url.userInfo, "");
+			assertEquals(url.host, "");
+			assertEquals(url.port, "");
+			assertEquals(url.path, "");
+			assertEquals(url.extension, "");
+			assertTrue(url.absolute);
+
+			// A URL with one trailing slash
+			url = new URL("rtmfp:/");
+			assertEquals(url.protocol, "rtmfp");
+			assertEquals(url.userInfo, "");
+			assertEquals(url.host, "");
+			assertEquals(url.port, "");
+			assertEquals(url.path, "");
+			assertEquals(url.extension, "");
+			assertTrue(url.absolute);
+			
+			// A URL with one slash
+			url = new URL("blah:/hostexample.com:80/foo/bar.php?var1=foo&var2=bar#yyz");
+			assertEquals(url.toString(), "blah:/hostexample.com:80/foo/bar.php?var1=foo&var2=bar#yyz");
+			assertEquals(url.protocol, "blah");
+			assertEquals(url.userInfo, "");
+			assertEquals(url.host, "hostexample.com");
+			assertEquals(url.port, "80");
+			assertEquals(url.path, "foo/bar.php");
+			assertEquals(url.getParamValue("var1"), "foo");
+			assertEquals(url.getParamValue("var2"), "bar");
+			assertEquals(url.fragment, "yyz");
+			assertEquals(url.extension, "php");
+			assertTrue(url.absolute);
+
 			// Relative path test
 			url = new URL("../../../myfile.flv");
 			assertEquals(url.protocol, "");
@@ -99,7 +133,7 @@ package org.osmf.utils
 			assertEquals(url.host, "");
 			assertEquals(url.path, "myfile.flv");
 
-			//Test 14
+			// Test 14
 			url = new URL("http://foo.com/mymp4.mp4");
 			assertEquals(url.protocol, "http");
 			assertEquals(url.host, "foo.com");
