@@ -45,6 +45,7 @@ package org.osmf.net
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	CONFIG::LOGGING
 	{			
@@ -119,7 +120,12 @@ package org.osmf.net
 			 * The stream reconnect timeout in seconds. The class will 
 			 * give up trying to reconnect the stream if a successful
 			 * reconnect does not occur within this time period. 
-			 * The default is 120 seconds.
+			 * The default is 120 seconds. The timeout period begins
+			 * when the buffer empties and therefore a value of zero
+			 * seconds is valid, meaning after the buffer empties, 
+			 * don't try to reconnect.
+			 * 
+			 * @throws ArgumentError If value param is less than zero.
 			 **/		
 			public function get reconnectStreamsTimeout():int
 			{
@@ -128,12 +134,17 @@ package org.osmf.net
 			
 			public function set reconnectStreamsTimeout(value:int):void
 			{
+				if (value < 0)
+				{
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+				}
+				
 				_reconnectStreamsTimeout = value;
 			}
 			
 			/**
 			 * Specifies whether or not the class should attempt to reconnect 
-			 * if the player is paused. the default is <code>false</code>.
+			 * if a stream is paused. the default is <code>false</code>.
 			 **/
 			public function get reconnectStreamsWhenPaused():Boolean
 			{
@@ -356,17 +367,34 @@ package org.osmf.net
 		
 		CONFIG::FLASH_10_1	
 		{				
+			/**
+			 * Sets up the stream reconnect logic. In the event of a dropped connection or a client
+			 * switching from a wired to a wireless network connection for example, this method
+			 * will use the <code>NetStream.attach()</code> method to attach the same 
+			 * <code>NetStream</code> object to a reconnected <code>NetConnection</code> object.
+			 * <p/>
+			 * This feature requires Flash Player 10.1 and Flash Media Server 3.5.3. If the Flash 
+			 * Player version is less than 10.1 or the Flash Media Server version is less than 
+			 * 3.5.3, the stream closes when the connection drops.
+			 * <p/>
+			 * When a <code>NetConnection</code> closes due to a network change, the stream keeps 
+			 * playing using the existing buffer. Meanwhile, this method attempts to 
+			 * reconnect to the server and resumes playing the stream.
+			 **/
 			private function setupStreamReconnect(loadTrait:NetStreamLoadTrait):void
 			{
 				var netConnection:NetConnection = loadTrait.connection;
 				var netStream:NetStream = loadTrait.netStream;
 				var reconnectTimer:Timer;
+				var timeoutTimer:Timer;
 				var currentURI:String = netConnection.uri;
 				var streamIsPaused:Boolean = false;
+				var reconnectHasTimedOut:Boolean = false;
 				
-				setupNetConnectionListeners(true);
-				setupNetStreamListeners(true);
-				setupReconnectTimer(true);
+				setupNetConnectionListeners();
+				setupNetStreamListeners();
+				setupReconnectTimer();
+				setupTimeoutTimer();
 				
 				function setupReconnectTimer(add:Boolean=true):void
 				{
@@ -379,6 +407,26 @@ package org.osmf.net
 					{
 						reconnectTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, onReconnectTimer);
 						reconnectTimer = null;
+					}
+				}
+				
+				function setupTimeoutTimer(add:Boolean=true):void
+				{
+					if (add)
+					{
+						if (_reconnectStreamsTimeout > 0 )
+						{
+							timeoutTimer = new Timer(_reconnectStreamsTimeout * 1000, 1);
+							timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeoutTimer);
+						}
+					}
+					else
+					{
+						if (timeoutTimer != null)
+						{
+							timeoutTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, onTimeoutTimer);
+							timeoutTimer = null;
+						}
 					}
 				}
 				
@@ -425,7 +473,15 @@ package org.osmf.net
 							}
 							var oldConnection:NetConnection = loadTrait.connection;
 							loadTrait.connection = netConnection;
+							
+							// Stop the timeout timer
+							if (timeoutTimer != null)
+							{
+								timeoutTimer.stop();
+							}
+							
 							reconnectStream(loadTrait);
+							
 							// Close the old connection
 							if (loadTrait.netConnectionFactory != null)
 							{
@@ -438,7 +494,9 @@ package org.osmf.net
 							break;
 						case NetConnectionCodes.CONNECT_CLOSED:
 						case NetConnectionCodes.CONNECT_FAILED:
-							if (loadTrait.loadState == LoadState.READY)
+							if (loadTrait.loadState == LoadState.READY && 
+								(!streamIsPaused || (streamIsPaused && _reconnectStreamsWhenPaused)) &&
+								!reconnectHasTimedOut) 
 							{
 								reconnectTimer.start();
 							}
@@ -448,6 +506,7 @@ package org.osmf.net
 								setupReconnectTimer(false);
 								setupNetConnectionListeners(false);
 								setupNetStreamListeners(false);
+								setupTimeoutTimer(false);
 							}
 							break;
 						case NetStreamCodes.NETSTREAM_PAUSE_NOTIFY:
@@ -456,11 +515,37 @@ package org.osmf.net
 						case NetStreamCodes.NETSTREAM_UNPAUSE_NOTIFY:
 							streamIsPaused = false;
 							break;
+						case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:
+							logger.debug("buffer empty, netConnection.connected="+netConnection.connected);
+							if (!netConnection.connected)
+							{
+								// Start the timeout timer
+								if (timeoutTimer != null)
+								{
+									timeoutTimer.start();
+								}
+								else
+								{
+									reconnectHasTimedOut = true;
+								}
+							} 
+							break;
 					}
+				}
+				
+				function onTimeoutTimer(event:TimerEvent):void
+				{
+					logger.debug("reconnect timer timed out...");
+					reconnectHasTimedOut = true;	
 				}
 				
 				function onReconnectTimer(event:TimerEvent):void
 				{
+					if (reconnectHasTimedOut)
+					{
+						return;
+					}
+					
 					if (netConnection === loadTrait.connection)
 					{
 						setupNetConnectionListeners(false);
@@ -480,10 +565,7 @@ package org.osmf.net
 						logger.info("Calling netConnection.connect() to try to reconnect...");
 					}
 
-					if (!streamIsPaused || (streamIsPaused && reconnectStreamsWhenPaused))
-					{
-						netConnection.connect(currentURI);
-					}
+					netConnection.connect(currentURI);
 				}
 			}
 			
