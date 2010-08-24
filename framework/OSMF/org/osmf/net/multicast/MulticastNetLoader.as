@@ -43,11 +43,11 @@ package org.osmf.net.multicast
 	import __AS3__.vec.Vector;
 
 	/**
-	 * The MulticastNetLoader class extends NetLoader to provide
-	 * loading support to multicast video playback.
+	 * Extends NetLoader to provide
+	 * loading support for multicast video playback.
 	 * 
-	 * <p> It expects the media resource to be StreamingURLResource, in which
-	 * rtmfpGroupspec and rtmfpStreamName are specified.</p>
+	 * <p> MulticastNetLoader expects the media resource to be a StreamingURLResource,
+	 * in which rtmfpGroupspec and rtmfpStreamName are specified.</p>
 	 *
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -75,7 +75,7 @@ package org.osmf.net.multicast
 			/**
 			 * The factory function for creating a NetGroup.
 			 * 
-			 * @param connection The NetConnection that's associated with the NetStreamSwitchManagerBase.
+			 * @param connection The NetConnection that is associated with the NetStreamSwitchManagerBase.
 			 * @param rtmfpGroupspec The rtmfp GroupSpec that is used to create the NetGroup.
 			 * 
 			 * @return The NetGroup.
@@ -97,11 +97,11 @@ package org.osmf.net.multicast
 		/**
 		 * @private
 		 * 
-		 * The MulticastNetLoader returns true if the resource is an instance of StreamingURLResource with
+		 * MulticastNetLoader returns true if the resource is an instance of StreamingURLResource with
 		 * both rtmfpGroupspec and rtmfpStreamName set.
 		 * 
 		 * @param resource The URL of the source media.
-		 * @return Returns <code>true</code> for StreamingURLResource which it can load
+		 * @return Returns <code>true</code> for resouces of type StreamingURLResource.
 		 * @inheritDoc
 		**/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
