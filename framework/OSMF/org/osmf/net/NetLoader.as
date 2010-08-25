@@ -516,7 +516,10 @@ package org.osmf.net
 							streamIsPaused = false;
 							break;
 						case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:
-							logger.debug("buffer empty, netConnection.connected="+netConnection.connected);
+							CONFIG::LOGGING
+							{			
+								logger.debug("buffer empty, netConnection.connected="+netConnection.connected);
+							}
 							if (!netConnection.connected)
 							{
 								// Start the timeout timer
@@ -535,7 +538,10 @@ package org.osmf.net
 				
 				function onTimeoutTimer(event:TimerEvent):void
 				{
-					logger.debug("reconnect timer timed out...");
+					CONFIG::LOGGING
+					{			
+						logger.debug("reconnect timer timed out...");
+					}
 					reconnectHasTimedOut = true;	
 				}
 				
