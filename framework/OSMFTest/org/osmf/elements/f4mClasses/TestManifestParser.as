@@ -30,14 +30,16 @@ package org.osmf.elements.f4mClasses
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
 	
+	import org.osmf.media.DefaultMediaFactory;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 
 	public class TestManifestParser extends TestCase
 	{
@@ -661,6 +663,21 @@ package org.osmf.elements.f4mClasses
 				</manifest>; 
 			manifest = parser.parse(test);
 			assertTrue(!manifest.urlIncludesFMSApplicationInstance);
+		}
+		
+		public function testFM992():void
+		{
+			var factory:MediaFactory = new DefaultMediaFactory();
+			var parser:ManifestParser = new ManifestParser();
+			var test:XML = 
+				<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+				  <id>Multicast_Fusion</id>
+				  <duration>0</duration>
+				  <media url="rtmfp://weiz-xp1/multicast" rtmfpGroupspec="G:010121055e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8010c170e6f72672e6f736d662e6e65742e6d756c746963617374210e61b67506b6a5f02187ca24fe590388778040fa3a9c23589c58baadd097c12657011b00070ae00000fe814b" rtmfpStreamName="fusionstream1"/>
+				</manifest>
+				
+			var manifest:Manifest = parser.parse(test);
+			assertTrue(manifest.streamType == StreamType.LIVE);
 		}				
 	}
 }

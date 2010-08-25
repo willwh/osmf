@@ -130,6 +130,13 @@ package org.osmf.net.httpstreaming
 			assertEquals(info.serverBaseURL, "http://fms1j009f.corp.adobe.com/zeri_live/events/zeriDVRMBRAppendSegment/events/_definst_");
 		}
 		
+		public function testFM986():void
+		{
+			assertEquals(HTTPStreamingUtils.normalizeURL("http://path1/path4/path5/path6"), "http://path1/path4/path5/path6");
+			assertEquals(HTTPStreamingUtils.normalizeURL("http://path1/path2/path3/../../path4/path5/path6"), "http://path1/path4/path5/path6");
+			assertEquals(HTTPStreamingUtils.normalizeURL("http://path1/../path3/../path4/path5/path6"), "http://path4/path5/path6");
+		}
+		
 		private function createSingleStreamVODManifest():Manifest
 		{
 			var xml:XML = 

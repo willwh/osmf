@@ -46,5 +46,21 @@ package org.osmf.net.httpstreaming
 			request = new HTTPStreamRequest(url, quality, truncateAt, retryAfter, unpublishNotify);			
 			assertEquals(request.urlRequest, null);
 		}
+		
+		public function testFM986():void
+		{
+			var url:String = "http://www.myserver.com/";
+			var quality:int = 2;
+			var truncateAt:Number = 300.25;
+			var retryAfter:Number = 500.86;
+			var unpublishNotify:Boolean = false;
+			
+			var request:HTTPStreamRequest = new HTTPStreamRequest(url, quality, truncateAt, retryAfter, unpublishNotify);
+			assertEquals(request.urlRequest.url.toString(), url);
+
+			url = "http://part1/part2/../part3/../part4/par5";
+			request = new HTTPStreamRequest(url, quality, truncateAt, retryAfter, unpublishNotify);
+			assertEquals(request.urlRequest.url.toString(), "http://part1/part4/par5");
+		}
 	}
 }

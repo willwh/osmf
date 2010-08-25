@@ -54,5 +54,19 @@ package org.osmf.media
 			assertTrue(factory.getItemById("org.osmf.elements.video").mediaElementCreationFunction.call(new URLResource("http://www.example.com/video.flv")) is VideoElement);
 			assertTrue(factory.getItemById("org.osmf.elements.audio.streaming").mediaElementCreationFunction.call(new URLResource("rtmp://www.example.com/audio")) is AudioElement);
 		}
+		
+		CONFIG::FLASH_10_1
+		{
+			public function testFM964():void
+			{
+				var factory:DefaultMediaFactory = new DefaultMediaFactory();
+				var resource:StreamingURLResource = new StreamingURLResource("rtmfp://weiz-xp1/multicast", StreamType.LIVE);
+				resource.rtmfpGroupspec = "G:010121055e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8010c170e6f72672e6f736d662e6e65742e6d756c746963617374210e61b67506b6a5f02187ca24fe590388778040fa3a9c23589c58baadd097c12657011b00070ae00000fe814b";
+				resource.rtmfpStreamName = "fusionstream1";
+				
+				assertTrue(factory.getItemById("org.osmf.elements.video.rtmfp.multicast") != null);		
+				assertTrue(factory.createMediaElement(resource) is VideoElement);		
+			}
+		}
 	}
 }
