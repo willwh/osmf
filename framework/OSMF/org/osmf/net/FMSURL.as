@@ -252,7 +252,58 @@ package org.osmf.net
 	 			}					 		
  			}		
 			
-			var prefixStart:int = _streamName.indexOf("/mp4:");
+			/*
+			 * At this point, the parser may have parsed the FMS URL incorrectly. The following 
+			 * is a detailed description:
+			 *
+			 * RTMP URL has the format as this: RTMP://server<:port>/applicationName/<applicationInstance>/streamName
+			 *
+			 * where port and applicationInstance are optional. 
+			 *  
+			 * To make matters more complicated, applicationName and applicationInstance can contain slashes.
+			 * For instance, applicationName_part1/applicationName_part2/applicationName_part3.
+			 * Since there is no hint about the boundary between applicationName and applicationInstance, a string
+			 * such as string_segment_1/string_segment_2/string_segment_3 is to up arbitrary interpretations. 
+			 * 
+			 * The issue depicted above should not matter too much since both applicationName and applicationInstance 
+			 * are part of the RTMP connection string. However, it becomes an issue because a erroneous parsing 
+			 * will lead to a malformatted streamName. 
+			 *
+			 * For instance we have the following URL: 
+			 *   rtmp://server/applicationName_part1/applicationName_part2/applicationInstance/mp4:video.f4v
+			 *
+			 * Up to this point, the parse will consider: 
+			 *   applicationName = "applicationName_part1"
+			 *   applicationInstance = "applicationName_part2"
+			 *   streamName = "applicationInstance/mp4:video.f4v"
+			 *
+			 * mp4, as well as mp3 and id3, is the prefix of streamName. These prefixes can provide hints
+			 * of where the streamName starts. As a result, whatever in front of the prefix should be considered
+			 * part of applicationInstance. One may argument that the portion of the streamName might technically be 
+			 * part of the applicationName if applicationInstance is absent. The argument is right, but again there 
+			 * is not enough information to make a perfect decision. Furthermore, as mentioned before,
+			 * it is more important to figure out the port of the streamName actually belongs to the connection string
+			 * rather than pin point which part of the connection string. 
+			 * 
+			 * The following code adjusts the erroneously parsed streamName as described above. One caveat is that 
+			 * this adjustment of parsing will fail when dealing with flv files since there is no prefix for it. 
+			 */
+			var mp4PrefixStart:int = _streamName.indexOf("/mp4:");
+			var mp3PrefixStart:int = _streamName.indexOf("/mp3:");
+			var id3PrefixStart:int = _streamName.indexOf("/id3:");
+			var prefixStart:int = -1;
+			if (mp4PrefixStart > 0)
+			{
+				prefixStart = mp4PrefixStart;
+			}
+			else if (mp3PrefixStart > 0)
+			{
+				prefixStart = mp3PrefixStart;
+			}
+			else if (id3PrefixStart > 0)
+			{
+				prefixStart = id3PrefixStart;
+			}
 			if (useInstance && prefixStart > 0)
 			{
 				_instanceName += "/";
@@ -382,14 +433,6 @@ package org.osmf.net
 					_edges.push(new FMSHost(tempSN, tempPN));
 				}
 			}
-
-			var prefixStart:int = _streamName.indexOf("/mp4:");
-			if (useInstance && prefixStart > 0)
-			{
-				_instanceName += "/";
-				_instanceName += _streamName.substr(0, prefixStart);
-				_streamName = streamName.substr(prefixStart + 1);
-			} 
 		}
 		
 		private var _useInstance:Boolean;

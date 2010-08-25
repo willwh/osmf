@@ -212,6 +212,9 @@ package org.osmf.elements.compositeClasses
 				
 				if (allHaveReachedDuration)
 				{
+					// It is critical to use super.currentTime instead of currentTime property of the class
+					// because currentTime of this class will call updateCurrentTime which may accidentally
+					// dispatch TimeEvent.COMPLETE. 
 					if (super.currentTime != this.duration)	
 					{
 						this.updateCurrentTime();				
