@@ -150,10 +150,18 @@ package org.osmf.elements
 				var loader:Loader = displayObjectTrait.displayObject as Loader;
 				if (loader != null)
 				{
-					var bitmap:Bitmap = loader.content as Bitmap;
-					if (bitmap != null)
+					try
 					{
-						bitmap.smoothing = _smoothing;
+						var bitmap:Bitmap = loader.content as Bitmap;
+						if (bitmap != null)
+						{
+							bitmap.smoothing = _smoothing;
+						}
+					}
+					catch (error:SecurityError)
+					{
+						// Swallow this, it indicates that a policy file was not
+						// available (or not retrieved).
 					}
 				}
 			}
