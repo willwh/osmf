@@ -383,9 +383,13 @@ package org.osmf.net
 			 **/
 			private function setupStreamReconnect(loadTrait:NetStreamLoadTrait):void
 			{
+				CONFIG::LOGGING
+				{
+					const STREAM_RECONNECT_LOGGING_PREFIX:String = "Stream reconnect: ";
+				}
+				
 				var netConnection:NetConnection = loadTrait.connection;
-				var netStream:NetStream = loadTrait.netStream;
-				var reconnectTimer:Timer;
+				var reconnectTimer:Timer = new Timer(1000, 1);
 				var timeoutTimer:Timer;
 				var currentURI:String = netConnection.uri;
 				var streamIsPaused:Boolean = false;
@@ -400,7 +404,6 @@ package org.osmf.net
 				{
 					if (add)
 					{
-						reconnectTimer = new Timer(1000, 1);
 						reconnectTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onReconnectTimer);
 					}
 					else
@@ -446,11 +449,11 @@ package org.osmf.net
 				{
 					if (add)
 					{
-						netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+						loadTrait.netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					}
 					else
 					{
-						netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+						loadTrait.netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					}
 				}
 				
@@ -458,7 +461,7 @@ package org.osmf.net
 				{
 					CONFIG::LOGGING
 					{			
-						logger.info("onNetStatus: " +event.info.code);
+						logger.info(STREAM_RECONNECT_LOGGING_PREFIX+"onNetStatus: " +event.info.code);
 					}
 					
 					switch(event.info.code)
@@ -468,7 +471,7 @@ package org.osmf.net
 							{
 								CONFIG::LOGGING
 								{
-									logger.info("FMS version "+event.info.data.version);
+									logger.info(STREAM_RECONNECT_LOGGING_PREFIX+"FMS version "+event.info.data.version);
 								}
 							}
 							var oldConnection:NetConnection = loadTrait.connection;
@@ -483,6 +486,10 @@ package org.osmf.net
 							reconnectStream(loadTrait);
 							
 							// Close the old connection
+							CONFIG::LOGGING
+							{			
+								logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"closing the old (bad) NetConnection");
+							}							
 							if (loadTrait.netConnectionFactory != null)
 							{
 								loadTrait.netConnectionFactory.closeNetConnection(oldConnection);
@@ -518,7 +525,7 @@ package org.osmf.net
 						case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:
 							CONFIG::LOGGING
 							{			
-								logger.debug("buffer empty, netConnection.connected="+netConnection.connected);
+								logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"buffer empty, netConnection.connected="+netConnection.connected);
 							}
 							if (!netConnection.connected)
 							{
@@ -540,7 +547,7 @@ package org.osmf.net
 				{
 					CONFIG::LOGGING
 					{			
-						logger.debug("reconnect timer timed out...");
+						logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"reconnect timer timed out...");
 					}
 					reconnectHasTimedOut = true;	
 				}
@@ -558,21 +565,47 @@ package org.osmf.net
 						
 						CONFIG::LOGGING
 						{
-							logger.debug("About to create a new NetConnection...");
+							logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"About to create a new NetConnection...");
 						}
 
-						netConnection = new NetConnection();
-						netConnection.client = new NetClient();
+						if (loadTrait.netConnectionFactory != null && loadTrait.netConnectionFactory is NetConnectionFactory)
+						{
+							netConnection = (loadTrait.netConnectionFactory as NetConnectionFactory).createReconnectNetConnection();
+						}
+						else
+						{
+							netConnection = new NetConnection();
+						}
+						
+						netConnection.client = new NetClient();						
 						setupNetConnectionListeners();
 					}
 					
 					CONFIG::LOGGING
 					{
-						logger.info("Calling netConnection.connect() to try to reconnect...");
+						logger.info(STREAM_RECONNECT_LOGGING_PREFIX+"Calling reconnectNetConnection to try to reconnect...");
 					}
 
-					netConnection.connect(currentURI);
+					currentURI = reconnectNetConnection(netConnection, currentURI);
 				}
+			}
+			
+			/**
+			 * Override this method to provide custom NetConnection behavior when
+			 * using the stream reconnect feature. For example, if you wanted to
+			 * provide client-side load balancing in your player, you could create
+			 * a custom NetLoader class and override this method to use an
+			 * alternate URI.
+			 * 
+			 * @param netConnection The new NetConnection created by the stream reconnect logic.
+			 * @param lastUsedURI This is the URI that was last passed to the NetConnection.connect method
+			 * 
+			 * @returns The URI that was passed to the NetConnection.connect method
+			 **/
+			protected function reconnectNetConnection(netConnection:NetConnection, lastUsedURI:String):String
+			{
+				netConnection.connect(lastUsedURI);
+				return lastUsedURI;
 			}
 			
 			/**

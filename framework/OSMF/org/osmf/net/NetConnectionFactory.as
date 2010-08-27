@@ -272,7 +272,7 @@ package org.osmf.net
 				super.closeNetConnection(netConnection);
 			}
 		}
-		
+				
 		// Protected
 		//
 		
@@ -421,6 +421,25 @@ package org.osmf.net
 			return addr;
 		}
 		
+		CONFIG::FLASH_10_1	
+		{						
+			/**
+			 * Called when the stream reconnect logic in NetLoader needs to create a new
+			 * NetConnection object. This allows the reconnect logic to use the same
+			 * type of NetConnection object that was originally created. For example,
+			 * a player or plugin may use a custom NetLoader and a custom 
+			 * NetConnectionFactory which creates a custom NetConnection. This method
+			 * ensures we are creating the NetConnection instance the player or 
+			 * plugin is expecting.
+			 * 
+			 * @private
+			 **/
+			internal function createReconnectNetConnection():NetConnection
+			{
+				return createNetConnection();
+			}		
+		}
+				
 		private var shareNetConnections:Boolean;
 		private var negotiator:NetNegotiator;
 		private var connectionDictionary:Dictionary;
