@@ -33,24 +33,33 @@ package org.osmf.elements.proxyClasses
 	/**
 	 * @private
 	 * 
-	 * Internal class used by the FactoryElement to proxy metadata.
+	 * Internal class used by the ProxyElement to proxy metadata.
 	 */ 
 	public class ProxyMetadata extends Metadata
 	{
 		public function ProxyMetadata()
 		{
 			proxiedMetadata = new Metadata();
+			proxiedMetadata.addEventListener(MetadataEvent.VALUE_ADD, redispatchEvent);
+			proxiedMetadata.addEventListener(MetadataEvent.VALUE_CHANGE, redispatchEvent);
+			proxiedMetadata.addEventListener(MetadataEvent.VALUE_REMOVE, redispatchEvent);	
 		}
 			
 		public function set metadata(value:Metadata):void
-		{			
-			
-			// Transfer all old values to new:
+		{
+			// Remove old listeners.
+			proxiedMetadata.removeEventListener(MetadataEvent.VALUE_ADD, redispatchEvent);
+			proxiedMetadata.removeEventListener(MetadataEvent.VALUE_CHANGE, redispatchEvent);
+			proxiedMetadata.removeEventListener(MetadataEvent.VALUE_REMOVE, redispatchEvent);	
+
+			// Transfer all old values to new.
 			for each (var url:String in proxiedMetadata.keys)
 			{
 				value.addValue(url, proxiedMetadata.getValue(url));
-			}			
-			proxiedMetadata = value;		
+			}
+			proxiedMetadata = value;
+			
+			// Add new listeners.		
 			proxiedMetadata.addEventListener(MetadataEvent.VALUE_ADD, redispatchEvent);
 			proxiedMetadata.addEventListener(MetadataEvent.VALUE_CHANGE, redispatchEvent);
 			proxiedMetadata.addEventListener(MetadataEvent.VALUE_REMOVE, redispatchEvent);	

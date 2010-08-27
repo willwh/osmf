@@ -30,6 +30,7 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.SimpleLoader;
@@ -149,6 +150,23 @@ package org.osmf.elements
 				);
 				
 			assertNull(mediaElement.container);
+		}
+		
+		public function testMetadataEventPropagation():void
+		{
+			var proxyElement:ProxyElement = createProxyElement();
+
+			var metadataAdded:Boolean = false;
+			
+			proxyElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
+			proxyElement.addMetadata("foo", new Metadata());
+			
+			function onMetadataAdd(event:MediaElementEvent):void
+			{
+				metadataAdded = true;
+			}
+			
+			assertTrue(metadataAdded);
 		}
 		
 		// Protected

@@ -24,11 +24,8 @@ package org.osmf.elements
 	import flash.events.Event;
 	
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
-	import org.osmf.elements.proxyClasses.ProxyMetadata;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;

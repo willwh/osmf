@@ -288,7 +288,7 @@ package org.osmf.elements
 		 */
 		override protected function createMetadata():Metadata
 		{
-			return new ProxyMetadata();;
+			return new ProxyMetadata();
 		}
 		
 		/**
