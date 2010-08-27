@@ -102,10 +102,6 @@ package org.osmf.net.httpstreaming
 				{
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
-				else
-				{
-					trace("loadstae: " + event.loadState);
-				}
 			}
 		}
 		
