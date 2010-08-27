@@ -628,7 +628,7 @@ package org.osmf.examples
 			composition.addItem
 				( new Example
 					(	"Video with Recommendations Bumper"
-					,	"Demonstrates how a recommendations bumper can be implemented."
+					,	"Demonstrates how a recommendations bumper can be implemented.  When the video finishes playback, a post-roll overlay is displayed.  Clicking on this overlay will cause the player to 'jump' to a different example, similar to how some players can navigate to a different video based on user interaction."
 					,	function():MediaElement
 						{
 							var recommendations:RecommendationsElement = new RecommendationsElement();

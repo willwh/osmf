@@ -50,7 +50,7 @@ package org.osmf.examples.recommendations
             
 			var textField:TextField = new TextField();
 			textField.defaultTextFormat = format;
-			textField.text = "Click to open the Pre-, mid- and post roll ads sample!";
+			textField.text = "Click to jump to the 'Video with Timed Ad Insertion' example!";
             textField.y = 100;
             textField.width = 640;
             textField.selectable = false;
@@ -73,7 +73,7 @@ package org.osmf.examples.recommendations
 		private function onMouseClick(event:MouseEvent):void
 		{
 			var data:Metadata = new Metadata();
-			data.addValue("open", "Ad insertion");
+			data.addValue("open", "Video with Timed Ad Insertion");
 			
 			addMetadata("recommendations", data); 
 		}
