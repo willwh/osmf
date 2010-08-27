@@ -627,6 +627,6 @@ package org.osmf.layout
 		}
 		
 		/* static */
-		private static const SYNTHESIZER:NullMetadataSynthesizer = new NullMetadataSynthesizer();
+		private const SYNTHESIZER:NullMetadataSynthesizer = new NullMetadataSynthesizer();
 	}
 }
