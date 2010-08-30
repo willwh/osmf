@@ -43,6 +43,7 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaTypeUtil;
 	import org.osmf.media.URLResource;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;	
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -241,7 +242,7 @@ package org.osmf.elements
 				completionCallback(true);
 			}
 			
-			drmLoader.load(new URLRequest(item.url));
+			drmLoader.load(new URLRequest(HTTPStreamingUtils.normalizeURL(item.url)));
 		}	
 			
 		private function getRootUrl(url:String):String
