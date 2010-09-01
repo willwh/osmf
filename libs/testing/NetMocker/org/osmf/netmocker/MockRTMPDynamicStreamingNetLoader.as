@@ -33,14 +33,14 @@ package org.osmf.netmocker
 
 	public class MockRTMPDynamicStreamingNetLoader extends RTMPDynamicStreamingNetLoader implements IMockNetLoader
 	{
-		public function MockRTMPDynamicStreamingNetLoader(netConnectionFactory:NetConnectionFactory= null)
+		public function MockRTMPDynamicStreamingNetLoader(netConnectionFactory:NetConnectionFactory= null, reconnectStreams:Boolean=true)
 		{
 			if (netConnectionFactory == null)
 			{
 				netConnectionFactory = new DefaultNetConnectionFactory();
 			}
 			
-			super(netConnectionFactory);
+			super(netConnectionFactory, reconnectStreams);
 			
 			this.netConnectionFactory = netConnectionFactory;
 		}

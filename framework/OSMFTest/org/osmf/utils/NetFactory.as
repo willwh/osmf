@@ -27,12 +27,11 @@ package org.osmf.utils
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.NetNegotiator;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
-	import org.osmf.netmocker.MockRTMPDynamicStreamingNetLoader;
 	import org.osmf.netmocker.MockNetConnection;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.MockNetStream;
+	import org.osmf.netmocker.MockRTMPDynamicStreamingNetLoader;
 	
 	/**
 	 * Factory class for creating NetConnections and NetStreams.
@@ -73,11 +72,11 @@ package org.osmf.utils
 		/**
 		 * Create and return a new NetLoader.
 		 **/
-		public function createNetLoader(factory:NetConnectionFactoryBase=null):NetLoader
+		public function createNetLoader(factory:NetConnectionFactoryBase=null, reconnectStreams:Boolean=false):NetLoader
 		{
 			return useMockObjects
-						? new MockNetLoader(factory)
-						: new NetLoader(factory);
+						? new MockNetLoader(factory, reconnectStreams)
+						: new NetLoader(factory, reconnectStreams);
 		}
 
 		/**
@@ -86,8 +85,8 @@ package org.osmf.utils
 		public function createRTMPDynamicStreamingNetLoader():RTMPDynamicStreamingNetLoader
 		{
 			return useMockObjects
-						? new MockRTMPDynamicStreamingNetLoader()
-						: new RTMPDynamicStreamingNetLoader();
+						? new MockRTMPDynamicStreamingNetLoader(null, false)
+						: new RTMPDynamicStreamingNetLoader(null, false);
 		}
 		
 		/**

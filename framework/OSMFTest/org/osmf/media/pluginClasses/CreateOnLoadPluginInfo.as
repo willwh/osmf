@@ -33,7 +33,7 @@ package org.osmf.media.pluginClasses
 	{
 		public function CreateOnLoadPluginInfo()
 		{
-			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader().canHandleResource, createElement);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader(null, false).canHandleResource, createElement);
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			items.push(item);
 			

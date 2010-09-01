@@ -38,7 +38,7 @@ package org.osmf.media.pluginClasses
 
 		public function SimpleVideoImagePluginInfo()
 		{
-			var netLoader:NetLoader = new NetLoader();
+			var netLoader:NetLoader = new NetLoader(null, false);
 			var imageLoader:ImageLoader = new ImageLoader();
 
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();

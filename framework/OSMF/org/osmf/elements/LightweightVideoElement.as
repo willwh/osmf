@@ -468,10 +468,7 @@ package org.osmf.elements
 
 			CONFIG::FLASH_10_1	
 			{
-				if (loader is NetLoader)
-				{
-					reconnectStreams = (loader as NetLoader).reconnectStreams;
-				}
+				reconnectStreams = (loader as NetLoader).reconnectStreams;
 			}
 			
 			addTrait(MediaTraitType.PLAY, trait || new NetStreamPlayTrait(stream, resource, reconnectStreams));

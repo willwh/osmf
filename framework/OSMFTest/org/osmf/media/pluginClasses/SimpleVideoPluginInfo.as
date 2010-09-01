@@ -39,7 +39,7 @@ package org.osmf.media.pluginClasses
 		
 		override public function initializePlugin(resource:MediaResourceBase):void
 		{
-			var netLoader:NetLoader = new NetLoader();
+			var netLoader:NetLoader = new NetLoader(null, false);
 			var imageLoader:ImageLoader = new ImageLoader();
 
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();

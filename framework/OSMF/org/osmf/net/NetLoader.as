@@ -334,6 +334,64 @@ package org.osmf.net
 			}
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED); 				
 		}
+		
+		CONFIG::FLASH_10_1	
+		{						
+			/**
+			 * Called when the stream reconnect logic needs to create a new
+			 * NetConnection object. Override to create a custom NetConnection
+			 * object.
+			 * 
+			 * @private
+			 **/
+			protected function createReconnectNetConnection():NetConnection
+			{
+				return new NetConnection();
+			}
+			
+			/**
+			 * Override this method to provide custom <code>NetConnection</code> behavior when
+			 * using the stream reconnect feature. For example, if you wanted to
+			 * provide client-side load balancing in your player, you could create
+			 * a custom <code>NetLoader</code> class and override this method to use an
+			 * alternate URI.
+			 * 
+			 * @param netConnection The new <code>NetConnection</code> created by the stream reconnect logic.
+			 * @param resource The <code>URLResource</code> that was originally used to play the media.
+			 * @param lastUsedURI This is the URI that was last passed to the <code>NetConnection.connect</code> 
+			 * method.
+			 * 
+			 * @returns The URI that was passed to the NetConnection.connect method
+			 **/
+			protected function reconnectNetConnection(netConnection:NetConnection, resource:URLResource, 
+														lastUsedURI:String):String
+			{
+				netConnection.connect(lastUsedURI);
+				return lastUsedURI;
+			}
+			
+			/**
+			 * Override this method to provide custom reconnect behavior.
+			 * 
+			 * @private
+			 **/
+			protected function reconnectStream(loadTrait:NetStreamLoadTrait):void
+			{
+				var nsPlayOptions:NetStreamPlayOptions = new NetStreamPlayOptions();
+				 
+				loadTrait.netStream.attach(loadTrait.connection);
+				
+				nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
+				
+				var resource:URLResource = loadTrait.resource as URLResource;
+				var urlIncludesFMSApplicationInstance:Boolean = 
+						(resource as StreamingURLResource) != null ? (resource as StreamingURLResource).urlIncludesFMSApplicationInstance : false;
+				var streamName:String = NetStreamUtils.getStreamNameFromURL(resource.url, urlIncludesFMSApplicationInstance);
+				
+				nsPlayOptions.streamName = streamName; 			
+				loadTrait.netStream.play2(nsPlayOptions);
+			}
+		}
 						
 		/**
 		 *  Establishes a new NetStream on the connected NetConnection and signals that loading is complete.
@@ -355,9 +413,10 @@ package org.osmf.net
 				CONFIG::FLASH_10_1	
 				{				
 					// Set up stream reconnect logic
-					if (_reconnectStreams && NetStreamUtils.isStreamingResource(loadTrait.resource))
+					if (_reconnectStreams && (netLoadTrait.resource is URLResource) && 
+							NetStreamUtils.isRTMPStream((netLoadTrait.resource as URLResource).url))
 					{
-						setupStreamReconnect(loadTrait as NetStreamLoadTrait);
+						setupStreamReconnect(netLoadTrait);
 					}				
 				}
 				
@@ -366,7 +425,7 @@ package org.osmf.net
 		}	
 		
 		CONFIG::FLASH_10_1	
-		{				
+		{
 			/**
 			 * Sets up the stream reconnect logic. In the event of a dropped connection or a client
 			 * switching from a wired to a wireless network connection for example, this method
@@ -389,7 +448,7 @@ package org.osmf.net
 				}
 				
 				var netConnection:NetConnection = loadTrait.connection;
-				var reconnectTimer:Timer = new Timer(1000, 1);
+				var reconnectTimer:Timer = new Timer(STREAM_RECONNECT_TIMER_INTERVAL, 1);
 				var timeoutTimer:Timer;
 				var currentURI:String = netConnection.uri;
 				var streamIsPaused:Boolean = false;
@@ -447,13 +506,16 @@ package org.osmf.net
 				
 				function setupNetStreamListeners(add:Boolean=true):void
 				{
-					if (add)
+					if (loadTrait.netStream != null)
 					{
-						loadTrait.netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-					}
-					else
-					{
-						loadTrait.netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+						if (add)
+						{
+							loadTrait.netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+						}
+						else
+						{
+							loadTrait.netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+						}
 					}
 				}
 				
@@ -568,15 +630,7 @@ package org.osmf.net
 							logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"About to create a new NetConnection...");
 						}
 
-						if (loadTrait.netConnectionFactory != null && loadTrait.netConnectionFactory is NetConnectionFactory)
-						{
-							netConnection = (loadTrait.netConnectionFactory as NetConnectionFactory).createReconnectNetConnection();
-						}
-						else
-						{
-							netConnection = new NetConnection();
-						}
-						
+						netConnection = createReconnectNetConnection();
 						netConnection.client = new NetClient();						
 						setupNetConnectionListeners();
 					}
@@ -586,48 +640,8 @@ package org.osmf.net
 						logger.info(STREAM_RECONNECT_LOGGING_PREFIX+"Calling reconnectNetConnection to try to reconnect...");
 					}
 
-					currentURI = reconnectNetConnection(netConnection, currentURI);
+					currentURI = reconnectNetConnection(netConnection, loadTrait.resource as URLResource, currentURI);
 				}
-			}
-			
-			/**
-			 * Override this method to provide custom NetConnection behavior when
-			 * using the stream reconnect feature. For example, if you wanted to
-			 * provide client-side load balancing in your player, you could create
-			 * a custom NetLoader class and override this method to use an
-			 * alternate URI.
-			 * 
-			 * @param netConnection The new NetConnection created by the stream reconnect logic.
-			 * @param lastUsedURI This is the URI that was last passed to the NetConnection.connect method
-			 * 
-			 * @returns The URI that was passed to the NetConnection.connect method
-			 **/
-			protected function reconnectNetConnection(netConnection:NetConnection, lastUsedURI:String):String
-			{
-				netConnection.connect(lastUsedURI);
-				return lastUsedURI;
-			}
-			
-			/**
-			 * Override this method to provide custom reconnect behavior.
-			 * 
-			 * @private
-			 **/
-			protected function reconnectStream(loadTrait:NetStreamLoadTrait):void
-			{
-				var nsPlayOptions:NetStreamPlayOptions = new NetStreamPlayOptions();
-				 
-				loadTrait.netStream.attach(loadTrait.connection);
-				
-				nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
-				
-				var resource:URLResource = loadTrait.resource as URLResource;
-				var urlIncludesFMSApplicationInstance:Boolean = 
-						(resource as StreamingURLResource) != null ? (resource as StreamingURLResource).urlIncludesFMSApplicationInstance : false;
-				var streamName:String = NetStreamUtils.getStreamNameFromURL(resource.url, urlIncludesFMSApplicationInstance);
-				
-				nsPlayOptions.streamName = streamName; 			
-				loadTrait.netStream.play2(nsPlayOptions);
 			}
 		}
 				
@@ -767,7 +781,8 @@ package org.osmf.net
 		
 		CONFIG::FLASH_10_1	
 		{				
-			private static const STREAM_RECONNECT_TIMEOUT:int = 120;	// in seconds
+			private static const STREAM_RECONNECT_TIMEOUT:int = 120;			// in seconds
+			private static const STREAM_RECONNECT_TIMER_INTERVAL:int = 1000;	// in milliseconds
 		}
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetLoader");

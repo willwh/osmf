@@ -44,7 +44,7 @@ package com.akamai.osmf.net
 		/**
 		 * Constructor.
 		 **/
-		public function AkamaiNetConnection(resourceMetadata:Metadata)
+		public function AkamaiNetConnection(resourceMetadata:Metadata=null)
 		{
 			super();
 			

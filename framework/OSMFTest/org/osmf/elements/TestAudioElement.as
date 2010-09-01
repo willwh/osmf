@@ -105,7 +105,7 @@ package org.osmf.elements
 		
 		public function testConstructor():void
 		{
-			new AudioElement(null, new NetLoader());
+			new AudioElement(null, new NetLoader(null, false));
 			new AudioElement(null, new SoundLoader());
 			
 			// Loader must be a NetLoader or a SoundLoader.

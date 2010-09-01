@@ -22,8 +22,6 @@
 
 package com.akamai.osmf.net
 {
-	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
-	
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.utils.Dictionary;
@@ -74,6 +72,17 @@ package com.akamai.osmf.net
 			return ns;
 		}
 		
+		CONFIG::FLASH_10_1	
+		{							
+			/**
+			 * @inheritDoc
+			 **/
+			override protected function createReconnectNetConnection():NetConnection
+			{
+				return new AkamaiNetConnection();
+			}
+		}
+				
 		/**
 		 * @inheritDoc
 		 **/

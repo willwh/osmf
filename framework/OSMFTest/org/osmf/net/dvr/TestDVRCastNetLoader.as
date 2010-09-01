@@ -28,7 +28,7 @@ package org.osmf.net.dvr
 	{
 		public function testDVRCastNetLoader():void
 		{
-			var nl:DVRCastNetLoader = new DVRCastNetLoader();
+			var nl:DVRCastNetLoader = new DVRCastNetLoader(null, false);
 			assertNotNull(nl);
 		}
 		
@@ -39,7 +39,7 @@ package org.osmf.net.dvr
 			// DVRCastNetLoader.canHandleResource is not fooled by a bogus dvr streamType
 			// without corresponding metadata under DVRCastConstants.STREAM_INFO_KEY and
 			// DVRCastConstants.RECORDING_INFO_KEY.
-			var nl:DVRCastNetLoader = new DVRCastNetLoader();
+			var nl:DVRCastNetLoader = new DVRCastNetLoader(null, false);
 			assertNotNull(nl);
 			
 			var resource:StreamingURLResource 

@@ -43,7 +43,7 @@ package org.osmf.net.dvr
 			video
 				= new VideoElement
 					( new StreamingURLResource("rtmp://example.com/non-existent", StreamType.DVR)
-					, new DVRCastNetLoader(dvrCastNetConnectionFactory)
+					, new DVRCastNetLoader(dvrCastNetConnectionFactory, false)
 					);
 		}
 		

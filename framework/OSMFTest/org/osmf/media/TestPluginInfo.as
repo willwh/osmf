@@ -39,7 +39,7 @@ package org.osmf.media
 			items.push
 				(	new MediaFactoryItem
 						( "test.video"
-							, new NetLoader().canHandleResource
+							, new NetLoader(null, false).canHandleResource
 							, function():MediaElement
 							{
 								return new VideoElement();

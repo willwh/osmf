@@ -23,6 +23,10 @@ package org.osmf.net
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.NetStatusEvent;
+	import flash.events.TimerEvent;
+	import flash.net.NetConnection;
+	import flash.utils.Timer;
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
@@ -41,6 +45,7 @@ package org.osmf.net
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.NullResource;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.TestConstants;
 
 	public class TestNetLoader extends TestLoaderBase
@@ -334,7 +339,121 @@ package org.osmf.net
 				}
 			}
 		}
+		
+		CONFIG::FLASH_10_1	
+		{
+			public function testReconnectProperties():void
+			{
+				var netLoader:NetLoader = new NetLoader();
+				assertTrue(netLoader.reconnectStreams);
+				netLoader.reconnectStreamsTimeout = 900;
+				assertTrue(netLoader.reconnectStreamsTimeout == 900);
+				
+				try 
+				{
+					netLoader.reconnectStreamsTimeout = -5;
+					fail("NetLoader.reconnectStreamsTimeout should have thrown an ArgumentError");				
+				}
+				catch(e:ArgumentError)
+				{
+					assertEquals(e.message, OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+				}
+				
+				netLoader.reconnectStreamsWhenPaused = true;
+				assertTrue(netLoader.reconnectStreamsWhenPaused == true);
+			}
+			
+			public function testStreamReconnect():void
+			{
+				doTestStreamReconnect(new URLResource("rtmp://host/appname/mp4:example.mp4"));
+			}
 
+			public function testStreamReconnectWithInstanceName():void
+			{
+				var resource:StreamingURLResource = new StreamingURLResource("rtmp://host/appname/instname/mp4:example.mp4", null, NaN, NaN, null, true); 
+				doTestStreamReconnect(resource);
+			}
+			
+			private function doTestStreamReconnect(resource:MediaResourceBase):void
+			{
+				var netLoader:NetLoader = netFactory.createNetLoader(null, true);
+				var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+				
+				if (mockLoader != null)
+				{
+					eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent, TEST_TIME));
+					
+					mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+					
+					resource.mediaType= MediaType.VIDEO;
+					
+					var loadTrait:LoadTrait = new NetStreamLoadTrait(netLoader, resource);
+					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onProtocolLoad);
+					loadTrait.load();
+
+					var nc:NetConnection;
+										
+					function onProtocolLoad(event:LoadEvent):void
+					{
+						if (event.loadState == LoadState.READY)
+						{
+							nc = (loadTrait as NetStreamLoadTrait).connection;
+							setupNetConnectionListeners();
+							// Close the NetConnection without using loadTrait.unload(). This
+							// will cause the reconnect logic to kick in since the LoadState 
+							// is still READY
+							nc.close();
+						}
+						else if (event.loadState == LoadState.UNINITIALIZED)
+						{
+							setupNetConnectionListeners(false);
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
+					}
+					
+					function setupNetConnectionListeners(add:Boolean=true):void
+					{
+						if (add)
+						{
+							nc.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+						}
+						else
+						{
+							nc.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+						}
+					}
+					
+					function onNetStatus(event:NetStatusEvent):void
+					{
+						var timer:Timer = new Timer(1000, 1);
+						timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete, false, 0, true);
+						
+						switch (event.info.code)
+						{
+							case NetConnectionCodes.CONNECT_CLOSED:
+								// We got here from the NetConnection.close() call above
+								// to simulate connection loss. Now we'll wait a second
+								// and see if we get a new NetConnection
+								setupNetConnectionListeners(false);
+								timer.start();
+								break;
+						}
+					}
+					
+					function onTimerComplete(event:TimerEvent):void
+					{
+						var tempNc:NetConnection = (loadTrait as NetStreamLoadTrait).connection;
+						// We're connected
+						assertTrue(tempNc.connected);
+						// And we got a differenent NetConnection object
+						assertFalse(tempNc === nc);
+						// We're done
+						loadTrait.unload();
+					}
+				}
+			}
+		}
+		
 		private function doTestLoadProtocol(resource:MediaResourceBase):void
 		{
 			var netLoader:NetLoader = netFactory.createNetLoader();

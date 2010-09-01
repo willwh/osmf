@@ -43,14 +43,14 @@ package org.osmf.netmocker
 		 * @param netConnectionFactory the netConnection factory instance to be used
 		 * @param mockNetNegotiator the mock NetNegotiator to be used
 		 */
-		public function MockNetLoader(netConnectionFactory:NetConnectionFactoryBase= null)
+		public function MockNetLoader(netConnectionFactory:NetConnectionFactoryBase=null, reconnectStreams:Boolean=true)
 		{
 			if (netConnectionFactory == null)
 			{
 				netConnectionFactory = new DefaultNetConnectionFactory();
 			}
 			
-			super(netConnectionFactory);
+			super(netConnectionFactory, reconnectStreams);
 			
 			this.netConnectionFactory = netConnectionFactory;
 		}
@@ -213,7 +213,27 @@ package org.osmf.netmocker
 			mockNetStream.expectedCuePoints = _netStreamExpectedCuePoints;
 			return mockNetStream;
 	    }
-	    	    
+
+		CONFIG::FLASH_10_1	
+		{								    
+			/**
+			 * @inheritDoc
+		     **/
+			override protected function createReconnectNetConnection():NetConnection
+			{
+				return new MockNetConnection();
+			}
+		   
+			/**
+			 * @inheritDoc
+			 **/
+			override protected function reconnectNetConnection(netConnection:NetConnection, resource:URLResource, lastUsedURI:String):String
+			{
+				super.reconnectNetConnection(netConnection, resource, null);
+				return null;
+			}
+		}
+					    	    
 	    private var _netStreamExpectedDuration:Number = 0;
 	    private var _netStreamExpectedBytesTotal:Number = 0;
 	    private var _netStreamExpectedSubclipDuration:Number = NaN;
