@@ -38,7 +38,6 @@ package
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.*;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoaderWithBufferControl;
-	import org.osmf.net.multicast.MulticastNetLoader;
 	import org.osmf.player.configuration.*;
 	import org.osmf.player.debug.*;
 	import org.osmf.player.preloader.*;
