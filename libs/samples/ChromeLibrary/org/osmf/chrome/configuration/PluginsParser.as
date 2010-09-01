@@ -53,6 +53,8 @@ package org.osmf.chrome.configuration
 				pluginsToLoad--;
 				if (pluginsToLoad <= 0)
 				{
+					mediaFactory.removeEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginResult);
+					mediaFactory.removeEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginResult);
 					dispatchEvent(new Event(Event.COMPLETE));
 				}
 			}
