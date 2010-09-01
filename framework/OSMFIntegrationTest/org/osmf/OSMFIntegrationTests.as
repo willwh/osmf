@@ -65,7 +65,7 @@ package org.osmf
 			
 			// Tests that use mock objects, now to be run a second time without
 			// using mock objects:
-	
+
 			addTestSuite(TestMediaPlayer);
 
 			addTestSuite(TestNetLoader);
@@ -86,6 +86,8 @@ package org.osmf
 			addTestSuite(TestPluginManagerIntegration);
 
 			addTestSuite(TestF4MLoader);	
+
+			addTestSuite(TestMulticast);
 		}
 	}
 }
