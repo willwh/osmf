@@ -25,10 +25,6 @@ package org.osmf.net
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.StreamingURLResource;
-	CONFIG::FLASH_10_1	
-	{
-		import flash.net.NetGroup;
-	}
 
 	public class TestMulticastNetLoader extends TestCase
 	{
