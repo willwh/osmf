@@ -47,7 +47,7 @@ package org.osmf
 	import org.osmf.net.httpstreaming.f4f.*;
 	import org.osmf.net.httpstreaming.flv.*;
 	import org.osmf.net.rtmpstreaming.*;
-	import org.osmf.net.multicast.*;
+	import org.osmf.net.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
 

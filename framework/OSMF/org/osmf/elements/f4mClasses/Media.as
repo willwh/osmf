@@ -23,8 +23,6 @@ package org.osmf.elements.f4mClasses
 {
 	import flash.utils.ByteArray;
 	
-	import org.osmf.net.multicast.*;
-	
 	/**
 	 * Describes a specific piece of media.
 	 *  
