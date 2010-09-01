@@ -133,6 +133,9 @@ package org.osmf.netmocker
 				case NetConnectionExpectation.SECURITY_ERROR:
 					throwSecurityError();
 					break;
+				case NetConnectionExpectation.CONNECT_WITH_REDIRECT:
+					performRedirect();
+					break;
 				default:
 					throw new IllegalOperationError();
 			}
@@ -176,6 +179,13 @@ package org.osmf.netmocker
 				// to dispatching the delayed event.
 				eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_SUCCESS, LEVEL_STATUS, EVENT_DELAY, this, params);
 			}
+		}
+
+		private function performRedirect():void
+		{
+			_expectation = NetConnectionExpectation.VALID_CONNECTION;
+			
+			eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_REJECTED, LEVEL_ERROR, EVENT_DELAY, null, null, true);
 		}
 
 		private function connectToInvalidServer():void

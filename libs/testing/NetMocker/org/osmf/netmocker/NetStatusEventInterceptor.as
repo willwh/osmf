@@ -58,7 +58,7 @@ package org.osmf.netmocker
 		 * to be dispatched.
 		 * @param nc A NetConnection which should be connected to null just prior to dispatching the delayed event.
 		 **/
-		public function dispatchNetStatusEvent(code:String, level:String, delay:int=0, nc:NetConnection = null, params:Array = null):void
+		public function dispatchNetStatusEvent(code:String, level:String, delay:int=0, nc:NetConnection = null, params:Array = null, signalRedirect:Boolean = false):void
 		{
 			// Once a CONNECT_CLOSED event is received, we want to prohibit the dispatching of any events which have been
 			// been queued-up for delayed dispatching.
@@ -71,7 +71,7 @@ package org.osmf.netmocker
 					isClosed = false;
 					break;
 			}
-			dispatchNetStatusEvents([{"code":code, "level":level, "nc":nc, "params":params}], delay);
+			dispatchNetStatusEvents([{"code":code, "level":level, "nc":nc, "params":params}], delay, signalRedirect);
 		}
 		
 		/**
@@ -84,7 +84,7 @@ package org.osmf.netmocker
 		 * @param delay An optional delay (in milliseconds) before the events
 		 * are to be dispatched.
 		 **/
-		public function dispatchNetStatusEvents(objectInfos:Array, delay:int=0):void
+		public function dispatchNetStatusEvents(objectInfos:Array, delay:int=0, signalRedirect:Boolean=false):void
 		{
 			if (delay > 0)
 			{
@@ -95,19 +95,19 @@ package org.osmf.netmocker
 				function onDelayTimerComplete(event:TimerEvent):void
 				{
 					timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onDelayTimerComplete);
-					doDispatchNetStatusEvents(objectInfos);
+					doDispatchNetStatusEvents(objectInfos, signalRedirect);
 				}
 			}
 			else
 			{
-				doDispatchNetStatusEvents(objectInfos);
+				doDispatchNetStatusEvents(objectInfos, signalRedirect);
 			}
 		}
 		
 		// Internals
 		//
 		
-		private function doDispatchNetStatusEvents(objectInfos:Array):void
+		private function doDispatchNetStatusEvents(objectInfos:Array, signalRedirect:Boolean=false):void
 		{
 			var detailsValue:String = "";
 			
@@ -140,6 +140,15 @@ package org.osmf.netmocker
 					detailsValue = objectInfo["details"];
 				}
 				
+				var infoObj:Object = {"code":objectInfo["code"], "level":objectInfo["level"], "details":detailsValue, "mockEvent":true};
+				
+				if (signalRedirect)
+				{
+					infoObj.ex = new Object();
+					infoObj.ex.code = 302;
+					infoObj.ex.redirect = "rtmp://example.com/redirect";
+				}
+				
 				// Because this class intercepts all NetStatusEvents, we add a
 				// marker to the info object (called "mockEvent") so that we
 				// can distinguish between real events (which we want to swallow)
@@ -148,7 +157,7 @@ package org.osmf.netmocker
 					( NetStatusEvent.NET_STATUS
 					, false
 					, false
-					, {"code":objectInfo["code"], "level":objectInfo["level"], "details":detailsValue, "mockEvent":true}
+					, infoObj
 					)
 				);
 			}

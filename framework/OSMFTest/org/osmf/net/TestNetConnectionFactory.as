@@ -94,6 +94,11 @@ package org.osmf.net
 			doTestCreateWithGoodResource(streamingURLResource);
 		}
 		
+		public function testCreateWithRTMPRedirect():void
+		{
+			doTestCreateWithRTMPRedirect();
+		}
+		
 		public function testCreateWithBadResource():void
 		{
 			doTestCreateWithBadResource();
@@ -218,6 +223,21 @@ package org.osmf.net
 			}
 		}
 		
+		private function doTestCreateWithRTMPRedirect():void
+		{
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var factory:NetConnectionFactory = createNetConnectionFactory(true, NetConnectionExpectation.CONNECT_WITH_REDIRECT);
+			factory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated);
+			factory.create(UNSUCCESSFUL_RESOURCE);
+			function onCreated(event:NetConnectionFactoryEvent):void
+			{
+				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_COMPLETE);
+				assertTrue(event.netConnection.connected);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
 		private function doTestCreateWithBadResource():void
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));

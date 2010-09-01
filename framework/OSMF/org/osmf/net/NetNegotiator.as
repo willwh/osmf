@@ -227,12 +227,42 @@ package org.osmf.net
 						);
 					break;
 				case NetConnectionCodes.CONNECT_REJECTED:
-					handleFailedConnectionSession
-						( new MediaError(MediaErrorCodes.NETCONNECTION_REJECTED, event.info.description)
-						, NetConnection(event.target).uri
-						);
+					if (	event.info.hasOwnProperty("ex")
+						&& 	event.info.ex.code == 302
+					   )
+					{
+						// Retry using the redirect URL.
+						var index:int = netConnections.indexOf(event.target as NetConnection);
+						CONFIG::LOGGING
+						{
+							logger.info("Redirect from " + netConnectionURLs[index] + " to " + event.info.ex.redirect);
+						}
+						netConnectionURLs[index] = event.info.ex.redirect;
+						attemptIndex = index;
+						
+						// We can't attempt a reconnect from within the netStatus
+						// event handler, so we use a temporary Timer.
+						var tempTimer:Timer = new Timer(100, 1);
+						tempTimer.addEventListener(TimerEvent.TIMER, onTempTimer);
+						tempTimer.start();
+						
+						function onTempTimer(event:TimerEvent):void
+						{
+							tempTimer.removeEventListener(TimerEvent.TIMER, onTempTimer);
+							tempTimer.stop();
+						
+							tryToConnect(null);
+						}
+					}
+					else
+					{
+						handleFailedConnectionSession
+							( new MediaError(MediaErrorCodes.NETCONNECTION_REJECTED, event.info.description)
+							, NetConnection(event.target).uri
+							);
+					}
     				break;
-    			case NetConnectionCodes.CONNECT_FAILED:
+       			case NetConnectionCodes.CONNECT_FAILED:
     				failedConnectionCount++;
     				
  					CONFIG::LOGGING

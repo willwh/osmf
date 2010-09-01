@@ -53,6 +53,9 @@ package org.osmf.netmocker
 		/** Expect the connect with FMTA parameters*/
 		public static const CONNECT_WITH_FMTA:NetConnectionExpectation = new NetConnectionExpectation("connectWithFMTA");
 
+		/** Expect the connection to undergo an RTMP redirect (302)*/
+		public static const CONNECT_WITH_REDIRECT:NetConnectionExpectation = new NetConnectionExpectation("connectWithRedirect");
+
 		/**
 		 * @private
 		 **/
