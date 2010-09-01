@@ -19,14 +19,11 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.multicast
+package org.osmf.net
 {
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
-	CONFIG::FLASH_10_1	
-	{
-		import flash.net.NetGroup;
-	}
+
 	CONFIG::LOGGING
 	{
 		import org.osmf.logging.Logger;
@@ -62,36 +59,7 @@ package org.osmf.net.multicast
 		**/
 		public function MulticastNetLoader(factory:NetConnectionFactoryBase=null)
 		{
-			super(factory);
-			
-			CONFIG::FLASH_10_1	
-			{
-				netGroups = new Vector.<NetGroup>();
-			}
-		}
-		
-		CONFIG::FLASH_10_1	
-		{
-			/**
-			 * The factory function for creating a NetGroup.
-			 * 
-			 * @param connection The NetConnection that is associated with the NetStreamSwitchManagerBase.
-			 * @param rtmfpGroupspec The rtmfp GroupSpec that is used to create the NetGroup.
-			 * 
-			 * @return The NetGroup.
-			 **/
-			public function createNetGroup(connection:NetConnection, rtmfpGroupspec:String):NetGroup
-			{
-				CONFIG::LOGGING
-				{
-					logger.info("Creating NetGroup with rtmfpGroupspec " + rtmfpGroupspec);
-				}
-				
-				var ng:NetGroup = new NetGroup(connection, rtmfpGroupspec);
-				netGroups.push(ng);
-				
-				return ng;
-			}
+			super(factory, false);
 		}
 		
 		/**
@@ -115,16 +83,6 @@ package org.osmf.net.multicast
 		 * @private
 		 * @inheritDoc
 		**/
-		override protected function executeLoad(loadTrait:LoadTrait):void
-		{
-			loadTrait.resource.addMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER, this);
-			super.executeLoad(loadTrait);
-		}
-		
-		/**
-		 * @private
-		 * @inheritDoc
-		**/
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
 			
@@ -142,15 +100,9 @@ package org.osmf.net.multicast
 				{
 					logger.info("Multicast NetStream created.");
 				}
-				ns.bufferTime = 5.0;
 			}
 			
 			return ns;
-		}
-		
-		CONFIG::FLASH_10_1	
-		{
-			private var netGroups:Vector.<NetGroup>;
 		}
 		
 		CONFIG::LOGGING

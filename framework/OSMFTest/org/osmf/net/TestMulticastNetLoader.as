@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.multicast
+package org.osmf.net
 {
 	import flexunit.framework.TestCase;
 	

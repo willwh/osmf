@@ -117,10 +117,21 @@ package org.osmf.elements.f4mClasses
 			// Media	
 			
 			var bitrateMissing:Boolean = false;
+			var multicastParameterInvalid:Boolean = false;
 			
 			for each (var media:XML in root.xmlns::media)
 			{
 				var newMedia:Media = parseMedia(media, baseUrl);
+				if ((newMedia.rtmfpGroupspec != null 
+						&& newMedia.rtmfpGroupspec.length > 0 
+						&& (newMedia.rtmfpStreamName == null || newMedia.rtmfpStreamName.length <= 0)) 
+					|| (newMedia.rtmfpStreamName != null 
+						&& newMedia.rtmfpStreamName.length > 0 
+						&& (newMedia.rtmfpGroupspec == null || newMedia.rtmfpGroupspec.length <= 0)))
+				{
+					multicastParameterInvalid = true;
+				}
+				
 				if (newMedia.rtmfpGroupspec != null && newMedia.rtmfpGroupspec.length > 0)
 				{
 					isMulticast = true;
@@ -128,6 +139,16 @@ package org.osmf.elements.f4mClasses
 				manifest.media.push(newMedia);
 				bitrateMissing ||= isNaN(newMedia.bitrate);
 			}	
+			
+			if (multicastParameterInvalid)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.MULTICAST_PARAMETER_INVALID));
+			}
+			
+			if (manifest.media.length > 1 && isMulticast)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.MULTICAST_NOT_SUPPORT_MBR));
+			} 
 			
 			if (isMulticast)
 			{

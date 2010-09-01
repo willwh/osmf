@@ -38,10 +38,6 @@ package org.osmf.net
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.utils.Timer;
-	CONFIG::FLASH_10_1	
-	{
-		import flash.net.NetGroup;
-	}
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -49,7 +45,6 @@ package org.osmf.net
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.multicast.MulticastNetLoader;
 	
 	/**
 	 * Dispatched when the factory has successfully created and connected a NetConnection.
@@ -157,9 +152,7 @@ package org.osmf.net
 			netConnections[attemptIndex].client = new NetClient();
 			
 			var rs:StreamingURLResource = resource as StreamingURLResource;
-			var loader:MulticastNetLoader = resource.getMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER) as MulticastNetLoader;
-			if (loader != null &&
-				rs != null &&
+			if (rs != null &&
 				rs.rtmfpGroupspec != null &&
 				rs.rtmfpGroupspec.length > 0)
 			{
@@ -276,37 +269,7 @@ package org.osmf.net
 					}
 					
 					shutDownUnsuccessfulConnections();
-					
-					var rs:StreamingURLResource = resource as StreamingURLResource;
-					var loader:MulticastNetLoader = resource.getMetadataValue(MetadataNamespaces.MULTICAST_NET_LOADER) as MulticastNetLoader;
-					if (loader != null && 
-						rs != null &&
-						rs.rtmfpGroupspec != null &&
-						rs.rtmfpGroupspec.length > 0)
-					{
-						CONFIG::FLASH_10_1	
-						{
-							formNetGroup(event.currentTarget as NetConnection, rs.rtmfpGroupspec, loader);
-						}
-					}
-					else
-					{
-						dispatchEvent
-							( new NetConnectionFactoryEvent
-								( NetConnectionFactoryEvent.CREATION_COMPLETE
-								, false
-								, false
-								, event.currentTarget as NetConnection
-								, resource
-								)
-							);
-					}
-					break;					
-				case "NetGroup.Connect.Success":
-					CONFIG::LOGGING
-					{
-						logger.info("NetGroup connected");
-					}
+
 					dispatchEvent
 						( new NetConnectionFactoryEvent
 							( NetConnectionFactoryEvent.CREATION_COMPLETE
@@ -316,31 +279,9 @@ package org.osmf.net
 							, resource
 							)
 						);
-					break;		
-				case "NetGroup.Connect.Failed":
-					CONFIG::LOGGING
-					{
-						logger.info(event.info.code);
-					}				
-					dispatchEvent(new MediaErrorEvent(
-						MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.MULTICAST_NETGROUP_CONNECT_FAILED)));
-					break;
-				case "NetGroup.Connect.Rejected":
-					CONFIG::LOGGING
-					{
-						logger.info(event.info.code);
-					}				
-					dispatchEvent(new MediaErrorEvent(
-						MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.MULTICAST_NETGROUP_CONNECT_REJECTED)));
-					break;
-				case "NetGroup.MulticastStream.PublishNotify":
-				case "NetGroup.MulticastStream.UnpublishNotify":
+						
+					break;					
 				case "NetStream.Publish.Start":
-				case "NetGroup.Neighbor.Connect":
-				case "NetGroup.Neighbor.Disconnect":
-				case "NetGroup.Posting.Notify":
-				case "NetGroup.LocalCoverage.Notify":
-				case "NetGroup.SendTo.Notify":
 					CONFIG::LOGGING
 					{
 						logger.info(event.info.code);
@@ -349,29 +290,6 @@ package org.osmf.net
 					// the MulticastStream events can be useful if more streams are published into the group
 					// or if you want to do something when streams start/stop
 					break;
-			}
-		}
-		
-		CONFIG::FLASH_10_1	
-		{
-			private function formNetGroup(connection:NetConnection, rtmfpGroupspec:String, loader:MulticastNetLoader):void
-			{
-				CONFIG::LOGGING
-				{
-					logger.info("Attempting create a NetGroup with rtmfpGroupspec " + rtmfpGroupspec);
-				}
-
-				var ng:NetGroup;
-				ng = loader.createNetGroup(connection, rtmfpGroupspec);
-
-				if (ng == null)
-				{
-					CONFIG::LOGGING
-					{
-						logger.info("MulticastNetLoader/derived class returns null NetGroup, NetNegotiator will create one");
-					}
-					ng = new NetGroup(connection, rtmfpGroupspec);
-				}
 			}
 		}
 		

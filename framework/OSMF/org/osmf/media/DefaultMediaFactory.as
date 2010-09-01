@@ -32,7 +32,7 @@ package org.osmf.media
 	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dvr.DVRCastNetLoader;
-	import org.osmf.net.multicast.MulticastNetLoader;
+	import org.osmf.net.MulticastNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	
 	CONFIG::FLASH_10_1

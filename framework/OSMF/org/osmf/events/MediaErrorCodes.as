@@ -155,14 +155,14 @@ package org.osmf.events
 		public static const DVRCAST_STREAM_INFO_RETRIEVAL_FAILED:int	= 22;
 
 		/**
-		 * Error constant for when the NetGroup connection attempt failed..
+		 * Error constant for when rtmfpGroupspec or rtmfpStreamName is null or empty but not both
 		 **/
-		public static const MULTICAST_NETGROUP_CONNECT_FAILED:int		= 23;
+		public static const MULTICAST_PARAMETER_INVALID:int				= 23;
 
 		/**
-		 * Error constant for when the NetGroup is not authorized to function.
+		 * Error constant for when MBR while multicast 
 		 **/
-		public static const MULTICAST_NETGROUP_CONNECT_REJECTED:int		= 24;
+		public static const MULTICAST_NOT_SUPPORT_MBR:int				= 24;
 
 		/**
 		 * @private
@@ -219,8 +219,8 @@ package org.osmf.events
 			, {errorID:DVRCAST_SUBSCRIBE_FAILED,				message:OSMFStrings.DVRCAST_SUBSCRIBE_FAILED}
 			, {errorID:DVRCAST_CONTENT_OFFLINE,					message:OSMFStrings.DVRCAST_CONTENT_OFFLINE}
 			, {errorID:DVRCAST_STREAM_INFO_RETRIEVAL_FAILED,	message:OSMFStrings.DVRCAST_STREAM_INFO_RETRIEVAL_FAILED}
-			, {errorID:MULTICAST_NETGROUP_CONNECT_FAILED,		message:OSMFStrings.MULTICAST_NETGROUP_CONNECT_FAILED}
-			, {errorID:MULTICAST_NETGROUP_CONNECT_REJECTED, 	message:OSMFStrings.MULTICAST_NETGROUP_CONNECT_REJECTED}
+			, {errirID:MULTICAST_PARAMETER_INVALID,				message:OSMFStrings.MULTICAST_PARAMETER_INVALID}
+			, {errirID:MULTICAST_NOT_SUPPORT_MBR,				message:OSMFStrings.MULTICAST_NOT_SUPPORT_MBR}
 		];
 	}
 }
