@@ -416,7 +416,7 @@ package org.osmf.vast.media
 				for each(var collapseObj:Object in vastDocument.trkCollapseEvent)
 				{
 					var collapseURL:VASTUrl = new VASTUrl(collapseObj.url);
-					expandArray.push(expandURL);
+					collapseArray.push(collapseURL);
 				}
 
 				collapseEvent.urls = collapseArray;
