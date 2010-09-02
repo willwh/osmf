@@ -24,6 +24,7 @@ package org.osmf.smil.media
 	import org.osmf.elements.CompositeElement;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
@@ -31,7 +32,6 @@ package org.osmf.smil.media
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaType;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.StreamType;
@@ -121,7 +121,24 @@ package org.osmf.smil.media
 					var duration:Number = (smilElement as SMILMediaElement).duration;
 					if (!isNaN(duration) && duration > 0)
 					{
-						(videoElement as VideoElement).defaultDuration = duration;
+						if (videoElement is VideoElement)
+						{
+							(videoElement as VideoElement).defaultDuration = duration;
+						}
+						else if (videoElement is ProxyElement) 
+						{ 
+							// Try to find the proxied video element (fix for FM-1020)
+							var tempMediaElement:MediaElement = videoElement;
+							while (tempMediaElement is ProxyElement)
+							{
+								tempMediaElement = (tempMediaElement as ProxyElement).proxiedElement;
+							}
+							
+							if (tempMediaElement != null && tempMediaElement is VideoElement)
+							{
+								(tempMediaElement as VideoElement).defaultDuration = duration;
+							}
+						}
 					}
 					(parentMediaElement as CompositeElement).addChild(videoElement);
 					break;
