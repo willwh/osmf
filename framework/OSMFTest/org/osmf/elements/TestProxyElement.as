@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.containers.MediaContainer;
@@ -33,6 +35,7 @@ package org.osmf.elements
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicProxyElement;
 	import org.osmf.utils.SimpleLoader;
 
 	public class TestProxyElement extends TestMediaElement
@@ -54,7 +57,7 @@ package org.osmf.elements
 			new ProxyElement(null);
 		}
 		
-		public function testSetWrappedElement():void
+		public function testSetProxiedElement():void
 		{
 			var proxyElement:ProxyElement = createProxyElement();
 			
@@ -103,7 +106,7 @@ package org.osmf.elements
 			
 			assertTrue(traitsAddedCount == 2);
 			assertTrue(traitsRemovedCount == 2);
-
+			
 			// Clearing the wrapped element is also possible.  This should
 			// clear out the traits, and make many operations invalid.
 			//
@@ -116,6 +119,38 @@ package org.osmf.elements
 
 			assertTrue(traitsAddedCount == 2);
 			assertTrue(traitsRemovedCount == 4);
+		}
+		
+		public function testSetProxiedElementWithBaseTraits():void
+		{
+			// When setting a new proxied element, we should not get events
+			// for traits that are overridden or blocked (FM-937).
+			//
+
+			var proxyElement:DynamicProxyElement = new DynamicProxyElement(null, [MediaTraitType.LOAD]);
+			var blockedTraits:Vector.<String> = new Vector.<String>();
+			blockedTraits.push(MediaTraitType.PLAY);
+			proxyElement.setBlockedTraits(blockedTraits);
+
+			var proxiedElement:DynamicMediaElement
+				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.LOAD]
+										 , new SimpleLoader()
+										 );
+										 
+			proxyElement.proxiedElement = proxiedElement;
+
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+			
+			var proxiedElement2:DynamicMediaElement
+				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.LOAD]
+										 , new SimpleLoader()
+										 );
+
+			proxyElement.proxiedElement = proxiedElement2;
+			
+			assertTrue(traitsAddedCount == 0);
+			assertTrue(traitsRemovedCount == 0);
 		}
 		
 		override public function testContainer():void

@@ -137,7 +137,16 @@ package org.osmf.elements
 					// for all traits.
 					for each (traitType in _proxiedElement.traitTypes)
 					{
-						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
+						// But not for traits that are overridden or blocked, since
+						// the client won't be aware of such traits.
+						if (	super.hasTrait(traitType) == false
+							&& (	_blockedTraits == null
+								||	_blockedTraits.indexOf(traitType) == -1
+							   )
+						   )
+						{
+							super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
+						}
 					}
 				}
 				
@@ -162,7 +171,16 @@ package org.osmf.elements
 					// for all traits.
 					for each (traitType in _proxiedElement.traitTypes)
 					{
-						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
+						// But not for traits that are overridden or blocked, since
+						// the client won't be able to access such traits.
+						if (	super.hasTrait(traitType) == false
+							&& (	_blockedTraits == null
+								||	_blockedTraits.indexOf(traitType) == -1
+							   )
+						   )
+						{
+							super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
+						}
 					}
 				}				
 			}
