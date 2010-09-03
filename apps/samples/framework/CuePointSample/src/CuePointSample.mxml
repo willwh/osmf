@@ -46,7 +46,11 @@
 			import org.osmf.media.URLResource;
 			import org.osmf.events.*;
 						
-			private static const REMOTE_STREAM_WITH_NAV:String = "rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/cuepoints/spacealonehd_sounas_640_with_nav.f4v";
+			private static const REMOTE_STREAM_WITH_NAV:String = 
+			// This sample contains embedded cuepoints (added at encoding time)
+			"rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/cuepoints/spacealonehd_sounas_640_with_nav.f4v";
+			// This sample contains no embedded cuepoints
+			//"rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/sample1_700kbps.f4v";
 						
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;
 			private static const MAX_VIDEO_WIDTH:int = 480;
@@ -148,7 +152,10 @@
 				}
 				else
 				{
-					dynamicTimelineMetadata = mediaElement.getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+					if (dynamicTimelineMetadata == null)
+					{
+						dynamicTimelineMetadata = mediaElement.getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+					}
 					timelineMetadata = dynamicTimelineMetadata;
 				}
 				
@@ -318,6 +325,12 @@
 			private function onClickAddCuePoint(event:Event):void
 			{
 				var cuePoint:CuePoint = new CuePoint(CuePointType.ACTIONSCRIPT, Number(tiCuePointTime.text), tiCuePointName.text, null);
+				if (dynamicTimelineMetadata == null)
+				{
+					dynamicTimelineMetadata = new TimelineMetadata(mediaPlayer.media);
+					mediaPlayer.media.addMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, dynamicTimelineMetadata);
+
+				}
 				dynamicTimelineMetadata.addMarker(cuePoint);
 				
 				updateInternalCollection(cuePoint);
