@@ -226,8 +226,8 @@ package org.osmf.media
 			
 			this.media = media;
 			
-			_currentTimeTimer.addEventListener(TimerEvent.TIMER, onCurrentTimeTimer);			
-			_bytesLoadedTimer.addEventListener(TimerEvent.TIMER, onBytesLoadedTimer);				
+			_currentTimeTimer.addEventListener(TimerEvent.TIMER, onCurrentTimeTimer, false, 0, true);			
+			_bytesLoadedTimer.addEventListener(TimerEvent.TIMER, onBytesLoadedTimer, false, 0, true);
 		}
 
 		/**
