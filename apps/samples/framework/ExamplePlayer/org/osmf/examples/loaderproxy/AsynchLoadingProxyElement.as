@@ -51,6 +51,17 @@ package org.osmf.examples.loaderproxy
 		}
 
 		/**
+		 * Override this method to define a custom asynchronous load trait.
+		 **/
+		protected function createAsynchLoadingProxyLoadTrait():LoadTrait
+		{
+			return new AsynchLoadingProxyLoadTrait(super.getTrait(MediaTraitType.LOAD) as LoadTrait);
+		}
+		
+		// Internals
+		//
+
+		/**
 		 * @private
 		 **/
 		override protected function setupTraits():void
@@ -86,7 +97,7 @@ package org.osmf.examples.loaderproxy
 			{
 				if (value.hasTrait(MediaTraitType.LOAD))
 				{
-					processLoadTrait();
+					processNewLoadTrait();
 				}
 				else
 				{
@@ -102,16 +113,16 @@ package org.osmf.examples.loaderproxy
 			{
 				proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
-				processLoadTrait();
+				processNewLoadTrait();
 			}
 		}
 
-		private function processLoadTrait():void
+		private function processNewLoadTrait():void
 		{
 			// Override the LoadTrait with our own custom trait, which provides
 			// hooks for executing asynchronous logic in conjunction with the
 			// load of the proxied element.
-			var asynchLoadTrait:AsynchLoadingProxyLoadTrait = new AsynchLoadingProxyLoadTrait(super.getTrait(MediaTraitType.LOAD) as LoadTrait);
+			var asynchLoadTrait:LoadTrait = createAsynchLoadingProxyLoadTrait();
 			addTrait(MediaTraitType.LOAD, asynchLoadTrait); 
 
 			// Make sure we're informed when the custom load trait signals that

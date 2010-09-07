@@ -29,19 +29,15 @@ package org.osmf.examples
 	
 	import mx.collections.ArrayCollection;
 	
-	import org.osmf.containers.HTMLMediaContainer;
 	import org.osmf.elements.AudioElement;
 	import org.osmf.elements.BeaconElement;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.F4MElement;
-	import org.osmf.elements.HTMLElement;
 	import org.osmf.elements.ImageElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SWFElement;
-	import org.osmf.elements.SWFLoader;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
-	import org.osmf.events.LoadEvent;
 	import org.osmf.examples.ads.PreMidPostRollElement;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.buffering.SynchronizedParallelElement;
@@ -52,6 +48,7 @@ package org.osmf.examples
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
 	import org.osmf.examples.recommendations.RecommendationsElement;
+	import org.osmf.examples.seeking.PreloadingProxyElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
 	import org.osmf.examples.switchingproxy.SwitchingProxyElement;
 	import org.osmf.examples.text.TextElement;
@@ -70,8 +67,6 @@ package org.osmf.examples
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.BufferTrait;
-	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
@@ -509,6 +504,43 @@ package org.osmf.examples
 				  	)
 				);
 
+			composition.addItem
+				( new Example
+					( 	"Serial Composition With Preloaded Subclips"
+					, 	"Demonstrates playback of a SerialElement that contains multiple preloaded subclips.  The advantage of preloaded subclips is that they are seekable even before the playhead first reaches the subclip."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var netLoader:NetLoader = new NetLoader();
+				  	   		
+							var serialElement:SerialElement = new SerialElement();
+
+				  	   		var resource:StreamingURLResource = new StreamingURLResource(REMOTE_STREAM);
+				  	   		resource.clipEndTime = 15;
+				  	   		var videoElement:VideoElement = new VideoElement(resource, netLoader);
+				  	   		videoElement.defaultDuration = 15;
+				  	   		serialElement.addChild(new PreloadingProxyElement(videoElement));
+				  	   		
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
+
+				  	   		resource = new StreamingURLResource(REMOTE_STREAM);
+							resource.clipStartTime = 15;
+							resource.clipEndTime = 22;
+							videoElement = new VideoElement(resource, netLoader);
+				  	   		videoElement.defaultDuration = 7;
+				  	   		serialElement.addChild(new PreloadingProxyElement(videoElement));
+
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
+
+				  	   		resource = new StreamingURLResource(REMOTE_STREAM);
+							resource.clipStartTime = 22;
+							videoElement = new VideoElement(resource, netLoader);
+				  	   		videoElement.defaultDuration = 17;
+				  	   		serialElement.addChild(new PreloadingProxyElement(videoElement));
+				  	   		
+							return serialElement; 
+				  	   	} 
+				  	)
+				);
 			composition.addItem
 				( new Example
 					( 	"Serial Composition With Dynamic Streaming Subclips"

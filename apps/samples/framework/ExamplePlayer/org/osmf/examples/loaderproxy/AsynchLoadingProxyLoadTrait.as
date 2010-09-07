@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.examples.loaderproxy
 {
+	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -48,7 +49,7 @@ package org.osmf.examples.loaderproxy
 			proxiedLoadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			proxiedLoadTrait.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 			
-			computedLoadState = proxiedLoadTrait.loadState;
+			calculatedLoadState = proxiedLoadTrait.loadState;
 		}
 		
 		/**
@@ -64,8 +65,8 @@ package org.osmf.examples.loaderproxy
 		 **/
 		override public function get loadState():String
 		{
-			// Return our own computed load state, not the base load state. 
-			return computedLoadState;
+			// Return our own calculated load state, not the base load state. 
+			return calculatedLoadState;
 		}
 				
 		/**
@@ -100,6 +101,41 @@ package org.osmf.examples.loaderproxy
 			return proxiedLoadTrait.bytesTotal;
 		}
 		
+		/**
+		 * Calculated version of the LoadState for this LoadTrait.  Distinct
+		 * from the proxied loadState property, which is not exposed to the
+		 * client.
+		 **/
+		protected var calculatedLoadState:String;
+		
+		/**
+		 * Override this method to define custom load logic that should occur
+		 * during the load operation, but before the READY state is signaled
+		 * to clients.  When the custom load logic has finished, set the
+		 * calculatedLoadState to LoadState.READY and dispatch the
+		 * eventToDispatch event.
+		 **/
+		protected function doCustomLoadLogic(eventToDispatch:Event):void
+		{
+			// For demonstration purposes, we just let a Timer run for a
+			// few seconds, then signal that we're done.  In a more realistic
+			// scenario, there might be some number of asynchronous calls
+			// going on.
+			var timer:Timer = new Timer(2000, 1);
+			timer.addEventListener(TimerEvent.TIMER, onTimer);
+			timer.start();
+			
+			function onTimer(timerEvent:TimerEvent):void
+			{
+				timer.removeEventListener(TimerEvent.TIMER, onTimer);
+				
+				// When all of the custom load logic is complete, we update
+				// our load state and inform the outside world.
+				calculatedLoadState = LoadState.READY;
+				dispatchEvent(eventToDispatch);
+			}
+		}
+		
 		// Internals
 		//
 		
@@ -110,29 +146,12 @@ package org.osmf.examples.loaderproxy
 				// Although the proxied element is now ready, we don't want
 				// to expose the READY state to the outside world because we
 				// want to be able to perform our own custom load logic first.
-				//
-				
-				// For demonstration purposes, we just let a Timer run for a
-				// few seconds, then signal load.  In a more realistic scenario,
-				// there might be some number of asynchronous calls going on.
-				var timer:Timer = new Timer(2000, 1);
-				timer.addEventListener(TimerEvent.TIMER, onTimer);
-				timer.start();
-				
-				function onTimer(timerEvent:TimerEvent):void
-				{
-					timer.removeEventListener(TimerEvent.TIMER, onTimer);
-					
-					// When all of the custom load logic is complete, we update
-					// our load state and inform the outside world.
-					computedLoadState = LoadState.READY;
-					dispatchEvent(event.clone());
-				}
+				doCustomLoadLogic(event.clone());
 			}
 			else
 			{
 				// Expose the proxied element's state to the outside world.
-				computedLoadState = event.loadState;
+				calculatedLoadState = event.loadState;
 				dispatchEvent(event.clone());
 			}
 		}
@@ -143,6 +162,5 @@ package org.osmf.examples.loaderproxy
 		}
 		
 		private var proxiedLoadTrait:LoadTrait;
-		private var computedLoadState:String;
 	}
 }
