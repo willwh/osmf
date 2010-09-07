@@ -1221,6 +1221,37 @@ package org.osmf.media
 			}
 		}
 		
+		public function testDVR():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
+			
+			if (hasLoadTrait)
+			{
+				callAfterLoad(doTestDVR, false);
+			}
+			else
+			{
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+				doTestDVR();
+			}
+		}
+		
+		private function doTestDVR():void
+		{
+			if (traitExists(MediaTraitType.DVR))
+			{
+				// TODO
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+			else
+			{
+				assertTrue(mediaPlayer.isDVRRecording == false);
+
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		public function testDisplayObjectEventGeneration():void
 		{
 			

@@ -1276,6 +1276,22 @@ package org.osmf.media
 		{
 			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).period : NaN;
 		}
+		
+		/**
+		 * Returns true if the media is DVR-enabled and currently recording, false if
+		 * the media is either not DVR-enabled, or is DVR-enabled but not currently
+		 * recording.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 **/
+		public function get isDVRRecording():Boolean
+		{
+			var dvrTrait:DVRTrait = media != null ? media.getTrait(MediaTraitType.DVR) as DVRTrait : null;
+			return dvrTrait != null ? dvrTrait.isRecording : false;
+		}
 	
 		// Internals
 		//

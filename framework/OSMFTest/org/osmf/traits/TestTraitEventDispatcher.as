@@ -33,6 +33,7 @@ package org.osmf.traits
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DRMEvent;
+	import org.osmf.events.DVREvent;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.MediaError;
@@ -156,7 +157,7 @@ package org.osmf.traits
 						
 		}
 		
-		public function  testAudioEvents():void
+		public function testAudioEvents():void
 		{
 			var muteEvent:AudioEvent = new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, true, 0, 0);
 			var volumeEvent:AudioEvent = new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, false, .2, 0);
@@ -170,7 +171,7 @@ package org.osmf.traits
 			testWithElement(events, properties, MediaTraitType.AUDIO);									 
 		}
 		
-		public function  testDisplayObjectEvents():void
+		public function testDisplayObjectEvents():void
 		{			
 			var event1:DisplayObjectEvent = new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, new Sprite(), new Sprite(), 150, 150, 300, 500);
 			var event2:DisplayObjectEvent = new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, new Sprite(), new Sprite(), 100, 100, 200, 200);
@@ -184,7 +185,7 @@ package org.osmf.traits
 			testWithElement(events, properties, MediaTraitType.DISPLAY_OBJECT);									 
 		}
 		
-		public function  testBufferEvents():void
+		public function testBufferEvents():void
 		{
 			var event1:BufferEvent = new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, true, 200);
 			var event2:BufferEvent = new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, false, 100);
@@ -199,7 +200,7 @@ package org.osmf.traits
 		}
 		
 		
-		public function  testSeekEvents():void
+		public function testSeekEvents():void
 		{
 			var event1:SeekEvent = new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, true, 12);
 			var event2:SeekEvent = new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, false, 15 );
@@ -213,7 +214,7 @@ package org.osmf.traits
 			testWithElement(events, properties, MediaTraitType.SEEK);											 
 		}
 		
-		public function  testPlayEvents():void
+		public function testPlayEvents():void
 		{
 			var event1:PlayEvent = new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE, false, false, PlayState.PAUSED, false);
 			var event2:PlayEvent = new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, PlayState.PLAYING, true );
@@ -228,7 +229,7 @@ package org.osmf.traits
 		}
 		
 		
-		public function  testTimeEvents():void
+		public function testTimeEvents():void
 		{
 			var event1:TimeEvent = new TimeEvent(TimeEvent.COMPLETE, false, false, 3);
 			//Trait doesn't dispatch this, but MP does
@@ -244,7 +245,7 @@ package org.osmf.traits
 			testWithElement(events, properties, MediaTraitType.TIME);										 
 		}
 		
-		public function  testDRMEvents():void
+		public function testDRMEvents():void
 		{
 			var event1:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATION_COMPLETE, false, false, new Date(1), new Date(2), 4, "server1", null, null );
 			var event2:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATING, false, false, new Date(8), new Date(9), 4, "server1", null, null );
@@ -258,6 +259,17 @@ package org.osmf.traits
 			properties.push("drmState", "mediaError", "endDate", "period", "serverURL", "startDate", "token");
 			
 			testWithElement(events, properties, MediaTraitType.DRM);													 
+		}
+
+		public function testDVREvents():void
+		{
+			var event1:DVREvent = new DVREvent(DVREvent.IS_RECORDING_CHANGE);
+						
+			var events:Vector.<Event> = new Vector.<Event>();
+			var properties:Vector.<String> = new Vector.<String>();
+			events.push(event1);
+			
+			testWithElement(events, properties, MediaTraitType.DVR);													 
 		}
 		
 		public function  testDynamicStreamEvents():void

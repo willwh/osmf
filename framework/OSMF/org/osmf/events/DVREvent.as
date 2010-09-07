@@ -62,5 +62,13 @@ package org.osmf.events
 		{
 			super(type, bubbles, cancelable);
 		}
+		
+		/**
+		 * @private
+		 **/
+		override public function clone():Event
+		{
+			return new DVREvent(type, bubbles, cancelable);
+		}
 	}
 }
