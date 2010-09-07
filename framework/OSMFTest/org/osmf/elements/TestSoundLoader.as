@@ -75,11 +75,18 @@ package org.osmf.elements
 			assertTrue(loader.canHandleResource(new URLResource("audio.mp3")));
 			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio")));
 			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio?param=.mp3")));
+			assertTrue(loader.canHandleResource(new URLResource("file:///audio.m4a")));
+			assertTrue(loader.canHandleResource(new URLResource("assets/audio.m4a")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio.m4a")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio.m4a?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("audio.m4a")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio?param=.m4a")));
 			
 			
 			// And some invalid ones.
 			assertFalse(loader.canHandleResource(new URLResource("http://example.com/audio.foo")));
-			assertFalse(loader.canHandleResource(new URLResource("http://example.com/audio.mp31")));	
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/audio.mp31")));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/audio.m4a1")));
 			assertFalse(loader.canHandleResource(new URLResource("foo")));		
 			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));

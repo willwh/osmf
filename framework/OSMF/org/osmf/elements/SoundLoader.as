@@ -84,8 +84,8 @@ package org.osmf.elements
 		 * @private
 		 * 
 		 * Indicates whether this SoundLoader is capable of handling the specified resource.
-		 * Returns <code>true</code> for URLResources with MP3 extensions or media/mime
-		 * types that match MP3.
+		 * Returns <code>true</code> for URLResources with MP3 extensions, M4A extensions, or
+		 * media/mime types that match MP3.
 		 * @param resource Resource proposed to be loaded.
 		 */ 
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
@@ -114,14 +114,14 @@ package org.osmf.elements
 			var url:URL = new URL(urlResource.url);
 			if (url.protocol == "")
 			{
-				return url.path.search(/\.mp3$/i) != -1;
+				return url.path.search(/\.mp3$|\.m4a$/i) != -1;
 			}		
 			if (url.protocol.search(/file$|http$|https$/i) != -1)
 			{
 				return (url.path == null ||
 						url.path.length <= 0 ||
 						url.path.indexOf(".") == -1 ||
-						url.path.search(/\.mp3$/i) != -1);
+						url.path.search(/\.mp3$|\.m4a$/i) != -1);
 			}
 			
 			return false;
