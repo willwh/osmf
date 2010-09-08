@@ -26,10 +26,10 @@ package org.osmf.net.dvr
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.LoadState;
 	
 	/**
@@ -43,7 +43,7 @@ package org.osmf.net.dvr
 	 * @playerversion AIR 1.5
 	 * @productversion OSMF 1.0	 
 	 */	
-	public class DVRCastNetLoader extends NetLoader
+	public class DVRCastNetLoader extends RTMPDynamicStreamingNetLoader
 	{
 		/**
 		 * @private 

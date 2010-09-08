@@ -20,6 +20,8 @@
 *****************************************************/
 package org.osmf.net.dvr
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.Event;
 	import flash.net.NetConnection;
 	import flash.net.Responder;
@@ -29,6 +31,8 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetStreamUtils;
@@ -98,7 +102,8 @@ package org.osmf.net.dvr
 		{
 			var urlResource:URLResource = event.resource as URLResource;
 			var netConnection:NetConnection = event.netConnection;
-			var streamName:String;
+			var streamNames:Vector.<String> = new Vector.<String>();
+			var totalRpcSubscribeInvocation:int = 0;
 			
 			// Capture this event, whithold it from the outside world until
 			// we have succeeded subscribing to the DVRCast stream:
@@ -110,8 +115,22 @@ package org.osmf.net.dvr
 				= streamingResource
 					? streamingResource.urlIncludesFMSApplicationInstance
 					: false;
-					
-			streamName = NetStreamUtils.getStreamNameFromURL(urlResource.url, urlIncludesFMSApplicationInstance);
+			
+			var dynamicResource:DynamicStreamingResource = streamingResource as DynamicStreamingResource;
+			if (dynamicResource != null)
+			{
+				var items:Vector.<DynamicStreamingItem> = dynamicResource.streamItems;
+				totalRpcSubscribeInvocation = items.length;
+				for (var i:int = 0; i < items.length; i++)
+				{
+					streamNames.push(items[i].streamName);
+				}
+			}	
+			else
+			{	
+				totalRpcSubscribeInvocation = 1;
+				streamNames.push(NetStreamUtils.getStreamNameFromURL(urlResource.url, urlIncludesFMSApplicationInstance));
+			}
 			
 			var responder:Responder 
 				= new TestableResponder
@@ -119,29 +138,36 @@ package org.osmf.net.dvr
 					, onServerCallError
 					);
 			
-			event.netConnection.call(DVRCastConstants.RPC_SUBSCRIBE, responder, streamName);
+			for (i = 0; i < streamNames.length; i++)
+			{
+				event.netConnection.call(DVRCastConstants.RPC_SUBSCRIBE, responder, streamNames[i]);
+			}
 			
 			function onStreamSubscriptionResult(result:Object):void
 			{
-				var streamInfoRetriever:DVRCastStreamInfoRetriever
-					= new DVRCastStreamInfoRetriever
-						( netConnection
-						, streamName
-						);
-				
-				streamInfoRetriever.addEventListener(Event.COMPLETE, onStreamInfoRetrieverComplete);
-				streamInfoRetriever.retrieve();
+				totalRpcSubscribeInvocation--;
+				if (totalRpcSubscribeInvocation <= 0)
+				{	
+					var streamInfoRetriever:DVRCastStreamInfoRetriever
+						= new DVRCastStreamInfoRetriever
+							( netConnection
+							, streamNames[0]
+							);
+					
+					streamInfoRetriever.addEventListener(Event.COMPLETE, onStreamInfoRetrieverComplete);
+					streamInfoRetriever.retrieve();
+				}
 			}
 			
 			function onStreamInfoRetrieverComplete(event:Event):void
 			{
 				var streamInfoRetriever:DVRCastStreamInfoRetriever = event.target as DVRCastStreamInfoRetriever;
 				
-				if (streamInfoRetriever.streamInfo != null)
-				{
-					// Remove the completion listener:
-					removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
+				// Remove the completion listener:
+				removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
 				
+				if (streamInfoRetriever.streamInfo != null)
+				{				
 					if (streamInfoRetriever.streamInfo.offline == true)
 					{
 						// The content is offline, signal this as a media error:
@@ -157,7 +183,10 @@ package org.osmf.net.dvr
 							);
 							
 						// Unsubscribe:
-						netConnection.call(DVRCastConstants.RPC_UNSUBSCRIBE, null, streamName);
+						for (i = 0; i < streamNames.length; i++)
+						{
+							netConnection.call(DVRCastConstants.RPC_UNSUBSCRIBE, null, streamNames[i]);
+						}
 						netConnection = null;
 					}
 					else
@@ -173,7 +202,7 @@ package org.osmf.net.dvr
 						streamingResource.addMetadataValue(DVRCastConstants.RECORDING_INFO_KEY, recordingInfo);
 						
 						// Store the subscribed stream with the connection instance:
-						subscribedStreams[netConnection] = streamName;
+						subscribedStreams[netConnection] = streamNames[0];
 							
 						// Now that we're done, signal completion, so the VideoElement will
 						// continue its loading process:
