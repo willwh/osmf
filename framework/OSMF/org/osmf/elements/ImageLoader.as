@@ -52,15 +52,21 @@ package org.osmf.elements
 	{
 		/**
 		 * Constructor.
+		 * 
+		 * @param checkPolicyFile Indicates whether the ImageLoader should try to download
+		 * a URL policy file from the loaded image's server before beginning to load the
+		 * image.  The default is true.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function ImageLoader()
+		public function ImageLoader(checkPolicyFile:Boolean=true)
 		{
 			super();
+			
+			this.checkPolicyFile = checkPolicyFile;
 		}
 		
 		/**
@@ -102,9 +108,9 @@ package org.osmf.elements
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
 			// No need to import into the current security domain, this is an
-			// image file.  But we do check for a policy file, since we may need
+			// image file.  The client should check for a policy file if they need
 			// pixel-level access to the image.
-			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, false, true);
+			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, false, checkPolicyFile);
 		}
 
 		/**
@@ -126,6 +132,8 @@ package org.osmf.elements
 		
 		// Internals
 		//
+		
+		private var checkPolicyFile:Boolean;
 
 		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["image/png", "image/gif", "image/jpeg"]);	
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.IMAGE]);
