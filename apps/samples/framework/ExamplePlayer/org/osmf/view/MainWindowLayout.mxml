@@ -82,12 +82,21 @@
 				fontSize			="12"
 				/>
 							
-			<mx:Tree
+			<!-- mx:Tree
 				id					="exampleTree"
 				labelField			="name"
 				color				="white"
+				width				="100%"
+				height				="100%"
+				alpha				="0.8"
 				backgroundAlpha		="0"
 				borderThickness		="0"
+				/-->
+				
+			<mx:Tree
+				id					="exampleTree"
+				labelField			="name"
+				color				="black"
 				width				="100%"
 				height				="100%"
 				alpha				="0.8"
@@ -281,7 +290,7 @@
 	
 	<mx:HBox
 		id						="stateControls"
-		filters				="{textFilters}"
+		filters					="{textFilters}"
 		color					="white"
 		right					="10"
 		width					="500"
