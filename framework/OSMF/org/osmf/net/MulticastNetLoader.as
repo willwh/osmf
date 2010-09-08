@@ -94,9 +94,9 @@ package org.osmf.net
 			}
 
 			var ns:NetStream = new NetStream(connection, rs.rtmfpGroupspec);
-			if (ns != null)
+			CONFIG::LOGGING	
 			{
-				CONFIG::LOGGING	
+				if (ns != null)
 				{
 					logger.info("Multicast NetStream created.");
 				}
