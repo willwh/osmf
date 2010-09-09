@@ -395,6 +395,18 @@ package org.osmf.net
 						
 		/**
 		 *  Establishes a new NetStream on the connected NetConnection and signals that loading is complete.
+		 * 
+		 *  Things become a little complex here. For multicast, the first time user will encounter a
+		 *  pop up dialog box for Peer Assited Network setting. The user may choose either to allow and deny.
+		 *  Also, the user may choose to remember the decision. If the user chooses to "allow", the client 
+		 *  can proceed to receive multicast contents. Otherwise, the client cannot proceed. 
+		 * 
+		 *  In terms of OSMF and Flex class, OSMF should not proceed until it receives either 
+		 *  "NetGroup.Connect.Success" or "NetStream.Connect.Success". Otherwise, multicast will not work and
+		 *  any attempt to access net stream or net group will incur exception (RTE). 
+		 *
+		 *  Therefore, the code here takes this scenario into consideration and wait for the "NetStream.Connect.Success"
+		 *  before it proceeds.
 		 *
 		 *  @private
 		**/
@@ -404,26 +416,75 @@ package org.osmf.net
 			if (netLoadTrait != null)
 			{
 				netLoadTrait.connection = connection;
-				var netStream:NetStream = createNetStream(connection, netLoadTrait.resource as URLResource);				
-				netStream.client = new NetClient();
-				netLoadTrait.netStream = netStream;
-				netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
-				netLoadTrait.netConnectionFactory = factory;
-				
-				CONFIG::FLASH_10_1	
-				{				
-					// Set up stream reconnect logic
-					if (_reconnectStreams && (netLoadTrait.resource is URLResource) && 
-							NetStreamUtils.isRTMPStream((netLoadTrait.resource as URLResource).url))
-					{
-						setupStreamReconnect(netLoadTrait);
-					}				
+				var streamURLResource:StreamingURLResource = netLoadTrait.resource as StreamingURLResource;
+				if (isMulticast(streamURLResource))
+				{
+					connection.addEventListener(NetStatusEvent.NET_STATUS, onNetStreamStatus);
 				}
-				
-				processFinishLoading(loadTrait as NetStreamLoadTrait);
+				var netStream:NetStream = createNetStream(connection, netLoadTrait.resource as URLResource);				
+				if (isMulticast(streamURLResource))
+				{
+					return;
+				}
+
+				prepareFinishLoading(connection, netLoadTrait, factory, netStream);
+								
+				function onNetStreamStatus(event:NetStatusEvent):void
+				{
+					switch(event.info.code)
+					{
+						case "NetStream.Connect.Success":
+							connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStreamStatus);
+							prepareFinishLoading(connection, netLoadTrait, factory, netStream);
+							break;
+						
+						case "NetStream.Connect.Failed":
+						case "NetStream.Connect.Rejected":
+							connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStreamStatus);
+							updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+							break;
+					}
+				}
 			}
 		}	
 		
+		/**
+		 * It checks whether this is multicast.
+		 * 
+		 *  @private
+		**/
+		private function isMulticast(streamURLResource:StreamingURLResource):Boolean
+		{
+			return (streamURLResource != null 
+				&& streamURLResource.rtmfpGroupspec != null 
+				&& streamURLResource.rtmfpGroupspec.length > 0);
+		}
+		
+		/**
+		 * The common code of loading the contents.
+		 * 
+		 *  @private
+		**/
+		private function prepareFinishLoading(
+			connection:NetConnection, netLoadTrait:NetStreamLoadTrait, factory:NetConnectionFactoryBase, netStream:NetStream):void
+		{
+			netStream.client = new NetClient();
+			netLoadTrait.netStream = netStream;
+			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
+			netLoadTrait.netConnectionFactory = factory;
+			
+			CONFIG::FLASH_10_1	
+			{				
+				// Set up stream reconnect logic
+				if (_reconnectStreams && NetStreamUtils.isStreamingResource(netLoadTrait.resource))
+				{
+					setupStreamReconnect(netLoadTrait);
+				}				
+			}
+			
+			processFinishLoading(netLoadTrait);
+		}
+
 		CONFIG::FLASH_10_1	
 		{
 			/**
