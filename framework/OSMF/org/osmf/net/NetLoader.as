@@ -423,7 +423,7 @@ package org.osmf.net
 				processFinishLoading(loadTrait as NetStreamLoadTrait);
 			}
 		}	
-		
+
 		CONFIG::FLASH_10_1	
 		{
 			/**
@@ -664,11 +664,32 @@ package org.osmf.net
 		 */
 		private function onCreationComplete(event:NetConnectionFactoryEvent):void
 		{
-			finishLoading
+			/**
+			 * Originally, it calls finishLoading right away. However, there are circumstances (such as multicast)
+			 * that a subclass of NetLoader may want to do some processing before calling finishLoading.
+			 * So, we add the protected processCreationComplete function as an intermediary. 
+			 */
+			processCreationComplete
 				( event.netConnection
 				, findAndRemovePendingLoad(event.resource)
 				, event.currentTarget as NetConnectionFactoryBase
 				);
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * This function is meant to be overridden if a subclass needs to conduct some processing before
+		 * entering the final phase of loading. For instance, in multicast, the subclass may want to create
+		 * a NetGroup before finishing the load.
+		 * 
+		 * @param connection
+		 * @param loadTrait
+		 * @param factory
+		 */
+		protected function processCreationComplete(connection:NetConnection, loadTrait:LoadTrait, factory:NetConnectionFactoryBase = null):void
+		{
+			finishLoading(connection, loadTrait, factory);
 		}
 		
 		/**

@@ -24,6 +24,10 @@ package org.osmf.net
 	import flash.errors.IllegalOperationError;
 	import flash.events.NetStatusEvent;
 	import flash.net.NetConnection;
+	CONFIG::FLASH_10_1	
+	{					
+		import flash.net.NetGroup;
+	}
 	import flash.net.NetStream;
 	import flash.utils.Dictionary;
 	
@@ -89,6 +93,27 @@ package org.osmf.net
 	   	{
 	   		_netStream = value;
 	   	}
+
+        /**
+		 * The NetGroup to join for multicast. This property is only valid when the stream is a multicast stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		CONFIG::FLASH_10_1	
+		{						 
+		    public function get netGroup():NetGroup
+		    {	   	
+		   		return _netGroup;
+		   	}
+		   	
+		   	public function set netGroup(value:NetGroup):void
+		   	{
+		   		_netGroup = value;
+		   	}
+		}
 
         /**
 		 * Manager class for switching between different MBR renditions using
@@ -239,5 +264,9 @@ package org.osmf.net
 
 		private var isStreamingResource:Boolean;
 		private var _netStream:NetStream;
+		CONFIG::FLASH_10_1	
+		{						 		
+			private var _netGroup:NetGroup;
+		}
 	}
 }
