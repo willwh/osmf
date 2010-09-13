@@ -204,7 +204,7 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 */		
 		override public function clone():Event
 		{

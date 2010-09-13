@@ -59,7 +59,6 @@ package org.osmf.net
 	{
 		/**
 		 * @private
-		 * @inheritDoc
 		**/
 		public function MulticastNetLoader(factory:NetConnectionFactoryBase=null)
 		{
@@ -74,7 +73,6 @@ package org.osmf.net
 		 * 
 		 * @param resource The URL of the source media.
 		 * @return Returns <code>true</code> for resouces of type StreamingURLResource.
-		 * @inheritDoc
 		**/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
@@ -85,7 +83,6 @@ package org.osmf.net
 
 		/**
 		 * @private
-		 * @inheritDoc
 		**/
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{

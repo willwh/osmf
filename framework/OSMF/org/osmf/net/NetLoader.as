@@ -167,7 +167,6 @@ package org.osmf.net
 		 * 
 		 * @param resource The URL of the source media.
 		 * @return Returns <code>true</code> for URLResources which it can load
-		 * @inheritDoc
 		**/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
@@ -270,7 +269,6 @@ package org.osmf.net
 	     * @see org.osmf.traits.LoadTrait
 	     * @see org.osmf.traits.LoadState
 	     * @see org.osmf.events.MediaErrorEvent
-		 * @inheritDoc
 		**/
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{	

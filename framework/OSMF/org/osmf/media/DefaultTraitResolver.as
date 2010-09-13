@@ -89,7 +89,7 @@ package org.osmf.media
 		//
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 * 
 		 * Only a single trait can be added to this resolver. Attempting to
 		 * add a second will fail. To change the trait, remove the previously
