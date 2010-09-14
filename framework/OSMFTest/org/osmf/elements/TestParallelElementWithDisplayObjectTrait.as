@@ -64,10 +64,9 @@ package org.osmf.elements
 			
 			displayObjectTrait1.setSize(50, 50);
 			
-			assertTrue(sizeChangeEventCount == 1);
-			
 			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
+			assertTrue(sizeChangeEventCount == 1);
 			assertEquals(50, displayObjectTrait.mediaWidth);
 			assertEquals(50, displayObjectTrait.mediaHeight);
 			
@@ -82,7 +81,7 @@ package org.osmf.elements
 			
 			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
-			assertEquals(4, sizeChangeEventCount);
+			assertEquals(2, sizeChangeEventCount);
 			
 			assertEquals(100, displayObjectTrait.mediaWidth);
 			assertEquals(50, displayObjectTrait.mediaHeight);
@@ -91,7 +90,7 @@ package org.osmf.elements
 			
 			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
-			assertEquals(6, sizeChangeEventCount);
+			assertEquals(3, sizeChangeEventCount);
 			
 			assertEquals(displayObjectTrait.mediaWidth, 100);
 			assertEquals(displayObjectTrait.mediaHeight, 100);
@@ -108,7 +107,7 @@ package org.osmf.elements
 			
 			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
-			assertEquals(6, sizeChangeEventCount);
+			assertEquals(3, sizeChangeEventCount);
 			
 			assertEquals(100, displayObjectTrait.mediaWidth);
 			assertEquals(100, displayObjectTrait.mediaHeight);
@@ -119,7 +118,7 @@ package org.osmf.elements
 			
 			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
-			assertEquals(6, sizeChangeEventCount);
+			assertEquals(3, sizeChangeEventCount);
 			
 			// It is the set media width and height that counts: if a sprite's bounds
 			// simply change, than that doesn't constitute for a mediaWidth and height

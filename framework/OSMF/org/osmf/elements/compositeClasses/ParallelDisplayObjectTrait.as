@@ -98,8 +98,6 @@ package org.osmf.elements.compositeClasses
 
 		private function processAggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
-			childTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange, false, 0, true);
-			
 			var layoutTarget:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
 			
 			if (layoutTarget == null)
@@ -119,8 +117,6 @@ package org.osmf.elements.compositeClasses
 		
 		private function processUnaggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
-			childTrait.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
-			
 			var target:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
 				
 			child.removeEventListener
@@ -160,28 +156,6 @@ package org.osmf.elements.compositeClasses
 			var mediaElement:MediaElement = event.target as MediaElement;
 			
 			setupLayoutTarget(mediaElementLayoutTargets[mediaElement]);
-		}
-		
-		private function onMediaSizeChange(event:DisplayObjectEvent):void
-		{
-			updateMediaSize();
-		}
-		
-		private function updateMediaSize():void
-		{
-			var newMediaWidth:int = -1;
-			var newMediaHeight:int = -1;
-			
-			traitAggregator.forEachChildTrait
-				(	function(trait:DisplayObjectTrait):void
-					{
-						newMediaWidth = Math.max(newMediaWidth, trait.mediaWidth);
-						newMediaHeight = Math.max(newMediaHeight, trait.mediaHeight);
-					}
-				,	MediaTraitType.DISPLAY_OBJECT
-				);
-					
-			setMediaSize(newMediaWidth, newMediaHeight);
 		}
 
 		private var traitAggregationHelper:TraitAggregationHelper;
