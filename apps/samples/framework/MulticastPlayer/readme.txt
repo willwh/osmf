@@ -7,6 +7,8 @@ The MulticastPlayer application demonstrates how to use the multicast feature of
 1) An F4M file
 2) Stream specific information including connection string, RTMFP Groupspec and RTMFP StreamName
 
+In order to run this application, Flash Player 10.1 or later is required. 
+
 B. Installation Instructions (Flex Builder)
 
 1. Unzip/copy the TransitionsSample project into your Flex Builder workspace folder. 
