@@ -38,7 +38,10 @@ package org.osmf.net
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
-
+	CONFIG::LOGGING
+	{
+		import org.osmf.logging.Logger;
+	}
 	
 	[ExcludeClass]
 	
@@ -72,7 +75,23 @@ package org.osmf.net
 	   	
 	   	public function set connection(value:NetConnection):void
 	   	{
+	   		CONFIG::LOGGING
+	   		{
+	   			if (_connection != null)
+	   			{
+	   				_connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusForLogging);
+		   		}
+		   	}
+		   	
 	   		_connection = value;
+
+	   		CONFIG::LOGGING
+	   		{
+	   			if (_connection != null)
+	   			{
+	   				_connection.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusForLogging, false, 0, true);
+		   		}
+	   		}
 	   	}
 	   
         /**
@@ -91,7 +110,23 @@ package org.osmf.net
 	   	
 	   	public function set netStream(value:NetStream):void
 	   	{
+	   		CONFIG::LOGGING
+	   		{
+	   			if (_netStream != null)
+	   			{
+	   				_netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusForLogging);
+		   		}
+		   	}
+
 	   		_netStream = value;
+
+	   		CONFIG::LOGGING
+	   		{
+	   			if (_netStream != null)
+	   			{
+	   				_netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusForLogging, false, 0, true);
+		   		}
+	   		}
 	   	}
 
         /**
@@ -111,7 +146,23 @@ package org.osmf.net
 		   	
 		   	public function set netGroup(value:NetGroup):void
 		   	{
+		   		CONFIG::LOGGING
+		   		{
+		   			if (_netGroup != null)
+		   			{
+		   				_netGroup.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusForLogging);
+			   		}
+			   	}
+
 		   		_netGroup = value;
+
+		   		CONFIG::LOGGING
+		   		{
+		   			if (_netGroup != null)
+		   			{
+		   				_netGroup.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusForLogging, false, 0, true);
+			   		}
+		   		}
 		   	}
 		}
 
@@ -256,6 +307,14 @@ package org.osmf.net
 				netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			}
 		}
+		
+		CONFIG::LOGGING
+		{
+			private function onNetStatusForLogging(event:NetStatusEvent):void
+			{
+				logger.info(event.info.code);
+			}
+		}	 
 
 	   	private var _connection:NetConnection;
 	   	private var _switchManager:NetStreamSwitchManagerBase;
@@ -268,5 +327,7 @@ package org.osmf.net
 		{						 		
 			private var _netGroup:NetGroup;
 		}
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetStreamLoadTrait");
 	}
 }
