@@ -21,28 +21,26 @@
 *****************************************************/
 package org.osmf.net
 {
+	import flash.events.NetStatusEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
-
-	CONFIG::LOGGING
-	{
-		import org.osmf.logging.Logger;
-		import org.osmf.logging.Log;
-	}
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.NetConnectionFactoryBase;
-	import org.osmf.net.NetLoader;
-	import org.osmf.net.NetStreamLoadTrait;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
-	import org.osmf.net.StreamingURLResource;
-	import __AS3__.vec.Vector;
-	import flash.events.NetStatusEvent;
+	import org.osmf.traits.LoadTrait;
+	
+	CONFIG::FLASH_10_1
+	{
 	import flash.net.NetGroup;
+	}
 
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.Log;
+	}
+	
 	/**
 	 * MulticastNetLoader extends NetLoader to provide loading support for multicast
 	 * media.

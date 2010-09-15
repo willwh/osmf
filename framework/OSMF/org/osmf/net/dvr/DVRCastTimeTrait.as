@@ -29,10 +29,14 @@ package org.osmf.net.dvr
 	import flash.utils.Timer;
 	
 	import org.osmf.events.TimeEvent;
-	import org.osmf.logging.Logger;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	}
 
 	[ExcludeClass]
 

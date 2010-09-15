@@ -31,11 +31,15 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.logging.Logger;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.utils.OSMFStrings;
-	
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	}
+
 	[ExcludeClass]
 	
 	/**

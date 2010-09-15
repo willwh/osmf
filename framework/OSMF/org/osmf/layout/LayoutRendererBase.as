@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
@@ -33,11 +31,15 @@ package org.osmf.layout
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.logging.Logger;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.OSMFStrings;
-	
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	}
+
 	/**
 	 * LayoutRendererBase is the base class for custom layout renderers
 	 *
