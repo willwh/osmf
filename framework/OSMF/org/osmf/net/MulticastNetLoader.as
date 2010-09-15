@@ -44,8 +44,8 @@ package org.osmf.net
 	import flash.net.NetGroup;
 
 	/**
-	 * Extends NetLoader to provide
-	 * loading support for multicast video playback.
+	 * MulticastNetLoader extends NetLoader to provide loading support for multicast
+	 * media.
 	 * 
 	 * <p> MulticastNetLoader expects the media resource to be a StreamingURLResource,
 	 * in which rtmfpGroupspec and rtmfpStreamName are specified.</p>
@@ -58,7 +58,14 @@ package org.osmf.net
 	public class MulticastNetLoader extends NetLoader
 	{
 		/**
-		 * @private
+		 * Constructor.
+		 * 
+		 * @param factory  The NetConnectionFactoryBase instance to use for managing
+		 * NetConnections. If factory is null, a NetConnectionFactory will be created
+		 * and used. Since the NetConnectionFactory class facilitates connection
+		 * sharing, this is an easy way of enabling global sharing, by creating a
+		 * single NetConnectionFactory instance within the player and then handing
+		 * it to all NetLoader instances. 
 		**/
 		public function MulticastNetLoader(factory:NetConnectionFactoryBase=null)
 		{

@@ -82,8 +82,8 @@ package org.osmf.net
 		 * enabling global sharing, by creating a single NetConnectionFactory instance within
 		 * the player and then handing it to all NetLoader instances.
 		 * 
-		 * @param reconnectStreams Specifies whether or not the class should attempt to reconnect
-		 * to the stream. Both Flash Player 10.1 and Flash Media Server 3.5.3 are required.
+		 * @param reconnectStreams Indicates whether stream reconnect is enabled. Both Flash
+		 * Player 10.1 and Flash Media Server 3.5.3 are required.
 		 *   
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -109,7 +109,7 @@ package org.osmf.net
 		CONFIG::FLASH_10_1	
 		{
 			/**
-			 * Returns <code>true</code> if stream recconnect is enabled.
+			 * Indicates whether stream reconnect is enabled.
 			 **/
 			public function get reconnectStreams():Boolean
 			{
@@ -117,13 +117,14 @@ package org.osmf.net
 			}
 				
 			/**
-			 * The stream reconnect timeout in seconds. The class will 
-			 * give up trying to reconnect the stream if a successful
-			 * reconnect does not occur within this time period. 
-			 * The default is 120 seconds. The timeout period begins
+			 * The stream reconnect timeout in seconds.
+			 * 
+			 * <p>The NetLoader will give up trying to reconnect the stream
+			 * if a successful reconnect does not occur within this time
+			 * period. The default is 120 seconds. The timeout period begins
 			 * when the buffer empties and therefore a value of zero
 			 * seconds is valid, meaning after the buffer empties, 
-			 * don't try to reconnect.
+			 * don't try to reconnect.</p>
 			 * 
 			 * @throws ArgumentError If value param is less than zero.
 			 **/		
@@ -143,8 +144,8 @@ package org.osmf.net
 			}
 			
 			/**
-			 * Specifies whether or not the class should attempt to reconnect 
-			 * if a stream is paused. the default is <code>false</code>.
+			 * Indicates whether or not the class should attempt to reconnect 
+			 * if a stream is paused. The default is <code>false</code>.
 			 **/
 			public function get reconnectStreamsWhenPaused():Boolean
 			{
@@ -348,11 +349,14 @@ package org.osmf.net
 			}
 			
 			/**
-			 * Override this method to provide custom <code>NetConnection</code> behavior when
-			 * using the stream reconnect feature. For example, if you wanted to
-			 * provide client-side load balancing in your player, you could create
+			 * Attempts to reconnect the specified NetConnection to the specified
+			 * URL.
+			 * 
+			 * <p>Clients can override this method to provide custom <code>NetConnection</code>
+			 * behavior when using the stream reconnect feature. For example, if you
+			 * wanted to provide client-side load balancing in your player, you could create
 			 * a custom <code>NetLoader</code> class and override this method to use an
-			 * alternate URI.
+			 * alternate URI.</p>
 			 * 
 			 * @param netConnection The new <code>NetConnection</code> created by the stream reconnect logic.
 			 * @param resource The <code>URLResource</code> that was originally used to play the media.
@@ -527,9 +531,9 @@ package org.osmf.net
 					switch(event.info.code)
 					{
 						case NetConnectionCodes.CONNECT_SUCCESS:
-							if (event.info.data && event.info.data.version)
+							CONFIG::LOGGING
 							{
-								CONFIG::LOGGING
+								if (event.info.data && event.info.data.version)
 								{
 									logger.info(STREAM_RECONNECT_LOGGING_PREFIX+"FMS version "+event.info.data.version);
 								}
