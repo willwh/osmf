@@ -26,9 +26,9 @@ package org.osmf.net
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.StreamingURLResource;
 
-	public class TestMulticastNetLoader extends TestCase
+	public class TestRTMFPNetLoader extends TestCase
 	{
-		public function TestMulticastNetLoader(methodName:String=null)
+		public function TestRTMFPNetLoader(methodName:String=null)
 		{
 			super(methodName);
 		}
@@ -43,7 +43,7 @@ package org.osmf.net
 		
 		public function testCanHandleResource():void
 		{
-			var loader:MulticastNetLoader = new MulticastNetLoader();
+			var loader:RTMFPNetLoader = new RTMFPNetLoader();
 			var resource:MediaResourceBase = new MediaResourceBase();
 			assertEquals(loader.canHandleResource(resource), false);
 			

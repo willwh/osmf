@@ -40,12 +40,12 @@ package org.osmf.net
 	import org.osmf.logging.Logger;
 	import org.osmf.logging.Log;
 	}
-	
+
 	/**
-	 * MulticastNetLoader extends NetLoader to provide loading support for multicast
-	 * media.
+	 * Extends NetLoader to provide
+	 * loading support for multicast video playback using RTMFP protocol.
 	 * 
-	 * <p> MulticastNetLoader expects the media resource to be a StreamingURLResource,
+	 * <p> RTMFPNetLoader expects the media resource to be a StreamingURLResource,
 	 * in which rtmfpGroupspec and rtmfpStreamName are specified.</p>
 	 *
 	 *  @langversion 3.0
@@ -53,19 +53,13 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.5
 	 */
-	public class MulticastNetLoader extends NetLoader
+	public class RTMFPNetLoader extends NetLoader
 	{
 		/**
-		 * Constructor.
-		 * 
-		 * @param factory  The NetConnectionFactoryBase instance to use for managing
-		 * NetConnections. If factory is null, a NetConnectionFactory will be created
-		 * and used. Since the NetConnectionFactory class facilitates connection
-		 * sharing, this is an easy way of enabling global sharing, by creating a
-		 * single NetConnectionFactory instance within the player and then handing
-		 * it to all NetLoader instances. 
+		 * @private
+		 * @inheritDoc
 		**/
-		public function MulticastNetLoader(factory:NetConnectionFactoryBase=null)
+		public function RTMFPNetLoader(factory:NetConnectionFactoryBase=null)
 		{
 			super(factory, false);
 		}
@@ -73,11 +67,12 @@ package org.osmf.net
 		/**
 		 * @private
 		 * 
-		 * MulticastNetLoader returns true if the resource is an instance of StreamingURLResource with
+		 * RTMFPNetLoader returns true if the resource is an instance of StreamingURLResource with
 		 * both rtmfpGroupspec and rtmfpStreamName set.
 		 * 
 		 * @param resource The URL of the source media.
 		 * @return Returns <code>true</code> for resouces of type StreamingURLResource.
+		 * @inheritDoc
 		**/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
@@ -88,6 +83,7 @@ package org.osmf.net
 
 		/**
 		 * @private
+		 * @inheritDoc
 		**/
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
@@ -117,7 +113,7 @@ package org.osmf.net
 		 *  Also, the user may choose to remember the decision. If the user chooses to "allow", the client 
 		 *  can proceed to receive multicast contents. Otherwise, the client cannot proceed. 
 		 * 
-		 *  In terms of OSMF and Flex class, OSMF should not proceed until it receives either 
+		 *  In terms of OSMF and Flex classes, OSMF should not proceed until it receives either 
 		 *  "NetGroup.Connect.Success" or "NetStream.Connect.Success". Otherwise, multicast will not work and
 		 *  any attempt to access net stream or net group will incur exception (RTE). 
 		 *
@@ -189,7 +185,7 @@ package org.osmf.net
 
 		CONFIG::LOGGING
 		{
-			private static var logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.net.multicast.MulticastNetLoader");
+			private static var logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.net.multicast.RTMFPNetLoader");
 		}	
 	}
 }

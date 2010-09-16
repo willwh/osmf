@@ -32,7 +32,7 @@ package org.osmf.media
 	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dvr.DVRCastNetLoader;
-	import org.osmf.net.MulticastNetLoader;
+	import org.osmf.net.RTMFPNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	
 	CONFIG::FLASH_10_1
@@ -157,14 +157,14 @@ package org.osmf.media
 					)
 				);
 				
-			multicastLoader = new MulticastNetLoader();
+			rtmfpLoader = new RTMFPNetLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.video.rtmfp.multicast"
-					, multicastLoader.canHandleResource
+					, rtmfpLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new VideoElement(null, multicastLoader);
+							return new VideoElement(null, rtmfpLoader);
 						}
 					)
 				);
@@ -253,7 +253,7 @@ package org.osmf.media
 		CONFIG::FLASH_10_1
 		{
 			private var httpStreamingNetLoader:HTTPStreamingNetLoader;
-			private var multicastLoader:MulticastNetLoader;
+			private var rtmfpLoader:RTMFPNetLoader;
 		}
 	}
 }

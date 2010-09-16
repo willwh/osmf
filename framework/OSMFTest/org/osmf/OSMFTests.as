@@ -292,7 +292,7 @@ package org.osmf
 			// Multicast
 			//
 			
-			addTestSuite(TestMulticastNetLoader);
+			addTestSuite(TestRTMFPNetLoader);
 
 			// Plugins
 			//

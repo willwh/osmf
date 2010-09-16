@@ -175,7 +175,6 @@
     <classEntry path="org.osmf.net.FMSHost"/>
     <classEntry path="org.osmf.net.FMSURL"/>
     <classEntry path="org.osmf.net.ModifiableTimeTrait"/>
-    <classEntry path="org.osmf.net.MulticastNetLoader"/>
     <classEntry path="org.osmf.net.NetClient"/>
     <classEntry path="org.osmf.net.NetConnectionCodes"/>
     <classEntry path="org.osmf.net.NetConnectionFactory"/>
@@ -196,6 +195,7 @@
     <classEntry path="org.osmf.net.NetStreamTimeTrait"/>
     <classEntry path="org.osmf.net.NetStreamUtils"/>
     <classEntry path="org.osmf.net.PortProtocol"/>
+    <classEntry path="org.osmf.net.RTMFPNetLoader"/>
     <classEntry path="org.osmf.net.StreamType"/>
     <classEntry path="org.osmf.net.StreamingURLResource"/>
     <classEntry path="org.osmf.net.SwitchingRuleBase"/>
