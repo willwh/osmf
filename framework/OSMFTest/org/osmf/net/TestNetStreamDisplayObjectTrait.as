@@ -29,6 +29,7 @@ package org.osmf.net
 	import flash.system.ApplicationDomain;
 	
 	import mx.core.Application;
+	import mx.core.FlexGlobals;
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.netmocker.MockNetStream;
@@ -86,7 +87,7 @@ package org.osmf.net
 			
 			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, addAsync(onTestVideoSizeDetection, 5000));
 			
-			var app:Application = Application.application as Application;
+			var app:Application = FlexGlobals.topLevelApplication as Application;
 			
 			if (!app.stage)
 			{
