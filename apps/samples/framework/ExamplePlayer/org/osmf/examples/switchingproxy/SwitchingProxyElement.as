@@ -54,7 +54,6 @@ package org.osmf.examples.switchingproxy
 			
 			switchTimer = new Timer(switchTime*1000, numSwitches);
 			switchTimer.addEventListener(TimerEvent.TIMER, onSwitchTimer);
-			switchTimer.start();
 			
 			// Make sure both elements are loaded up front, so that our switch
 			// is seamless.
@@ -94,6 +93,14 @@ package org.osmf.examples.switchingproxy
 		
 		private function onLoadStateChange(event:LoadEvent):void
 		{
+			// Start our timer as soon as something is loaded.
+			if (	event.loadState == LoadState.READY
+				&& 	switchTimer.running == false
+			   )
+			{
+				switchTimer.start();
+			}
+			
 			// If one of the two elements is unloaded, we should force the other
 			// to unload as well.
 			if (	event.loadState == LoadState.UNLOADING
