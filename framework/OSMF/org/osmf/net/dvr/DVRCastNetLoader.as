@@ -27,6 +27,7 @@ package org.osmf.net.dvr
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetStreamLoadTrait;
+	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
@@ -77,9 +78,9 @@ package org.osmf.net.dvr
 			if (super.canHandleResource(resource))
 			{
 				var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
-				if (streamingURLResource)
+				if (streamingURLResource != null)
 				{
-					result = (streamingURLResource.streamType == StreamType.DVR && streamingURLResource.url.indexOf("rtmp") == 0);
+					result = (streamingURLResource.streamType == StreamType.DVR && NetStreamUtils.isRTMPStream(streamingURLResource.url));
 				}
 			}
 			

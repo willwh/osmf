@@ -78,6 +78,7 @@ package org.osmf.net
 			assertTrue(NetStreamUtils.isRTMPStream("rtmpt://example.com") == true);
 			assertTrue(NetStreamUtils.isRTMPStream("rtmpte://example.com") == true);
 			assertTrue(NetStreamUtils.isRTMPStream("rtmps://example.com") == true);
+			assertTrue(NetStreamUtils.isRTMPStream(" rtmp://example.com") == true);
 		}
 
 		public function testIsStreamingResource():void

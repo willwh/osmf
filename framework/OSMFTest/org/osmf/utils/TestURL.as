@@ -142,6 +142,13 @@ package org.osmf.utils
 			assertEquals(url.extension, "mp4");
 			assertTrue(url.absolute);
 
+			// Leading and trailing whitespace test
+			url = new URL("  http://foo.com/file.flv  ");
+			assertEquals(url.protocol, "http");
+			assertEquals(url.host, "foo.com");
+			assertEquals(url.path, "file.flv");
+			assertEquals(url.port, "");
+			assertEquals(url.extension, "flv");
 		}
 		
 	}

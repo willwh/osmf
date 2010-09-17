@@ -63,6 +63,9 @@ package org.osmf.utils
 			
 			if ((_rawUrl != null) && (_rawUrl.length > 0))
 			{
+				// Strip leading/trailing spaces.
+				_rawUrl = _rawUrl.replace(/^\s+|\s+$/g, "");
+				
 				parseUrl();
 			}
 		}
