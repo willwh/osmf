@@ -339,15 +339,15 @@
 
 			protected function fsBtn_clickHandler(event:MouseEvent):void
 			{
-				if ( Application.application.stage.displayState == StageDisplayState.NORMAL )
+				if ( stage.displayState == StageDisplayState.NORMAL )
 				{
 					var globalPt : Point = uiMediaPlayer.localToGlobal( new Point( uiMediaPlayer.x, uiMediaPlayer.y ) );
 					var stageRect : Rectangle = new Rectangle( globalPt.x, globalPt.y, uiMediaPlayer.width, uiMediaPlayer.height );
 					trace( "stageRect - " + stageRect );
-					Application.application.stage.addEventListener( FullScreenEvent.FULL_SCREEN, handleFullScreenChange, false, 0 , true );
-					Application.application.stage.fullScreenSourceRect = stageRect;
-					Application.application.stage.displayState = StageDisplayState.FULL_SCREEN;
-					Application.application.stage.scaleMode = StageScaleMode.NO_BORDER;
+					stage.addEventListener( FullScreenEvent.FULL_SCREEN, handleFullScreenChange, false, 0 , true );
+					stage.fullScreenSourceRect = stageRect;
+					stage.displayState = StageDisplayState.FULL_SCREEN;
+					stage.scaleMode = StageScaleMode.NO_BORDER;
 					trace( "fsHeight - " + this.stage.fullScreenHeight );
 					trace( "fsWidth - " + this.stage.fullScreenWidth );
 					trace( "scaleMode - " + this.stage.scaleMode );

@@ -19,14 +19,18 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
+@namespace mx "library://ns.adobe.com/flex/mx";
+
 @font-face {
 	src: local("Verdana");
+	embedAsCFF: false;
 	fontFamily: "Verdana";
 	unicodeRange:'U+0020-U+007E'; 
 }
 
 @font-face {
 	src: local("Verdana");
+	embedAsCFF: false;
 	fontFamily: "Verdana";
 	fontWeight: bold;
 	unicodeRange:'U+0020-U+007E'; 
@@ -54,31 +58,30 @@ global {
 	color: #FF1111;
 }
 
-Label {
+mx|Label {
 	fontSize: 10px;
 	color: #aaaaaa;
 }
 
-ComboBox {
+mx|ComboBox {
 	color: #333333;
 	themeColor: "haloSilver";
 }
 
-
-Button {
+mx|Button {
 	themeColor: "haloSilver";
 }
 
-TextInput {
+mx|TextInput {
 	color: #000000;
 }
 
-TextArea {
+mx|TextArea {
 	color: #222222;
 	disabledColor: #222222;
 }
 
-HSlider {
+mx|HSlider {
 	themeColor: "haloSilver";
     dataTipStyleName: "dataTip";
     dataTipOffset: 6;

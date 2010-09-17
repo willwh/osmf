@@ -31,7 +31,7 @@
 		<link>
 			<name>[source path] OSMFTest</name>
 			<type>2</type>
-			<locationURI>DOCUMENTS/framework/OSMFTest</locationURI>
+			<location>C:/Dev/osmf/public/trunk/framework/OSMFTest</location>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -14,4 +14,11 @@
 	<natures>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] MASTPlugin</name>
+			<type>2</type>
+			<location>C:/Dev/osmf/public/trunk/plugins/samples/MASTPlugin</location>
+		</link>
+	</linkedResources>
 </projectDescription>

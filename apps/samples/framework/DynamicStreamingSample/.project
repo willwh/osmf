@@ -16,4 +16,11 @@
 		<nature>com.adobe.flexbuilder.project.flexnature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] SMILPlugin</name>
+			<type>2</type>
+			<location>C:/Dev/osmf/public/trunk/plugins/samples/SMILPlugin</location>
+		</link>
+	</linkedResources>
 </projectDescription>

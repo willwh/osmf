@@ -261,7 +261,8 @@ package org.osmf.vpaid.elements
 				
 				case "AdLog":
 					var success:Boolean = false;
-					try {
+					try
+					{
 						if (event.hasOwnProperty("data"))
 						{
 							if (event.data.hasOwnProperty("message"))
@@ -278,10 +279,13 @@ package org.osmf.vpaid.elements
 							}
 						}
 					}
-					catch(e:Event) {}
-					if (success == false)
+					catch(e:Event)
 					{
-						CONFIG::LOGGING
+					}
+					
+					CONFIG::LOGGING
+					{
+						if (success == false)
 						{
 							logger.debug("[VPAID] Invalid AdLog event sent from creative. event.data not defined. Check creative.");
 						}

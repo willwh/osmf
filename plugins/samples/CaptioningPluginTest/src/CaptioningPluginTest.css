@@ -20,6 +20,8 @@
 *  
 *****************************************************/
 
+@namespace mx "library://ns.adobe.com/flex/mx";
+
 global {
 	color: #ffffff;
 	fontFamily: "Verdana";
@@ -42,21 +44,21 @@ global {
 	color: #FF1111;
 }
 
-Label {
+mx|Label {
 	fontSize: 10px;
 	color: #aaaaaa;
 }
 
-Button {
+mx|Button {
 	themeColor: "haloSilver";
 }
 
-ComboBox {
+mx|ComboBox {
 	color: #333333;
 	themeColor: "haloSilver";
 }
 
-TextArea {
+mx|TextArea {
 	color: #000000;
 	disabledColor: #000000;
 	backgroundColor: #ffffff;
@@ -64,17 +66,17 @@ TextArea {
 	borderColor: #ffffff;
 }
 
-TextInput {
+mx|TextInput {
 	color: #000000;
 }
 
-HSlider {
+mx|HSlider {
 	themeColor: "haloSilver";
     dataTipStyleName: "dataTip";
     dataTipOffset: 6;
 }
 
-ToolTip {
+mx|ToolTip {
 	color: #ffffff;
 	backgroundColor: #333333;
 }

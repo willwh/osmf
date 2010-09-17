@@ -43,7 +43,7 @@
 			private function onComplete():void
 			{
 				
-				var value:String = Application.application.parameters["integration_test_asset_root"] as String;
+				var value:String = this.parameters["integration_test_asset_root"] as String;
 				if (value != null && value.length > 0)
 				{
 					if (value.charAt(value.length-1) != "/")
