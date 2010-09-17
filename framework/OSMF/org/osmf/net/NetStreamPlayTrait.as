@@ -139,9 +139,9 @@ package org.osmf.net
 					else
 					{
 						var rs:StreamingURLResource = urlResource as StreamingURLResource;
-						if (rs != null && rs.rtmfpGroupspec != null && rs.rtmfpGroupspec.length > 0)
+						if (rs != null && rs.multicastGroupspec != null && rs.multicastGroupspec.length > 0)
 						{
-							doPlay(rs.rtmfpStreamName, startTime, len);
+							doPlay(rs.multicastStreamName, startTime, len);
 						}
 						else
 						{

@@ -153,8 +153,8 @@ package org.osmf.net
 			
 			var rs:StreamingURLResource = resource as StreamingURLResource;
 			if (rs != null &&
-				rs.rtmfpGroupspec != null &&
-				rs.rtmfpGroupspec.length > 0)
+				rs.multicastGroupspec != null &&
+				rs.multicastGroupspec.length > 0)
 			{
 				CONFIG::LOGGING
 				{

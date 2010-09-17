@@ -62,7 +62,7 @@ package org.osmf.net
 			}
 			
 			var streamResource:StreamingURLResource = resource as StreamingURLResource;
-			if (streamResource != null && streamResource.rtmfpGroupspec != null && streamResource.rtmfpGroupspec.length > 0)
+			if (streamResource != null && streamResource.multicastGroupspec != null && streamResource.multicastGroupspec.length > 0)
 			{
 				multicast = true;
 				setDuration(Number.MAX_VALUE);

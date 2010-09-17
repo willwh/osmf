@@ -122,17 +122,17 @@ package org.osmf.elements.f4mClasses
 			for each (var media:XML in root.xmlns::media)
 			{
 				var newMedia:Media = parseMedia(media, baseUrl);
-				if ((newMedia.rtmfpGroupspec != null 
-						&& newMedia.rtmfpGroupspec.length > 0 
-						&& (newMedia.rtmfpStreamName == null || newMedia.rtmfpStreamName.length <= 0)) 
-					|| (newMedia.rtmfpStreamName != null 
-						&& newMedia.rtmfpStreamName.length > 0 
-						&& (newMedia.rtmfpGroupspec == null || newMedia.rtmfpGroupspec.length <= 0)))
+				if ((newMedia.multicastGroupspec != null 
+						&& newMedia.multicastGroupspec.length > 0 
+						&& (newMedia.multicastStreamName == null || newMedia.multicastStreamName.length <= 0)) 
+					|| (newMedia.multicastStreamName != null 
+						&& newMedia.multicastStreamName.length > 0 
+						&& (newMedia.multicastGroupspec == null || newMedia.multicastGroupspec.length <= 0)))
 				{
 					multicastParameterInvalid = true;
 				}
 				
-				if (newMedia.rtmfpGroupspec != null && newMedia.rtmfpGroupspec.length > 0)
+				if (newMedia.multicastGroupspec != null && newMedia.multicastGroupspec.length > 0)
 				{
 					isMulticast = true;
 				}
@@ -220,14 +220,14 @@ package org.osmf.elements.f4mClasses
 				media.width = value.@width;
 			}
 			
-			if (value.attribute('rtmfpGroupspec').length() > 0)
+			if (value.attribute('multicastGroupspec').length() > 0)
 			{
-				media.rtmfpGroupspec = value.@rtmfpGroupspec;
+				media.multicastGroupspec = value.@multicastGroupspec;
 			}
 			
-			if (value.attribute('rtmfpStreamName').length() > 0)
+			if (value.attribute('multicastStreamName').length() > 0)
 			{
-				media.rtmfpStreamName = value.@rtmfpStreamName;
+				media.multicastStreamName = value.@multicastStreamName;
 			}
 			
 			if (value.xmlns::moov.length() > 0)
@@ -536,8 +536,8 @@ package org.osmf.elements.f4mClasses
 				{
 					resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
 				}								
-				resource.rtmfpGroupspec = media.rtmfpGroupspec;
-				resource.rtmfpStreamName = media.rtmfpStreamName;
+				resource.multicastGroupspec = media.multicastGroupspec;
+				resource.multicastStreamName = media.multicastStreamName;
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
 			{

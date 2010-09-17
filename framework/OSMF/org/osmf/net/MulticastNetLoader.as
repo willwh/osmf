@@ -45,7 +45,7 @@ package org.osmf.net
 	 * Extends NetLoader to provide
 	 * loading support for multicast video playback using RTMFP protocol.
 	 * 
-	 * <p> RTMFPNetLoader expects the media resource to be a StreamingURLResource,
+	 * <p> MulticastNetLoader expects the media resource to be a StreamingURLResource,
 	 * in which rtmfpGroupspec and rtmfpStreamName are specified.</p>
 	 *
 	 *  @langversion 3.0
@@ -53,13 +53,13 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.5
 	 */
-	public class RTMFPNetLoader extends NetLoader
+	public class MulticastNetLoader extends NetLoader
 	{
 		/**
 		 * @private
 		 * @inheritDoc
 		**/
-		public function RTMFPNetLoader(factory:NetConnectionFactoryBase=null)
+		public function MulticastNetLoader(factory:NetConnectionFactoryBase=null)
 		{
 			super(factory);
 		}
@@ -67,7 +67,7 @@ package org.osmf.net
 		/**
 		 * @private
 		 * 
-		 * RTMFPNetLoader returns true if the resource is an instance of StreamingURLResource with
+		 * MulticastNetLoader returns true if the resource is an instance of StreamingURLResource with
 		 * both rtmfpGroupspec and rtmfpStreamName set.
 		 * 
 		 * @param resource The URL of the source media.
@@ -78,7 +78,7 @@ package org.osmf.net
 		{
 			var rs:StreamingURLResource = resource as StreamingURLResource;
 
-            return rs != null && rs.rtmfpGroupspec != null && rs.rtmfpGroupspec.length > 0 && rs.rtmfpStreamName != null && rs.rtmfpStreamName.length > 0;
+            return rs != null && rs.multicastGroupspec != null && rs.multicastGroupspec.length > 0 && rs.multicastStreamName != null && rs.multicastStreamName.length > 0;
         }
 
 		/**
@@ -95,7 +95,7 @@ package org.osmf.net
 				logger.info("Creating multicast NetStream with rtmfpGroupspec " + rs.rtmfpGroupspec);
 			}
 
-			var ns:NetStream = new NetStream(connection, rs.rtmfpGroupspec);
+			var ns:NetStream = new NetStream(connection, rs.multicastGroupspec);
 			CONFIG::LOGGING	
 			{
 				if (ns != null)
@@ -139,7 +139,7 @@ package org.osmf.net
 				
 				var streamURLResource:StreamingURLResource = netLoadTrait.resource as StreamingURLResource;
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-				var netGroup:NetGroup = new NetGroup(connection, streamURLResource.rtmfpGroupspec);
+				var netGroup:NetGroup = new NetGroup(connection, streamURLResource.multicastGroupspec);
 				
 				function onNetStatus(event:NetStatusEvent):void
 				{
@@ -179,13 +179,13 @@ package org.osmf.net
 		private function isMulticast(streamURLResource:StreamingURLResource):Boolean
 		{
 			return (streamURLResource != null 
-				&& streamURLResource.rtmfpGroupspec != null 
-				&& streamURLResource.rtmfpGroupspec.length > 0);
+				&& streamURLResource.multicastGroupspec != null 
+				&& streamURLResource.multicastGroupspec.length > 0);
 		}
 
 		CONFIG::LOGGING
 		{
-			private static var logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.net.multicast.RTMFPNetLoader");
+			private static var logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.net.multicast.MulticastNetLoader");
 		}	
 	}
 }

@@ -26,9 +26,9 @@ package org.osmf.net
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.StreamingURLResource;
 
-	public class TestRTMFPNetLoader extends TestCase
+	public class TestMulticastNetLoader extends TestCase
 	{
-		public function TestRTMFPNetLoader(methodName:String=null)
+		public function TestMulticastNetLoader(methodName:String=null)
 		{
 			super(methodName);
 		}
@@ -43,28 +43,28 @@ package org.osmf.net
 		
 		public function testCanHandleResource():void
 		{
-			var loader:RTMFPNetLoader = new RTMFPNetLoader();
+			var loader:MulticastNetLoader = new MulticastNetLoader();
 			var resource:MediaResourceBase = new MediaResourceBase();
 			assertEquals(loader.canHandleResource(resource), false);
 			
 			var streamingURLResource:StreamingURLResource = new StreamingURLResource(URL, "live");
 			assertEquals(loader.canHandleResource(streamingURLResource), false);
 			
-			streamingURLResource.rtmfpGroupspec = "";
+			streamingURLResource.multicastGroupspec = "";
 			assertEquals(loader.canHandleResource(streamingURLResource), false);
 
-			streamingURLResource.rtmfpStreamName = "";
+			streamingURLResource.multicastStreamName = "";
 			assertEquals(loader.canHandleResource(streamingURLResource), false);
 
-			streamingURLResource.rtmfpGroupspec = GROUP_SPEC;
+			streamingURLResource.multicastGroupspec = GROUP_SPEC;
 			assertEquals(loader.canHandleResource(streamingURLResource), false);
 
-			streamingURLResource.rtmfpGroupspec = "";
-			streamingURLResource.rtmfpStreamName = GROUP_NAME;
+			streamingURLResource.multicastGroupspec = "";
+			streamingURLResource.multicastStreamName = GROUP_NAME;
 			assertEquals(loader.canHandleResource(streamingURLResource), false);
 
-			streamingURLResource.rtmfpGroupspec = GROUP_SPEC;
-			streamingURLResource.rtmfpStreamName = GROUP_NAME;
+			streamingURLResource.multicastGroupspec = GROUP_SPEC;
+			streamingURLResource.multicastStreamName = GROUP_NAME;
 			assertEquals(loader.canHandleResource(streamingURLResource), true);
 		}
 		

@@ -136,7 +136,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var rtmfpGroupspec:String;
+		public var multicastGroupspec:String;
 		
 		/**
 		 * Store multicast stream name
@@ -146,6 +146,6 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var rtmfpStreamName:String;				
+		public var multicastStreamName:String;				
 	}
 }

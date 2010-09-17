@@ -60,6 +60,16 @@ package org.osmf
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
 			
+			// Metadata
+			//
+
+			addTestSuite(TestMetadata);
+			addTestSuite(TestMetadataGroup);
+			addTestSuite(TestMetadataWatcher);
+			addTestSuite(TestTimelineMetadata);
+			addTestSuite(TestCuePoint);
+			addTestSuite(TestTimelineMarker);
+
 			// Logging
 			//
 
@@ -207,16 +217,6 @@ package org.osmf
 			
 			addTestSuite(TestMediaPlayer);
 			
-			// Metadata
-			//
-
-			addTestSuite(TestMetadata);
-			addTestSuite(TestMetadataGroup);
-			addTestSuite(TestMetadataWatcher);
-			addTestSuite(TestTimelineMetadata);
-			addTestSuite(TestCuePoint);
-			addTestSuite(TestTimelineMarker);
-
 			// NetStream
 			//
 			
@@ -292,7 +292,7 @@ package org.osmf
 			// Multicast
 			//
 			
-			addTestSuite(TestRTMFPNetLoader);
+			addTestSuite(TestMulticastNetLoader);
 
 			// Plugins
 			//

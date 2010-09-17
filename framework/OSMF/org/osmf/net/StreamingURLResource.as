@@ -87,8 +87,8 @@ package org.osmf.net
 							, connectionArguments:Vector.<Object> = null
 							, urlIncludesFMSApplicationInstance:Boolean = false
 							, drmContentData:ByteArray = null
-							, rtmfpGroupspec:String = null
-							, rtmfpStreamName:String = null
+							, multicastGroupspec:String = null
+							, multicastStreamName:String = null
 							)
 		{
 			_streamType = streamType || StreamType.RECORDED;
@@ -99,8 +99,8 @@ package org.osmf.net
 			
 			_connectionArguments = connectionArguments;
 			
-			_rtmfpGroupspec = rtmfpGroupspec;
-			_rtmfpStreamName = rtmfpStreamName;
+			_multicastGroupspec = multicastGroupspec;
+			_multicastStreamName = multicastStreamName;
 			
 			super(url);
 		}
@@ -232,29 +232,29 @@ package org.osmf.net
 		}
 		
 		/**
-		 * The group spec string for RTMFP multicasting.
+		 * The group spec string for multicasting.
 		 **/
-		public function get rtmfpGroupspec():String
+		public function get multicastGroupspec():String
 		{
-			return _rtmfpGroupspec;
+			return _multicastGroupspec;
 		}
 		
-		public function set rtmfpGroupspec(value:String):void
+		public function set multicastGroupspec(value:String):void
 		{
-			_rtmfpGroupspec = value;
+			_multicastGroupspec = value;
 		}
 		
 		/**
-		 * The stream name string for RTMFP multicasting.
+		 * The stream name string for multicasting.
 		 **/
-		public function get rtmfpStreamName():String
+		public function get multicastStreamName():String
 		{
-			return _rtmfpStreamName;
+			return _multicastStreamName;
 		}
 		
-		public function set rtmfpStreamName(value:String):void
+		public function set multicastStreamName(value:String):void
 		{
-			_rtmfpStreamName = value;
+			_multicastStreamName = value;
 		}
 		
 		private var _streamType:String; // StreamType
@@ -263,7 +263,7 @@ package org.osmf.net
 		private var _connectionArguments:Vector.<Object>;
 		private var _drmContentData:ByteArray;
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
-		private var _rtmfpGroupspec:String;
-		private var _rtmfpStreamName:String;
+		private var _multicastGroupspec:String;
+		private var _multicastStreamName:String;
 	}
 }
