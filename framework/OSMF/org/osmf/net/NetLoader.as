@@ -90,15 +90,13 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetLoader(factory:NetConnectionFactoryBase=null, reconnectStreams:Boolean=true)
+		public function NetLoader(factory:NetConnectionFactoryBase=null)
 		{
 			super();
 
 			CONFIG::FLASH_10_1	
 			{
-				_reconnectStreams = reconnectStreams;
-				_reconnectStreamsTimeout = STREAM_RECONNECT_TIMEOUT;
-				_reconnectStreamsWhenPaused = false;
+				_reconnectTimeout = STREAM_RECONNECT_TIMEOUT;
 			}
 			
 			netConnectionFactory = factory || new NetConnectionFactory();
@@ -110,6 +108,7 @@ package org.osmf.net
 		{
 			/**
 			 * Indicates whether stream reconnect is enabled.
+			 * 
 			 **/
 			public function get reconnectStreams():Boolean
 			{
@@ -117,7 +116,7 @@ package org.osmf.net
 			}
 				
 			/**
-			 * The stream reconnect timeout in seconds.
+			 * The stream reconnect timeout in milliseconds.
 			 * 
 			 * <p>The NetLoader will give up trying to reconnect the stream
 			 * if a successful reconnect does not occur within this time
@@ -128,34 +127,31 @@ package org.osmf.net
 			 * 
 			 * @throws ArgumentError If value param is less than zero.
 			 **/		
-			public function get reconnectStreamsTimeout():int
+			public function get reconnectTimeout():Number
 			{
-				return _reconnectStreamsTimeout;
+				return _reconnectTimeout;
 			}
 			
-			public function set reconnectStreamsTimeout(value:int):void
+			public function set reconnectTimeout(value:Number):void
 			{
 				if (value < 0)
 				{
 					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 				}
 				
-				_reconnectStreamsTimeout = value;
-			}
-			
+				_reconnectTimeout = value;
+			}	
+						
 			/**
-			 * Indicates whether or not the class should attempt to reconnect 
-			 * if a stream is paused. The default is <code>false</code>.
-			 **/
-			public function get reconnectStreamsWhenPaused():Boolean
+			 * @private
+			 *
+			 * Allow derived classes to change the value of _reconnectStreams.
+			 * 
+			**/ 
+			protected function setReconnectStreams(value:Boolean):void
 			{
-				return _reconnectStreamsWhenPaused;
-			}
-			
-			public function set reconnectStreamsWhenPaused(value:Boolean):void
-			{
-				_reconnectStreamsWhenPaused = value;
-			}
+				_reconnectStreams = value;
+			}		
 		}				
 		
 		/**
@@ -331,6 +327,7 @@ package org.osmf.net
 			{
 				netLoadTrait.connection.close();
 			}
+			delete oldConnectionURLs[loadTrait.resource];
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED); 				
 		}
 		
@@ -347,7 +344,7 @@ package org.osmf.net
 			{
 				return new NetConnection();
 			}
-			
+
 			/**
 			 * Attempts to reconnect the specified NetConnection to the specified
 			 * URL.
@@ -365,11 +362,14 @@ package org.osmf.net
 			 * 
 			 * @returns The URI that was passed to the NetConnection.connect method
 			 **/
-			protected function reconnectNetConnection(netConnection:NetConnection, resource:URLResource, 
-														lastUsedURI:String):String
+			protected function reconnect(netConnection:NetConnection, resource:URLResource):void
 			{
-				netConnection.connect(lastUsedURI);
-				return lastUsedURI;
+				var connectionURL:String = oldConnectionURLs[resource] as String;
+				
+				if (connectionURL != null && connectionURL.length > 0 && netConnection != null)
+				{
+					netConnection.connect(connectionURL);
+				}
 			}
 			
 			/**
@@ -452,7 +452,7 @@ package org.osmf.net
 				var netConnection:NetConnection = loadTrait.connection;
 				var reconnectTimer:Timer = new Timer(STREAM_RECONNECT_TIMER_INTERVAL, 1);
 				var timeoutTimer:Timer;
-				var currentURI:String = netConnection.uri;
+				oldConnectionURLs[loadTrait.resource] = netConnection.uri;
 				var streamIsPaused:Boolean = false;
 				var reconnectHasTimedOut:Boolean = false;
 				
@@ -478,9 +478,9 @@ package org.osmf.net
 				{
 					if (add)
 					{
-						if (_reconnectStreamsTimeout > 0 )
+						if (_reconnectTimeout > 0 )
 						{
-							timeoutTimer = new Timer(_reconnectStreamsTimeout * 1000, 1);
+							timeoutTimer = new Timer(_reconnectTimeout, 1);
 							timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeoutTimer);
 						}
 					}
@@ -540,6 +540,7 @@ package org.osmf.net
 							}
 							var oldConnection:NetConnection = loadTrait.connection;
 							loadTrait.connection = netConnection;
+							oldConnectionURLs[loadTrait.resource] = netConnection.uri;
 							
 							// Stop the timeout timer
 							if (timeoutTimer != null)
@@ -565,9 +566,7 @@ package org.osmf.net
 							break;
 						case NetConnectionCodes.CONNECT_CLOSED:
 						case NetConnectionCodes.CONNECT_FAILED:
-							if (loadTrait.loadState == LoadState.READY && 
-								(!streamIsPaused || (streamIsPaused && _reconnectStreamsWhenPaused)) &&
-								!reconnectHasTimedOut) 
+							if (loadTrait.loadState == LoadState.READY && !reconnectHasTimedOut) 
 							{
 								reconnectTimer.start();
 							}
@@ -642,7 +641,7 @@ package org.osmf.net
 						logger.info(STREAM_RECONNECT_LOGGING_PREFIX+"Calling reconnectNetConnection to try to reconnect...");
 					}
 
-					currentURI = reconnectNetConnection(netConnection, loadTrait.resource as URLResource, currentURI);
+					reconnect(netConnection, loadTrait.resource as URLResource);
 				}
 			}
 		}
@@ -770,12 +769,12 @@ package org.osmf.net
 
 		private var netConnectionFactory:NetConnectionFactoryBase;
 		private var pendingLoads:Dictionary = new Dictionary();
+		private var oldConnectionURLs:Dictionary = new Dictionary();
 		
 		CONFIG::FLASH_10_1	
 		{					
-			private var _reconnectStreams:Boolean;
-			private var _reconnectStreamsTimeout:int;
-			private var _reconnectStreamsWhenPaused:Boolean;
+			private var _reconnectStreams:Boolean = true;
+			private var _reconnectTimeout:Number;
 		}
 		
 		private static const PROTOCOL_RTMP:String = "rtmp";
@@ -804,7 +803,7 @@ package org.osmf.net
 		
 		CONFIG::FLASH_10_1	
 		{				
-			private static const STREAM_RECONNECT_TIMEOUT:int = 120;			// in seconds
+			private static const STREAM_RECONNECT_TIMEOUT:Number = 120000;		// in milliseconds
 			private static const STREAM_RECONNECT_TIMER_INTERVAL:int = 1000;	// in milliseconds
 		}
 		

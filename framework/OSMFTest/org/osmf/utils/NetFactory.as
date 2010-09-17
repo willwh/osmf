@@ -76,7 +76,7 @@ package org.osmf.utils
 		{
 			return useMockObjects
 						? new MockNetLoader(factory, reconnectStreams)
-						: new NetLoader(factory, reconnectStreams);
+						: new NetLoader(factory);
 		}
 
 		/**
@@ -86,7 +86,7 @@ package org.osmf.utils
 		{
 			return useMockObjects
 						? new MockRTMPDynamicStreamingNetLoader(null, false)
-						: new RTMPDynamicStreamingNetLoader(null, false);
+						: new RTMPDynamicStreamingNetLoader(null);
 		}
 		
 		/**

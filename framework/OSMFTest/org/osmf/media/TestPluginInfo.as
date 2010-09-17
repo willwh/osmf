@@ -29,6 +29,7 @@ package org.osmf.media
 	import org.osmf.elements.ImageLoader;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetLoaderForTest;
 	import org.osmf.utils.Version;
 
 	public class TestPluginInfo extends TestCase
@@ -39,7 +40,7 @@ package org.osmf.media
 			items.push
 				(	new MediaFactoryItem
 						( "test.video"
-							, new NetLoader(null, false).canHandleResource
+							, new NetLoaderForTest(null, false).canHandleResource
 							, function():MediaElement
 							{
 								return new VideoElement();

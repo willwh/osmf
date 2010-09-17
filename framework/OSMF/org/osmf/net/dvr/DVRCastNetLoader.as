@@ -53,13 +53,13 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DVRCastNetLoader(factory:DVRCastNetConnectionFactory=null, reconnectStreams:Boolean=true)
+		public function DVRCastNetLoader(factory:DVRCastNetConnectionFactory=null)
 		{
 			if (factory == null)
 			{
 				factory = new DVRCastNetConnectionFactory()
 			}
-			super(factory, reconnectStreams);
+			super(factory);
 		}
 		
 		/**

@@ -61,7 +61,7 @@ package org.osmf.net
 		**/
 		public function RTMFPNetLoader(factory:NetConnectionFactoryBase=null)
 		{
-			super(factory, false);
+			super(factory);
 		}
 		
 		/**

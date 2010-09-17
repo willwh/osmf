@@ -30,6 +30,7 @@ package org.osmf.media.pluginClasses
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.PluginInfo;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetLoaderForTest;
 	
 	public class SimpleVideoImagePluginInfo extends PluginInfo
 	{
@@ -38,7 +39,7 @@ package org.osmf.media.pluginClasses
 
 		public function SimpleVideoImagePluginInfo()
 		{
-			var netLoader:NetLoader = new NetLoader(null, false);
+			var netLoader:NetLoader = new NetLoaderForTest(null, false);
 			var imageLoader:ImageLoader = new ImageLoader();
 
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();

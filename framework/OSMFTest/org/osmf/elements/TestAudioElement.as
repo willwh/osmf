@@ -32,6 +32,7 @@ package org.osmf.elements
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetLoaderForTest;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.netmocker.EventInfo;
@@ -105,7 +106,7 @@ package org.osmf.elements
 		
 		public function testConstructor():void
 		{
-			new AudioElement(null, new NetLoader(null, false));
+			new AudioElement(null, new NetLoaderForTest(null, false));
 			new AudioElement(null, new SoundLoader());
 			
 			// Loader must be a NetLoader or a SoundLoader.

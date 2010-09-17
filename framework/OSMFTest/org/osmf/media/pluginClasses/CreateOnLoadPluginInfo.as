@@ -28,12 +28,13 @@ package org.osmf.media.pluginClasses
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.PluginInfo;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetLoaderForTest;
 
 	public class CreateOnLoadPluginInfo extends PluginInfo
 	{
 		public function CreateOnLoadPluginInfo()
 		{
-			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader(null, false).canHandleResource, createElement);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoaderForTest(null, false).canHandleResource, createElement);
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			items.push(item);
 			

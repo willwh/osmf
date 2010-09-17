@@ -40,7 +40,11 @@ package org.osmf.netmocker
 				netConnectionFactory = new DefaultNetConnectionFactory();
 			}
 			
-			super(netConnectionFactory, reconnectStreams);
+			super(netConnectionFactory);
+			CONFIG::FLASH_10_1	
+			{
+				setReconnectStreams(reconnectStreams);
+			}
 			
 			this.netConnectionFactory = netConnectionFactory;
 		}

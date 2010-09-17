@@ -346,21 +346,18 @@ package org.osmf.net
 			{
 				var netLoader:NetLoader = new NetLoader();
 				assertTrue(netLoader.reconnectStreams);
-				netLoader.reconnectStreamsTimeout = 900;
-				assertTrue(netLoader.reconnectStreamsTimeout == 900);
+				netLoader.reconnectTimeout = 900;
+				assertTrue(netLoader.reconnectTimeout == 900);
 				
 				try 
 				{
-					netLoader.reconnectStreamsTimeout = -5;
+					netLoader.reconnectTimeout = -5;
 					fail("NetLoader.reconnectStreamsTimeout should have thrown an ArgumentError");				
 				}
 				catch(e:ArgumentError)
 				{
 					assertEquals(e.message, OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 				}
-				
-				netLoader.reconnectStreamsWhenPaused = true;
-				assertTrue(netLoader.reconnectStreamsWhenPaused == true);
 			}
 			
 			public function testStreamReconnect():void
@@ -425,7 +422,7 @@ package org.osmf.net
 					
 					function onNetStatus(event:NetStatusEvent):void
 					{
-						var timer:Timer = new Timer(1000, 1);
+						var timer:Timer = new Timer(2000, 1);
 						timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete, false, 0, true);
 						
 						switch (event.info.code)

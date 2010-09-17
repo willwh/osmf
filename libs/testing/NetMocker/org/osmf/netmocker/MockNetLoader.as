@@ -50,7 +50,11 @@ package org.osmf.netmocker
 				netConnectionFactory = new DefaultNetConnectionFactory();
 			}
 			
-			super(netConnectionFactory, reconnectStreams);
+			super(netConnectionFactory);
+			CONFIG::FLASH_10_1	
+			{
+				setReconnectStreams(reconnectStreams);
+			}
 			
 			this.netConnectionFactory = netConnectionFactory;
 		}
@@ -227,10 +231,9 @@ package org.osmf.netmocker
 			/**
 			 * @inheritDoc
 			 **/
-			override protected function reconnectNetConnection(netConnection:NetConnection, resource:URLResource, lastUsedURI:String):String
+			override protected function reconnect(netConnection:NetConnection, resource:URLResource):void
 			{
-				super.reconnectNetConnection(netConnection, resource, null);
-				return null;
+				super.reconnect(netConnection, resource);
 			}
 		}
 					    	    
