@@ -32,7 +32,10 @@ package org.osmf.net
 		{
 			super(factory);
 			
-			super.setReconnectStreams(reconnectStreams);
+			CONFIG::FLASH_10_1	
+			{
+				super.setReconnectStreams(reconnectStreams);
+			}
 		}
 		
 	}

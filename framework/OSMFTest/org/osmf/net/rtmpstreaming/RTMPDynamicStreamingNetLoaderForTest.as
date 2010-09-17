@@ -33,7 +33,10 @@ package org.osmf.net.rtmpstreaming
 		public function RTMPDynamicStreamingNetLoaderForTest(factory:NetConnectionFactoryBase=null, reconnectStreams:Boolean=true)
 		{
 			super(factory);
-			super._reconnectStreams = reconnectStreams;
+			CONFIG::FLASH_10_1	
+			{
+				super.setReconnectStreams = reconnectStreams;
+			}
 		}
 		
 	}
