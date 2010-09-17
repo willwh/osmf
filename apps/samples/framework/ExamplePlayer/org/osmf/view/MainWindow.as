@@ -232,12 +232,16 @@ package org.osmf.view
 			{
 				example = exampleTree.selectedItem as Example;
 				setMediaElement(example.mediaElement);
-				exampleDescription.text = example.description;								
+				exampleDescription.text = example.description;
+				
+				var category:Category = exampleTree.getParentItem(exampleTree.selectedItem) as Category;
+				disableScaleMode = (category != null && category.name == "Layout")
 			}
 			else
 			{
 				setMediaElement(null);
 				exampleDescription.text = "";
+				disableScaleMode = false;
 			}
 			
 			updateControls();
@@ -331,7 +335,7 @@ package org.osmf.view
 			bufferTraitControls.visible	= mediaPlayer.canBuffer;
 			loadTraitControls.visible	= mediaPlayer.canLoad;
 			seekBar.enabled 			= mediaPlayer.canSeek;
-			scaleModeBox.visible		= mediaPlayer.displayObject != null;
+			scaleModeBox.visible		= mediaPlayer.displayObject != null && !disableScaleMode;
 			
 			if (mediaPlayer.temporal)
 			{
@@ -399,5 +403,6 @@ package org.osmf.view
 		private var example:Example;
 		private var recommendationsWatcher:MetadataWatcher;
 		private var scaleMode:String = ScaleMode.NONE;
+		private var disableScaleMode:Boolean = false;
 	}
 }
