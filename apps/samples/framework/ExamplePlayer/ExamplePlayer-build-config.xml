@@ -132,7 +132,7 @@
       -->
       <theme>
          <!-- The Flex 4 default theme is Spark. -->
-         <filename>themes/Halo/halo.swc</filename>
+         <filename>${flexlib}/themes/Halo/halo.swc</filename>
       </theme>
       
       <!-- Turns on the display of stack traces for uncaught runtime errors. -->
