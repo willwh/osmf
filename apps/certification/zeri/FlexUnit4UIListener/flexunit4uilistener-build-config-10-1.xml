@@ -46,7 +46,7 @@
       <!-- linking.                                                             -->
       <external-library-path>
 <!--         <path-element>${flexlib}/libs/air/airglobal.swc</path-element> -->
-         <path-element>${flexlib}/libs/player/10.0/playerglobal.swc</path-element>
+         <path-element>${flexlib}/libs/player/10.1/playerglobal.swc</path-element>
 
          <path-element>../../../../build/certification/zeri/OSMF.swc</path-element>
          <path-element>../../../../build/certification/zeri/FlexUnit4.swc</path-element>
