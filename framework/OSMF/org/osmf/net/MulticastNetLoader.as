@@ -92,7 +92,7 @@ package org.osmf.net
 
 			CONFIG::LOGGING	
 			{
-				logger.info("Creating multicast NetStream with rtmfpGroupspec " + rs.rtmfpGroupspec);
+				logger.info("Creating multicast NetStream with multicastGroupspec " + rs.multicastGroupspec);
 			}
 
 			var ns:NetStream = new NetStream(connection, rs.multicastGroupspec);
