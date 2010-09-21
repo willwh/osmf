@@ -13,6 +13,13 @@ package org.osmf.examples.buffering
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 
+	/**
+	 * ParallelElement which attempts to synchronize its children by pausing
+	 * any time one child is buffering.
+	 * 
+	 * Note that there's a bug (FM-1044) where the entire ParallelElement will
+	 * pause when the shortest element reaches its duration.
+	 **/
 	public class SynchronizedParallelElement extends ParallelElement
 	{
 		public function SynchronizedParallelElement()
