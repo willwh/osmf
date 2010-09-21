@@ -58,7 +58,6 @@
 	 	 <path-element>${flexlib}/libs/air/airframework.swc</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
          <path-element>../../../build/lib/OSMF.swc</path-element>
-         <path-element>../FlexUnit/FlexUnit.swc</path-element>
       </library-path>
       
       <!-- Enable post-link SWF optimization. -->
