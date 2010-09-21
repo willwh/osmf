@@ -90,7 +90,7 @@ package org.osmf.vast.media
 		 */
 		public function VAST2TrackingProxyElement(events:Vector.<VASTTrackingEvent>, httpLoader:HTTPLoader=null, wrappedElement:MediaElement=null, cacheBust:CacheBuster = null,  clickURL:String = "")
 		{ 
-			super(events);
+			super(events, httpLoader, wrappedElement, clickURL);
 			setEvents(events);
 			this.httpLoader = httpLoader;
 			clickThruURL = clickURL;
@@ -428,7 +428,7 @@ package org.osmf.vast.media
 					{
 						//trace("Firing Creative View");
 						fireEventOfType(VASTTrackingEventType.CREATIVE_VIEW);//Want to fire only for linear creatives. Nonlinear fires it's own AD_CREATIVE_VIEW
-						createClickTrhu();
+						createClickThru();
 						if(ProxyElement(this.proxiedElement).proxiedElement.hasTrait(MediaTraitType.TIME))
 						{
 							
@@ -443,14 +443,6 @@ package org.osmf.vast.media
 					onMediaElementPlay();
 				}
 			}
-		}
-		
-		private function createClickTrhu():void
-		{
-			//Add a mouse event to the media container for clickThru support
-			mediaContainer = container as MediaContainer;
-			mediaContainer.buttonMode = true;
-			mediaContainer.addEventListener(MouseEvent.MOUSE_UP,onMediaElementClick);		
 		}
 		
 		/**
@@ -549,33 +541,7 @@ package org.osmf.vast.media
 					}
 				}
 			}
-		}
-		
-		private function getBrowserEngine() : String
-		{
-			// Get User Agent
-			try
-			{
-				var userAgent : String = ExternalInterface.call("eval", "navigator.userAgent");
-				userAgent = userAgent.toLowerCase();
-				var isIe : Boolean = (userAgent.indexOf("msie") >= 0);
-				var isOpera : Boolean = (userAgent.indexOf('opera') >= 0);
-				if(isOpera) isIe = false;
-				var isSafari : Boolean = (userAgent.indexOf('applewebkit') >= 0 || userAgent.indexOf('konqueror') >= 0);
-				var isGecko : Boolean = (userAgent.indexOf('gecko/') > 0);
-			
-				if(isIe) browserEngine = 'msie';
-				if(isOpera) browserEngine = 'opera';
-				if(isSafari) browserEngine = 'webkit';
-				if(isGecko) browserEngine = 'gecko';
-			}
-			catch ( e : Error )
-			{
-				browserEngine = 'unknown';
-			}
-			
-			return browserEngine;
-		}		
+		}	
 		
 		private function onPlayheadTimer(event:TimerEvent):void
 		{
@@ -614,7 +580,7 @@ package org.osmf.vast.media
 			return 0;
 		}
 		
-		private function onMediaElementClick(e:MouseEvent):void
+		override protected function onMediaElementClick(e:MouseEvent):void
 		{
 			
 			if(cacheBuster != null && clickThruURL != null)
@@ -622,26 +588,6 @@ package org.osmf.vast.media
 				getURL(cacheBustURL(clickThruURL), "_blank");
 				fireEventOfType(VASTTrackingEventType.CLICK_THRU);
 			}
-		}
-		
-		private function getURL( url : String, window : String = "_self" ) : void
-		{
-			var compatBrowser : Boolean = false;
-			browserEngine = getBrowserEngine();
-			switch( browserEngine ) {
-				case "webkit":
-				case "opera":
-				case "internabl":
-				case "unknown":
-				case "aim":
-					compatBrowser = false;
-					break;
-				default:
-					compatBrowser = true;
-			}
-
-			var request : URLRequest = new URLRequest(url);
-			flash.net.navigateToURL(request, window);
 		}
 		
 		private function cacheBustURL(urlToTag:String):String

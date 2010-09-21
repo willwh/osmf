@@ -176,7 +176,7 @@ package org.osmf.vast.media
 			fireEventOfType(VASTTrackingEventType.COMPLETE);
 		}
 
-		private function createClickThru():void
+		protected function createClickThru():void
 		{
 			// Add a mouse event to the media container for clickThru support.
 			if (container != null)
@@ -190,13 +190,13 @@ package org.osmf.vast.media
 			}
 		}
 		
-		private function onMediaElementClick(event:MouseEvent):void
+		protected function onMediaElementClick(event:MouseEvent):void
 		{
 			getURL(clickThruURL, "_blank");
 			fireEventOfType(VASTTrackingEventType.CLICK_THRU);
 		}
 		
-		private function getURL(url:String, window:String = "_self"):void
+		protected function getURL(url:String, window:String = "_self"):void
 		{
 			var compatBrowser:Boolean = false;
 			browserEngine = getBrowserEngine();
