@@ -67,6 +67,11 @@ package org.osmf.traits
 			return new SimpleResource(SimpleResource.UNHANDLED);
 		}
 		
+		protected function get loadIsAsynchronous():Boolean
+		{
+			return false;
+		}
+		
 		/**
 		 * Subclasses can override if the media being loaded has a positive
 		 * byte count.
@@ -428,6 +433,71 @@ package org.osmf.traits
 					}
 				}
 			}
+		}
+		
+		public function testUnloadAfterLoad():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
+			
+			var loadTrait:LoadTrait = currentLoadTrait = createLoadTrait(successfulResource);
+			
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestUnloadAfterLoad);
+			loadTrait.load();
+			loadTrait.unload();
+		}
+		
+		private function onTestUnloadAfterLoad(event:LoadEvent):void
+		{
+			assertTrue(event.target == currentLoadTrait);
+			
+			switch (eventCount)
+			{
+				case 0:
+					assertTrue(event.loadState == LoadState.LOADING);
+					break;
+				case 1:
+					if (loadIsAsynchronous)
+					{
+						// The unload should begin before the load completes.
+						assertTrue(event.loadState == LoadState.UNLOADING);
+					}
+					else
+					{
+						// The load will complete before the unload starts.
+						assertTrue(event.loadState == LoadState.READY);
+					}
+					break;
+				case 2:
+					if (loadIsAsynchronous)
+					{
+						assertTrue(event.loadState == LoadState.UNINITIALIZED);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					else
+					{
+						assertTrue(event.loadState == LoadState.UNLOADING);
+					}
+					break;
+				case 3:
+					if (loadIsAsynchronous)
+					{
+						fail();
+					}
+					else
+					{
+						assertTrue(event.loadState == LoadState.UNINITIALIZED);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					
+					break;
+				
+				default:
+					fail();
+			}
+			
+			eventCount++;
 		}
 		
 		public function testUnloadWithInvalidResource():void

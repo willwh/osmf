@@ -191,7 +191,13 @@ package org.osmf.elements
 				// want to have already signaled READY).  15 bytes is roughly the
 				// size of a 404, and presumably we'll never need to load content
 				// so small, so this seems like a safe heuristic to use.
-				if (event.bytesTotal >= MIN_BYTES_TO_RECEIVE)
+				//
+				// The second condition is to cover the case where a load is
+				// immediately followed by an unload.  In such a case, we might
+				// still get a ProgressEvent, but we want to ignore it since we've
+				// already changed the state to unloaded.
+				if (event.bytesTotal >= MIN_BYTES_TO_RECEIVE &&
+					soundLoadTrait.loadState == LoadState.LOADING)
 				{
 					toggleSoundListeners(sound, false);
 
@@ -254,8 +260,11 @@ package org.osmf.elements
 			
 			updateLoadTrait(soundLoadTrait, LoadState.UNLOADING);
 			try
-			{			
-				soundLoadTrait.sound.close();
+			{
+				if (soundLoadTrait.sound != null)
+				{
+					soundLoadTrait.sound.close();
+				}
 			}
 			catch (error:IOError)
 			{

@@ -44,6 +44,11 @@ package org.osmf.elements.audioClasses
 			return new SoundLoadTrait(loader, resource);
 		}
 		
+		override protected function get loadIsAsynchronous():Boolean
+		{
+			return true;
+		}
+		
 		override protected function createLoader():LoaderBase
 		{
 			return new SoundLoader();

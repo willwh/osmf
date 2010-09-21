@@ -186,39 +186,44 @@ package org.osmf.elements.loaderClasses
 			{
 				toggleLoaderListeners(loader, false);
 				
-				if (validateLoadedContentFunction != null)
+				// If we're not still in the LOADING state, then ignore this event.
+				// (This can happen when a load is immediately followed by an unload.)
+				if (loadTrait.loadState == LoadState.LOADING)
 				{
-					var validated:Boolean = validateLoadedContentFunction(loader.content);
-					if (validated)
+					if (validateLoadedContentFunction != null)
 					{
-						// Unload the loaded SWF, we don't need it anymore.
-						loader.unloadAndStop();
-						loader = null;
-						
-						loadLoadTrait(loadTrait, updateLoadTraitFunction, useCurrentSecurityDomain, false, null);
+						var validated:Boolean = validateLoadedContentFunction(loader.content);
+						if (validated)
+						{
+							// Unload the loaded SWF, we don't need it anymore.
+							loader.unloadAndStop();
+							loader = null;
+							
+							loadLoadTrait(loadTrait, updateLoadTraitFunction, useCurrentSecurityDomain, false, null);
+						}
+						else
+						{
+							// Unload the loaded SWF, we don't need it anymore.
+							loader.unloadAndStop();
+							loader = null;
+							
+							updateLoadTraitFunction(loadTrait, LoadState.LOAD_ERROR);
+							loadTrait.dispatchEvent
+								( new MediaErrorEvent
+									( MediaErrorEvent.MEDIA_ERROR
+									, false
+									, false
+									, new MediaError
+										( MediaErrorCodes.IO_ERROR
+										)
+									)
+								);
+						}
 					}
 					else
 					{
-						// Unload the loaded SWF, we don't need it anymore.
-						loader.unloadAndStop();
-						loader = null;
-						
-						updateLoadTraitFunction(loadTrait, LoadState.LOAD_ERROR);
-						loadTrait.dispatchEvent
-							( new MediaErrorEvent
-								( MediaErrorEvent.MEDIA_ERROR
-								, false
-								, false
-								, new MediaError
-									( MediaErrorCodes.IO_ERROR
-									)
-								)
-							);
+						updateLoadTraitFunction(loadTrait, LoadState.READY);
 					}
-				}
-				else
-				{
-					updateLoadTraitFunction(loadTrait, LoadState.READY);
 				}
 			}
 
