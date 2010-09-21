@@ -132,6 +132,17 @@ package org.osmf.vast.model
 		public static const STOP:VASTTrackingEventType 				= new VASTTrackingEventType("stop");
 		
 		/**
+		 * Event constant for when the user clicks an ad.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const CLICK_THRU:VASTTrackingEventType 				= new VASTTrackingEventType("clickThru");
+		
+		
+		/**
 		 * @private
 		 * 
 		 * Constructor.

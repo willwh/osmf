@@ -130,6 +130,7 @@ package
 
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
+			sprite.addMediaElement(adElement);
 			sprite.addMediaElement(serialElement);
 			mediaPlayer.media = serialElement;
 		}
@@ -144,7 +145,7 @@ package
 		private var mediaPlayer:MediaPlayer = new MediaPlayer();
 
 		// Sample VAST documents.  The first has an inline ad, the second a wrapper.
-		private static const VAST_DOCUMENT_URL1:String = "http://ad.doubleclick.net/pfadx/N270.135279.6816128834321/B3442378.2;dcadv=1379578;sz=0x0;ord=123;dcmt=text/html";
+		private static const VAST_DOCUMENT_URL1:String = "http://cdn1.eyewonder.com/200125/instream/osmf/vast_1_linear_flv.xml";
 		private static const VAST_DOCUMENT_URL2:String = "http://ad.doubleclick.net/pfadx/AngelaSite;kw=vastdemo;sz=468x60;ord=667;dcmt=text/html";
 		
 		private static const REMOTE_STREAM:String

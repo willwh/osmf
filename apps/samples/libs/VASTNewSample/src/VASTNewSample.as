@@ -61,7 +61,7 @@ package {
 		public static const VAST_2_NONLINEAR_VPAID:String 				= "http://cdn1.eyewonder.com/200125/instream/osmf/vast_2_nonlinear_vpaid.xml";
 		public static const VAST_2_WRAPPER:String 						= "http://cdn1.eyewonder.com/200125/instream/osmf/vast_2_wrapper.xml";
 		
-		public static const chosenFile:String = VAST_2_WRAPPER;	// Change me
+		public static const chosenFile:String =  VAST_1_LINEAR_FLV;	// Change me
 		public static const chosenPlacement:String = VASTMediaGenerator.PLACEMENT_LINEAR;	// Change me
 		
 		private var vol:Number;

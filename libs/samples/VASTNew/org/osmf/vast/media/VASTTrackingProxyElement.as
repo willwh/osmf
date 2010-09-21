@@ -23,10 +23,14 @@ package org.osmf.vast.media
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.external.ExternalInterface;
+	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.beaconClasses.Beacon;
 	import org.osmf.events.AudioEvent;
@@ -70,11 +74,11 @@ package org.osmf.vast.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function VASTTrackingProxyElement(events:Vector.<VASTTrackingEvent>, httpLoader:HTTPLoader=null, wrappedElement:MediaElement=null)
+		public function VASTTrackingProxyElement(events:Vector.<VASTTrackingEvent>, httpLoader:HTTPLoader=null, wrappedElement:MediaElement=null, clickURL:String="")
 		{
 			setEvents(events);
 			this.httpLoader = httpLoader;
-			
+			clickThruURL = clickURL;
 			playheadTimer = new Timer(250);
 			playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);
 			
@@ -89,10 +93,11 @@ package org.osmf.vast.media
 		// Overrides
 		//
 		
+		/**
+		 * @private
+		 **/
 		override public function set proxiedElement(value:MediaElement):void
 		{
-			trace("VASTTrackingProxyElement code is running ");
-			
 			if (value != proxiedElement)
 			{
 				if (dispatcher != null)
@@ -133,6 +138,8 @@ package org.osmf.vast.media
 		 */
 		private function processPlayStateChange(event:PlayEvent):void
 		{
+			createClickThru();
+			
 			if (event.playState == PlayState.PLAYING)
 			{
 				playheadTimer.start();
@@ -169,6 +176,88 @@ package org.osmf.vast.media
 			fireEventOfType(VASTTrackingEventType.COMPLETE);
 		}
 
+		private function createClickThru():void
+		{
+			// Add a mouse event to the media container for clickThru support.
+			if (container != null)
+			{
+				var mediaContainer:MediaContainer = container as MediaContainer;
+				if (mediaContainer != null)
+				{
+					mediaContainer.buttonMode = true;
+					mediaContainer.addEventListener(MouseEvent.MOUSE_UP, onMediaElementClick, false, 0, true);
+				}
+			}
+		}
+		
+		private function onMediaElementClick(event:MouseEvent):void
+		{
+			getURL(clickThruURL, "_blank");
+			fireEventOfType(VASTTrackingEventType.CLICK_THRU);
+		}
+		
+		private function getURL(url:String, window:String = "_self"):void
+		{
+			var compatBrowser:Boolean = false;
+			browserEngine = getBrowserEngine();
+			switch (browserEngine)
+			{
+				case "webkit":
+				case "opera":
+				case "internabl":
+				case "unknown":
+				case "aim":
+					compatBrowser = false;
+					break;
+				default:
+					compatBrowser = true;
+			}
+			
+			var request:URLRequest = new URLRequest(url);
+			flash.net.navigateToURL(request, window);
+		}
+		
+		private function getBrowserEngine() : String
+		{
+			// Get User Agent
+			try
+			{
+				var userAgent:String = ExternalInterface.call("eval", "navigator.userAgent");
+				userAgent = userAgent.toLowerCase();
+				var isIe:Boolean = (userAgent.indexOf("msie") >= 0);
+				var isOpera:Boolean = (userAgent.indexOf('opera') >= 0);
+				if (isOpera)
+				{
+					isIe = false;
+				}
+				var isSafari:Boolean = (userAgent.indexOf('applewebkit') >= 0 || userAgent.indexOf('konqueror') >= 0);
+				var isGecko:Boolean = (userAgent.indexOf('gecko/') > 0);
+				
+				if (isIe)
+				{
+					browserEngine = 'msie';
+				}
+				if (isOpera)
+				{
+					browserEngine = 'opera';
+				}
+				if (isSafari)
+				{
+					browserEngine = 'webkit';
+				}
+				if (isGecko)
+				{
+					browserEngine = 'gecko';
+				}
+			}
+			catch (e:Error)
+			{
+				browserEngine = 'unknown';
+			}
+			
+			return browserEngine;
+		}
+		
 		// Internals
 		//
 		
@@ -245,10 +334,11 @@ package org.osmf.vast.media
 			// Value: VASTTrackingEvent
 		private var httpLoader:HTTPLoader;
 		private var playheadTimer:Timer;
-		
+		private var clickThruURL:String;
 		private var startReached:Boolean = false;
 		private var firstQuartileReached:Boolean = false;
 		private var midpointReached:Boolean = false;
 		private var thirdQuartileReached:Boolean = false;
+		private var browserEngine:String = 'unknown';
 	}
 }
