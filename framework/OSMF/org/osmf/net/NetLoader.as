@@ -107,15 +107,6 @@ package org.osmf.net
 		CONFIG::FLASH_10_1	
 		{
 			/**
-			 * Indicates whether stream reconnect is enabled.
-			 * 
-			 **/
-			public function get reconnectStreams():Boolean
-			{
-				return _reconnectStreams;
-			}
-				
-			/**
 			 * The stream reconnect timeout in milliseconds.
 			 * 
 			 * <p>The NetLoader will give up trying to reconnect the stream
@@ -145,13 +136,23 @@ package org.osmf.net
 			/**
 			 * @private
 			 *
-			 * Allow derived classes to change the value of _reconnectStreams.
+			 * Allow derived classes to change the value of reconnectStreams.
 			 * 
 			**/ 
 			protected function setReconnectStreams(value:Boolean):void
 			{
 				_reconnectStreams = value;
-			}		
+			}
+			
+			/**
+			 * @private
+			 * 
+			 * Indicates whether stream reconnect is enabled.
+			 **/
+			public function get reconnectStreams():Boolean
+			{
+				return _reconnectStreams;
+			}
 		}				
 		
 		/**
