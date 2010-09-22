@@ -61,8 +61,8 @@ package org.osmf.net
 				setDuration(defaultDuration);
 			}
 			
-			var streamResource:StreamingURLResource = resource as StreamingURLResource;
-			if (streamResource != null && streamResource.multicastGroupspec != null && streamResource.multicastGroupspec.length > 0)
+			var streamResource:MulticastResource = resource as MulticastResource;
+			if (streamResource != null && streamResource.groupspec != null && streamResource.groupspec.length > 0)
 			{
 				multicast = true;
 				setDuration(Number.MAX_VALUE);

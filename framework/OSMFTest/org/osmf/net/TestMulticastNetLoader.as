@@ -47,25 +47,25 @@ package org.osmf.net
 			var resource:MediaResourceBase = new MediaResourceBase();
 			assertEquals(loader.canHandleResource(resource), false);
 			
-			var streamingURLResource:StreamingURLResource = new StreamingURLResource(URL, "live");
-			assertEquals(loader.canHandleResource(streamingURLResource), false);
+			var multicastResource:MulticastResource = new MulticastResource(URL, "live");
+			assertEquals(loader.canHandleResource(multicastResource), false);
 			
-			streamingURLResource.multicastGroupspec = "";
-			assertEquals(loader.canHandleResource(streamingURLResource), false);
+			multicastResource.groupspec = "";
+			assertEquals(loader.canHandleResource(multicastResource), false);
 
-			streamingURLResource.multicastStreamName = "";
-			assertEquals(loader.canHandleResource(streamingURLResource), false);
+			multicastResource.streamName = "";
+			assertEquals(loader.canHandleResource(multicastResource), false);
 
-			streamingURLResource.multicastGroupspec = GROUP_SPEC;
-			assertEquals(loader.canHandleResource(streamingURLResource), false);
+			multicastResource.groupspec = GROUP_SPEC;
+			assertEquals(loader.canHandleResource(multicastResource), false);
 
-			streamingURLResource.multicastGroupspec = "";
-			streamingURLResource.multicastStreamName = GROUP_NAME;
-			assertEquals(loader.canHandleResource(streamingURLResource), false);
+			multicastResource.groupspec = "";
+			multicastResource.streamName = GROUP_NAME;
+			assertEquals(loader.canHandleResource(multicastResource), false);
 
-			streamingURLResource.multicastGroupspec = GROUP_SPEC;
-			streamingURLResource.multicastStreamName = GROUP_NAME;
-			assertEquals(loader.canHandleResource(streamingURLResource), true);
+			multicastResource.groupspec = GROUP_SPEC;
+			multicastResource.streamName = GROUP_NAME;
+			assertEquals(loader.canHandleResource(multicastResource), true);
 		}
 		
 		private static const GROUP_SPEC:String = "G:010121055e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8010c1b0e6f72672e6f736d662e6d756c7469636173742e73747265616d31210e7aaf87509c4271cc1e6459b903a6c18cca200d1ba1aa0f357cb769121d63918b011b00070ae00000fe8140";

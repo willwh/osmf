@@ -673,7 +673,7 @@ package org.osmf.elements.f4mClasses
 				<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 				  <id>Multicast_Fusion</id>
 				  <duration>0</duration>
-				  <media url="rtmfp://weiz-xp1/multicast" multicastGroupspec="G:010121055e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8010c170e6f72672e6f736d662e6e65742e6d756c746963617374210e61b67506b6a5f02187ca24fe590388778040fa3a9c23589c58baadd097c12657011b00070ae00000fe814b" multicastStreamName="fusionstream1"/>
+				  <media url="rtmfp://weiz-xp1/multicast" groupspec="G:010121055e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8010c170e6f72672e6f736d662e6e65742e6d756c746963617374210e61b67506b6a5f02187ca24fe590388778040fa3a9c23589c58baadd097c12657011b00070ae00000fe814b" multicastStreamName="fusionstream1"/>
 				</manifest>
 				
 			var manifest:Manifest = parser.parse(test);
@@ -704,7 +704,7 @@ package org.osmf.elements.f4mClasses
 				<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 				  <id>Multicast_Fusion</id>
 				  <duration>0</duration>
-				  <media url="rtmfp://weiz-xp1/multicast" multicastGroupspec="G:010121055e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8010c170e6f72672e6f736d662e6e65742e6d756c746963617374210e61b67506b6a5f02187ca24fe590388778040fa3a9c23589c58baadd097c12657011b00070ae00000fe814b"/>
+				  <media url="rtmfp://weiz-xp1/multicast" groupspec="G:010121055e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8010c170e6f72672e6f736d662e6e65742e6d756c746963617374210e61b67506b6a5f02187ca24fe590388778040fa3a9c23589c58baadd097c12657011b00070ae00000fe814b"/>
 				</manifest>
 				
 			try

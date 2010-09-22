@@ -138,10 +138,10 @@ package org.osmf.net
 					}
 					else
 					{
-						var rs:StreamingURLResource = urlResource as StreamingURLResource;
-						if (rs != null && rs.multicastGroupspec != null && rs.multicastGroupspec.length > 0)
+						var rs:MulticastResource = urlResource as MulticastResource;
+						if (rs != null && rs.groupspec != null && rs.groupspec.length > 0)
 						{
-							doPlay(rs.multicastStreamName, startTime, len);
+							doPlay(rs.streamName, startTime, len);
 						}
 						else
 						{

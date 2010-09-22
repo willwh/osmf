@@ -2,18 +2,19 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:samples="org.osmf.samples.*" layout="absolute" applicationComplete="initApp()" creationPolicy="all">
 	<mx:Script>
 		<![CDATA[
-			import org.osmf.media.MediaResourceBase;
 			import mx.collections.ArrayCollection;
-			import org.osmf.media.URLResource;
 			import mx.events.ItemClickEvent;
+			
+			import org.osmf.containers.MediaContainer;
 			import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 			import org.osmf.media.DefaultMediaFactory;
 			import org.osmf.media.MediaElement;
-			import org.osmf.media.MediaPlayer;
 			import org.osmf.media.MediaFactory;
+			import org.osmf.media.MediaPlayer;
+			import org.osmf.media.MediaResourceBase;
+			import org.osmf.media.URLResource;
 			import org.osmf.net.*;
 			import org.osmf.traits.MediaTraitType;
-			import org.osmf.containers.MediaContainer;
 			
 			private var factory:MediaFactory;
 			private var player:MediaPlayer;
@@ -118,9 +119,9 @@
 			
 			private function getResourceByStreamInfo(connectionString:String, groupSpec:String, streamName:String):MediaResourceBase
 			{
-				var resource:StreamingURLResource = new StreamingURLResource(connectionString, "live");
-				resource.rtmfpGroupspec = groupSpec;
-				resource.rtmfpStreamName = streamName;
+				var resource:MulticastResource = new MulticastResource(connectionString, "live");
+				resource.groupspec = groupSpec;
+				resource.streamName = streamName;
 				
 				return resource;
 			}

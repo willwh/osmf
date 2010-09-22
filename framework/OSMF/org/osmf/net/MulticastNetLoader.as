@@ -76,9 +76,13 @@ package org.osmf.net
 		**/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
-			var rs:StreamingURLResource = resource as StreamingURLResource;
+			var rs:MulticastResource = resource as MulticastResource;
 
-            return rs != null && rs.multicastGroupspec != null && rs.multicastGroupspec.length > 0 && rs.multicastStreamName != null && rs.multicastStreamName.length > 0;
+            return rs != null && 
+				rs.groupspec != null && 
+				rs.groupspec.length > 0 && 
+				rs.streamName != null && 
+				rs.streamName.length > 0;
         }
 
 		/**
@@ -88,14 +92,14 @@ package org.osmf.net
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
 			
-			var rs:StreamingURLResource = resource as StreamingURLResource;
+			var rs:MulticastResource = resource as MulticastResource;
 
 			CONFIG::LOGGING	
 			{
 				logger.info("Creating multicast NetStream with multicastGroupspec " + rs.multicastGroupspec);
 			}
 
-			var ns:NetStream = new NetStream(connection, rs.multicastGroupspec);
+			var ns:NetStream = new NetStream(connection, rs.groupspec);
 			CONFIG::LOGGING	
 			{
 				if (ns != null)
@@ -131,15 +135,15 @@ package org.osmf.net
 				 * Normally, it would not even get here if it is not NetStreamLoadTrait or the rtmfpGroupspec
 				 * is empty. But it is alway good to be cautious and defensive.
 				 */
-				if (netLoadTrait == null || !isMulticast(netLoadTrait.resource as StreamingURLResource))
+				if (netLoadTrait == null || !isMulticast(netLoadTrait.resource as MulticastResource))
 				{
 					super.processCreationComplete(connection, loadTrait, factory);
 					return;
 				}
 				
-				var streamURLResource:StreamingURLResource = netLoadTrait.resource as StreamingURLResource;
+				var multicastResource:MulticastResource = netLoadTrait.resource as MulticastResource;
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-				var netGroup:NetGroup = new NetGroup(connection, streamURLResource.multicastGroupspec);
+				var netGroup:NetGroup = new NetGroup(connection, multicastResource.groupspec);
 				
 				function onNetStatus(event:NetStatusEvent):void
 				{
@@ -176,11 +180,11 @@ package org.osmf.net
 		 * 
 		 *  @private
 		 */
-		private function isMulticast(streamURLResource:StreamingURLResource):Boolean
+		private function isMulticast(multicastResource:MulticastResource):Boolean
 		{
-			return (streamURLResource != null 
-				&& streamURLResource.multicastGroupspec != null 
-				&& streamURLResource.multicastGroupspec.length > 0);
+			return (multicastResource != null 
+				&& multicastResource.groupspec != null 
+				&& multicastResource.groupspec.length > 0);
 		}
 
 		CONFIG::LOGGING

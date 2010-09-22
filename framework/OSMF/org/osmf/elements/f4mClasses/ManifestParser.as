@@ -32,6 +32,7 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.MulticastResource;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
@@ -220,9 +221,9 @@ package org.osmf.elements.f4mClasses
 				media.width = value.@width;
 			}
 			
-			if (value.attribute('multicastGroupspec').length() > 0)
+			if (value.attribute('groupspec').length() > 0)
 			{
-				media.multicastGroupspec = value.@multicastGroupspec;
+				media.multicastGroupspec = value.@groupspec;
 			}
 			
 			if (value.attribute('multicastStreamName').length() > 0)
@@ -464,7 +465,27 @@ package org.osmf.elements.f4mClasses
 					baseURLString = manifestFolder;
 				}
 				
-				if (isAbsoluteURL(url))
+				if (media.multicastGroupspec != null && 
+					media.multicastGroupspec.length > 0 &&
+					media.multicastStreamName != null &&
+					media.multicastStreamName.length > 0)
+				{
+					if (isAbsoluteURL(url))
+					{
+						resource = new MulticastResource(url, value.streamType);
+					}				
+					else if (value.baseURL != null)	// Relative to Base URL					
+					{
+						resource = new MulticastResource(value.baseURL + "/" + url, streamType(value));
+					}
+					else // Relative to F4M file  (no absolute or base urls or rtmp urls).
+					{
+						resource = new MulticastResource(manifestFolder + "/" + url, streamType(value));
+					}
+					MulticastResource(resource).groupspec = media.multicastGroupspec;
+					MulticastResource(resource).streamName = media.multicastStreamName;
+				}
+				else if (isAbsoluteURL(url))
 				{
 					resource = new StreamingURLResource(url, value.streamType);
 				}				
@@ -536,8 +557,6 @@ package org.osmf.elements.f4mClasses
 				{
 					resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
 				}								
-				resource.multicastGroupspec = media.multicastGroupspec;
-				resource.multicastStreamName = media.multicastStreamName;
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
 			{

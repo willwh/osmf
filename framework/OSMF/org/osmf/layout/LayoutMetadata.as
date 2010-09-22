@@ -537,7 +537,7 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 **/
+		 **/	
 		override public function get synthesizer():MetadataSynthesizer
 		{
 			return SYNTHESIZER;

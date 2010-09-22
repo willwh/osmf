@@ -151,10 +151,10 @@ package org.osmf.net
     		netConnections[attemptIndex].addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError, false, 0, true);
 			netConnections[attemptIndex].client = new NetClient();
 			
-			var rs:StreamingURLResource = resource as StreamingURLResource;
+			var rs:MulticastResource = resource as MulticastResource;
 			if (rs != null &&
-				rs.multicastGroupspec != null &&
-				rs.multicastGroupspec.length > 0)
+				rs.groupspec != null &&
+				rs.groupspec.length > 0)
 			{
 				CONFIG::LOGGING
 				{

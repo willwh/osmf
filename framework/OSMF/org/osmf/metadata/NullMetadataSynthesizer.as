@@ -22,7 +22,7 @@
 package org.osmf.metadata
 {
 	import __AS3__.vec.Vector;
-
+	
 	[ExcludeClass]
 	
 	/**
