@@ -151,5 +151,13 @@ package org.osmf.utils
 			assertEquals(url.extension, "flv");
 		}
 		
+		public function testFM950():void
+		{
+			var url:FMSURL = new FMSURL("rtmpte:/vod/sample");
+			assertEquals(url.streamName, "sample");
+			assertEquals(url.host, "localhost");
+			assertEquals(url.appName, "vod");
+			assertEquals(url.path, "vod/sample");
+		}
 	}
 }

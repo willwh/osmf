@@ -355,7 +355,7 @@ package org.osmf.utils
 	
 				// Handle the special case where the user is tring to connect to a dev server running on 
 	 			//	the same machine as the client with a url like this: "rtmp:/sudoku/room1"
-	 			var oneSlashRegExp:RegExp = /^(rtmp|rtmp[tse]|rtmp\bte\b)(:\/[^\/])/i;
+				var oneSlashRegExp:RegExp = /^(rtmp|rtmp[tse]|rtmpte)(:\/[^\/])/i;
 	 			var oneSlashResult:Array = _rawUrl.match(oneSlashRegExp);
 	 				
 				var tempUrl:String = _rawUrl;
