@@ -39,16 +39,13 @@ package org.osmf.net
 	{
 		public function MulticastResource(
 			url:String, 
-			streamType:String=null, 
-			clipStartTime:Number=NaN, 
-			clipEndTime:Number=NaN, 
+			groupspec:String=null, 
+			streamName:String=null,
 			connectionArguments:Vector.<Object>=null, 
 			urlIncludesFMSApplicationInstance:Boolean=false, 
-			drmContentData:ByteArray=null, 
-			groupspec:String=null, 
-			streamName:String=null)
+			drmContentData:ByteArray=null)
 		{
-			super(url, streamType, clipStartTime, clipEndTime, connectionArguments, urlIncludesFMSApplicationInstance, drmContentData);
+			super(url, StreamType.LIVE, NaN, NaN, connectionArguments, urlIncludesFMSApplicationInstance, drmContentData);
 
 			_groupspec = groupspec;
 			_streamName = streamName;
