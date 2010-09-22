@@ -155,7 +155,7 @@ package org.osmf.events
 		public static const DVRCAST_STREAM_INFO_RETRIEVAL_FAILED:int	= 22;
 
 		/**
-		 * Error constant for when rtmfpGroupspec or rtmfpStreamName is null or empty but not both
+		 * Error constant for when groupspec or streamName is null or empty but not both
 		 **/
 		public static const MULTICAST_PARAMETER_INVALID:int				= 23;
 

@@ -46,7 +46,7 @@ package org.osmf.net
 	 * loading support for multicast video playback using RTMFP protocol.
 	 * 
 	 * <p> MulticastNetLoader expects the media resource to be a StreamingURLResource,
-	 * in which rtmfpGroupspec and rtmfpStreamName are specified.</p>
+	 * in which groupspec and streamName are specified.</p>
 	 *
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -68,7 +68,7 @@ package org.osmf.net
 		 * @private
 		 * 
 		 * MulticastNetLoader returns true if the resource is an instance of StreamingURLResource with
-		 * both rtmfpGroupspec and rtmfpStreamName set.
+		 * both groupspec and streamName set.
 		 * 
 		 * @param resource The URL of the source media.
 		 * @return Returns <code>true</code> for resouces of type StreamingURLResource.
@@ -132,7 +132,7 @@ package org.osmf.net
 			{
 				var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
 				/**
-				 * Normally, it would not even get here if it is not NetStreamLoadTrait or the rtmfpGroupspec
+				 * Normally, it would not even get here if it is not NetStreamLoadTrait or the groupspec
 				 * is empty. But it is alway good to be cautious and defensive.
 				 */
 				if (netLoadTrait == null || !isMulticast(netLoadTrait.resource as MulticastResource))

@@ -439,7 +439,7 @@ package org.osmf.utils
 			resourceDict[DVRCAST_SUBSCRIBE_FAILED]					= "DVRCast subscribe failed";
 			resourceDict[DVRCAST_CONTENT_OFFLINE]					= "DVRCast content is offline and unavailable";
 			resourceDict[DVRCAST_STREAM_INFO_RETRIEVAL_FAILED]		= "Unable to retrieve DVRCast stream info";
-			resourceDict[MULTICAST_PARAMETER_INVALID]				= "The rtmfpGroupspec or rtmfpStreamName is null or empty but not both";
+			resourceDict[MULTICAST_PARAMETER_INVALID]				= "The groupspec or streamName is null or empty but not both";
 			resourceDict[MULTICAST_NOT_SUPPORT_MBR]					= "Multicast does not support MBR";
 			
 			
