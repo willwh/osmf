@@ -358,10 +358,6 @@ package org.osmf.net
 			 * 
 			 * @param netConnection The new <code>NetConnection</code> created by the stream reconnect logic.
 			 * @param resource The <code>URLResource</code> that was originally used to play the media.
-			 * @param lastUsedURI This is the URI that was last passed to the <code>NetConnection.connect</code> 
-			 * method.
-			 * 
-			 * @returns The URI that was passed to the NetConnection.connect method
 			 **/
 			protected function reconnect(netConnection:NetConnection, resource:URLResource):void
 			{
