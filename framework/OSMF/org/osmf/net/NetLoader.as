@@ -452,6 +452,7 @@ package org.osmf.net
 				oldConnectionURLs[loadTrait.resource] = netConnection.uri;
 				var streamIsPaused:Boolean = false;
 				var reconnectHasTimedOut:Boolean = false;
+				var fmsIdleTimeoutReached:Boolean = false;
 				
 				setupNetConnectionListeners();
 				setupNetStreamListeners();
@@ -561,9 +562,12 @@ package org.osmf.net
 								oldConnection.close();
 							}
 							break;
+						case NetConnectionCodes.CONNECT_IDLE_TIME_OUT:
+							fmsIdleTimeoutReached = true;
+							break;
 						case NetConnectionCodes.CONNECT_CLOSED:
 						case NetConnectionCodes.CONNECT_FAILED:
-							if (loadTrait.loadState == LoadState.READY && !reconnectHasTimedOut) 
+							if (loadTrait.loadState == LoadState.READY && !reconnectHasTimedOut && !fmsIdleTimeoutReached) 
 							{
 								reconnectTimer.start();
 							}

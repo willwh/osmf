@@ -108,7 +108,6 @@ package org.osmf.events
 
 		/**
 		 * Error constant for when a NetConnection cannot connect due to a timeout.
-		 * period.
 		 **/
 		public static const NETCONNECTION_TIMEOUT:int					= 14;
 

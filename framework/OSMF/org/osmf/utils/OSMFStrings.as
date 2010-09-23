@@ -430,7 +430,7 @@ package org.osmf.utils
 			resourceDict[NETCONNECTION_REJECTED]					= "Connection attempt rejected by FMS server";
 			resourceDict[NETCONNECTION_APPLICATION_INVALID]			= "Attempting to connect to an invalid FMS application";
 			resourceDict[NETCONNECTION_FAILED]						= "All NetConnection attempts failed";
-			resourceDict[NETCONNECTION_TIMEOUT]						= "Timed-out trying to establish a NetConnection";
+			resourceDict[NETCONNECTION_TIMEOUT]						= "Timed-out trying to establish a NetConnection, or timed out due to an idle NetConnection";
 			resourceDict[NETSTREAM_PLAY_FAILED] 					= "Playback failed";
 			resourceDict[NETSTREAM_STREAM_NOT_FOUND]	 			= "Stream not found";
 			resourceDict[NETSTREAM_FILE_STRUCTURE_INVALID]			= "File has invalid structure";

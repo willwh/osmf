@@ -87,5 +87,15 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_INVALIDAPP:String = "NetConnection.Connect.InvalidApp";	
-	}
+
+		/** 
+		 * "error"	The connection has been idle for too long.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const CONNECT_IDLE_TIME_OUT:String = "NetConnection.Connect.IdleTimeOut";	
+}
 }

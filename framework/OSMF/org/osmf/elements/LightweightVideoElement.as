@@ -42,6 +42,7 @@ package org.osmf.elements
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.ModifiableTimeTrait;
 	import org.osmf.net.NetClient;
+	import org.osmf.net.NetConnectionCodes;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamAudioTrait;
 	import org.osmf.net.NetStreamBufferTrait;
@@ -328,6 +329,7 @@ package org.osmf.elements
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_CUE_POINT, onCuePoint);
 						
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+			loadTrait.connection.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent, false, 0, true);
 						
 			CONFIG::FLASH_10_1
     		{
@@ -513,9 +515,12 @@ package org.osmf.elements
 		 */
 		override protected function processUnloadingState():void
 		{
+			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+			
 			NetClient(stream.client).removeHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			
 			stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+			loadTrait.connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 			
 	    	removeTrait(MediaTraitType.AUDIO);
 	    	removeTrait(MediaTraitType.BUFFER);
@@ -630,7 +635,10 @@ package org.osmf.elements
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:
 					error = new MediaError(MediaErrorCodes.NETSTREAM_NO_SUPPORTED_TRACK_FOUND, event.info.description);
-					break;	
+					break;
+				case NetConnectionCodes.CONNECT_IDLE_TIME_OUT:
+					error = new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT, event.info.description);
+					break;
 			}
 					
 			CONFIG::FLASH_10_1

@@ -200,6 +200,7 @@ package org.osmf.elements
 				stream = netLoadTrait.netStream;
 				
 				stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+				netLoadTrait.connection.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent, false, 0, true);
 				
 				var reconnectStreams:Boolean = false;
 
@@ -244,6 +245,11 @@ package org.osmf.elements
 			{
 				stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 			}
+			var netLoadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+			if (netLoadTrait != null)
+			{
+				netLoadTrait.connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+			}
 			
 			removeTrait(MediaTraitType.PLAY);
 			removeTrait(MediaTraitType.SEEK);
@@ -278,6 +284,9 @@ package org.osmf.elements
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:
 					error = new MediaError(MediaErrorCodes.NETSTREAM_NO_SUPPORTED_TRACK_FOUND, event.info.description);
 					break;	
+				case NetConnectionCodes.CONNECT_IDLE_TIME_OUT:
+					error = new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT, event.info.description);
+					break;
 			}
 					
 			if (error != null)
