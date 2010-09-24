@@ -300,9 +300,9 @@ package org.osmf.metadata
 				// If we just removed the last one, clean up and stop the interval timer (fix for FM-1052)
 				if (temporalValueCollection.length == 0)
 				{
+					reset(false);
 					temporalValueCollection = null;
 					temporalKeyCollection = null;
-					reset(false);
 				}
 				
 				dispatchEvent(new MetadataEvent(MetadataEvent.VALUE_REMOVE, false, false, key, result));
