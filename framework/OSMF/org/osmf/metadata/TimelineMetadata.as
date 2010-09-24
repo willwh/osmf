@@ -297,6 +297,14 @@ package org.osmf.metadata
 				temporalKeyCollection.splice(index, 1);
 				result = temporalValueCollection.splice(index, 1)[0];
 				
+				// If we just removed the last one, clean up and stop the interval timer (fix for FM-1052)
+				if (temporalValueCollection.length == 0)
+				{
+					temporalValueCollection = null;
+					temporalKeyCollection = null;
+					reset(false);
+				}
+				
 				dispatchEvent(new MetadataEvent(MetadataEvent.VALUE_REMOVE, false, false, key, result));
 				dispatchEvent(new TimelineMetadataEvent(TimelineMetadataEvent.MARKER_REMOVE, false, false, result as TimelineMarker));
 			}
