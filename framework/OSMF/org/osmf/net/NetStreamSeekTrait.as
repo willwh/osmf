@@ -23,6 +23,7 @@ package org.osmf.net
 {
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
+	import flash.media.Video;
 	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
@@ -49,11 +50,12 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public function NetStreamSeekTrait(temporal:TimeTrait, loadTrait:LoadTrait, netStream:NetStream)
+		public function NetStreamSeekTrait(temporal:TimeTrait, loadTrait:LoadTrait, netStream:NetStream, video:Video=null)
 		{
 			super(temporal);
 			
 			this.netStream = netStream;
+			this.video = video;
 			this.loadTrait = loadTrait;
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
@@ -120,6 +122,25 @@ package org.osmf.net
 					suppressSeekNotifyEvent = true;
 				}
 			}
+		}
+		
+		override protected function seekingChangeEnd(time:Number):void
+		{
+			super.seekingChangeEnd(time);
+			
+			// When a seek to the end of the media is initiated, then we
+			// should clear the Video (if one exists).  This will prevent
+			// the image in the Video from being displayed if/when we seek
+			// back into the media (e.g. in a composition).  See FM-936.
+			if (seeking == true && video != null)
+			{
+				var nsTimeTrait:NetStreamTimeTrait = timeTrait as NetStreamTimeTrait;
+				if (nsTimeTrait.currentTime + nsTimeTrait.audioDelay >= nsTimeTrait.duration)
+				{
+					video.clear();
+				}
+			}
+				
 		}
 		
 		private function onMetaData(value:Object):void
@@ -199,6 +220,7 @@ package org.osmf.net
 			setSeeking(false, expectedTime);
 		}
 		
+		private var video:Video;
 		private var loadTrait:LoadTrait;
 		private var audioDelay:Number = 0;
 		private var seekBugTimer:Timer;

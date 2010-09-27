@@ -478,7 +478,7 @@ package org.osmf.elements
 			trait = loadTrait.getTrait(MediaTraitType.SEEK);
 			if (trait == null && NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
 			{
-				trait = new NetStreamSeekTrait(timeTrait, loadTrait, stream);
+				trait = new NetStreamSeekTrait(timeTrait, loadTrait, stream, video);
 	  		}
 	  		if (trait != null)
 	  		{

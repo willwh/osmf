@@ -81,13 +81,13 @@ package org.osmf.net
 			
 			// If at the end of the video, make sure the duration matches the currentTime.  
 			// Work around for FP-3724.  Only apply duration offset at the end - or else the seek(0) doesn't goto 0.
-			if (durationOffset == (duration - (netStream.time - audioDelay)))  
+			if (durationOffset == (duration - (netStream.time - _audioDelay)))  
 			{
-				return netStream.time - audioDelay + durationOffset;
+				return netStream.time - _audioDelay + durationOffset;
 			}
 			else
 			{
-				return netStream.time - audioDelay;
+				return netStream.time - _audioDelay;
 			}
 		}
 		
@@ -99,7 +99,7 @@ package org.osmf.net
 			
 			//Audio delay is sometimes passed along with the metadata.  The audio delay affects
 			//all netsTream.time related calculations, including seek().
-			audioDelay = value.hasOwnProperty("audiodelay") ? value.audiodelay : 0;
+			_audioDelay = value.hasOwnProperty("audiodelay") ? value.audiodelay : 0;
 			
 			// Ensure our start time is non-negative, we only use it for
 			// calculating the offset.
@@ -115,7 +115,7 @@ package org.osmf.net
 			// If startTime is unspecified, our duration is everything
 			// up to the end of the subclip (or the entire duration, if
 			// no subclip end is specified).  Take into account audio delay.
-			setDuration(Math.min((value.duration - audioDelay) - subclipStartTime, subclipDuration));
+			setDuration(Math.min((value.duration - _audioDelay) - subclipStartTime, subclipDuration));
 		}
 		
 		private function onPlayStatus(event:Object):void
@@ -157,15 +157,23 @@ package org.osmf.net
 		 **/
 		override protected function signalComplete():void
 		{
-			if ((netStream.time - audioDelay) != duration)
+			if ((netStream.time - _audioDelay) != duration)
 			{
-				durationOffset = duration - (netStream.time - audioDelay);
+				durationOffset = duration - (netStream.time - _audioDelay);
 			}
 			super.signalComplete();
 		}
 		
+		/**
+		 * @private
+		 **/
+		internal function get audioDelay():Number
+		{
+			return _audioDelay;
+		}
+		
 		private var durationOffset:Number = 0;
-		private var audioDelay:Number = 0;
+		private var _audioDelay:Number = 0;
 		private var netStream:NetStream;
 		private var resource:MediaResourceBase;
 		private var multicast:Boolean = false;
