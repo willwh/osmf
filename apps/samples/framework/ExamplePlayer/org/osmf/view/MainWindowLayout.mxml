@@ -66,7 +66,7 @@
 						<mx:XML format="e4x">
 							<root label="Play Options">			
 								<autoPlay label="Auto Play" type="check" toggled="true"/>
-								<autoRewind label="Auto Rewind" type="check" toggled="false"/>
+								<autoRewind label="Auto Rewind" type="check" toggled="true"/>
 								<loop label="Loop" type="check" toggled="false"/>
 							</root>
 						</mx:XML>
