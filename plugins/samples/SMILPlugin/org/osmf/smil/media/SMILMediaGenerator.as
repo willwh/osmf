@@ -165,6 +165,12 @@ package org.osmf.smil.media
 					var childElement:SMILElement = smilElement.getChildAt(i);
 					internalCreateMediaElement(originalResource, mediaElement, smilDocument, childElement);
 				}
+				
+				// Fix for FM-931, make sure we support nested elements
+				if (parentMediaElement is CompositeElement)
+				{
+					(parentMediaElement as CompositeElement).addChild(mediaElement);
+				}
 			}
 			else if (mediaResource != null)
 			{
