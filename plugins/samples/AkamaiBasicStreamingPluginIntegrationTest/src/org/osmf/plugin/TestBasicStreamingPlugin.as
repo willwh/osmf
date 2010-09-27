@@ -67,13 +67,6 @@ package org.osmf.plugin
 			callAfterLoad(doTestPlayVODStreamWithAuth);
 		}
 
-		public function testPlayLiveStreamWithAuth():void
-		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
-			
-			callAfterLoad(doTestPlayLiveStreamWithAuth);
-		}
-
 		public function testPlayVODStream():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
@@ -102,12 +95,6 @@ package org.osmf.plugin
 		{
 			// on-demand stream with an auth token
 			doTestMediaElementLoadAndPlay(REMOTE_STREAM_WITH_AUTH);
-		}
-
-		private function doTestPlayLiveStreamWithAuth():void
-		{
-			// a live stream with an auth token
-			doTestMediaElementLoadAndPlay(REMOTE_LIVE_WITH_AUTH);
 		}
 
 		private function doTestPlayVODStream():void
@@ -206,9 +193,8 @@ package org.osmf.plugin
 		private static const TEST_TIME:int = 4000;
 
 		private static const PROGRESSIVE_FLV:String 		= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
-		private static const REMOTE_STREAM_WITH_AUTH:String	= "rtmp://cp78634.edgefcs.net/ondemand/mp4:mediapmsec/osmf/content/test/SpaceAloneHD_sounas_640_700.mp4?auth=daEc2a9a5byaMa.avcxbiaoa8dBcibqbAa8-bkxDGK-b4toa-znnrqzzBvl&aifp=v0001";
+		private static const REMOTE_STREAM_WITH_AUTH:String	= "rtmp://cp78634.edgefcs.net/ondemand/mp4:mediapmsec/osmf/content/test/SpaceAloneHD_sounas_640_700.mp4?auth=daEcScnchcpd8dkcBa3b1azdScKcyaSd0aM-bmqrYo-b4toa-zpptqAAEno&aifp=v0001";
 		private static const REMOTE_STREAM:String 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
-		private static const REMOTE_LIVE_WITH_AUTH:String	= "rtmp://cp78635.live.edgefcs.net/live/osmb-test-secure-700@s12015?auth=daEcobPbeaAbxa6d.c8cEbxcBdMdMdQdqa4-bkxDMF-b4toa-zonsnyBCql&aifp=v0001";
 		private static const REMOTE_LIVE_BAD:String			= "rtmp://cp34973.live.edgefcs.net/live/Flash_Live_Benchmarkxxx@632";
 	}
 }
