@@ -147,7 +147,7 @@ package org.osmf.elements
 					
 					var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					assertNotNull(playTrait);
-					assertTrue(playTrait.canPause == false);
+					assertTrue(playTrait.canPause == true);
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 			}

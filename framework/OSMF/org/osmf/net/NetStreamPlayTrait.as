@@ -22,6 +22,7 @@
 package org.osmf.net
 {
 	import flash.events.NetStatusEvent;
+	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.net.NetStreamPlayOptions;
 	import flash.net.NetStreamPlayTransitions;
@@ -54,7 +55,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function NetStreamPlayTrait(netStream:NetStream, resource:MediaResourceBase, reconnectStreams:Boolean)
+		public function NetStreamPlayTrait(netStream:NetStream, resource:MediaResourceBase, reconnectStreams:Boolean, netConnection:NetConnection)
 		{
 			super();
 			
@@ -63,16 +64,11 @@ package org.osmf.net
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));					
 			}
 			this.netStream = netStream;
+			this.netConnection = netConnection;
 			this.urlResource = resource as URLResource;
+			this.multicastResource = resource as MulticastResource;
 			this.reconnectStreams = reconnectStreams;
 			
-			// Live streams can't be paused.
-			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
-			if (streamingResource != null && streamingResource.streamType == StreamType.LIVE)
-			{
-				setCanPause(false);
-			}
-
 			// Note that we add the listener (and handler) with a high priority.
 			// The reason for this is that we want to process any Play.Stop (and
 			// Play.Complete) events first, so that we can update our playing
@@ -96,8 +92,15 @@ package org.osmf.net
 				var playArgs:Object;
 				
 				if (streamStarted)
-				{				
-					netStream.resume();						
+				{
+					if (multicastResource != null)
+					{
+						netStream.play(multicastResource.streamName, -1 , -1);
+					}
+					else
+					{
+						netStream.resume();
+					}
 				}
 				else if (urlResource != null) 
 				{
@@ -138,10 +141,9 @@ package org.osmf.net
 					}
 					else
 					{
-						var rs:MulticastResource = urlResource as MulticastResource;
-						if (rs != null && rs.groupspec != null && rs.groupspec.length > 0)
+						if (multicastResource != null && multicastResource.groupspec != null && multicastResource.groupspec.length > 0)
 						{
-							doPlay(rs.streamName, startTime, len);
+							doPlay(multicastResource.streamName, startTime, len);
 						}
 						else
 						{
@@ -153,7 +155,14 @@ package org.osmf.net
 			}
 			else // PAUSED || STOPPED
 			{
-				netStream.pause();
+				if (multicastResource != null)
+				{
+					netStream.play(false);
+				}
+				else
+				{
+					netStream.pause();
+				}
 			}
 		}
 
@@ -235,7 +244,9 @@ package org.osmf.net
 		
 		private var streamStarted:Boolean;
 		private var netStream:NetStream;
+		private var netConnection:NetConnection;
 		private var urlResource:URLResource;
+		private var multicastResource:MulticastResource;
 		private var reconnectStreams:Boolean;
 	}
 }

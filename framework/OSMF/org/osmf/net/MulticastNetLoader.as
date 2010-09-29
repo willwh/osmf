@@ -131,16 +131,6 @@ package org.osmf.net
 			override protected function processCreationComplete(connection:NetConnection, loadTrait:LoadTrait, factory:NetConnectionFactoryBase = null):void
 			{
 				var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
-				/**
-				 * Normally, it would not even get here if it is not NetStreamLoadTrait or the groupspec
-				 * is empty. But it is alway good to be cautious and defensive.
-				 */
-				if (netLoadTrait == null || !isMulticast(netLoadTrait.resource as MulticastResource))
-				{
-					super.processCreationComplete(connection, loadTrait, factory);
-					return;
-				}
-				
 				var multicastResource:MulticastResource = netLoadTrait.resource as MulticastResource;
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 				var netGroup:NetGroup = new NetGroup(connection, multicastResource.groupspec);
@@ -175,18 +165,6 @@ package org.osmf.net
 			super.processCreationComplete(connection, loadTrait, factory);			
 		}
 		
-		/**
-		 * It checks whether this is multicast.
-		 * 
-		 *  @private
-		 */
-		private function isMulticast(multicastResource:MulticastResource):Boolean
-		{
-			return (multicastResource != null 
-				&& multicastResource.groupspec != null 
-				&& multicastResource.groupspec.length > 0);
-		}
-
 		CONFIG::LOGGING
 		{
 			private static var logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.net.multicast.MulticastNetLoader");

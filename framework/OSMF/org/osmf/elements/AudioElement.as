@@ -212,7 +212,7 @@ package org.osmf.elements
 					}
 				}
 				
-				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource, reconnectStreams));
+				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource, reconnectStreams, netLoadTrait.connection));
 				timeTrait = new NetStreamTimeTrait(stream, resource, defaultDuration);
 				addTrait(MediaTraitType.TIME, timeTrait);
 				addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, loadTrait, stream));

@@ -473,7 +473,7 @@ package org.osmf.elements
 				reconnectStreams = (loader as NetLoader).reconnectStreams;
 			}
 			
-			addTrait(MediaTraitType.PLAY, trait || new NetStreamPlayTrait(stream, resource, reconnectStreams));
+			addTrait(MediaTraitType.PLAY, trait || new NetStreamPlayTrait(stream, resource, reconnectStreams, loadTrait.connection));
 			
 			trait = loadTrait.getTrait(MediaTraitType.SEEK);
 			if (trait == null && NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
