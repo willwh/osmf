@@ -135,7 +135,9 @@ package org.osmf.net
 			if (seeking == true && video != null)
 			{
 				var nsTimeTrait:NetStreamTimeTrait = timeTrait as NetStreamTimeTrait;
-				if (nsTimeTrait.currentTime + nsTimeTrait.audioDelay >= nsTimeTrait.duration)
+				if (	nsTimeTrait != null 
+					&&	nsTimeTrait.currentTime + nsTimeTrait.audioDelay >= nsTimeTrait.duration
+				   )
 				{
 					video.clear();
 				}
