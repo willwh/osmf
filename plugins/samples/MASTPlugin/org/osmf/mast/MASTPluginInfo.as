@@ -23,6 +23,7 @@ package org.osmf.mast
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.elements.F4MLoader;
 	import org.osmf.mast.media.MASTProxyElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -58,6 +59,8 @@ package org.osmf.mast
 				);
 			items.push(item);
 			
+			f4mLoader = new F4MLoader();
+			
 			super(items);
 		}
 		
@@ -67,7 +70,7 @@ package org.osmf.mast
 			var metadata:Metadata = resource.getMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE) as Metadata;
 			return 		metadata != null
 					&&	metadata.getValue(MASTPluginInfo.MAST_METADATA_KEY_URI) != null
-					&& 	loader.canHandleResource(resource);
+					&& 	(loader.canHandleResource(resource) || f4mLoader.canHandleResource(resource));
 		}
 		
 		private function createMASTProxyElement():MediaElement
@@ -82,6 +85,7 @@ package org.osmf.mast
 		}
 
 		private var loader:NetLoader;
+		private var f4mLoader:F4MLoader;
 		private var mediaFactory:MediaFactory;
 	}
 }
