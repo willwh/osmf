@@ -70,7 +70,10 @@ package org.osmf.mast
 			var metadata:Metadata = resource.getMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE) as Metadata;
 			return 		metadata != null
 					&&	metadata.getValue(MASTPluginInfo.MAST_METADATA_KEY_URI) != null
-					&& 	(loader.canHandleResource(resource) || f4mLoader.canHandleResource(resource));
+					&&  (	loader.canHandleResource(resource)
+						||	f4mLoader.canHandleResource(resource)
+						||	mediaFactory.getItemById(SMIL_PLUGIN_ID) != null
+					);
 		}
 		
 		private function createMASTProxyElement():MediaElement
@@ -87,5 +90,7 @@ package org.osmf.mast
 		private var loader:NetLoader;
 		private var f4mLoader:F4MLoader;
 		private var mediaFactory:MediaFactory;
+		
+		private static const SMIL_PLUGIN_ID:String = "org.osmf.smil.SMILPluginInfo";
 	}
 }
