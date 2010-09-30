@@ -1645,7 +1645,7 @@ package org.osmf.media
 			if (event.playState == PlayState.PLAYING)  
 			{
 				// Don't signal playing until we've buffered some data.
-				if (canBuffer == false || bufferLength > 0)
+				if (canBuffer == false || bufferLength > 0 || bufferTime < 0.001)
 				{
 					setState(MediaPlayerState.PLAYING);
 				}
@@ -1655,7 +1655,7 @@ package org.osmf.media
 				setState(MediaPlayerState.PAUSED);				
 			}
 		}
-		
+
 		private function onLoadState(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY && 
@@ -1774,7 +1774,7 @@ package org.osmf.media
 		}
 		
 		private function onBuffering(event:BufferEvent):void
-		{
+		{			
 			if (event.buffering)
 			{
 				setState(MediaPlayerState.BUFFERING);

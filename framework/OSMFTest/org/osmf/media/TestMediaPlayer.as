@@ -580,7 +580,7 @@ package org.osmf.media
 				// PLAYING state before we're truly PLAYING.
 				assertTrue(		(mediaPlayer.state == MediaPlayerState.READY && mediaPlayer.canBuffer)
 							||	(mediaPlayer.state == MediaPlayerState.BUFFERING && mediaPlayer.canBuffer)
-							||	(mediaPlayer.state == MediaPlayerState.PLAYING && !mediaPlayer.canBuffer)
+							||	(mediaPlayer.state == MediaPlayerState.PLAYING && (!mediaPlayer.canBuffer || mediaPlayer.bufferTime < 0.001))
 						  );
 				
 				if (pauseAfterPlay)
@@ -681,7 +681,7 @@ package org.osmf.media
 					// before changing to PLAYING, so that we don't signal a
 					// PLAYING state before we're truly PLAYING.
 					assertTrue(		(mediaPlayer.state == MediaPlayerState.READY && mediaPlayer.canBuffer)
-								||	(mediaPlayer.state == MediaPlayerState.PLAYING && !mediaPlayer.canBuffer)
+								||	(mediaPlayer.state == MediaPlayerState.PLAYING && (!mediaPlayer.canBuffer || mediaPlayer.bufferTime < 0.001))
 							  );
 
 					var hasStopped:Boolean = false;
@@ -1809,7 +1809,7 @@ package org.osmf.media
 					}				
 					else if (eventCount == 2)
 					{
-						if (mediaPlayer.canBuffer)
+						if (mediaPlayer.canBuffer && mediaPlayer.bufferTime > 0)
 						{
 							assertTrue(event.state == MediaPlayerState.READY);
 						}
