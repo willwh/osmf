@@ -27,6 +27,8 @@
 	xmlns:view			="org.osmf.view.*"
 	backgroundColor		="#333333"
 	frameRate			="30"
+	layoutDirection		="ltr"
+	direction			="ltr"
 	>
 
 	<mx:Style source="assets/ExamplePlayer.css"/>
