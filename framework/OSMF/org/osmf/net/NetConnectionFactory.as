@@ -75,6 +75,24 @@ package org.osmf.net
 		/**
 		 * @private
 		 * 
+		 * Interval in milliseconds between consecutive NetConnection attempts.
+		 * The default is 200 ms.
+		 * 
+		 * This method is currently undocumented, use at your own risk.
+		 **/
+		public function get connectionAttemptInterval():Number
+		{
+			return _connectionAttemptInterval;
+		}
+
+		public function set connectionAttemptInterval(value:Number):void
+		{
+			_connectionAttemptInterval = value;
+		}
+
+		/**
+		 * @private
+		 * 
 		 * Begins the process of creating a new NetConnection.  The method creates two dictionaries to help it 
 		 * manage previously shared connections as well as pending connections. Only if a NetConnection is not shareable
 		 * and not pending is a new connection sequence initiated via a new NetNegotiator instance.
@@ -143,7 +161,7 @@ package org.osmf.net
 				} 
 				
 				// Perform the connection attempt
-				var negotiator:NetNegotiator = new NetNegotiator();
+				var negotiator:NetNegotiator = new NetNegotiator(_connectionAttemptInterval);
 				negotiator.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onConnected);
 				negotiator.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR, onConnectionFailed);
 				negotiator.createNetConnection(resource, netConnectionURLs, netConnections);
@@ -426,10 +444,12 @@ package org.osmf.net
 		private var connectionDictionary:Dictionary;
 		private var keyDictionary:Dictionary;
 		private var pendingDictionary:Dictionary;
+		private var _connectionAttemptInterval:Number = DEFAULT_CONNECTION_ATTEMPT_INTERVAL;
 		
 		private static const DEFAULT_PORTS:String = "1935,443,80";
-		private static const DEFAULT_PROTOCOLS_FOR_RTMP:String = "rtmp,rtmps,rtmpt"
+		private static const DEFAULT_PROTOCOLS_FOR_RTMP:String = "rtmp,rtmpt,rtmps"
 		private static const DEFAULT_PROTOCOLS_FOR_RTMPE:String = "rtmpe,rtmpte";
+		private static const DEFAULT_CONNECTION_ATTEMPT_INTERVAL:Number = 200;
 
 		private static const PROTOCOL_RTMP:String = "rtmp";
 		private static const PROTOCOL_RTMPS:String = "rtmps";

@@ -88,14 +88,18 @@ package org.osmf.net
 		/**
 		 * Constructor.
 		 * 
+		 * @param connectionAttemptInterval Interval in milliseconds between consecutive connection
+		 * attempts.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetNegotiator():void
+		public function NetNegotiator(connectionAttemptInterval:Number):void
 		{
 			super();
+			
+			this.connectionAttemptInterval = connectionAttemptInterval;
 		}
 		
 		/**
@@ -131,7 +135,7 @@ package org.osmf.net
 			timeOutTimer.start();
 			
 			// Individual attempt sequencer
-			connectionTimer = new Timer(CONNECTION_ATTEMPT_INTERVAL);
+			connectionTimer = new Timer(connectionAttemptInterval);
 			connectionTimer.addEventListener(TimerEvent.TIMER, tryToConnect);
 			connectionTimer.start();
 			
@@ -415,9 +419,9 @@ package org.osmf.net
 		private var connectionTimer:Timer;
 		private var attemptIndex:int;
 		private var mediaError:MediaError;
+		private var connectionAttemptInterval:Number;
 		
 		private static const DEFAULT_TIMEOUT:Number = 10000;
-		private static const CONNECTION_ATTEMPT_INTERVAL:Number = 50;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetNegotiator");
 	}
