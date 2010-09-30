@@ -150,39 +150,39 @@ package org.osmf.net
     		netConnections[attemptIndex].addEventListener(SecurityErrorEvent.SECURITY_ERROR, onNetSecurityError, false, 0, true);
     		netConnections[attemptIndex].addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError, false, 0, true);
 			netConnections[attemptIndex].client = new NetClient();
-			
-			var rs:MulticastResource = resource as MulticastResource;
-			if (rs != null &&
-				rs.groupspec != null &&
-				rs.groupspec.length > 0)
-			{
-				CONFIG::LOGGING
-				{
-					logger.info("Attempting multicast connection to " + rs.url);
-				}
-
-				NetConnection(netConnections[attemptIndex]).connect(rs.url);
-				return;
-			}
-			
+							
 			try 
 			{
-				var host:String = netConnectionURLs[attemptIndex];
-				var args:Array = [host];
-				if (netConnectionArguments != null)
+				var rs:MulticastResource = resource as MulticastResource;
+				if (rs != null && rs.groupspec != null && rs.groupspec.length > 0)
 				{
-					for each (var arg:Object in netConnectionArguments)
+					CONFIG::LOGGING
 					{
-						args.push(arg);
+						logger.info("Attempting multicast connection to " + rs.url);
 					}
+
+					NetConnection(netConnections[attemptIndex]).connect(rs.url);
 				}
-				
-				CONFIG::LOGGING
+				else
 				{
-					logger.info("Attempting connection to " + netConnectionURLs[attemptIndex]);
+					var host:String = netConnectionURLs[attemptIndex];
+					var args:Array = [host];
+					if (netConnectionArguments != null)
+					{
+						for each (var arg:Object in netConnectionArguments)
+						{
+							args.push(arg);
+						}
+					}
+					
+					CONFIG::LOGGING
+					{
+						logger.info("Attempting connection to " + netConnectionURLs[attemptIndex]);
+					}
+					
+					NetConnection(netConnections[attemptIndex]).connect.apply(netConnections[attemptIndex], args);
 				}
-				
-				NetConnection(netConnections[attemptIndex]).connect.apply(netConnections[attemptIndex], args);
+
 				attemptIndex++;
 				if (attemptIndex >= netConnectionURLs.length) 
 				{
