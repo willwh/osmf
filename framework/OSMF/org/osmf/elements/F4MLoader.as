@@ -36,6 +36,7 @@ package org.osmf.elements
 	import org.osmf.elements.f4mClasses.ManifestParser;
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
@@ -212,7 +213,7 @@ package org.osmf.elements
 				catch (error:Error)
 				{					
 					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
-					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(error.errorID, error.message)));
+					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.F4M_DOCUMENT_ERROR, error.message)));
 				}			
 			}				
 		}

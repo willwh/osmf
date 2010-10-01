@@ -164,6 +164,11 @@ package org.osmf.events
 		public static const MULTICAST_NOT_SUPPORT_MBR:int				= 24;
 
 		/**
+		 * Error constant for when the manifest file contains errors 
+		 **/
+		public static const F4M_DOCUMENT_ERROR:int						= 25;
+
+		/**
 		 * @private
 		 * 
 		 * Returns a message for the error of the specified ID.  If the error ID
@@ -218,8 +223,9 @@ package org.osmf.events
 			, {errorID:DVRCAST_SUBSCRIBE_FAILED,				message:OSMFStrings.DVRCAST_SUBSCRIBE_FAILED}
 			, {errorID:DVRCAST_CONTENT_OFFLINE,					message:OSMFStrings.DVRCAST_CONTENT_OFFLINE}
 			, {errorID:DVRCAST_STREAM_INFO_RETRIEVAL_FAILED,	message:OSMFStrings.DVRCAST_STREAM_INFO_RETRIEVAL_FAILED}
-			, {errirID:MULTICAST_PARAMETER_INVALID,				message:OSMFStrings.MULTICAST_PARAMETER_INVALID}
-			, {errirID:MULTICAST_NOT_SUPPORT_MBR,				message:OSMFStrings.MULTICAST_NOT_SUPPORT_MBR}
+			, {errorID:MULTICAST_PARAMETER_INVALID,				message:OSMFStrings.MULTICAST_PARAMETER_INVALID}
+			, {errorID:MULTICAST_NOT_SUPPORT_MBR,				message:OSMFStrings.MULTICAST_NOT_SUPPORT_MBR}
+			, {errorID:F4M_DOCUMENT_ERROR,						message:OSMFStrings.F4M_DOCUMENT_ERROR}
 		];
 	}
 }
