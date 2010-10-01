@@ -249,7 +249,12 @@ package org.osmf.media
 				mediaAtEnd = false;
 				
 				if (media != null)
-				{		
+				{
+					// If we're in the middle of an auto-rewind, it will be cancelled
+					// (and we should update our state so as not to break looping, see
+					// FM-1092).
+					inExecuteAutoRewind = false;
+					
 					if (playing)
 					{
 						// Stop, but don't auto-rewind.
