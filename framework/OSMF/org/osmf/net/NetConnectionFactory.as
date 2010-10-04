@@ -73,6 +73,19 @@ package org.osmf.net
 		}
 		
 		/**
+		 * 
+		 **/
+		public function get timeout():Number
+		{
+			return _timeout;
+		}
+		
+		public function set timeout(value:Number):void
+		{
+			_timeout = value;
+		}
+		
+		/**
 		 * @private
 		 * 
 		 * Interval in milliseconds between consecutive NetConnection attempts.
@@ -161,7 +174,7 @@ package org.osmf.net
 				} 
 				
 				// Perform the connection attempt
-				var negotiator:NetNegotiator = new NetNegotiator(_connectionAttemptInterval);
+				var negotiator:NetNegotiator = new NetNegotiator(_connectionAttemptInterval, _timeout);
 				negotiator.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onConnected);
 				negotiator.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR, onConnectionFailed);
 				negotiator.createNetConnection(resource, netConnectionURLs, netConnections);
@@ -445,7 +458,9 @@ package org.osmf.net
 		private var keyDictionary:Dictionary;
 		private var pendingDictionary:Dictionary;
 		private var _connectionAttemptInterval:Number = DEFAULT_CONNECTION_ATTEMPT_INTERVAL;
+		private var _timeout:Number = DEFAULT_TIMEOUT;
 		
+		private static const DEFAULT_TIMEOUT:Number = 10000;
 		private static const DEFAULT_PORTS:String = "1935,443,80";
 		private static const DEFAULT_PROTOCOLS_FOR_RTMP:String = "rtmp,rtmpt,rtmps"
 		private static const DEFAULT_PROTOCOLS_FOR_RTMPE:String = "rtmpe,rtmpte";

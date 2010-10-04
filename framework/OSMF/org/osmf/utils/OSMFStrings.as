@@ -375,7 +375,7 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const F4M_DOCUMENT_ERROR:String					= "f4mDocumentError";
+		public static const F4M_FILE_INVALID:String						= "f4MFileINVALID";
 		
 		private static const resourceDict:Dictionary = new Dictionary();
 		{
@@ -446,7 +446,7 @@ package org.osmf.utils
 			resourceDict[DVRCAST_STREAM_INFO_RETRIEVAL_FAILED]		= "Unable to retrieve DVRCast stream info";
 			resourceDict[MULTICAST_PARAMETER_INVALID]				= "The groupspec or streamName is null or empty but not both";
 			resourceDict[MULTICAST_NOT_SUPPORT_MBR]					= "Multicast does not support MBR";
-			resourceDict[F4M_DOCUMENT_ERROR]						= "The F4M document contains errors";
+			resourceDict[F4M_FILE_INVALID]							= "The F4M document contains errors";
 			
 			
 			resourceDict["missingStringResource"]					= "No string for resource {0}";

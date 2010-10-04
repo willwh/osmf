@@ -154,19 +154,9 @@ package org.osmf.events
 		public static const DVRCAST_STREAM_INFO_RETRIEVAL_FAILED:int	= 22;
 
 		/**
-		 * Error constant for when groupspec or streamName is null or empty but not both
-		 **/
-		public static const MULTICAST_PARAMETER_INVALID:int				= 23;
-
-		/**
-		 * Error constant for when MBR while multicast 
-		 **/
-		public static const MULTICAST_NOT_SUPPORT_MBR:int				= 24;
-
-		/**
 		 * Error constant for when the manifest file contains errors 
 		 **/
-		public static const F4M_DOCUMENT_ERROR:int						= 25;
+		public static const F4M_FILE_INVALID:int						= 23;
 
 		/**
 		 * @private
@@ -223,9 +213,7 @@ package org.osmf.events
 			, {errorID:DVRCAST_SUBSCRIBE_FAILED,				message:OSMFStrings.DVRCAST_SUBSCRIBE_FAILED}
 			, {errorID:DVRCAST_CONTENT_OFFLINE,					message:OSMFStrings.DVRCAST_CONTENT_OFFLINE}
 			, {errorID:DVRCAST_STREAM_INFO_RETRIEVAL_FAILED,	message:OSMFStrings.DVRCAST_STREAM_INFO_RETRIEVAL_FAILED}
-			, {errorID:MULTICAST_PARAMETER_INVALID,				message:OSMFStrings.MULTICAST_PARAMETER_INVALID}
-			, {errorID:MULTICAST_NOT_SUPPORT_MBR,				message:OSMFStrings.MULTICAST_NOT_SUPPORT_MBR}
-			, {errorID:F4M_DOCUMENT_ERROR,						message:OSMFStrings.F4M_DOCUMENT_ERROR}
+			, {errorID:F4M_FILE_INVALID,						message:OSMFStrings.F4M_FILE_INVALID}
 		];
 	}
 }

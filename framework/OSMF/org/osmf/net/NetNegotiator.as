@@ -95,11 +95,25 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetNegotiator(connectionAttemptInterval:Number):void
+		public function NetNegotiator(connectionAttemptInterval:Number, timeout:Number=10000):void
 		{
 			super();
 			
 			this.connectionAttemptInterval = connectionAttemptInterval;
+			this._timeout = timeout;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get timeout():Number
+		{
+			return _timeout;
+		}
+		
+		public function set timeout(value:Number):void
+		{
+			_timeout = value;
 		}
 		
 		/**
@@ -130,7 +144,7 @@ package org.osmf.net
 		private function initializeConnectionAttempts():void
 		{
 			// Master timeout
-			timeOutTimer = new Timer(DEFAULT_TIMEOUT, 1);
+			timeOutTimer = new Timer(_timeout, 1);
 			timeOutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, masterTimeout);
 			timeOutTimer.start();
 			
@@ -164,7 +178,6 @@ package org.osmf.net
 					{
 						logger.info("Attempting multicast connection to " + rs.url);
 					}
-
 					NetConnection(netConnections[attemptIndex]).connect(rs.url);
 				}
 				else
@@ -404,7 +417,7 @@ package org.osmf.net
 		private function masterTimeout(event:TimerEvent):void 
 		{
 			handleFailedConnectionSession
-				( new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT, "" + DEFAULT_TIMEOUT)
+				( new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT, "" + _timeout)
 				, ""
 				);
 		}
@@ -420,8 +433,7 @@ package org.osmf.net
 		private var attemptIndex:int;
 		private var mediaError:MediaError;
 		private var connectionAttemptInterval:Number;
-		
-		private static const DEFAULT_TIMEOUT:Number = 10000;
+		private var _timeout:Number;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetNegotiator");
 	}

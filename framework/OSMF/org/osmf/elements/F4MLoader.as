@@ -44,10 +44,11 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaTypeUtil;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;	
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -213,7 +214,15 @@ package org.osmf.elements
 				catch (error:Error)
 				{					
 					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
-					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.F4M_DOCUMENT_ERROR, error.message)));
+					var s:OSMFStrings;
+					loadTrait.dispatchEvent(
+						new MediaErrorEvent(
+							MediaErrorEvent.MEDIA_ERROR, 
+							false, 
+							false, 
+							new MediaError(
+								MediaErrorCodes.F4M_FILE_INVALID, 
+								OSMFStrings.getString(OSMFStrings.F4M_FILE_INVALID))));
 				}			
 			}				
 		}

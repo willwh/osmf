@@ -61,7 +61,14 @@ package org.osmf.net
 		**/
 		public function MulticastNetLoader(factory:NetConnectionFactoryBase=null)
 		{
-			super(factory);
+			var newFactory:NetConnectionFactory;
+			if (factory == null)
+			{
+				
+				newFactory = new NetConnectionFactory();
+				newFactory.timeout = 60000;
+			}
+			super((factory != null)? factory: newFactory);
 		}
 		
 		/**
