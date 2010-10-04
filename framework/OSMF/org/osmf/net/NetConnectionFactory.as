@@ -73,7 +73,7 @@ package org.osmf.net
 		}
 		
 		/**
-		 * 
+		 * @private
 		 **/
 		public function get timeout():Number
 		{

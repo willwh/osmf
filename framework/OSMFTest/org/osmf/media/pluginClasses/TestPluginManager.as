@@ -278,7 +278,7 @@ package org.osmf.media.pluginClasses
 			// Note: This test will need updating any time the framework
 			// version number changes.  I've added the following assertion
 			// to make this explicit.
-			assertTrue(Version.version == "1.41");
+			assertTrue(Version.version == "1.5");
 			
 			// First number is minimum supported framework version.
 			// Second number is plugin's framework version.

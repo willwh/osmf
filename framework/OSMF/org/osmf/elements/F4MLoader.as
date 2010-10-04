@@ -220,9 +220,7 @@ package org.osmf.elements
 							MediaErrorEvent.MEDIA_ERROR, 
 							false, 
 							false, 
-							new MediaError(
-								MediaErrorCodes.F4M_FILE_INVALID, 
-								OSMFStrings.getString(OSMFStrings.F4M_FILE_INVALID))));
+							new MediaError(MediaErrorCodes.F4M_FILE_INVALID, error.message)));
 				}			
 			}				
 		}
