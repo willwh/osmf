@@ -1,4 +1,4 @@
-﻿/*****************************************************
+/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -86,7 +86,7 @@ package org.osmf.events
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param loadState New LoadState of the LoadTrait.
-		 * @param bytes New value of bytesLoaded or bytesTotal.
+		 * @param bytes New value of bytesLoaded or bytesTotal. Returns NaN when media is unloaded.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
