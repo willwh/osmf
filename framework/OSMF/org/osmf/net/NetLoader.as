@@ -617,9 +617,21 @@ package org.osmf.net
 							break;
 						case NetConnectionCodes.CONNECT_CLOSED:
 						case NetConnectionCodes.CONNECT_FAILED:
+							CONFIG::LOGGING
+							{			
+								logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"connection failed, bufferLength is "+loadTrait.netStream.bufferLength);
+							}
 							if (loadTrait.loadState == LoadState.READY && !reconnectHasTimedOut && !fmsIdleTimeoutReached) 
 							{
 								reconnectTimer.start();
+								
+								// If our buffer is empty when the connection closes, then
+								// we must start the timeout Timer now, since we won't get
+								// a Buffer.Empty event later (FM-1076).
+								if (loadTrait.netStream.bufferLength == 0 && timeoutTimer != null)
+								{
+									timeoutTimer.start();
+								}
 							}
 							else
 							{
