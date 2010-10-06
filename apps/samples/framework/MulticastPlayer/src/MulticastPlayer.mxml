@@ -27,7 +27,7 @@
 			 * of OSMF. To play a multicast stream, the user can either specify an F4M to the 
 			 * stream or provide specifics of the stream, such as connection string, RTMFP Groupspec
 			 * and RTMFP StreamName. The player can load and playback the multicast stream
-			 * in either way. The user can also subscribe/unscribe to a stream multiple times.
+			 * in either way. The user can also subscribe/unsubscribe to a stream multiple times.
 			 */
 			private function initApp():void
 			{	
