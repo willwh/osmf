@@ -301,15 +301,21 @@ package org.osmf.net
     				break;
 				case NetConnectionCodes.CONNECT_SUCCESS:
 				
-					CONFIG::LOGGING
+					if (	event.info.hasOwnProperty("data")
+						&& 	event.info.data.hasOwnProperty("version")
+					   )
 					{
-						if (	event.info.hasOwnProperty("data")
-							&& 	event.info.data.hasOwnProperty("version")
-						   )
+						// Decorate the resource with the FMS version, as it may be useful downstream.
+						resource.addMetadataValue(MetadataNamespaces.FMS_SERVER_VERSION_METADATA, event.info.data.version);
+							
+						CONFIG::LOGGING
 						{
 							logger.info("FMS Version: " + event.info.data.version);
 						}
-						else
+					}
+					else
+					{
+						CONFIG::LOGGING
 						{
 							logger.info("FMS Version unknown");
 						}

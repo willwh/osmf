@@ -67,6 +67,22 @@ package org.osmf.netmocker
 		
 		/**
 		 * @inheritDoc
+		 **/ 
+		public function set netConnectionExpectedFMSVersion(value:String):void
+		{
+			if (netConnectionFactory is DefaultNetConnectionFactory)
+			{
+				DefaultNetConnectionFactory(netConnectionFactory).netConnectionExpectedFMSVersion = value;
+			}
+		}
+		
+		public function get netConnectionExpectedFMSVersion():String
+		{
+			return netConnectionFactory is DefaultNetConnectionFactory ? DefaultNetConnectionFactory(netConnectionFactory).netConnectionExpectedFMSVersion : null;
+		}
+
+		/**
+		 * @inheritDoc
 		 */
 		public function set netStreamExpectedDuration(value:Number):void
 		{

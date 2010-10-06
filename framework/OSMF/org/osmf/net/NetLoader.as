@@ -23,8 +23,6 @@
 *****************************************************/
 package org.osmf.net
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
@@ -42,6 +40,7 @@ package org.osmf.net
 	import org.osmf.media.MediaType;
 	import org.osmf.media.MediaTypeUtil;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -387,7 +386,7 @@ package org.osmf.net
 						(resource as StreamingURLResource) != null ? (resource as StreamingURLResource).urlIncludesFMSApplicationInstance : false;
 				var streamName:String = NetStreamUtils.getStreamNameFromURL(resource.url, urlIncludesFMSApplicationInstance);
 				
-				nsPlayOptions.streamName = streamName; 			
+				nsPlayOptions.streamName = streamName;
 				loadTrait.netStream.play2(nsPlayOptions);
 			}
 		}
@@ -412,8 +411,9 @@ package org.osmf.net
 				CONFIG::FLASH_10_1	
 				{				
 					// Set up stream reconnect logic
-					if (_reconnectStreams && (netLoadTrait.resource is URLResource) && 
-							NetStreamUtils.isRTMPStream((netLoadTrait.resource as URLResource).url))
+					if (	_reconnectStreams
+						&&	netLoadTrait.resource is URLResource
+						&&  supportsStreamReconnect(netLoadTrait.resource as URLResource))
 					{
 						setupStreamReconnect(netLoadTrait);
 					}				
@@ -421,7 +421,48 @@ package org.osmf.net
 				
 				processFinishLoading(loadTrait as NetStreamLoadTrait);
 			}
-		}	
+		}
+		
+		private function supportsStreamReconnect(resource:URLResource):Boolean
+		{
+			var result:Boolean = true;
+
+			// It must be an RTMP stream...
+			if (NetStreamUtils.isRTMPStream(resource.url))
+			{
+				var fmsVersion:String = resource.getMetadataValue(MetadataNamespaces.FMS_SERVER_VERSION_METADATA) as String;
+				if (fmsVersion != null && fmsVersion.length > 0)
+				{
+					// And if a version is available, it must be at least 3.5.3.
+					var versionParts:Array = fmsVersion.split(",");
+					if (versionParts.length >= 3)
+					{
+						var majorVersion:int = versionParts[0];
+						var minorVersion:int = versionParts[1];
+						var subMinorVersion:int = versionParts[2];
+						
+						if (	majorVersion < 3
+							||	(majorVersion == 3 && minorVersion < 5)
+							||	(majorVersion == 3 && minorVersion == 5 && subMinorVersion < 3)
+						)
+						{
+							result = false;
+							
+							CONFIG::LOGGING
+							{
+								logger.info(STREAM_RECONNECT_LOGGING_PREFIX+"Stream Reconnect not supported by this version of FMS");
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				result = false;
+			}
+
+			return result;
+		}
 
 		CONFIG::FLASH_10_1	
 		{
@@ -441,11 +482,6 @@ package org.osmf.net
 			 **/
 			private function setupStreamReconnect(loadTrait:NetStreamLoadTrait):void
 			{
-				CONFIG::LOGGING
-				{
-					const STREAM_RECONNECT_LOGGING_PREFIX:String = "Stream reconnect: ";
-				}
-				
 				var netConnection:NetConnection = loadTrait.connection;
 				var reconnectTimer:Timer = new Timer(STREAM_RECONNECT_TIMER_INTERVAL, 1);
 				var timeoutTimer:Timer;
@@ -807,7 +843,12 @@ package org.osmf.net
 			private static const STREAM_RECONNECT_TIMEOUT:Number = 120000;		// in milliseconds
 			private static const STREAM_RECONNECT_TIMER_INTERVAL:int = 1000;	// in milliseconds
 		}
-		
+
+		CONFIG::LOGGING
+		{
+			private static const STREAM_RECONNECT_LOGGING_PREFIX:String = "Stream reconnect: ";
+		}
+
 		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetLoader");
 				
 	}

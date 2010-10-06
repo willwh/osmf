@@ -50,6 +50,11 @@ package org.osmf.metadata
 
 		/**
 		 * @private
+		 **/
+		public static const FMS_SERVER_VERSION_METADATA:String			= "http://www.osmf.org/fmsServerVersion/1.0";
+
+		/**
+		 * @private
 		 * 
 		 * Used by the layout system to log individual IDs of regions.  For debugging only.
 		 **/

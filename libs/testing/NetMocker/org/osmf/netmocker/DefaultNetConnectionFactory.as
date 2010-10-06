@@ -47,7 +47,22 @@ package org.osmf.netmocker
 		{
 			return _netConnectionExpectation;
 		}
+
+		/**
+		 * The client's expectation for the version of the FMS server from which
+		 * the NetConnection originates.  Format should be "3,5,3" (i.e. comma
+		 * separated).
+		 **/ 
+		public function set netConnectionExpectedFMSVersion(value:String):void
+		{
+			this._netConnectionExpectedFMSVersion = value;
+		}
 		
+		public function get netConnectionExpectedFMSVersion():String
+		{
+			return _netConnectionExpectedFMSVersion;
+		}
+
 	    /**
 	     * @inheritDoc
 	     **/
@@ -58,9 +73,14 @@ package org.osmf.netmocker
 			{
 				mockNetConnection.expectation = this.netConnectionExpectation;
 			}
+			if (netConnectionExpectedFMSVersion != null)
+			{
+				mockNetConnection.expectedFMSVersion = this.netConnectionExpectedFMSVersion;
+			}
 			return mockNetConnection;
 	    }
 	    
-	    private var _netConnectionExpectation:NetConnectionExpectation;		
+	    private var _netConnectionExpectation:NetConnectionExpectation;
+		private var _netConnectionExpectedFMSVersion:String;
 	}
 }

@@ -65,7 +65,22 @@ package org.osmf.netmocker
 		{
 			return _expectation;
 		}
+
+		/**
+		 * The client's expectation for the version of the FMS server from which
+		 * the NetConnection originates.  Format should be "3,5,3" (i.e. comma
+		 * separated).
+		 **/ 
+		public function set expectedFMSVersion(value:String):void
+		{
+			this._expectedFMSVersion = value;
+		}
 		
+		public function get expectedFMSVersion():String
+		{
+			return _expectedFMSVersion;
+		}
+
 		// Overrides
 		//
 		
@@ -170,14 +185,14 @@ package org.osmf.netmocker
 				// Progressive
 				// Connect to null, so that NetStreams can use this NetConnection.
 				super.connect(null);
-				eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_SUCCESS, LEVEL_STATUS);
+				eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_SUCCESS, LEVEL_STATUS, 0, null, null, false, expectedFMSVersion);
 			}
 			else
 			{
 				// Streaming
 				// Pass a reference to this NetConnection, so that the connection can be established just prior
 				// to dispatching the delayed event.
-				eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_SUCCESS, LEVEL_STATUS, EVENT_DELAY, this, params);
+				eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_SUCCESS, LEVEL_STATUS, EVENT_DELAY, this, params, false, expectedFMSVersion);
 			}
 		}
 
@@ -243,5 +258,6 @@ package org.osmf.netmocker
 		
 		private var eventInterceptor:NetStatusEventInterceptor;
 		private var _expectation:NetConnectionExpectation;
+		private var _expectedFMSVersion:String;
 	}
 }

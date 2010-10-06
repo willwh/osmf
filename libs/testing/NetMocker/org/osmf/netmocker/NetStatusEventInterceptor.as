@@ -58,7 +58,7 @@ package org.osmf.netmocker
 		 * to be dispatched.
 		 * @param nc A NetConnection which should be connected to null just prior to dispatching the delayed event.
 		 **/
-		public function dispatchNetStatusEvent(code:String, level:String, delay:int=0, nc:NetConnection = null, params:Array = null, signalRedirect:Boolean = false):void
+		public function dispatchNetStatusEvent(code:String, level:String, delay:int=0, nc:NetConnection = null, params:Array = null, signalRedirect:Boolean = false, fmsVersion:String = null):void
 		{
 			// Once a CONNECT_CLOSED event is received, we want to prohibit the dispatching of any events which have been
 			// been queued-up for delayed dispatching.
@@ -71,7 +71,7 @@ package org.osmf.netmocker
 					isClosed = false;
 					break;
 			}
-			dispatchNetStatusEvents([{"code":code, "level":level, "nc":nc, "params":params}], delay, signalRedirect);
+			dispatchNetStatusEvents([{"code":code, "level":level, "nc":nc, "params":params}], delay, signalRedirect, fmsVersion);
 		}
 		
 		/**
@@ -84,7 +84,7 @@ package org.osmf.netmocker
 		 * @param delay An optional delay (in milliseconds) before the events
 		 * are to be dispatched.
 		 **/
-		public function dispatchNetStatusEvents(objectInfos:Array, delay:int=0, signalRedirect:Boolean=false):void
+		public function dispatchNetStatusEvents(objectInfos:Array, delay:int=0, signalRedirect:Boolean=false, fmsVersion:String=null):void
 		{
 			if (delay > 0)
 			{
@@ -95,19 +95,19 @@ package org.osmf.netmocker
 				function onDelayTimerComplete(event:TimerEvent):void
 				{
 					timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onDelayTimerComplete);
-					doDispatchNetStatusEvents(objectInfos, signalRedirect);
+					doDispatchNetStatusEvents(objectInfos, signalRedirect, fmsVersion);
 				}
 			}
 			else
 			{
-				doDispatchNetStatusEvents(objectInfos, signalRedirect);
+				doDispatchNetStatusEvents(objectInfos, signalRedirect, fmsVersion);
 			}
 		}
 		
 		// Internals
 		//
 		
-		private function doDispatchNetStatusEvents(objectInfos:Array, signalRedirect:Boolean=false):void
+		private function doDispatchNetStatusEvents(objectInfos:Array, signalRedirect:Boolean=false, fmsVersion:String=null):void
 		{
 			var detailsValue:String = "";
 			
@@ -147,6 +147,12 @@ package org.osmf.netmocker
 					infoObj.ex = new Object();
 					infoObj.ex.code = 302;
 					infoObj.ex.redirect = "rtmp://example.com/redirect";
+				}
+				
+				if (fmsVersion)
+				{
+					infoObj.data = new Object();
+					infoObj.data.version = fmsVersion;
 				}
 				
 				// Because this class intercepts all NetStatusEvents, we add a

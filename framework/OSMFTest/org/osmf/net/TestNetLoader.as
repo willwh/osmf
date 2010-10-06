@@ -362,16 +362,21 @@ package org.osmf.net
 			
 			public function testStreamReconnect():void
 			{
-				doTestStreamReconnect(new URLResource("rtmp://host/appname/mp4:example.mp4"));
+				doTestStreamReconnect(new URLResource("rtmp://host/appname/mp4:example.mp4"), true);
+			}
+
+			public function testStreamReconnectWithInvalidFMSVersion():void
+			{
+				doTestStreamReconnect(new URLResource("rtmp://host/appname/mp4:example.mp4"), false);
 			}
 
 			public function testStreamReconnectWithInstanceName():void
 			{
 				var resource:StreamingURLResource = new StreamingURLResource("rtmp://host/appname/instname/mp4:example.mp4", null, NaN, NaN, null, true); 
-				doTestStreamReconnect(resource);
+				doTestStreamReconnect(resource, true);
 			}
 			
-			private function doTestStreamReconnect(resource:MediaResourceBase):void
+			private function doTestStreamReconnect(resource:MediaResourceBase, fmsSupportsStreamReconnect:Boolean):void
 			{
 				var netLoader:NetLoader = netFactory.createNetLoader(null, true);
 				var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
@@ -382,7 +387,16 @@ package org.osmf.net
 					
 					mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 					
-					resource.mediaType= MediaType.VIDEO;
+					if (fmsSupportsStreamReconnect)
+					{
+						mockLoader.netConnectionExpectedFMSVersion = "3,5,3";
+					}
+					else
+					{
+						mockLoader.netConnectionExpectedFMSVersion = "3,5,0";
+					}
+					
+					resource.mediaType = MediaType.VIDEO;
 					
 					var loadTrait:LoadTrait = new NetStreamLoadTrait(netLoader, resource);
 					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onProtocolLoad);
@@ -440,10 +454,22 @@ package org.osmf.net
 					function onTimerComplete(event:TimerEvent):void
 					{
 						var tempNc:NetConnection = (loadTrait as NetStreamLoadTrait).connection;
-						// We're connected
-						assertTrue(tempNc.connected);
-						// And we got a differenent NetConnection object
-						assertFalse(tempNc === nc);
+						
+						if (fmsSupportsStreamReconnect)
+						{
+							// We're connected
+							assertTrue(tempNc.connected);
+							// And we got a different NetConnection object
+							assertFalse(tempNc === nc);
+						}
+						else
+						{
+							// We're not connected
+							assertFalse(tempNc.connected);
+							// And we got the same NetConnection object
+							assertTrue(tempNc === nc);
+						}
+						
 						// We're done
 						loadTrait.unload();
 					}
