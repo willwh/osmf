@@ -222,7 +222,21 @@ package org.osmf.net
 		**/
 		protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			return new NetStream(connection);
+			var ns:NetStream = new NetStream(connection);
+			
+			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+			if (streamingResource != null && streamingResource.streamType == StreamType.LIVE && ns.bufferTime == 0)
+			{
+				// Live streams typically start with a buffer time of zero, which is
+				// problematic in stream reconnection scenarios.  So we ensure that
+				// the default is similar to non-live cases (0.1).  See FM-1037.
+				//
+				// Note that this may need to be removed once we provide framework
+				// level support for custom buffering strategies.
+				ns.bufferTime = 0.1;
+			}
+			
+			return ns;
 		}
 
 		/**
