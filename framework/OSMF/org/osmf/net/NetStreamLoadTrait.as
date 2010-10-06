@@ -38,8 +38,14 @@ package org.osmf.net
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
+
 	CONFIG::LOGGING
 	{
+		CONFIG::FLASH_10_1	
+		{						 
+			import flash.utils.Timer;
+			import flash.events.TimerEvent;
+		}
 		import org.osmf.logging.Logger;
 	}
 	
@@ -57,6 +63,63 @@ package org.osmf.net
 			super(loader, resource);
 			
 			isStreamingResource = NetStreamUtils.isStreamingResource(resource);
+			
+			CONFIG::LOGGING
+			{
+				CONFIG::FLASH_10_1	
+				{
+					_logTimer = new Timer(LOG_POLLLING_INTERVAL);
+					_logTimer.addEventListener(TimerEvent.TIMER, onLogTimer);
+					_logTimer.start();
+				}						 
+			}
+		}
+		
+		CONFIG::LOGGING
+		{
+			CONFIG::FLASH_10_1	
+			{
+				private function onLogTimer(event:TimerEvent):void
+				{
+					if (_netStream != null)
+					{
+						if (_netStream.multicastInfo != null)
+						{
+							logger.info("bytesPushedFromPeers: "						+ _netStream.multicastInfo.bytesPushedFromPeers);
+							logger.info("bytesPushedToPeers: "							+ _netStream.multicastInfo.bytesPushedToPeers);		
+							logger.info("bytesReceivedFromIPMulticast: "				+ _netStream.multicastInfo.bytesReceivedFromIPMulticast);		
+							logger.info("bytesReceivedFromServer: "						+ _netStream.multicastInfo.bytesReceivedFromServer);		
+							logger.info("bytesRequestedByPeers: "						+ _netStream.multicastInfo.bytesRequestedByPeers);		
+							logger.info("bytesRequestedFromPeers: "						+ _netStream.multicastInfo.bytesRequestedFromPeers);		
+							logger.info("fragmentsPushedFromPeers: "					+ _netStream.multicastInfo.fragmentsPushedFromPeers);		
+							logger.info("fragmentsPushedToPeers: "						+ _netStream.multicastInfo.fragmentsPushedToPeers);		
+							logger.info("fragmentsReceivedFromIPMulticast: "			+ _netStream.multicastInfo.fragmentsReceivedFromIPMulticast);		
+							logger.info("fragmentsReceivedFromServer: "					+ _netStream.multicastInfo.fragmentsReceivedFromServer);		
+							logger.info("fragmentsRequestedByPeers: "					+ _netStream.multicastInfo.fragmentsRequestedByPeers);		
+							logger.info("fragmentsRequestedFromPeers: "					+ _netStream.multicastInfo.fragmentsRequestedFromPeers);		
+							logger.info("receiveControlBytesPerSecond: "				+ _netStream.multicastInfo.receiveControlBytesPerSecond);		
+							logger.info("receiveDataBytesPerSecond: "					+ _netStream.multicastInfo.receiveDataBytesPerSecond);		
+							logger.info("receiveDataBytesPerSecondFromIPMulticast: "	+ _netStream.multicastInfo.receiveDataBytesPerSecondFromIPMulticast);		
+							logger.info("receiveDataBytesPerSecondFromServer: "			+ _netStream.multicastInfo.receiveDataBytesPerSecondFromServer);		
+							logger.info("sendControlBytesPerSecond: "					+ _netStream.multicastInfo.sendControlBytesPerSecond);		
+							logger.info("sendControlBytesPerSecondToServer: "			+ _netStream.multicastInfo.sendControlBytesPerSecondToServer);		
+							logger.info("sendDataBytesPerSecond: "						+ _netStream.multicastInfo.sendDataBytesPerSecond);
+						}
+						logger.info("bufferLength: "								+ _netStream.bufferLength);
+						logger.info("currentFPS: "									+ _netStream.currentFPS);
+						if (_netStream.info != null)
+						{
+							logger.info("droppedFrames: "								+ _netStream.info.droppedFrames);
+						}
+					}
+					
+					if (this._netGroup != null)
+					{
+						logger.info("estimatedMemberCount: "						+ _netGroup.estimatedMemberCount);
+						logger.info("neighborCount: "								+ _netGroup.neighborCount);
+					}
+				}
+			}
 		}
 		
 		/**
@@ -328,6 +391,16 @@ package org.osmf.net
 			private var _netGroup:NetGroup;
 		}
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetStreamLoadTrait");
+		CONFIG::LOGGING 
+		{
+			CONFIG::FLASH_10_1	
+			{						 
+				private var _logTimer:Timer;
+
+				private static const LOG_POLLLING_INTERVAL:Number = 2000;
+			}	
+			
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetStreamLoadTrait");
+		}
 	}
 }
