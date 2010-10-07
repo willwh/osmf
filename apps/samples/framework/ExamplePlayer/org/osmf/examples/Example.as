@@ -31,12 +31,13 @@ package org.osmf.examples
 		/**
 		 * Constructor.
 		 **/
-		public function Example(name:String, description:String, mediaElementCreatorFunc:Function, disposeFunc:Function = null)
+		public function Example(name:String, description:String, mediaElementCreatorFunc:Function, disposeFunc:Function = null, scaleModeOverride:String = null)
 		{
 			_name = name;
 			_description = description;
 			_mediaElementCreatorFunc = mediaElementCreatorFunc;
 			this.disposeFunc = disposeFunc;
+			_scaleModeOverride = scaleModeOverride;
 		}
 		
 		/**
@@ -64,6 +65,14 @@ package org.osmf.examples
 		}
 		
 		/**
+		 * Optional override of the scale mode.
+		 **/
+		public function get scaleModeOverride():String
+		{
+			return _scaleModeOverride;
+		}
+		
+		/**
 		 * To be invoked when the example should clean-up.
 		 */
 		public function dispose():void
@@ -78,5 +87,6 @@ package org.osmf.examples
 		private var _description:String;
 		private var _mediaElementCreatorFunc:Function;
 		private var disposeFunc:Function;
+		private var _scaleModeOverride:String;
 	}
 }

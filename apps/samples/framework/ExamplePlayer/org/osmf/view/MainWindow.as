@@ -177,8 +177,13 @@ package org.osmf.view
 		
 		private function onScaleModeSelect(event:MenuEvent):void
 		{
-			scaleMode = event.item.toString();
-			
+			setScaleMode(event.item.toString());
+		}
+		
+		private function setScaleMode(scaleMode:String):void
+		{
+			scaleModeButton.label = scaleMode;
+
 			if (mediaPlayer.media != null)
 			{
 				var layoutMetadata:LayoutMetadata = mediaPlayer.media.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
@@ -234,8 +239,19 @@ package org.osmf.view
 				setMediaElement(example.mediaElement);
 				exampleDescription.text = example.description;
 				
-				var category:Category = exampleTree.getParentItem(exampleTree.selectedItem) as Category;
-				disableScaleMode = (category != null && category.name == "Layout")
+				disableScaleMode = false;
+				scaleModeButton.label = scaleMode;
+				if (example.scaleModeOverride != null)
+				{
+					if (example.scaleModeOverride == "disable")
+					{
+						disableScaleMode = true;
+					}
+					else
+					{
+						setScaleMode(example.scaleModeOverride);
+					}
+				}
 			}
 			else
 			{

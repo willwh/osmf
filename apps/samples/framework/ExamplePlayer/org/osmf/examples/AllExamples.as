@@ -132,6 +132,8 @@ package org.osmf.examples
 							}							
 				  	   		return new VideoElement(dsResource);
 				  	   	}
+					,	null
+					, "letterbox"
 					)
 				);
 
@@ -939,7 +941,9 @@ package org.osmf.examples
 							parallelElement.addChild(mediaElement2);
 							
 							return parallelElement;
-				  	   	} 
+				  	   	}
+					,	null
+					,	"disable"
 				  	)
 				);
 
@@ -1012,6 +1016,7 @@ package org.osmf.examples
 								, timerHandler
 								);
 						}
+					,	"disable"
 					)
 				);
 			
@@ -1046,6 +1051,8 @@ package org.osmf.examples
 												
 							return elem;
 						}
+					,	null
+					,	"disable"
 					)
 				);
 			
