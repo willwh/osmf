@@ -501,6 +501,7 @@ package org.osmf.net
 				var timeoutTimer:Timer;
 				oldConnectionURLs[loadTrait.resource] = netConnection.uri;
 				var streamIsPaused:Boolean = false;
+				var bufferIsEmpty:Boolean = false;
 				var reconnectHasTimedOut:Boolean = false;
 				var fmsIdleTimeoutReached:Boolean = false;
 				
@@ -627,8 +628,12 @@ package org.osmf.net
 								
 								// If our buffer is empty when the connection closes, then
 								// we must start the timeout Timer now, since we won't get
-								// a Buffer.Empty event later (FM-1076).
-								if (loadTrait.netStream.bufferLength == 0 && timeoutTimer != null)
+								// a Buffer.Empty event later (FM-1076).  Note that we check
+								// for this in two ways, since bufferLength might not be
+								// zero when we get the Buffer.Empty event.
+								if (	timeoutTimer != null
+									&&	(bufferIsEmpty || loadTrait.netStream.bufferLength == 0)
+								   )
 								{
 									timeoutTimer.start();
 								}
@@ -664,7 +669,14 @@ package org.osmf.net
 								{
 									reconnectHasTimedOut = true;
 								}
-							} 
+							}
+							else
+							{
+								bufferIsEmpty = true;
+							}
+							break;
+						case NetStreamCodes.NETSTREAM_BUFFER_FULL:
+							bufferIsEmpty = false;
 							break;
 					}
 				}
