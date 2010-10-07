@@ -110,10 +110,11 @@ package org.osmf.net
 			 * 
 			 * <p>The NetLoader will give up trying to reconnect the stream
 			 * if a successful reconnect does not occur within this time
-			 * period. The default is 120 seconds. The timeout period begins
-			 * when the buffer empties and therefore a value of zero
-			 * seconds is valid, meaning after the buffer empties, 
-			 * don't try to reconnect.</p>
+			 * period. The default is 120 seconds. For unpaused streams, the
+			 * timeout period begins when the buffer empties and therefore a
+			 * value of zero seconds is valid, meaning after the buffer empties, 
+			 * don't try to reconnect.  For paused streams, the timeout period
+			 * begins immediately.</p>
 			 * 
 			 * @throws ArgumentError If value param is less than zero.
 			 **/		
@@ -631,7 +632,7 @@ package org.osmf.net
 								// a Buffer.Empty event later (FM-1076).  Note that we check
 								// for this in two ways, since bufferLength might not be
 								// zero when we get the Buffer.Empty event.
-								if (bufferIsEmpty || loadTrait.netStream.bufferLength == 0)
+								if (bufferIsEmpty || loadTrait.netStream.bufferLength == 0 || streamIsPaused)
 								{
 									if (timeoutTimer != null)
 									{

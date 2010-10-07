@@ -26,6 +26,7 @@ package org.osmf.net
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
+	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
 	import org.osmf.events.LoadEvent;
@@ -375,8 +376,13 @@ package org.osmf.net
 				var resource:StreamingURLResource = new StreamingURLResource("rtmp://host/appname/instname/mp4:example.mp4", null, NaN, NaN, null, true); 
 				doTestStreamReconnect(resource, true);
 			}
-			
-			private function doTestStreamReconnect(resource:MediaResourceBase, fmsSupportsStreamReconnect:Boolean):void
+
+			public function testStreamReconnectWhenPaused():void
+			{
+				doTestStreamReconnect(new URLResource("rtmp://host/appname/mp4:example.mp4"), true, true);
+			}
+
+			private function doTestStreamReconnect(resource:MediaResourceBase, fmsSupportsStreamReconnect:Boolean, pauseStream:Boolean=false):void
 			{
 				var netLoader:NetLoader = netFactory.createNetLoader(null, true);
 				var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
@@ -408,6 +414,12 @@ package org.osmf.net
 					{
 						if (event.loadState == LoadState.READY)
 						{
+							if (pauseStream)
+							{
+								var ns:NetStream = (loadTrait as NetStreamLoadTrait).netStream;
+								ns.play();
+								ns.pause();
+							}
 							nc = (loadTrait as NetStreamLoadTrait).connection;
 							setupNetConnectionListeners();
 							// Close the NetConnection without using loadTrait.unload(). This
