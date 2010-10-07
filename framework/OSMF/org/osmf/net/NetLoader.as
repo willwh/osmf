@@ -631,11 +631,22 @@ package org.osmf.net
 								// a Buffer.Empty event later (FM-1076).  Note that we check
 								// for this in two ways, since bufferLength might not be
 								// zero when we get the Buffer.Empty event.
-								if (	timeoutTimer != null
-									&&	(bufferIsEmpty || loadTrait.netStream.bufferLength == 0)
-								   )
+								if (bufferIsEmpty || loadTrait.netStream.bufferLength == 0)
 								{
-									timeoutTimer.start();
+									if (timeoutTimer != null)
+									{
+										timeoutTimer.start();
+									}
+									else
+									{
+										reconnectHasTimedOut = true;
+										
+										// Clean up
+										setupReconnectTimer(false);
+										setupNetConnectionListeners(false);
+										setupNetStreamListeners(false);
+										setupTimeoutTimer(false);
+									}
 								}
 							}
 							else
