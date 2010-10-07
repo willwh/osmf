@@ -486,20 +486,26 @@ package org.osmf.examples
 
 				  	   		var resource:StreamingURLResource = new StreamingURLResource(REMOTE_STREAM);
 				  	   		resource.clipEndTime = 15;
-				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
+							var videoElement:VideoElement = new VideoElement(resource, netLoader);
+							videoElement.defaultDuration = 15;
+				  	   		serialElement.addChild(videoElement);
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
 
 				  	   		resource = new StreamingURLResource(REMOTE_STREAM);
 							resource.clipStartTime = 15;
 							resource.clipEndTime = 22;
-				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
+							videoElement = new VideoElement(resource, netLoader);
+							videoElement.defaultDuration = 7;
+				  	   		serialElement.addChild(videoElement);
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
 
 				  	   		resource = new StreamingURLResource(REMOTE_STREAM);
 							resource.clipStartTime = 22;
-				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
+							videoElement = new VideoElement(resource, netLoader);
+							videoElement.defaultDuration = 17;
+				  	   		serialElement.addChild(videoElement);
 				  	   		
 							return serialElement; 
 				  	   	} 
