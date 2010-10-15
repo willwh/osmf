@@ -22,8 +22,6 @@
 package org.osmf.utils
 {
 	import flexunit.framework.TestCase;
-	
-	import org.osmf.net.FMSURL;
 
 	public class TestURL extends TestCase
 	{
@@ -151,15 +149,6 @@ package org.osmf.utils
 			assertEquals(url.path, "file.flv");
 			assertEquals(url.port, "");
 			assertEquals(url.extension, "flv");
-		}
-		
-		public function testFM950():void
-		{
-			var url:FMSURL = new FMSURL("rtmpte:/vod/sample");
-			assertEquals(url.streamName, "sample");
-			assertEquals(url.host, "localhost");
-			assertEquals(url.appName, "vod");
-			assertEquals(url.path, "vod/sample");
 		}
 	}
 }
