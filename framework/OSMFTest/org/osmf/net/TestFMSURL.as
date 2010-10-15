@@ -363,5 +363,14 @@ package org.osmf.net
 			serverUrl = fmsURL.protocol + "://" + fmsURL.host + ((fmsURL.port != null && fmsURL.port.length > 0)? ":" + fmsURL.port : "") + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:""); 
 			assertEquals(serverUrl, "rtmp://llnwqa.fcod.llnwd.net/a1218/o18/_definst_");
 		}
+		
+		public function testFM950():void
+		{
+			var url:FMSURL = new FMSURL("rtmpte:/vod/sample");
+			assertEquals(url.streamName, "sample");
+			assertEquals(url.host, "localhost");
+			assertEquals(url.appName, "vod");
+			assertEquals(url.path, "vod/sample");
+		}
 	}
 }
