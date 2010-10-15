@@ -22,6 +22,8 @@
 package org.osmf.utils
 {
 	import flexunit.framework.TestCase;
+	
+	import org.osmf.net.FMSURL;
 
 	public class TestURL extends TestCase
 	{
