@@ -620,8 +620,15 @@ package org.osmf.net
 						case NetConnectionCodes.CONNECT_CLOSED:
 						case NetConnectionCodes.CONNECT_FAILED:
 							CONFIG::LOGGING
-							{			
-								logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"connection failed, bufferLength is "+loadTrait.netStream.bufferLength);
+							{	
+								if (loadTrait.netStream != null)
+								{
+									logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"connection failed, bufferLength is "+loadTrait.netStream.bufferLength);
+								}
+								else
+								{
+									logger.debug(STREAM_RECONNECT_LOGGING_PREFIX+"connection failed, bufferLength is zero");
+								}
 							}
 							if (loadTrait.loadState == LoadState.READY && !reconnectHasTimedOut && !fmsIdleTimeoutReached) 
 							{
