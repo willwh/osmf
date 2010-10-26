@@ -19,7 +19,7 @@
 		<link>
 			<name>[source path] src</name>
 			<type>2</type>
-			<location>C:/Dev/osmf/public/trunk/apps/samples/plugins/ControlBarPlugin/src</location>
+			<location>C:/svn/osmf/public/trunk/apps/samples/plugins/ControlBarPlugin/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -19,7 +19,7 @@
 		<link>
 			<name>[source path] CaptioningPlugin</name>
 			<type>2</type>
-			<location>C:/Dev/osmf/public/trunk/plugins/samples/CaptioningPlugin</location>
+			<location>C:/svn/osmf/public/trunk/plugins/samples/CaptioningPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>
