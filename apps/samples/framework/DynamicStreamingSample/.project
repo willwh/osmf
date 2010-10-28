@@ -20,7 +20,7 @@
 		<link>
 			<name>[source path] SMILPlugin</name>
 			<type>2</type>
-			<locationURI>DOCUMENTS/plugins/samples/SMILPlugin</locationURI>
+			<location>/SMILPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>
