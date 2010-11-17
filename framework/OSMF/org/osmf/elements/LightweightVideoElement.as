@@ -56,7 +56,6 @@ package org.osmf.elements
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
-	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -76,6 +75,7 @@ package org.osmf.elements
 	import flash.system.SystemUpdater;	
 	import org.osmf.net.drm.NetStreamDRMTrait;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+	import org.osmf.traits.DRMState;
 	}
 	
 	/**

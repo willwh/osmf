@@ -25,7 +25,6 @@ package org.osmf.elements
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.LoaderBase;
 
