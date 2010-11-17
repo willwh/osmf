@@ -28,11 +28,14 @@ package org.osmf.elements.loaderClasses
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
+	import flash.system.Capabilities;
 	import flash.system.LoaderContext;
 	import flash.system.SecurityDomain;
+	import flash.utils.Timer;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -196,10 +199,39 @@ package org.osmf.elements.loaderClasses
 						if (validated)
 						{
 							// Unload the loaded SWF, we don't need it anymore.
-							loader.unloadAndStop();
-							loader = null;
 							
-							loadLoadTrait(loadTrait, updateLoadTraitFunction, useCurrentSecurityDomain, false, null);
+							// Fix for FM-1104: adding a delay seems to fix a race condition that causes an
+							// RTE in the debug version of the Flash Player. We'll only execute
+							// this code for the debug version since the release version does not
+							// show RTE messages. In both cases, the plugin loads fine despite
+							// the RTE.
+							if (Capabilities.isDebugger)
+							{
+								CONFIG::LOGGING
+								{
+									logger.debug("Capabilities.isDebugger is true");
+								}
+								
+								var timer:Timer = new Timer(250, 1);
+								timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimer);
+								timer.start();
+								
+								function onTimer(event:TimerEvent):void 
+								{
+									timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onTimer);
+									timer = null;
+									loader.unloadAndStop();
+									loader = null;
+									loadLoadTrait(loadTrait, updateLoadTraitFunction, useCurrentSecurityDomain, false, null);
+								}
+							}
+							else
+							{
+								loader.unloadAndStop();
+								loader = null;
+								loadLoadTrait(loadTrait, updateLoadTraitFunction, useCurrentSecurityDomain, false, null);
+							}							
+							
 						}
 						else
 						{
