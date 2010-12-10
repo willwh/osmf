@@ -22,9 +22,15 @@
 package org.osmf.examples.seeking
 {
 	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
+	import org.osmf.events.MediaElementEvent;
+	import org.osmf.events.PlayEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.examples.loaderproxy.AsynchLoadingProxyLoadTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -61,13 +67,68 @@ package org.osmf.examples.seeking
 			var playTrait:PlayTrait = proxiedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			if (playTrait != null)
 			{
-				// Do a play and a pause in succession, to ensure the stream
-				// is seekable.
-				playTrait.play();
-				playTrait.pause();
+				var audioTrait:AudioTrait = proxiedElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
+
+				// Mute the video, but remember the mute state.
+				var previousMuted:Boolean = audioTrait.muted;
+				audioTrait.muted = true;
 				
-				calculatedLoadState = LoadState.READY;
-				dispatchEvent(eventToDispatch);
+				// Begin playback.  But don't pause immediately, as doing so for MBR
+				// streams seems to put them in a bad state.
+				playTrait.play();
+				
+				var timer:Timer = new Timer(500, 1);
+				timer.addEventListener(TimerEvent.TIMER, onTimer);
+				timer.start();
+				
+				function onTimer(event:TimerEvent):void
+				{
+					timer.removeEventListener(TimerEvent.TIMER, onTimer);
+
+					// Now pause the stream and seek back to the start.
+					playTrait.pause();
+					
+					// It's possible that the media isn't seekable yet, in which
+					// case we must wait until it is.
+					var seekTrait:SeekTrait = proxiedElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+					if (seekTrait != null)
+					{
+						// Seek back to the start.
+						seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+						seekTrait.seek(0);
+						
+						function onSeekingChange(event:SeekEvent):void
+						{
+							if (event.seeking == false)
+							{
+								seekTrait.removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+								
+								// Restore the original muted state, and signal we're loaded.
+								audioTrait.muted = previousMuted;
+	
+								calculatedLoadState = LoadState.READY;
+								dispatchEvent(eventToDispatch);
+							}
+						}
+					}
+					else
+					{
+						proxiedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+						
+						function onTraitAdd(event:MediaElementEvent):void
+						{
+							if (event.traitType == MediaTraitType.SEEK)
+							{
+								proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+
+								// Now we can seek back to the start.
+								seekTrait = proxiedElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+								seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+								seekTrait.seek(0);
+							}
+						}
+					}
+				}
 			}
 			else
 			{
