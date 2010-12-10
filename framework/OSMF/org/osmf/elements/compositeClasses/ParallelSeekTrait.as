@@ -56,6 +56,17 @@ package org.osmf.elements.compositeClasses
 		
 		/**
 		 * @private
+		 **/
+		override public function dispose():void
+		{
+			// Make sure we remove any listeners (see FM-1134).
+			detach();
+			
+			super.dispose();
+		}
+
+		/**
+		 * @private
 		 */
 		override protected function doSeek(seekOp:CompositeSeekOperationInfo):void
 		{
