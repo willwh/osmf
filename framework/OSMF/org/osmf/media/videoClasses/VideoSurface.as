@@ -35,6 +35,8 @@ package org.osmf.media.videoClasses
 			
 			if (useStageVideo)
 			{
+				// Be carefull, this code needs to be in a different function.
+				// See the method docs for details.
 				register();
 			}
 			else
@@ -42,15 +44,7 @@ package org.osmf.media.videoClasses
 				switchRenderer(this.createVideo());
 			}
 		}
-		
-		private function register()
-		{
-			if (videoSurfaceManager == null)
-			{
-				videoSurfaceManager = new VideoSurfaceManager();
-			}
-			videoSurfaceManager.registerVideoSurface(this);
-		}
+
 		/**
 		 * Returns a VideoSurfaceInfo object whose properties contain statistics 
 		 * about the surface state. The object is a snapshot of the current state.
@@ -88,7 +82,6 @@ package org.osmf.media.videoClasses
 					// Flash Player limitation: there is no clear concept for StageVideo.
 					// The snippet below is not 
 					// currentVideoRenderer.viewPort = new Rectangle(0,0,0,0);
-
 				}
 			}
 		}
@@ -223,7 +216,6 @@ package org.osmf.media.videoClasses
 			{
 				return;
 			}
-			//removeChild(currentVideoRenderer);
 			if (currentVideoRenderer)
 			{				
 				currentVideoRenderer.attachNetStream(null);
@@ -254,12 +246,27 @@ package org.osmf.media.videoClasses
 		private function onRenderState(event:Event):void
 		{		
 			updateView();
-			//event.target.removeEventListener("renderState", onRenderState);
 			if (event.hasOwnProperty("status"))
 			{
 				_info._renderStatus = event["status"];
 			}
 		}
+		
+		/**
+		 * This codes needs to be in a separate function.
+		 * 
+		 * If used directly in the constructor, a runtime error is being 
+		 * thrown on Flash Player 10.0 and 10.1.
+		 */ 
+		private function register()
+		{
+			if (videoSurfaceManager == null)
+			{
+				videoSurfaceManager = new VideoSurfaceManager();
+			}
+			videoSurfaceManager.registerVideoSurface(this);
+		}
+		
 	
 		/**
 		 * @private

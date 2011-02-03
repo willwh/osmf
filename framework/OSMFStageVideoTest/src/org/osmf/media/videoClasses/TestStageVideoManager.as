@@ -145,8 +145,10 @@ package org.osmf.media.videoClasses
 			assertNotNull(adSurface.stageVideo);
 			
 			mockStage.removeChild(adSurface);
+			assertNull(adSurface.stageVideo);
 			
-			mockStage.addChild(videoSurface);			
+			mockStage.addChild(videoSurface);	
+			assertNotNull(videoSurface.stageVideo);
 		}
 		
 		/**
@@ -169,5 +171,7 @@ package org.osmf.media.videoClasses
 		{
 			
 		}
+		
+		
 	}
 }
