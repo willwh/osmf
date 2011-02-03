@@ -11,11 +11,11 @@ package org.osmf.media.videoClasses
 	
 	public class TestStageVideoManager
 	{
-		private static var mockStage:Stage;
-		private static var videoSurfaceManager:VideoSurfaceManager;
+		private var mockStage:Stage;
+		private var videoSurfaceManager:VideoSurfaceManager;		
 		
-		[BeforeClass]
-		public static function setUpBeforeClass():void
+		[Before]
+		public function setUp():void
 		{
 			mockStage = new Stage();
 			videoSurfaceManager = new VideoSurfaceManager();			
@@ -23,21 +23,11 @@ package org.osmf.media.videoClasses
 			VideoSurface.videoSurfaceManager = videoSurfaceManager;
 		}
 		
-		[AfterClass]
-		public static function tearDownAfterClass():void
-		{
-			mockStage = null;
-			VideoSurface.videoSurfaceManager = null;
-		}
-		
-		[Before]
-		public function setUp():void
-		{
-		}
-		
 		[After]
 		public function tearDown():void
 		{
+			mockStage = null;
+			VideoSurface.videoSurfaceManager = null;
 		}
 		
 		/**
@@ -126,22 +116,25 @@ package org.osmf.media.videoClasses
 			mockStage.addChild(videoSurface);			
 			
 			assertNotNull(videoSurface.stageVideo);
+			assertTrue(videoSurfaceManager.activeVideoSurfaces.hasOwnProperty(videoSurface));
+		
+			
+			mockStage.removeChild(videoSurface);
+			assertTrue(videoSurfaceManager.activeVideoSurfaces.hasOwnProperty(videoSurface));			
+			assertNull(videoSurface.stageVideo);
+			assertNull(videoSurface.video);
 			
 			var adSurface:VideoSurface = new VideoSurface(true);
 			adSurface.x = 20;
 			adSurface.y = 20;
-			videoSurface.width = 50;
-			videoSurface.height = 50;			
-			
-			assertTrue(videoSurfaceManager.hasOwnProperty(videoSurface));
-			
-			mockStage.removeChild(videoSurface);
-			assertTrue(videoSurfaceManager.hasOwnProperty(videoSurface));
+			adSurface.width = 50;
+			adSurface.height = 50;	
+		
 			assertNull(videoSurface.stageVideo);
 			
 			mockStage.addChild(adSurface);
 			
-			assertTrue(videoSurfaceManager.hasOwnProperty(adSurface));
+			assertTrue(videoSurfaceManager.activeVideoSurfaces.hasOwnProperty(adSurface));
 			assertNotNull(adSurface.stageVideo);
 			
 			mockStage.removeChild(adSurface);

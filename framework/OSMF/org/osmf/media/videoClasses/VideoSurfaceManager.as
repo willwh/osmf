@@ -42,7 +42,7 @@ package org.osmf.media.videoClasses
 				stageVideoAvailability = event.availability;
 				// Switch current VideoSurfaces so that they start using StageVideo if it's available
 				// or switch to Video if StageVideo is not available anymore.
-				for (var key:* in videoSurfaces)
+				for (var key:* in activeVideoSurfaces)
 				{
 					var videoSurface:VideoSurface = key as VideoSurface;
 					if (videoSurface.info._stageVideoAvailability != event.availability)
@@ -69,7 +69,7 @@ package org.osmf.media.videoClasses
 			
 			videoSurface.info._stageVideoAvailability = stageVideoAvailability;
 		
-			switchRenderer(videoSurface);	
+			switchRenderer(videoSurface);
 			videoSurface.updateView();
 		}
 		
@@ -78,7 +78,7 @@ package org.osmf.media.videoClasses
 			var videoSurface:VideoSurface = event.target as VideoSurface;
 			videoSurface.info._stageVideoAvailability = "";
 			videoSurface.clear();
-			videoSurfaces[videoSurface] = null;
+			activeVideoSurfaces[videoSurface] = null;
 			videoSurface.switchRenderer(null);
 		}
 		
@@ -90,7 +90,7 @@ package org.osmf.media.videoClasses
 		{
 			if (event.status == StageVideoEvent.RENDER_STATUS_UNAVAILABLE)
 			{
-				for (var key:* in videoSurfaces)
+				for (var key:* in activeVideoSurfaces)
 				{
 					var videoSurface:VideoSurface = key as VideoSurface;
 					if (event.target == videoSurface.stageVideo)
@@ -127,13 +127,13 @@ package org.osmf.media.videoClasses
 			else
 			{
 				// Find a StageVideo instance that is not in use
-				var stageVideo:StageVideo;
+				var stageVideo:StageVideo = null;
 				for (var i:int = 0; i < _stage.stageVideos.length; i++)
 				{
 					stageVideo = _stage.stageVideos[i];
-					for (var j:* in videoSurfaces)
+					for (var key:* in activeVideoSurfaces)
 					{
-						if (stageVideo == videoSurfaces[j])
+						if (stageVideo == activeVideoSurfaces[key])
 						{
 							stageVideo = null;
 						}
@@ -147,8 +147,8 @@ package org.osmf.media.videoClasses
 				if (stageVideo != null)
 				{
 					// There is an available stageVideo instance. 
-					videoSurfaces[videoSurface] = stageVideo;
-					videoSurfaces.stageVideo = stageVideo;
+					activeVideoSurfaces[videoSurface] = stageVideo;
+					videoSurface.stageVideo = stageVideo;
 					renderer = stageVideo;
 					stageVideo.depth = maxDepth + 1;
 					renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);						
@@ -161,13 +161,13 @@ package org.osmf.media.videoClasses
 				}
 			}
 		
-			videoSurfaces[videoSurface] = renderer;
+			activeVideoSurfaces[videoSurface] = renderer;
 			
 			// Start using the new renderer.
 			videoSurface.switchRenderer(renderer);
 		}					
 	
-		internal var videoSurfaces:Dictionary = new Dictionary(true);
+		internal var activeVideoSurfaces:Dictionary = new Dictionary(true);
 		private var stageVideoAvailability:String = "";
 		private var _stage:Stage = null;		
 	}
