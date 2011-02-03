@@ -8,32 +8,53 @@ package org.osmf.media.videoClasses
 	import org.fluint.uiImpersonation.UIImpersonator;
 	import org.osmf.mock.Stage;
 	import org.osmf.utils.OSMFSettings;
-
+	
 	public class TestStageVideoManager
 	{
-		public function TestStageVideoManager()
+		private static var mockStage:Stage;
+		private static var videoSurfaceManager:VideoSurfaceManager;
+		
+		[BeforeClass]
+		public static function setUpBeforeClass():void
+		{
+			mockStage = new Stage();
+			videoSurfaceManager = new VideoSurfaceManager();			
+			videoSurfaceManager.registerStage(mockStage);
+			VideoSurface.videoSurfaceManager = videoSurfaceManager;
+		}
+		
+		[AfterClass]
+		public static function tearDownAfterClass():void
+		{
+			mockStage = null;
+			VideoSurface.videoSurfaceManager = null;
+		}
+		
+		[Before]
+		public function setUp():void
 		{
 		}
 		
+		[After]
+		public function tearDown():void
+		{
+		}
+		
+		/**
+		 * Tests the basic workflow. 
+		 */ 
 		[Test]
 		public function testAddRemoveStageVideoAvailable():void
-		{
-			var mockStage:Stage = new Stage();
-			VideoSurface.videoSurfaceManager = new VideoSurfaceManager();
-			VideoSurface.videoSurfaceManager.registerStage(mockStage);
-			
+		{		
 			var videoSurface:VideoSurface = new VideoSurface(true);
 			videoSurface.width = 100;
-			videoSurface.height = 100;
+			videoSurface.height = 100;	
 			
-			var container:DisplayObjectContainer = new Sprite();
-			container.addChild(videoSurface);
-			
-			//mockStage.addChild(videoSurface);
-			mockStage.addChild(container);
+			mockStage.addChild(videoSurface);
 			
 			assertNotNull(videoSurface.stageVideo);
 			assertNull(videoSurface.video);
+			
 			assertEquals("available", videoSurface.info.stageVideoAvailability);
 			assertEquals("unavailable", videoSurface.info.renderStatus);
 			
@@ -42,23 +63,23 @@ package org.osmf.media.videoClasses
 			
 			videoSurface.stageVideo.renderStateAccelerated();
 			assertEquals("accelerated", videoSurface.info.renderStatus);
-	
+			
 			videoSurface.stageVideo.renderStateUnavailable();
 			assertEquals("unavailable", videoSurface.info.renderStatus);
-
+			
 			assertNull(videoSurface.stageVideo);
 			assertNotNull(videoSurface.video);
 			
-			mockStage.removeChild(container);
+			mockStage.removeChild(videoSurface);
 			assertEquals("", videoSurface.info.stageVideoAvailability);
 		}
 		
+		/**
+		 * Tests a simple positioning workflow.
+		 */ 
 		[Test]
 		public function testPositioning():void
 		{
-			var mockStage:Stage = new Stage();
-			VideoSurface.videoSurfaceManager = new VideoSurfaceManager();
-			VideoSurface.videoSurfaceManager.registerStage(mockStage);
 			var videoSurface:VideoSurface = new VideoSurface(true);
 			videoSurface.x = 7;
 			videoSurface.y = 13;
@@ -91,11 +112,62 @@ package org.osmf.media.videoClasses
 			assertEquals(0, videoSurface.video.y);
 			assertEquals(7, videoSurface.x);
 			assertEquals(13, videoSurface.y);
-//			assertEquals(0, (videoSurface.stageVideo as StageVideo).viewPort.x);
-//			assertEquals(0, (videoSurface.stageVideo as StageVideo).viewPort.y);
-			//UIImpersonator.addChild(videoSurface);
 		}
 		
+		[Test]
+		public function testSerialWorkflow():void
+		{			
+			var videoSurface:VideoSurface = new VideoSurface(true);
+			videoSurface.x = 7;
+			videoSurface.y = 13;			
+			videoSurface.width = 100;
+			videoSurface.height = 100;
+			
+			mockStage.addChild(videoSurface);			
+			
+			assertNotNull(videoSurface.stageVideo);
+			
+			var adSurface:VideoSurface = new VideoSurface(true);
+			adSurface.x = 20;
+			adSurface.y = 20;
+			videoSurface.width = 50;
+			videoSurface.height = 50;			
+			
+			assertTrue(videoSurfaceManager.hasOwnProperty(videoSurface));
+			
+			mockStage.removeChild(videoSurface);
+			assertTrue(videoSurfaceManager.hasOwnProperty(videoSurface));
+			assertNull(videoSurface.stageVideo);
+			
+			mockStage.addChild(adSurface);
+			
+			assertTrue(videoSurfaceManager.hasOwnProperty(adSurface));
+			assertNotNull(adSurface.stageVideo);
+			
+			mockStage.removeChild(adSurface);
+			
+			mockStage.addChild(videoSurface);			
+		}
 		
+		/**
+		 * Multiple VideoSurfaces, multiple StageVideos
+		 * ... some stageVideos become unavailable and a different stageVideo instance is being picked up
+		 * 
+		 */ 
+		[Test]
+		public function testCompositeWorkflow():void
+		{
+			
+		}
+		
+		/**
+		 * One StageVideo, multiple VideoSurfaces
+		 * The same stageVideo gets repicked, whenever available 
+		 */ 
+		[Test]
+		public function testNotEnoughStageVideoObjests():void
+		{
+			
+		}
 	}
 }

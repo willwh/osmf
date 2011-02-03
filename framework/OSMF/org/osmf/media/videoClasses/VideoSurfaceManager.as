@@ -162,12 +162,8 @@ package org.osmf.media.videoClasses
 			videoSurface.switchRenderer(renderer);
 		}					
 	
-		
+		internal var videoSurfaces:Dictionary = new Dictionary(true);
 		private var stageVideoAvailability:String = "";
-		private var _stage:Stage = null;
-		private var videoSurfaces:Dictionary = new Dictionary(true);
-//		private var stageVideos:Dictionary = new Dictionary(true);
-//		private var videos:Dictionary = new Dictionary(true);
-//		private var createVideoFunctions:Dictionary = new Dictionary(true);
+		private var _stage:Stage = null;		
 	}
 }
