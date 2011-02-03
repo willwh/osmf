@@ -37,6 +37,7 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
+	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.metadata.CuePoint;
 	import org.osmf.metadata.CuePointType;
 	import org.osmf.metadata.TimelineMetadata;
@@ -176,7 +177,7 @@ package org.osmf.elements
 					
 					var displayObjectTrait:DisplayObjectTrait = videoElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 					assertTrue(displayObjectTrait != null);
-					var video:Video = displayObjectTrait.displayObject as Video;
+					var video:VideoSurface = displayObjectTrait.displayObject as VideoSurface;
 					assertTrue(video != null);
 					assertTrue(video.deblocking == 4);
 					
@@ -211,7 +212,7 @@ package org.osmf.elements
 					
 					var displayObjectTrait:DisplayObjectTrait = videoElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 					assertTrue(displayObjectTrait != null);
-					var video:Video = displayObjectTrait.displayObject as Video;
+					var video:VideoSurface = displayObjectTrait.displayObject as VideoSurface;
 					assertTrue(video != null);
 					assertTrue(video.smoothing == true);
 					

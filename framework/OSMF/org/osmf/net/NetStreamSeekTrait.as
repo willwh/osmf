@@ -23,10 +23,10 @@ package org.osmf.net
 {
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
-	import flash.media.Video;
 	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
+	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
@@ -50,12 +50,12 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public function NetStreamSeekTrait(temporal:TimeTrait, loadTrait:LoadTrait, netStream:NetStream, video:Video=null)
+		public function NetStreamSeekTrait(temporal:TimeTrait, loadTrait:LoadTrait, netStream:NetStream, videoSurface:VideoSurface=null)
 		{
 			super(temporal);
 			
 			this.netStream = netStream;
-			this.video = video;
+			this.videoSurface = videoSurface;
 			this.loadTrait = loadTrait;
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
@@ -129,17 +129,17 @@ package org.osmf.net
 			super.seekingChangeEnd(time);
 			
 			// When a seek to the end of the media is initiated, then we
-			// should clear the Video (if one exists).  This will prevent
-			// the image in the Video from being displayed if/when we seek
+			// should clear the VideoProxy (if one exists).  This will prevent
+			// the image in the VideoProxy from being displayed if/when we seek
 			// back into the media (e.g. in a composition).  See FM-936.
-			if (seeking == true && video != null)
+			if (seeking == true &&  videoSurface != null)
 			{
 				var nsTimeTrait:NetStreamTimeTrait = timeTrait as NetStreamTimeTrait;
 				if (	nsTimeTrait != null 
 					&&	nsTimeTrait.currentTime + nsTimeTrait.audioDelay >= nsTimeTrait.duration
 				   )
 				{
-					video.clear();
+					videoSurface.clear();
 				}
 			}
 				
@@ -222,7 +222,12 @@ package org.osmf.net
 			setSeeking(false, expectedTime);
 		}
 		
-		private var video:Video;
+		/**
+		 * @private
+		 * Internal video proxy reference used for clearing the current image while seeking.
+		 */
+		private var videoSurface:VideoSurface = null;
+		
 		private var loadTrait:LoadTrait;
 		private var audioDelay:Number = 0;
 		private var seekBugTimer:Timer;

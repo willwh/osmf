@@ -56,7 +56,7 @@ package org.osmf
 		public function OSMFTests(param:Object=null)
 		{
 			super(param);
-
+			
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
 			
@@ -364,7 +364,8 @@ package org.osmf
 			addTestSuite(TestMediaPlayerSprite);
 
 			// This test fails intermittently on the build machine.
-			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);	
+			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
+			 	
 		}
 	}
 }

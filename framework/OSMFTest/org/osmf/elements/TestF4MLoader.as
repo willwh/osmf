@@ -94,6 +94,7 @@ package org.osmf.elements
 					
 			function onError(event:MediaErrorEvent):void
 			{
+				
 			}
 				
 		}

@@ -23,9 +23,9 @@ package org.osmf.net
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
-	import flash.media.Video;
 	import flash.net.NetStream;
 	
+	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.traits.DisplayObjectTrait;
 	
 	[ExcludeClass]
@@ -35,42 +35,45 @@ package org.osmf.net
 	 */
 	public class NetStreamDisplayObjectTrait extends DisplayObjectTrait
 	{
-		public function NetStreamDisplayObjectTrait(netStream:NetStream, view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
+		public function NetStreamDisplayObjectTrait(netStream:NetStream, videoSurface:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
-			super(view, mediaWidth, mediaHeight);
+			super(videoSurface, mediaWidth, mediaHeight);
 			
 			this.netStream = netStream;
+			this.videoSurface = videoSurface as VideoSurface;
+			
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
-			if (view is Video)
-			{
-				view.addEventListener(Event.ADDED_TO_STAGE, onStage);
-			}
+			if (this.videoSurface is VideoSurface)
+				this.videoSurface.addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 		
 		private function onStage(event:Event):void
 		{
-			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			displayObject.addEventListener(Event.ENTER_FRAME, onFrame);				
+			videoSurface.removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			videoSurface.addEventListener(Event.ENTER_FRAME, onFrame);				
 		}
 				
 		private function onFrame(event:Event):void
 		{	
-			if	(  Video(displayObject).videoWidth != 0
-				&& Video(displayObject).videoHeight != 0			
+			if  (
+					videoSurface.videoWidth != 0
+			 	 && videoSurface.videoHeight != 0 
 				)
 			{	
-				if (Video(displayObject).videoWidth != mediaWidth
-					&& Video(displayObject).videoHeight != mediaHeight)
+				if  (	videoSurface.videoWidth != mediaWidth
+					 && videoSurface.videoHeight != mediaHeight
+					)
 				{
-					newMediaSize(Video(displayObject).videoWidth, Video(displayObject).videoHeight);		
+					newMediaSize(videoSurface.videoWidth, videoSurface.videoHeight);		
 				}
-				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);							
+				videoSurface.removeEventListener(Event.ENTER_FRAME, onFrame);							
 			}
 		}
 	
 		private function onMetaData(info:Object):void 
     	{       		
-    		if	(	!isNaN(info.width)
+    		if	(
+					!isNaN(info.width)
     			&&  !isNaN(info.height)
     			&&	(	info.width != mediaWidth
     				||	info.height != mediaHeight
@@ -83,15 +86,19 @@ package org.osmf.net
 		
 		private function newMediaSize(width:Number, height:Number):void
 		{
-			if(displayObject.width == 0 &&
-				displayObject.height == 0)  //If there is no layout, set as no scale.
+			if	(
+					videoSurface != null					
+				&& 	videoSurface.width == 0 
+			  	&&	videoSurface.height == 0
+				)  //If there is no layout, set as no scale.
 			{
-				displayObject.width = width;
-				displayObject.height = height;				
+				videoSurface.width = width;
+				videoSurface.height = height;	
 			}
 			setMediaSize(width, height);
 		}
     	
+		private var videoSurface:VideoSurface;
 		private var netStream:NetStream;
 	}
 }

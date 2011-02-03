@@ -31,6 +31,7 @@ package org.osmf.net
 	import mx.core.Application;
 	import mx.core.FlexGlobals;
 	
+	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.netmocker.MockNetStream;
 	import org.osmf.traits.TestDisplayObjectTrait;
@@ -108,8 +109,8 @@ package org.osmf.net
 		{
 			var stream:NetStream = createStream();
 			
-			var sprite:Sprite = new Sprite();
-			var displayObjectTrait:NetStreamDisplayObjectTrait = new NetStreamDisplayObjectTrait(stream, sprite);
+			var videoSurface:VideoSurface = new VideoSurface();
+			var displayObjectTrait:NetStreamDisplayObjectTrait = new NetStreamDisplayObjectTrait(stream, videoSurface);
 			assertTrue(displayObjectTrait.mediaWidth == 0);
 			assertTrue(displayObjectTrait.mediaHeight == 0);
 			
@@ -146,9 +147,9 @@ package org.osmf.net
 		private var netFactory:NetFactory;
 	}
 }
-import flash.media.Video;
+import org.osmf.media.videoClasses.VideoSurface;
 
-class VideoSizes extends Video 
+class VideoSizes extends VideoSurface 
 {
 	override public function get videoWidth():int
 	{

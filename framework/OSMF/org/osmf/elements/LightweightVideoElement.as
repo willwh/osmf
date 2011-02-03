@@ -21,10 +21,12 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.NetStatusEvent;
 	import flash.events.StatusEvent;
 	import flash.media.Video;
+	
 	import flash.net.NetStream;
 	import flash.utils.ByteArray;
 	
@@ -37,6 +39,7 @@ package org.osmf.elements
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.metadata.CuePoint;
 	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.net.DynamicStreamingResource;
@@ -56,6 +59,7 @@ package org.osmf.elements
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -64,6 +68,8 @@ package org.osmf.elements
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.utils.OSMFSettings;
+	
 
 	CONFIG::FLASH_10_1
 	{
@@ -75,7 +81,6 @@ package org.osmf.elements
 	import flash.system.SystemUpdater;	
 	import org.osmf.net.drm.NetStreamDRMTrait;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
-	import org.osmf.traits.DRMState;
 	}
 	
 	/**
@@ -225,7 +230,7 @@ package org.osmf.elements
 		  		defaultTimeTrait.duration = value; 
 			}	
 		}
-				
+			
 		/**
 		 * Specifies whether the video should be smoothed (interpolated) when it is scaled. 
 		 * For smoothing to work, the runtime must be in high-quality mode (the default). 
@@ -247,9 +252,9 @@ package org.osmf.elements
 		public function set smoothing(value:Boolean):void
 		{
 			_smoothing = value;
-			if (video != null)
+			if (videoSurface != null)
 			{
-				video.smoothing = value;
+				videoSurface.smoothing = value;
 			}
 		}
 		
@@ -273,9 +278,9 @@ package org.osmf.elements
 		public function set deblocking(value:int):void
 		{
 			_deblocking = value;
-			if (video != null)
+			if (videoSurface != null)
 			{
-				video.deblocking = value;
+				videoSurface.deblocking = value;
 			}
 		}
 		
@@ -303,7 +308,7 @@ package org.osmf.elements
 		 * @private
 		 */
 		protected function createVideo():Video
-		{
+		{			
 			return new Video();
 		}
        	
@@ -314,15 +319,15 @@ package org.osmf.elements
 		{
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			stream = loadTrait.netStream;
-				
+			
 			// Set the video's dimensions so that it doesn't appear at the wrong size.
-			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)
-			video = createVideo();
-			video.smoothing = _smoothing;
-			video.deblocking = _deblocking;
-			video.width = video.height = 0;
+			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)			
+			videoSurface = new VideoSurface(OSMFSettings.useStageVideo, createVideo);
+			videoSurface.smoothing = _smoothing;
+			videoSurface.deblocking = _deblocking;
+			videoSurface.width = videoSurface.height = 0;
 
-			video.attachNetStream(stream);
+			videoSurface.attachNetStream(stream);
 			
 			// Hook up our metadata listeners
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
@@ -461,7 +466,7 @@ package org.osmf.elements
 			addTrait
 				(	MediaTraitType.DISPLAY_OBJECT
 				,	trait
-				||	new NetStreamDisplayObjectTrait(stream, video, NaN, NaN)
+				||	new NetStreamDisplayObjectTrait(stream, videoSurface, NaN, NaN)
 				);
 			
 			trait = loadTrait.getTrait(MediaTraitType.PLAY);
@@ -478,7 +483,7 @@ package org.osmf.elements
 			trait = loadTrait.getTrait(MediaTraitType.SEEK);
 			if (trait == null && NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
 			{
-				trait = new NetStreamSeekTrait(timeTrait, loadTrait, stream, video);
+				trait = new NetStreamSeekTrait(timeTrait, loadTrait, stream, videoSurface);
 	  		}
 	  		if (trait != null)
 	  		{
@@ -545,9 +550,9 @@ package org.osmf.elements
     		}
     		
 	    	// Null refs to garbage collect.	    	
-			video.attachNetStream(null);
+			videoSurface.attachNetStream(null);
+			videoSurface = null;
 			stream = null;
-			video = null;
 			displayObjectTrait = null;
 		}
 
@@ -659,11 +664,11 @@ package org.osmf.elements
      	private var defaultTimeTrait:ModifiableTimeTrait;
      	
      	private var stream:NetStream;
-      	private var video:Video;
       	
 		private var embeddedCuePoints:TimelineMetadata;
 		private var _smoothing:Boolean;
 		private var _deblocking:int;
+		private var videoSurface:VideoSurface;
 		
 		CONFIG::FLASH_10_1
 		{	
