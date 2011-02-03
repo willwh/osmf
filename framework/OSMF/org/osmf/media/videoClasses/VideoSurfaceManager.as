@@ -40,8 +40,8 @@ package org.osmf.media.videoClasses
 			if (stageVideoAvailability != event.availability)
 			{
 				stageVideoAvailability = event.availability;
-				trace("event.availability=", event.availability);
-				//stageVideoAvailable = (event.availability == "available");			
+				// Switch current VideoSurfaces so that they start using StageVideo if it's available
+				// or switch to Video if StageVideo is not available anymore.
 				for (var key:* in videoSurfaces)
 				{
 					var videoSurface:VideoSurface = key as VideoSurface;
@@ -61,6 +61,8 @@ package org.osmf.media.videoClasses
 				registerStage(event.target.stage);
 			}
 			
+			// Don't wait for the StageVideoAvailability event to occur. 
+			// Check if stageVideo instances are available.
 			stageVideoAvailability = _stage.stageVideos.length > 0 ? "available" : "";
 			
 			var videoSurface:VideoSurface = event.target as VideoSurface;		
@@ -80,6 +82,10 @@ package org.osmf.media.videoClasses
 			videoSurface.switchRenderer(null);
 		}
 		
+		/**
+		 * A StageVideo instance might become unavailable while it is being used.
+		 * Switches to Video once this happens.
+		 */ 
 		private function onStageVideoRenderState(event:StageVideoEvent):void
 		{
 			if (event.status == StageVideoEvent.RENDER_STATUS_UNAVAILABLE)
@@ -98,6 +104,8 @@ package org.osmf.media.videoClasses
 		
 		private function switchRenderer(videoSurface:VideoSurface):void
 		{
+			// Retrieve the current max depth, so that we surface the newly used
+			// StageVideos to the top
 			var maxDepth:int = 0;
 			for (var index:int = 0; index < _stage.stageVideos.length; index++)
 			{
@@ -118,47 +126,44 @@ package org.osmf.media.videoClasses
 			}
 			else
 			{
-				if (!videoSurfaces.hasOwnProperty(videoSurface))
+				// Find a StageVideo instance that is not in use
+				var stageVideo:StageVideo;
+				for (var i:int = 0; i < _stage.stageVideos.length; i++)
 				{
-					var stageVideo:StageVideo;
-					for (var i:int = 0; i < _stage.stageVideos.length; i++)
+					stageVideo = _stage.stageVideos[i];
+					for (var j:* in videoSurfaces)
 					{
-						stageVideo = _stage.stageVideos[i];
-						//stageVideo.depth = 1;
-						for (var j:* in videoSurfaces)
+						if (stageVideo == videoSurfaces[j])
 						{
-							if (stageVideo == videoSurfaces[j])
-							{
-								stageVideo = null;
-							}
-						}
-						if (stageVideo != null)
-						{							
-							break;
+							stageVideo = null;
 						}
 					}
-					
 					if (stageVideo != null)
-					{
-						videoSurfaces[videoSurface] = stageVideo;
-						videoSurface.stageVideo = stageVideo;
-						renderer = stageVideo;
-						stageVideo.depth = maxDepth + 1;
-						renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);						
-					}
-					else
-					{
-						videoSurface.video = videoSurface.createVideo();//s[videoSurface] = createVideoFunctions[videoSurface]();
-						renderer = videoSurface.video;
+					{							
+						break;
 					}
 				}
-			}
-			if (videoSurfaces[videoSurface] is StageVideo && videoSurfaces[videoSurface] != renderer)
-			{
-				videoSurfaces[videoSurface].viewPort = new Rectangle(0,0,0,0);
+				
+				if (stageVideo != null)
+				{
+					// There is an available stageVideo instance. 
+					videoSurfaces[videoSurface] = stageVideo;
+					videoSurfaces.stageVideo = stageVideo;
+					renderer = stageVideo;
+					stageVideo.depth = maxDepth + 1;
+					renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);						
+				}
+				else
+				{
+					// All the StageVideo instances are currrently used. Fallback to Video.
+					videoSurface.video = videoSurface.createVideo();
+					renderer = videoSurface.video;
+				}
 			}
 		
 			videoSurfaces[videoSurface] = renderer;
+			
+			// Start using the new renderer.
 			videoSurface.switchRenderer(renderer);
 		}					
 	

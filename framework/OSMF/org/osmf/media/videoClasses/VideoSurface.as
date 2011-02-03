@@ -216,16 +216,22 @@ package org.osmf.media.videoClasses
 			{
 				return;
 			}
+			
 			if (currentVideoRenderer)
 			{				
 				currentVideoRenderer.attachNetStream(null);
-				if (currentVideoRenderer is DisplayObject)
+				if (currentVideoRenderer == video)
 				{
+					video = null;
 					removeChild(currentVideoRenderer);
 				}
 				else
 				{
-					currentVideoRenderer.viewPort = new Rectangle(0,0,0,0);					
+					
+					// If the renderer switched from StageVideo to Video we need to clear the viewPort of the
+					// stageVideo isntance that is no longer used.
+					currentVideoRenderer.viewPort = new Rectangle(0,0,0,0);			
+					stageVideo = null;
 				}
 			}
 			
@@ -234,18 +240,23 @@ package org.osmf.media.videoClasses
 			if (currentVideoRenderer)
 			{
 				currentVideoRenderer.attachNetStream(netStream);
-				updateView();
+				
 				if (currentVideoRenderer is DisplayObject)
 				{				
+					video = currentVideoRenderer;
 					addChild(currentVideoRenderer);
 				}						
+				else
+				{
+					stageVideo = currentVideoRenderer;
+				}
+				updateView();
 				currentVideoRenderer.addEventListener("renderState", onRenderState);
 			}
 		}
 		
 		private function onRenderState(event:Event):void
 		{		
-			updateView();
 			if (event.hasOwnProperty("status"))
 			{
 				_info._renderStatus = event["status"];
@@ -253,7 +264,7 @@ package org.osmf.media.videoClasses
 		}
 		
 		/**
-		 * This codes needs to be in a separate function.
+		 * This code needs to be in a separate function.
 		 * 
 		 * If used directly in the constructor, a runtime error is being 
 		 * thrown on Flash Player 10.0 and 10.1.
@@ -278,16 +289,14 @@ package org.osmf.media.videoClasses
 		internal var createVideo:Function;
 		internal var video:Video = null;
 		
+		private var _info:VideoSurfaceInfo = new VideoSurfaceInfo();	
+		
 		/** StageVideo instance used by this VideoSurface. 
 		 * 
 		 * Do not link to StageVideo, to avoid runtime issues older FP versions, < 10.2. 
 		 */ 
-		internal var stageVideo:* = null;
-		
-		
-		
-		private var currentVideoRenderer:* = null;
-		private var _info:VideoSurfaceInfo = new VideoSurfaceInfo();		
+		internal var stageVideo:* = null;	
+		private var currentVideoRenderer:* = null;			
 		private var netStream:NetStream;
 		/**
 		 * @private
