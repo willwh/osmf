@@ -244,7 +244,10 @@ package org.osmf.media.videoClasses
 				if (currentVideoRenderer is DisplayObject)
 				{				
 					video = currentVideoRenderer;
+					video.deblocking = _deblocking;
+					video.smoothing = _smoothing;
 					addChild(currentVideoRenderer);
+					
 				}						
 				else
 				{
