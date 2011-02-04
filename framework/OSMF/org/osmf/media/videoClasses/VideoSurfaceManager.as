@@ -1,7 +1,6 @@
 package org.osmf.media.videoClasses
 {
 	import flash.events.Event;
-	import flash.events.StageVideoAvailabilityEvent;
 	import flash.events.StageVideoEvent;
 	import flash.events.VideoEvent;
 	import flash.geom.Rectangle;
@@ -26,7 +25,7 @@ package org.osmf.media.videoClasses
 		internal function registerStage(stage:Stage):void
 		{
 			_stage = stage;
-			stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailability);
+			stage.addEventListener("stageVideoAvailability", onStageVideoAvailability);
 		}
 		
 		public function registerVideoSurface(videoSurface:VideoSurface):void
@@ -35,19 +34,19 @@ package org.osmf.media.videoClasses
 			videoSurface.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 		}
 		
-		private function onStageVideoAvailability(event:StageVideoAvailabilityEvent):void
+		private function onStageVideoAvailability(event:Event):void
 		{	
-			if (stageVideoAvailability != event.availability)
+			if (event.hasOwnProperty("availability") && stageVideoAvailability != event["availability"])
 			{
-				stageVideoAvailability = event.availability;
+				stageVideoAvailability = event["availability"];
 				// Switch current VideoSurfaces so that they start using StageVideo if it's available
 				// or switch to Video if StageVideo is not available anymore.
 				for (var key:* in activeVideoSurfaces)
 				{
 					var videoSurface:VideoSurface = key as VideoSurface;
-					if (videoSurface.info._stageVideoAvailability != event.availability)
+					if (videoSurface.info._stageVideoAvailability != stageVideoAvailability)
 					{
-						videoSurface.info._stageVideoAvailability = event.availability;
+						videoSurface.info._stageVideoAvailability = stageVideoAvailability;
 						switchRenderer(videoSurface);	
 					}
 				}
