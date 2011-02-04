@@ -6,6 +6,7 @@ package
 	
 	import flexunit.flexui.FlexUnitTestRunnerUIAS;
 	
+	import org.flexunit.runner.Request;
 	import org.osmf.media.videoClasses.TestStageVideoManager;
 	
 	public class FlexUnitApplication extends Sprite
@@ -25,7 +26,8 @@ package
 		public function currentRunTestSuite():Array
 		{
 			var testsToRun:Array = new Array();
-			testsToRun.push(org.osmf.media.videoClasses.TestStageVideoManager);
+			testsToRun.push(Request.methods(org.osmf.media.videoClasses.TestStageVideoManager,["testSerialWorkflow"]));
+			
 			return testsToRun;
 		}
 	}

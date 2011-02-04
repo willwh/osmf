@@ -73,15 +73,16 @@ package org.osmf.media.videoClasses
 		{
 			if (currentVideoRenderer)
 			{
-				if (currentVideoRenderer is Video)
+				if (currentVideoRenderer == video)
 				{
-					currentVideoRenderer.clear();
+					video.clear();
 				}
 				else
 				{
 					// Flash Player limitation: there is no clear concept for StageVideo.
 					// The snippet below is not 
-					// currentVideoRenderer.viewPort = new Rectangle(0,0,0,0);
+					//stageVideo.viewPort = new Rectangle(0,0,0,0);
+					//stageVideo.depth = 0;
 				}
 			}
 		}
@@ -131,7 +132,7 @@ package org.osmf.media.videoClasses
 		 */
 		public function get videoHeight():int
 		{
-			return currentVideoRenderer ? currentVideoRenderer.videoHeight : 0;
+			return currentVideoRenderer ? currentVideoRenderer.videoHeight : surfaceRect.height;
 		}
 		
 		/**
@@ -139,7 +140,7 @@ package org.osmf.media.videoClasses
 		 */
 		public function get videoWidth():int
 		{
-			return currentVideoRenderer ? currentVideoRenderer.videoWidth : 0;
+			return currentVideoRenderer ? currentVideoRenderer.videoWidth : surfaceRect.width;
 		}
 		
 		/// Overrides
@@ -152,7 +153,7 @@ package org.osmf.media.videoClasses
 		
 		override public function set y(value:Number):void
 		{
-			super.y = value;
+			super.y = value;			
 			surfaceRect.y = 0;
 			updateView();
 		}
@@ -166,7 +167,10 @@ package org.osmf.media.videoClasses
 		{
 			if (surfaceRect.height != value)
 			{
-				surfaceRect.height = value;
+				if (value != 0)
+				{
+					surfaceRect.height = value;
+				}
 				updateView();
 			}
 		}
@@ -180,12 +184,27 @@ package org.osmf.media.videoClasses
 		{
 			if (surfaceRect.width != value)
 			{
-				surfaceRect.width = value;
+				if (value != 0)
+				{
+					surfaceRect.width = value;
+				}
 				updateView();
 			}
 		}
 		
 		// Internals	
+		internal function clear2():void
+		{
+			if (currentVideoRenderer == stageVideo)
+			{
+				stageVideo.depth = 0;
+				//stageVideo.viewPort = new Rectangle(0, 0, 0, 0);				
+			}
+			else
+			{
+				clear();
+			}			
+		}
 		
 		internal function updateView():void
 		{
@@ -194,12 +213,12 @@ package org.osmf.media.videoClasses
 				return;
 			}
 			
-			if (currentVideoRenderer.hasOwnProperty("viewPort"))
+			if (currentVideoRenderer == stageVideo)
 			{
 				var viewPort:Rectangle = new Rectangle();
 				viewPort.topLeft = localToGlobal(surfaceRect.topLeft);
 				viewPort.bottomRight = localToGlobal(surfaceRect.bottomRight);
-				currentVideoRenderer["viewPort"] = viewPort;
+				stageVideo.viewPort = viewPort;
 			}
 			else
 			{			
@@ -230,7 +249,7 @@ package org.osmf.media.videoClasses
 					
 					// If the renderer switched from StageVideo to Video we need to clear the viewPort of the
 					// stageVideo isntance that is no longer used.
-					currentVideoRenderer.viewPort = new Rectangle(0,0,0,0);			
+					stageVideo.viewPort = new Rectangle(0,0,0,0);			
 					stageVideo = null;
 				}
 			}
@@ -272,7 +291,7 @@ package org.osmf.media.videoClasses
 		 * If used directly in the constructor, a runtime error is being 
 		 * thrown on Flash Player 10.0 and 10.1.
 		 */ 
-		private function register()
+		private function register():void
 		{
 			if (videoSurfaceManager == null)
 			{
@@ -290,17 +309,21 @@ package org.osmf.media.videoClasses
 		internal static var videoSurfaceManager:VideoSurfaceManager = null;		
 	
 		internal var createVideo:Function;
-		internal var video:Video = null;
+		internal var video:Video = null;	
 		
-		private var _info:VideoSurfaceInfo = new VideoSurfaceInfo();	
 		
-		/** StageVideo instance used by this VideoSurface. 
+		/** 
+		 * StageVideo instance used by this VideoSurface.
 		 * 
 		 * Do not link to StageVideo, to avoid runtime issues older FP versions, < 10.2. 
 		 */ 
 		internal var stageVideo:* = null;	
-		private var currentVideoRenderer:* = null;			
+		private var currentVideoRenderer:* = null;	
+		
+		private var _info:VideoSurfaceInfo = new VideoSurfaceInfo();	
+				
 		private var netStream:NetStream;
+		
 		/**
 		 * @private
 		 * Internal rect used for representing the actual size.

@@ -76,7 +76,7 @@ package org.osmf.media.videoClasses
 		{
 			var videoSurface:VideoSurface = event.target as VideoSurface;
 			videoSurface.info._stageVideoAvailability = "";
-			videoSurface.clear();
+			videoSurface.clear2();
 			activeVideoSurfaces[videoSurface] = null;
 			videoSurface.switchRenderer(null);
 		}
@@ -112,7 +112,7 @@ package org.osmf.media.videoClasses
 				{
 					maxDepth = _stage.stageVideos[index].depth;
 				}
-			}			
+			}	
 			
 			var renderer:*;
 			if (stageVideoAvailability != "available")
@@ -150,7 +150,9 @@ package org.osmf.media.videoClasses
 					videoSurface.stageVideo = stageVideo;
 					renderer = stageVideo;
 					stageVideo.depth = maxDepth + 1;
-					renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);						
+					renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);	
+					
+				
 				}
 				else
 				{
@@ -160,6 +162,8 @@ package org.osmf.media.videoClasses
 				}
 			}
 		
+
+			
 			activeVideoSurfaces[videoSurface] = renderer;
 			
 			// Start using the new renderer.
