@@ -10,7 +10,7 @@ package org.osmf.utils
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.6
 	 */ 
-	public class OSMFSettings
+	public final class OSMFSettings
 	{
 		/**
 		 * Controls OSMF’s use of StageVideo in your application. 
@@ -45,33 +45,15 @@ package org.osmf.utils
 		 * @playerversion AIR 1.5
 		 * @productversion OSMF 1.6
 		 */
-		public static function get systemSupportsStageVideo():Boolean
+		public static function get supportsStageVideo():Boolean
 		{
 			return runtimeSupportsStageVideo(Capabilities.version);
 		}
 
 		/**
-		 * Returns true if StageVideo feature can be actually used. It returns true only if
-		 * the StageVideo APIs are supported by the runtime and if the developer
-		 * wants to use it. 
-		 * 
-		 * It will return false if the platform doesn't support StageVideo API or the developer disabled in 
-		 * an explicit way the use of StageVideo.
-		 * 
-		 * @langversion 3.0
-		 * @playerversion Flash 10
-		 * @playerversion AIR 1.5
-		 * @productversion OSMF 1.6
-		 */
-		public static function get canUseStageVideo():Boolean
-		{
-			return enableStageVideo && systemSupportsStageVideo;
-		}
-		
-		/**
 		 * @private
 		 */
-		protected static function runtimeSupportsStageVideo(runtimeVersion:String):Boolean
+		internal static function runtimeSupportsStageVideo(runtimeVersion:String):Boolean
 		{
 			var osArray:Array = runtimeVersion.split(' ');
 			var osType:String = osArray[0]; 
@@ -81,7 +63,10 @@ package org.osmf.utils
 			var minorVersion:Number = parseInt(versionArray[2]);
 			var minorRevision:Number = parseInt(versionArray[3]);
 			
-			return (majorVersion >= 10 && majorRevision >= 2);
+			return (
+						majorVersion > 10 ||
+						(majorVersion == 10 && majorRevision >= 2)
+					);
 		}
 	}
 }

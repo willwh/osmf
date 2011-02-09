@@ -26,7 +26,6 @@ package org.osmf.elements
 	import flash.events.NetStatusEvent;
 	import flash.events.StatusEvent;
 	import flash.media.Video;
-	
 	import flash.net.NetStream;
 	import flash.utils.ByteArray;
 	
@@ -67,8 +66,8 @@ package org.osmf.elements
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.OSMFSettings;
+	import org.osmf.utils.OSMFStrings;
 	
 
 	CONFIG::FLASH_10_1
@@ -322,7 +321,10 @@ package org.osmf.elements
 			
 			// Set the video's dimensions so that it doesn't appear at the wrong size.
 			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)			
-			videoSurface = new VideoSurface(OSMFSettings.canUseStageVideo, createVideo);
+			videoSurface = new VideoSurface(
+											OSMFSettings.enableStageVideo && OSMFSettings.supportsStageVideo, 
+											createVideo
+									);
 			videoSurface.smoothing = _smoothing;
 			videoSurface.deblocking = _deblocking;
 			videoSurface.width = videoSurface.height = 0;
