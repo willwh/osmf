@@ -36,6 +36,21 @@ package org.osmf.media.videoClasses
 			videoSurface.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 		}
 		
+		internal function provideRenderer(videoSurface:VideoSurface):void
+		{
+			videoSurface.info._stageVideoAvailability = stageVideoAvailability;
+			
+			switchRenderer(videoSurface);
+		}
+		
+		internal function releaseRenderer(videoSurface:VideoSurface):void
+		{
+			videoSurface.info._stageVideoAvailability = "";
+			videoSurface.clear(true);
+			activeVideoSurfaces[videoSurface] = null;
+			videoSurface.switchRenderer(null);
+		}
+		
 		private function onStageVideoAvailability(event:Event):void
 		{				
 			if (event.hasOwnProperty("availability") && stageVideoAvailability != event["availability"])
@@ -72,22 +87,16 @@ package org.osmf.media.videoClasses
 			// Check if stageVideo instances are available.
 			stageVideoAvailability = _stage.stageVideos.length > 0 ? "available" : "";
 			
-			var videoSurface:VideoSurface = event.target as VideoSurface;		
-			
-			videoSurface.info._stageVideoAvailability = stageVideoAvailability;
-		
-			switchRenderer(videoSurface);
-			videoSurface.updateView();
+			var videoSurface:VideoSurface = event.target as VideoSurface;	
+			provideRenderer(videoSurface);
 		}
 		
 		private function onRemovedFromStage(event:Event):void
 		{
 			var videoSurface:VideoSurface = event.target as VideoSurface;
-			videoSurface.info._stageVideoAvailability = "";
-			videoSurface.clear(true);
-			activeVideoSurfaces[videoSurface] = null;
-			videoSurface.switchRenderer(null);
+			releaseRenderer(videoSurface);
 		}
+		
 		
 		/**
 		 * A StageVideo instance might become unavailable while it is being used.

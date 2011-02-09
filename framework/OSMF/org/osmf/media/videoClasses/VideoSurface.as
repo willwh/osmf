@@ -136,7 +136,15 @@ package org.osmf.media.videoClasses
 		
 		override public function set visible(value:Boolean):void
 		{			
-			_visible = value;			
+			_visible = value;
+			if (_visible)
+			{
+				videoSurfaceManager.provideRenderer(this);
+			}
+			else
+			{
+				videoSurfaceManager.releaseRenderer(this);
+			}
 		}
 		
 		override public function get visible():Boolean
