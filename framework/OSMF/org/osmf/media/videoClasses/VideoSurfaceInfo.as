@@ -1,6 +1,10 @@
 package org.osmf.media.videoClasses
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The VideoSurfaceInfo class specifies the variousstatistics related to a VideoSurface object
 	 * and the underlying display. A VideoSurfaceInfo object is returned in response to the 
 	 * <code>VideoSurface.info</code> call, which takes a snapshot of the current state

@@ -1,5 +1,7 @@
 package org.osmf.media.videoClasses
 {
+	[ExcludeClass]
+	
 	import flash.events.Event;
 	import flash.events.StageVideoEvent;
 	import flash.events.VideoEvent;
@@ -16,6 +18,8 @@ package org.osmf.media.videoClasses
 	CONFIG::LOGGING  import org.osmf.logging.Logger;	
 	
 	/**
+	 * @private
+	 * 
 	 * VideoSurfaceManager manages the workflow related to StageVideo support.
 	 */ 
 	internal class VideoSurfaceManager
@@ -35,10 +39,16 @@ package org.osmf.media.videoClasses
 		}
 		
 		private function onStageVideoAvailability(event:Event):void
-		{	
+		{				
 			if (event.hasOwnProperty("availability") && stageVideoAvailability != event["availability"])
 			{
-				stageVideoAvailability = event["availability"];
+				CONFIG::LOGGING
+				{
+					logger.info("stageVideoAvailability changed. Previous value = {0}; Current value = {1}", stageVideoAvailability, event["availability"]);
+				}
+				
+				stageVideoAvailability = event["availability"];				
+				
 				// Switch current VideoSurfaces so that they start using StageVideo if it's available
 				// or switch to Video if StageVideo is not available anymore.
 				for (var key:* in activeVideoSurfaces)
@@ -150,9 +160,7 @@ package org.osmf.media.videoClasses
 					videoSurface.stageVideo = stageVideo;
 					renderer = stageVideo;
 					stageVideo.depth = maxDepth + 1;
-					renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);	
-					
-				
+					renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);				
 				}
 				else
 				{
@@ -161,8 +169,6 @@ package org.osmf.media.videoClasses
 					renderer = videoSurface.video;
 				}
 			}
-		
-
 			
 			activeVideoSurfaces[videoSurface] = renderer;
 			

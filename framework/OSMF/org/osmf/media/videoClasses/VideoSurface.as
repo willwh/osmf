@@ -1,5 +1,7 @@
 package org.osmf.media.videoClasses
-{
+{	
+	[ExcludeClass]
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -14,6 +16,8 @@ package org.osmf.media.videoClasses
 	CONFIG::LOGGING  import org.osmf.logging.Logger;	
 
 	/**
+	 * @private
+	 * 
 	 * VideoSurface class wraps the display object where
 	 * a video should be displayed.
 	 */
