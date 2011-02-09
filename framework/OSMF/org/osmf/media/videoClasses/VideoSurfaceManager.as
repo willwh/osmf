@@ -23,9 +23,7 @@ package org.osmf.media.videoClasses
 	 * VideoSurfaceManager manages the workflow related to StageVideo support.
 	 */ 
 	internal class VideoSurfaceManager
-	{	
-		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurfaceManager");
-		
+	{			
 		internal function registerStage(stage:Stage):void
 		{
 			_stage = stage;
@@ -86,7 +84,7 @@ package org.osmf.media.videoClasses
 		{
 			var videoSurface:VideoSurface = event.target as VideoSurface;
 			videoSurface.info._stageVideoAvailability = "";
-			videoSurface.clear2();
+			videoSurface.clear(true);
 			activeVideoSurfaces[videoSurface] = null;
 			videoSurface.switchRenderer(null);
 		}
@@ -174,10 +172,12 @@ package org.osmf.media.videoClasses
 			
 			// Start using the new renderer.
 			videoSurface.switchRenderer(renderer);
-		}					
-	
+		}							
+		
 		internal var activeVideoSurfaces:Dictionary = new Dictionary(true);
 		private var stageVideoAvailability:String = "";
-		private var _stage:Stage = null;		
+		private var _stage:Stage = null;	
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurfaceManager");
 	}
 }

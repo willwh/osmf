@@ -73,7 +73,7 @@ package org.osmf.media.videoClasses
 		/**
 		 * Clears the image currently displayed in the Video object (not the video stream).
 		 */ 
-		public function clear():void
+		public function clear(clearStageVideoObject:Boolean = false):void
 		{
 			if (currentVideoRenderer)
 			{
@@ -85,8 +85,11 @@ package org.osmf.media.videoClasses
 				{
 					// Flash Player limitation: there is no clear concept for StageVideo.
 					// The snippet below is not 
-					//stageVideo.viewPort = new Rectangle(0,0,0,0);
-					//stageVideo.depth = 0;
+					if (clearStageVideoObject)
+					{
+						stageVideo.depth = 0;
+						//stageVideo.viewPort = new Rectangle(0, 0, 0, 0);	
+					}
 				}
 			}
 		}
@@ -130,6 +133,16 @@ package org.osmf.media.videoClasses
 				}
 			}
 		}
+		
+		override public function set visible(value:Boolean):void
+		{			
+			_visible = value;			
+		}
+		
+		override public function get visible():Boolean
+		{
+			return _visible;
+		}		
 		
 		/**
 		 * An integer specifying the height of the video stream, in pixels.
@@ -197,18 +210,6 @@ package org.osmf.media.videoClasses
 		}
 		
 		// Internals	
-		internal function clear2():void
-		{
-			if (currentVideoRenderer == stageVideo)
-			{
-				stageVideo.depth = 0;
-				//stageVideo.viewPort = new Rectangle(0, 0, 0, 0);				
-			}
-			else
-			{
-				clear();
-			}			
-		}
 		
 		internal function updateView():void
 		{
@@ -235,6 +236,11 @@ package org.osmf.media.videoClasses
 		
 		internal function switchRenderer(renderer:*):void
 		{		
+			CONFIG::LOGGING
+			{
+				logger.info("switchRenderer. currentVideoRenderer = {0}; the new renderer = {1}", currentVideoRenderer != null ? currentVideoRenderer.toString() : "null", renderer);
+			}
+			
 			if (currentVideoRenderer == renderer)
 			{
 				return;
@@ -336,6 +342,7 @@ package org.osmf.media.videoClasses
 		
 		private var _deblocking:int 	= 0;
 		private var _smoothing:Boolean 	= false;
+		private var _visible:Boolean;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurface");
 		
