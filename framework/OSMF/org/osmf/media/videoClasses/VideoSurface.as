@@ -350,7 +350,7 @@ package org.osmf.media.videoClasses
 		
 		private var _deblocking:int 	= 0;
 		private var _smoothing:Boolean 	= false;
-		private var _visible:Boolean;
+		private var _visible:Boolean = true;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurface");
 		
