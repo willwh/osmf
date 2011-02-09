@@ -147,6 +147,7 @@ package org.osmf.media.videoClasses
 					{
 						videoSurface.stageVideo = null;
 						switchRenderer(videoSurface);
+						break;
 					}
 				}
 			}
@@ -154,19 +155,8 @@ package org.osmf.media.videoClasses
 		
 		private function switchRenderer(videoSurface:VideoSurface):void
 		{
-			// Retrieve the current max depth, so that we surface the newly used
-			// StageVideos to the top
-			var maxDepth:int = 0;
-			for (var index:int = 0; index < _stage.stageVideos.length; index++)
-			{
-				if (maxDepth < _stage.stageVideos[index].depth)
-				{
-					maxDepth = _stage.stageVideos[index].depth;
-				}
-			}	
-			
 			var renderer:*;
-			if (stageVideoIsAvailable)
+			if (!stageVideoIsAvailable)
 			{
 				if (videoSurface.video == null)
 				{
@@ -196,6 +186,17 @@ package org.osmf.media.videoClasses
 				
 				if (stageVideo != null)
 				{
+					// Retrieve the current max depth, so that we surface the newly used
+					// StageVideos to the top
+					var maxDepth:int = 0;
+					for (var index:int = 0; index < _stage.stageVideos.length; index++)
+					{
+						if (maxDepth < _stage.stageVideos[index].depth)
+						{
+							maxDepth = _stage.stageVideos[index].depth;
+						}
+					}	
+
 					// There is an available stageVideo instance. 
 					activeVideoSurfaces[videoSurface] = stageVideo;
 					videoSurface.stageVideo = stageVideo;
@@ -206,7 +207,10 @@ package org.osmf.media.videoClasses
 				else
 				{
 					// All the StageVideo instances are currrently used. Fallback to Video.
-					videoSurface.video = videoSurface.createVideo();
+					if (videoSurface.video == null)
+					{
+						videoSurface.video = videoSurface.createVideo();
+					}
 					renderer = videoSurface.video;
 				}
 			}

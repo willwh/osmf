@@ -244,14 +244,19 @@ package org.osmf.media.videoClasses
 		
 		internal function switchRenderer(renderer:*):void
 		{		
-			CONFIG::LOGGING
-			{
-				logger.info("switchRenderer. currentVideoRenderer = {0}; the new renderer = {1}", currentVideoRenderer != null ? currentVideoRenderer.toString() : "null", renderer);
-			}
 			
 			if (currentVideoRenderer == renderer)
 			{
+				CONFIG::LOGGING
+				{
+					logger.info("switchRenderer reusing the same renderer. Do nothing");
+				}
 				return;
+			}
+			
+			CONFIG::LOGGING
+			{
+				logger.info("switchRenderer. currentVideoRenderer = {0}; the new renderer = {1}", currentVideoRenderer != null ? currentVideoRenderer.toString() : "null", renderer);
 			}
 			
 			if (currentVideoRenderer)
