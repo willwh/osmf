@@ -322,7 +322,7 @@ package org.osmf.elements
 			
 			// Set the video's dimensions so that it doesn't appear at the wrong size.
 			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)			
-			videoSurface = new VideoSurface(OSMFSettings.useStageVideo, createVideo);
+			videoSurface = new VideoSurface(OSMFSettings.canUseStageVideo, createVideo);
 			videoSurface.smoothing = _smoothing;
 			videoSurface.deblocking = _deblocking;
 			videoSurface.width = videoSurface.height = 0;
