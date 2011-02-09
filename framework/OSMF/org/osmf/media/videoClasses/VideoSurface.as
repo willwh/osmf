@@ -55,7 +55,7 @@ package org.osmf.media.videoClasses
 		 */
 		public function get info():VideoSurfaceInfo
 		{
-			return _info;	
+			return new VideoSurfaceInfo(stageVideo != null, renderStatus);	
 		}
 		
 		/**
@@ -295,11 +295,15 @@ package org.osmf.media.videoClasses
 			}
 		}
 		
+		/**
+		 * @private
+		 * Event handler for render events dispatched both by Video and StageVideo objects.
+		 */
 		private function onRenderState(event:Event):void
 		{		
 			if (event.hasOwnProperty("status"))
 			{
-				_info._renderStatus = event["status"];
+				renderStatus = event["status"];
 			}
 		}
 		
@@ -338,8 +342,6 @@ package org.osmf.media.videoClasses
 		internal var stageVideo:* = null;	
 		private var currentVideoRenderer:* = null;	
 		
-		private var _info:VideoSurfaceInfo = new VideoSurfaceInfo();	
-				
 		private var netStream:NetStream;
 		
 		/**
@@ -352,7 +354,15 @@ package org.osmf.media.videoClasses
 		private var _smoothing:Boolean 	= false;
 		private var _visible:Boolean = true;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurface");
+		
+		/**
+		 * @private
+		 * Internal render status information.
+		 */
+		private var renderStatus:String;
+		
+		CONFIG::LOGGING 
+		private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurface");
 		
 	}
 }

@@ -17,33 +17,48 @@ package org.osmf.media.videoClasses
 	 */
 	public final class VideoSurfaceInfo
 	{
-		/** The available color spaces for displaying the video. */
-		public function get colorSpace():String
+		public static const UNAVAILABLE:String 	= "unavailable";
+		public static const SOFTWARE:String 	= "software";
+		public static const ACCELERATED:String 	= "accelerated";
+		
+		/**
+		 * Default constructor.
+		 */
+		public function VideoSurfaceInfo(stageVideoInUse:Boolean, renderStatus:String)
 		{
-			return _colorSpace;
+			this._stageVideoInUse = stageVideoInUse;
+			this._renderStatus = renderStatus;
 		}
-
-		/** Indicates whether the video is being rendered (decoded and displayed) by hardware or software, or not at all */
+		
+		/**
+		 * Indicates if the current video surface is using StageVideo.
+		 */ 
+		public function get stageVideoInUse():Boolean
+		{
+			return _stageVideoInUse;	
+		}
+		
+		/** 
+		 * Indicates whether the video is being rendered (decoded and displayed) by hardware or software, or not at all 
+		 */
 		public function get renderStatus():String
 		{
 			return _renderStatus;
 		}
 
-		/** Indicates whether stage video is supported on the current device */
-		public function get stageVideoAvailability():String
-		{
-			return _stageVideoAvailability;
-		}
-
-		internal var _stageVideoAvailability:String = "unavailable";		
-		internal var _renderStatus:String = "unavailable";		
-		internal var _colorSpace:String = "";
+		/// Internals
 		
-		// TODO: Not sure about this... if this is present we need to have a property 
-		// indicating the current status as well as the availability in different display modes (normal, fullscreen).
-		// This supports use cases where a video player developer needs to decide upon the use of 
-		// fullScreenSourceRect.
-		/** Indicates whether stage video is supported in Full Screen mode on the current device */
-		//public var stageVideoFullScreenAvailability:String = "available";// StageVideoAvailability.AVAILABLE;
+		/**
+		 * @private
+		 * Internal flag for use of StageVideo.
+		 */
+		protected var _stageVideoInUse:Boolean;
+		
+		/**
+		 * @private
+		 * Internal render status.
+		 */
+		protected var _renderStatus:String;
+		
 	}
 }

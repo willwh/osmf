@@ -23,11 +23,18 @@ package org.osmf.media.videoClasses
 	 * VideoSurfaceManager manages the workflow related to StageVideo support.
 	 */ 
 	internal class VideoSurfaceManager
-	{			
+	{	
+		/**
+		 * Registers the current stage.
+		 * VideoSurfaceManager object will monitor the changes in StageVideo availability
+		 * and trigger for each available VideoSurface the switch to appropiate mode.
+		 */
 		internal function registerStage(stage:Stage):void
 		{
 			_stage = stage;
-			stage.addEventListener("stageVideoAvailability", onStageVideoAvailability);
+			_stage.addEventListener("stageVideoAvailability", onStageVideoAvailability);
+			
+			stageVideoIsAvailable = _stage.hasOwnProperty("stageVideos") && _stage.stageVideos.length > 0;
 		}
 		
 		public function registerVideoSurface(videoSurface:VideoSurface):void
@@ -35,47 +42,73 @@ package org.osmf.media.videoClasses
 			videoSurface.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			videoSurface.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 		}
-		
+
 		internal function provideRenderer(videoSurface:VideoSurface):void
 		{
-			videoSurface.info._stageVideoAvailability = stageVideoAvailability;
-			
+			if (videoSurface == null)
+				return;
+				
 			switchRenderer(videoSurface);
 		}
-		
+
 		internal function releaseRenderer(videoSurface:VideoSurface):void
 		{
-			videoSurface.info._stageVideoAvailability = "";
 			videoSurface.clear(true);
 			activeVideoSurfaces[videoSurface] = null;
 			videoSurface.switchRenderer(null);
 		}
 		
+		/**
+		 * @private
+		 * Event handler for StageVideoAvailability event dispatched by stage.
+		 */
 		private function onStageVideoAvailability(event:Event):void
-		{				
-			if (event.hasOwnProperty("availability") && stageVideoAvailability != event["availability"])
+		{	
+			if (!event.hasOwnProperty(AVAILABILITY))
 			{
+				// If the event has no AVAILABILITY property then
+				// we should ignore it.
 				CONFIG::LOGGING
 				{
-					logger.info("stageVideoAvailability changed. Previous value = {0}; Current value = {1}", stageVideoAvailability, event["availability"]);
+					logger.warn("stageVideoAvailability event received. No {0} property", AVAILABILITY);
 				}
-				
-				stageVideoAvailability = event["availability"];				
-				
-				// Switch current VideoSurfaces so that they start using StageVideo if it's available
-				// or switch to Video if StageVideo is not available anymore.
-				for (var key:* in activeVideoSurfaces)
+				return;
+			}
+			else
+			{
+				// Check if stageVideoAvailability has been changed 
+				// If yes we will need to go through all existing VideoSurface 
+				// objects and force a manual switch to the correct mode.
+				var currentStageVideoIsAvailable:Boolean = event[AVAILABILITY] == AVAILABLE;
+				if (stageVideoIsAvailable != currentStageVideoIsAvailable)
 				{
-					var videoSurface:VideoSurface = key as VideoSurface;
-					if (videoSurface.info._stageVideoAvailability != stageVideoAvailability)
+					CONFIG::LOGGING
 					{
-						videoSurface.info._stageVideoAvailability = stageVideoAvailability;
-						switchRenderer(videoSurface);	
+						logger.info("stageVideoAvailability changed. Previous value = {0}; Current value = {1}", stageVideoIsAvailable, currentStageVideoIsAvailable);
 					}
-				}
+					
+					stageVideoIsAvailable = currentStageVideoIsAvailable;
+					for (var key:* in activeVideoSurfaces)
+					{
+						var videoSurface:VideoSurface = key as VideoSurface;
+						if (videoSurface != null && videoSurface.info.stageVideoInUse != stageVideoIsAvailable)
+						{
+							// If the VideoSurface is in StageVideo mode but the StageVideo is not available
+							// anymore then switch to Video. If the StageVideo is not used but the StageVideo
+							// has become available, then switch to StageVideo.
+							switchRenderer(videoSurface);	
+						}
+					}
+				}	
 			}
 		}
 		
+		/**
+		 * @private
+		 * Event handler for VideoSurface ADDED_TO_STAGE events.
+		 * When VideoSurface objects are added to stage, the VideoSurfaceManager 
+		 * will try to switch VideoSurface direclty in StageVideo mode.
+		 */
 		private function onAddedToStage(event:Event):void
 		{			
 			if (_stage == null)
@@ -83,28 +116,29 @@ package org.osmf.media.videoClasses
 				registerStage(event.target.stage);
 			}
 			
-			// Don't wait for the StageVideoAvailability event to occur. 
-			// Check if stageVideo instances are available.
-			stageVideoAvailability = _stage.stageVideos.length > 0 ? "available" : "";
-			
-			var videoSurface:VideoSurface = event.target as VideoSurface;	
-			provideRenderer(videoSurface);
+			// When added to Stage, try to use the StageVideo mode 
+			// directly, without waiting for availability event.
+			provideRenderer(event.target as VideoSurface);		
 		}
 		
+		/**
+		 * @private
+		 * Event handler for VideoSurface REMOVE_FROM_STAGE events.
+		 * When VideoSurface is removed from stage, The VideoSurfacManager
+		 * will unregister any informations.
+		 */ 
 		private function onRemovedFromStage(event:Event):void
 		{
-			var videoSurface:VideoSurface = event.target as VideoSurface;
-			releaseRenderer(videoSurface);
+			releaseRenderer(event.target as VideoSurface);
 		}
-		
-		
+				
 		/**
 		 * A StageVideo instance might become unavailable while it is being used.
 		 * Switches to Video once this happens.
 		 */ 
 		private function onStageVideoRenderState(event:StageVideoEvent):void
 		{
-			if (event.status == StageVideoEvent.RENDER_STATUS_UNAVAILABLE)
+			if (event.status == UNAVAILABLE)
 			{
 				for (var key:* in activeVideoSurfaces)
 				{
@@ -132,7 +166,7 @@ package org.osmf.media.videoClasses
 			}	
 			
 			var renderer:*;
-			if (stageVideoAvailability != "available")
+			if (stageVideoIsAvailable)
 			{
 				if (videoSurface.video == null)
 				{
@@ -184,9 +218,25 @@ package org.osmf.media.videoClasses
 		}							
 		
 		internal var activeVideoSurfaces:Dictionary = new Dictionary(true);
-		private var stageVideoAvailability:String = "";
-		private var _stage:Stage = null;	
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurfaceManager");
+		/**
+		 * @private
+		 * Stage reference. 
+		 * It is set the first time a VideoSurface is added to the stage.
+		 */
+		private var _stage:Stage = null;		
+		
+		/**
+		 * @private
+		 * Status flag signaling the availability of StageVideo.
+		 */
+		private var stageVideoIsAvailable:Boolean = false;
+		
+		CONFIG::LOGGING 
+		private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurfaceManager");
+
+		private static const AVAILABILITY:String = "availability";
+		private static const AVAILABLE:String = "available";
+		private static const UNAVAILABLE:String = "unavailable"
 	}
 }

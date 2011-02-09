@@ -45,7 +45,7 @@ package org.osmf.media.videoClasses
 			assertNotNull(videoSurface.stageVideo);
 			assertNull(videoSurface.video);
 			
-			assertEquals("available", videoSurface.info.stageVideoAvailability);
+			assertTrue(videoSurface.info.stageVideoInUse);
 			assertEquals("unavailable", videoSurface.info.renderStatus);
 			
 			videoSurface.stageVideo.renderStateSoftware();
@@ -61,7 +61,7 @@ package org.osmf.media.videoClasses
 			assertNotNull(videoSurface.video);
 			
 			mockStage.removeChild(videoSurface);
-			assertEquals("", videoSurface.info.stageVideoAvailability);
+			assertFalse(videoSurface.info.stageVideoInUse);
 		}
 		
 		/**
@@ -152,7 +152,6 @@ package org.osmf.media.videoClasses
 		[Test]
 		public function testCompositeWorkflow():void
 		{
-			
 		}
 		
 		/**
@@ -162,7 +161,6 @@ package org.osmf.media.videoClasses
 		[Test]
 		public function testNotEnoughStageVideoObjests():void
 		{
-			
 		}
 		
 		
