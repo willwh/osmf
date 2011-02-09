@@ -55,13 +55,19 @@ package org.osmf.utils
 		 */
 		internal static function runtimeSupportsStageVideo(runtimeVersion:String):Boolean
 		{
+			if (runtimeVersion == null)
+				return false;
+			
 			var osArray:Array = runtimeVersion.split(' ');
+			if (osArray.length < 2)
+				return false;
+			
 			var osType:String = osArray[0]; 
 			var versionArray:Array = osArray[1].split(',');
+			if (versionArray.length < 2)
+					return false;
 			var majorVersion:Number = parseInt(versionArray[0]);
 			var majorRevision:Number = parseInt(versionArray[1]);
-			var minorVersion:Number = parseInt(versionArray[2]);
-			var minorRevision:Number = parseInt(versionArray[3]);
 			
 			return (
 						majorVersion > 10 ||
