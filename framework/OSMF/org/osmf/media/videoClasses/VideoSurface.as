@@ -88,7 +88,7 @@ package org.osmf.media.videoClasses
 					if (clearStageVideoObject)
 					{
 						stageVideo.depth = 0;
-						//stageVideo.viewPort = new Rectangle(0, 0, 0, 0);	
+						stageVideo.viewPort = new Rectangle(0, 0, 0, 0);	
 					}
 				}
 			}
@@ -192,10 +192,8 @@ package org.osmf.media.videoClasses
 		{
 			if (surfaceRect.height != value)
 			{
-				if (value != 0)
-				{
-					surfaceRect.height = value;
-				}
+				surfaceRect.height = value;
+				
 				updateView();
 			}
 		}
@@ -209,10 +207,7 @@ package org.osmf.media.videoClasses
 		{
 			if (surfaceRect.width != value)
 			{
-				if (value != 0)
-				{
-					surfaceRect.width = value;
-				}
+				surfaceRect.width = value;				
 				updateView();
 			}
 		}
@@ -268,8 +263,7 @@ package org.osmf.media.videoClasses
 					removeChild(currentVideoRenderer);
 				}
 				else
-				{
-					
+				{					
 					// If the renderer switched from StageVideo to Video we need to clear the viewPort of the
 					// stageVideo isntance that is no longer used.
 					stageVideo.viewPort = new Rectangle(0,0,0,0);			
@@ -288,8 +282,7 @@ package org.osmf.media.videoClasses
 					video = currentVideoRenderer;
 					video.deblocking = _deblocking;
 					video.smoothing = _smoothing;
-					addChild(currentVideoRenderer);
-					
+					addChild(currentVideoRenderer);					
 				}						
 				else
 				{
@@ -331,20 +324,19 @@ package org.osmf.media.videoClasses
 		/**
 		 * @private
 		 * Internal surface used for actual rendering.
-		 */
-		
+		 */		
 		internal static var videoSurfaceManager:VideoSurfaceManager = null;		
 	
-		internal var createVideo:Function;
-		internal var video:Video = null;	
-		
+		internal var createVideo:Function;		
 		
 		/** 
+		 * @private
 		 * StageVideo instance used by this VideoSurface.
 		 * 
-		 * Do not link to StageVideo, to avoid runtime issues older FP versions, < 10.2. 
+		 * Do not link to StageVideo, to avoid runtime issues on older FP versions, < 10.2. 
 		 */ 
-		internal var stageVideo:* = null;	
+		internal var stageVideo:* = null;
+		internal var video:Video = null;	
 		private var currentVideoRenderer:* = null;	
 		
 		private var netStream:NetStream;
