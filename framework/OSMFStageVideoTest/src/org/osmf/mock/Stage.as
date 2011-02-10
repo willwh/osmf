@@ -13,13 +13,22 @@ package org.osmf.mock
 		public function Stage()
 		{
 			stageVideo = new StageVideo();
+			internalStageVideos.push(stageVideo);
 		}
 		
 		public function get stageVideos():Array
 		{
-			return [stageVideo];
+			return internalStageVideos;
 		}
-			
+		
+		public function updateStageVideos(videos:Array, replace:Boolean = false):void
+		{
+			if (replace)
+				internalStageVideos= videos;
+			else
+				internalStageVideos = internalStageVideos.concat(videos);
+		}
+		
 		public function stageVideoAvailable():void
 		{
 			dispatchEvent(new StageVideoAvailabilityEvent(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, false, false, StageVideoAvailability.AVAILABLE));
@@ -64,6 +73,8 @@ package org.osmf.mock
 			}
 			return child;
 		}
+		
+		private var internalStageVideos:Array = new Array();
 		
 		private var stageVideo:StageVideo;
 	}

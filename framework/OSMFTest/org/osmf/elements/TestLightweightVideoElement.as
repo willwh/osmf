@@ -55,6 +55,7 @@ package org.osmf.elements
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.NetFactory;
+	import org.osmf.utils.OSMFSettings;
 	import org.osmf.utils.TestConstants;
 
 	public class TestLightweightVideoElement extends TestMediaElement
@@ -149,6 +150,36 @@ package org.osmf.elements
 					var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					assertNotNull(playTrait);
 					assertTrue(playTrait.canPause == true);
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
+		
+		public function testDisabledStageVideo():void
+		{
+			OSMFSettings.enableStageVideo = false;
+			
+			var videoElement:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
+			videoElement.resource = resourceForMediaElement;
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
+			
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
+			
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					
+					var displayObjectTrait:DisplayObjectTrait = videoElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					assertTrue(displayObjectTrait != null);
+					var video:VideoSurface = displayObjectTrait.displayObject as VideoSurface;
+					assertTrue(video != null);
+					assertTrue(video.info.stageVideoInUse == false);
+
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 			}

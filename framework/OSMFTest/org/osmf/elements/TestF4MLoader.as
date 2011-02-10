@@ -79,25 +79,29 @@ package org.osmf.elements
 			}
 			assertTrue(errorThrown);			
 		}
-		
-		public function testLoadFail():void
-		{
-			
-			var loader:F4MLoader = new F4MLoader();
-			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource("http://example.com/notValid.f4m"));
-			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 10000));
-			
-			var errorThrown:Boolean = false;
-			var errorThrownLoader:Boolean = false;
-			
-			loader.load(loadTrait);
-					
-			function onError(event:MediaErrorEvent):void
-			{
-				
-			}
-				
-		}
+
+		// FIXME
+		// [cdobre] What is the use case for this test?
+		// Is not clear what is we are trying to test here.
+//		public function testLoadFail():void
+//		{
+//			
+//			var loader:F4MLoader = new F4MLoader();
+//			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource("http://example.com/notValid.f4m"));
+//			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 10000));
+//			
+//			var errorThrown:Boolean = false;
+//			var errorThrownLoader:Boolean = false;
+//			
+//			loader.load(loadTrait);
+//					
+//			function onError(event:MediaErrorEvent):void
+//			{
+//				errorThrown = true;
+//				ass
+//			}
+//				
+//		}
 		
 		
 		

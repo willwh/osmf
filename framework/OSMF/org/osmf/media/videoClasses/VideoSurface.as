@@ -266,7 +266,8 @@ package org.osmf.media.videoClasses
 				{					
 					// If the renderer switched from StageVideo to Video we need to clear the viewPort of the
 					// stageVideo isntance that is no longer used.
-					stageVideo.viewPort = new Rectangle(0,0,0,0);			
+					if (stageVideo != null)
+						stageVideo.viewPort = new Rectangle(0,0,0,0);			
 					stageVideo = null;
 				}
 			}

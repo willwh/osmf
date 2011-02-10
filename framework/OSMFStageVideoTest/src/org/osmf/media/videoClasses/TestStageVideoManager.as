@@ -2,11 +2,11 @@ package org.osmf.media.videoClasses
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
-	import org.osmf.mock.StageVideo;
 	
 	import org.flexunit.asserts.*;
 	import org.fluint.uiImpersonation.UIImpersonator;
 	import org.osmf.mock.Stage;
+	import org.osmf.mock.StageVideo;
 	import org.osmf.utils.OSMFSettings;
 	
 	public class TestStageVideoManager
@@ -114,13 +114,11 @@ package org.osmf.media.videoClasses
 			videoSurface.height = 100;
 			
 			mockStage.addChild(videoSurface);			
-			
 			assertNotNull(videoSurface.stageVideo);
-			assertTrue(videoSurfaceManager.activeVideoSurfaces.hasOwnProperty(videoSurface));
-		
-			
+			//assertTrue(videoSurfaceManager.activeVideoSurfaces.hasOwnProperty(videoSurface));
+					
 			mockStage.removeChild(videoSurface);
-			assertTrue(videoSurfaceManager.activeVideoSurfaces.hasOwnProperty(videoSurface));			
+			//assertTrue(videoSurfaceManager.activeVideoSurfaces.hasOwnProperty(videoSurface));			
 			assertNull(videoSurface.stageVideo);
 			assertNull(videoSurface.video);
 			
@@ -152,6 +150,22 @@ package org.osmf.media.videoClasses
 		[Test]
 		public function testCompositeWorkflow():void
 		{
+			var stageVideo1:StageVideo = new StageVideo();
+			var stageVideo2:StageVideo = new StageVideo();
+			mockStage.updateStageVideos( new Array(stageVideo1, stageVideo2), true);
+			
+			var videoSurface1:VideoSurface = new VideoSurface(true);
+			mockStage.addChild(videoSurface1);		
+			var videoSurface2:VideoSurface = new VideoSurface(true);
+			mockStage.addChild(videoSurface2);			
+			
+			mockStage.stageVideoAvailable();
+			
+			assertNotNull(videoSurface1.stageVideo);
+			assertEquals(videoSurface1.stageVideo, stageVideo1);
+			
+			assertNotNull(videoSurface2.stageVideo);
+			assertEquals(videoSurface2.stageVideo, stageVideo2);
 		}
 		
 		/**
@@ -161,6 +175,25 @@ package org.osmf.media.videoClasses
 		[Test]
 		public function testNotEnoughStageVideoObjests():void
 		{
+			var stageVideo1:StageVideo = new StageVideo();
+			mockStage.updateStageVideos( new Array(stageVideo1), true);
+			
+			var videoSurface1:VideoSurface = new VideoSurface(true);
+			mockStage.addChild(videoSurface1);			
+			assertNotNull(videoSurface1.stageVideo);
+			assertEquals(videoSurface1.stageVideo, stageVideo1);
+			
+			var videoSurface2:VideoSurface = new VideoSurface(true);
+			mockStage.addChild(videoSurface2);			
+			assertNull(videoSurface2.stageVideo);
+			assertNotNull(videoSurface2.video);
+			
+			mockStage.removeChild(videoSurface1);			
+			mockStage.stageVideoAvailable();
+			
+			assertNotNull(videoSurface2.stageVideo);
+			assertEquals(videoSurface2.stageVideo, stageVideo1);
+			
 		}
 		
 		
