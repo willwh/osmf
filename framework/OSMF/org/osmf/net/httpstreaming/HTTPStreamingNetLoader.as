@@ -40,6 +40,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait;
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
+	import org.osmf.net.httpstreaming.HTTPStreamingSwitchManager;
 	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
 	import org.osmf.traits.LoadState;
 
@@ -107,7 +108,7 @@ package org.osmf.net.httpstreaming
 			if (dsResource != null)
 			{
 				var metrics:HTTPNetStreamMetrics = new HTTPNetStreamMetrics(netStream as HTTPNetStream);
-				return new NetStreamSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
+				return new HTTPStreamingSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
 			}
 			return null;
 		}
@@ -158,7 +159,7 @@ package org.osmf.net.httpstreaming
 		private function getDefaultSwitchingRules(metrics:HTTPNetStreamMetrics):Vector.<SwitchingRuleBase>
 		{
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
-			rules.push(new DownloadRatioRule(metrics));
+			rules.push(new DownloadRatioRule(metrics, false));
 			rules.push(new DroppedFramesRule(metrics));
 			return rules;
 		}

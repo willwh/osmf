@@ -43,14 +43,15 @@ package org.osmf.net.httpstreaming
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
+	import org.osmf.events.StreamEvent;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
+	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
-	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 
 	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
 	
@@ -1189,7 +1190,7 @@ package org.osmf.net.httpstreaming
 					bytes = fileHandler.endProcessFile(_savedBytes.bytesAvailable ? _savedBytes : null);
 					processAndAppend(bytes);
 					_lastDownloadRatio = _segmentDuration / _lastDownloadDuration;	// urlcomplete would have fired by now, otherwise we couldn't be done, and onEndSegment is the last possible chance to report duration
-
+					postEndSegment();					
 					if (_state != HTTPStreamingState.STOP && _state != HTTPStreamingState.HALT)
 					{ 
 						setState(HTTPStreamingState.LOAD_WAIT);
@@ -1226,6 +1227,11 @@ package org.osmf.net.httpstreaming
 					throw new Error("HTTPStream cannot run undefined _state "+_state);
 					break;
 			}
+		}
+		
+		private function postEndSegment():void
+		{
+			this.dispatchEvent(new StreamEvent(StreamEvent.FRAGMENT_END));
 		}
 		
 		private function onURLStatus(progressEvent:ProgressEvent):void

@@ -251,7 +251,15 @@ package org.osmf.net
 		{
 			_bandwidthLimit = value;
 		}
-						
+	
+		/**
+		 * @private
+		 **/
+		protected function doCheckRules():void
+		{
+			checkRules(null);
+		}
+		
 		// Internals
 		//
 		
@@ -325,7 +333,7 @@ package org.osmf.net
 		 */
 		private function checkRules(event:TimerEvent):void 
 		{
-			if (switchingRules == null || switching)
+			if (switchingRules == null || switching || dsResource == null)
 			{
 				return;
 			}
@@ -333,7 +341,7 @@ package org.osmf.net
 			var newIndex:int = int.MAX_VALUE;
 			
 			for (var i:int = 0; i < switchingRules.length; i++) 
-			{
+			{				
 				var n:int =  switchingRules[i].getNewIndex();
 
 				if (n != -1 && n < newIndex) 
