@@ -17,8 +17,11 @@ package org.osmf.net.httpstreaming
 		{
 			super(connection, netStream, resource, metrics, switchingRules);
 			
-			autoSwitch = false;
-			netStream.addEventListener(StreamEvent.FRAGMENT_END, onFragmentEnd);
+			super.autoSwitch = false;
+			
+			this.netStream = netStream;
+			
+			//netStream.addEventListener(StreamEvent.FRAGMENT_END, onFragmentEnd);
 		}
 		
 		/**
@@ -29,7 +32,22 @@ package org.osmf.net.httpstreaming
 		override public function set autoSwitch(value:Boolean):void
 		{
 			super.autoSwitch = false;
+			_autoSwitch = value;
+			
+			if (_autoSwitch)
+			{
+				netStream.addEventListener(StreamEvent.FRAGMENT_END, onFragmentEnd);
+			}
+			else
+			{
+				netStream.removeEventListener(StreamEvent.FRAGMENT_END, onFragmentEnd);
+			}
 		}
+		
+//		override public function get autoSwitch():Boolean
+//		{
+//			return _autoSwitch;
+//		}
 		
 		/**
 		 * @private
@@ -41,5 +59,8 @@ package org.osmf.net.httpstreaming
 		{
 			doCheckRules();
 		}
+		
+		private var _autoSwitch:Boolean = false;
+		private var netStream:NetStream;
 	}
 }
