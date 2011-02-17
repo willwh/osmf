@@ -43,7 +43,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
-	import org.osmf.events.StreamEvent;
+	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
@@ -1231,7 +1231,7 @@ package org.osmf.net.httpstreaming
 		
 		private function postEndSegment():void
 		{
-			this.dispatchEvent(new StreamEvent(StreamEvent.FRAGMENT_END));
+			this.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END));
 		}
 		
 		private function onURLStatus(progressEvent:ProgressEvent):void

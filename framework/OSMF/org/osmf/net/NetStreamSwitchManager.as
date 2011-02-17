@@ -362,15 +362,21 @@ package org.osmf.net
 				&& 	newIndex != int.MAX_VALUE
 				&&	newIndex != actualIndex
 				&&	!switching
-				&&	newIndex <= maxAllowedIndex
-				&&  canAutoSwitchNow(newIndex)
+				&&	newIndex <= maxAllowedIndex				
 			   ) 
 			{
-				CONFIG::LOGGING
+				if (actualIndex == -1)
 				{
-					debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
+					prepareForSwitching();
 				}
-				executeSwitch(newIndex);
+				if (canAutoSwitchNow(newIndex))
+				{				
+					CONFIG::LOGGING
+					{
+						debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
+					}
+					executeSwitch(newIndex);
+				}
 			}  
 		}
 		

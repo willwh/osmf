@@ -1,6 +1,6 @@
 /*****************************************************
  *  
- *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+ *  Copyright 2011 Adobe Systems Incorporated.  All Rights Reserved.
  *  
  *****************************************************
  *  The contents of this file are subject to the Mozilla Public License
@@ -33,11 +33,11 @@ package org.osmf.events
 	 * http stream or any other types of stream.
 	 * 
 	 */ 
-	public class StreamEvent extends Event
+	public class HTTPStreamingEvent extends Event
 	{
 		public static const FRAGMENT_END:String = "fragmentEnd";
 		
-		public function StreamEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function HTTPStreamingEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 		}

@@ -1,9 +1,30 @@
+/*****************************************************
+ *  
+ *  Copyright 2011 Adobe Systems Incorporated.  All Rights Reserved.
+ *  
+ *****************************************************
+ *  The contents of this file are subject to the Mozilla Public License
+ *  Version 1.1 (the "License"); you may not use this file except in
+ *  compliance with the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *   
+ *  Software distributed under the License is distributed on an "AS IS"
+ *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing rights and limitations
+ *  under the License.
+ *   
+ *  
+ *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+ *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+ *  Incorporated. All Rights Reserved. 
+ *  
+ *****************************************************/
 package org.osmf.net.httpstreaming
 {
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.events.StreamEvent;
+	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetStreamMetricsBase;
 	import org.osmf.net.NetStreamSwitchManager;
@@ -11,6 +32,10 @@ package org.osmf.net.httpstreaming
 	
 	[ExcludeClass]
 
+	/**
+	 * HTTPStreamingSwitchManager is making switching decisions at the end of each 
+	 * fragment, instead of using the timer mechanism which is being used in NetStreamSwitchManager.
+	 */ 
 	public class HTTPStreamingSwitchManager extends NetStreamSwitchManager
 	{
 		public function HTTPStreamingSwitchManager(connection:NetConnection, netStream:NetStream, resource:DynamicStreamingResource, metrics:NetStreamMetricsBase, switchingRules:Vector.<SwitchingRuleBase>)
@@ -20,8 +45,6 @@ package org.osmf.net.httpstreaming
 			super.autoSwitch = false;
 			
 			this.netStream = netStream;
-			
-			//netStream.addEventListener(StreamEvent.FRAGMENT_END, onFragmentEnd);
 		}
 		
 		/**
@@ -31,23 +54,15 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function set autoSwitch(value:Boolean):void
 		{
-			super.autoSwitch = false;
-			_autoSwitch = value;
-			
-			if (_autoSwitch)
+			if (value)
 			{
-				netStream.addEventListener(StreamEvent.FRAGMENT_END, onFragmentEnd);
+				netStream.addEventListener(HTTPStreamingEvent.FRAGMENT_END, onFragmentEnd);
 			}
 			else
 			{
-				netStream.removeEventListener(StreamEvent.FRAGMENT_END, onFragmentEnd);
+				netStream.removeEventListener(HTTPStreamingEvent.FRAGMENT_END, onFragmentEnd);
 			}
 		}
-		
-//		override public function get autoSwitch():Boolean
-//		{
-//			return _autoSwitch;
-//		}
 		
 		/**
 		 * @private
@@ -55,7 +70,7 @@ package org.osmf.net.httpstreaming
 		 * When a fragment download has been complete, we need to call checkRules of the base
 		 * class to update critical ratios such as DownloadRatio.
 		 */
-		private function onFragmentEnd(event:StreamEvent):void
+		private function onFragmentEnd(event:HTTPStreamingEvent):void
 		{
 			doCheckRules();
 		}
