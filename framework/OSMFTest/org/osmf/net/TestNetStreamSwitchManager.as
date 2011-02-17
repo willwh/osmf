@@ -55,7 +55,7 @@ package org.osmf.net
 			
 			netFactory = new NetFactory();
 			
-			var connection:NetConnection = netFactory.createNetConnection();
+			connection = netFactory.createNetConnection();
 			connection.connect(null);
 			stream = netFactory.createNetStream(connection);
 			stream.client = new NetClient();
@@ -67,13 +67,13 @@ package org.osmf.net
 			
 			metrics = new MockRTMPNetStreamMetrics(stream);
 
-			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
+			rules = new Vector.<SwitchingRuleBase>();
 			switchingRule = new DynamicSwitchingRule(metrics);
 			rules.push(switchingRule);
 
 			switchManager = new NetStreamSwitchManager(connection, stream, dsResource, metrics, rules);
 		}
-		
+
 		override public function tearDown():void
 		{
 			super.tearDown();
@@ -86,6 +86,7 @@ package org.osmf.net
 			eventDispatcher = null;
 			stream.close();
 			stream = null;
+			rules = null;
 		}
 		
 		public function testConstructorWithInitialIndex():void
@@ -341,14 +342,16 @@ package org.osmf.net
 			stream.play2(nso);
 		}
 		
-		private static const ASYNC_DELAY:Number = 90000;
+		protected static const ASYNC_DELAY:Number = 90000;
 
-		private var eventDispatcher:EventDispatcher;
-		private var netFactory:NetFactory;
-		private var switchingRule:DynamicSwitchingRule;
-		private var switchManager:NetStreamSwitchManager;
-		private var metrics:NetStreamMetricsBase;
-		private var stream:NetStream;
-		private var dsResource:DynamicStreamingResource;
+		protected var eventDispatcher:EventDispatcher;
+		protected var netFactory:NetFactory;
+		protected var switchingRule:DynamicSwitchingRule;
+		protected var switchManager:NetStreamSwitchManager;
+		protected var metrics:MockRTMPNetStreamMetrics;
+		protected var stream:NetStream;
+		protected var dsResource:DynamicStreamingResource;
+		protected var rules:Vector.<SwitchingRuleBase>;
+		protected var connection:NetConnection;
 	}
 }

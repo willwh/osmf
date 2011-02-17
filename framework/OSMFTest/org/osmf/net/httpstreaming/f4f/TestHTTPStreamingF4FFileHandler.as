@@ -35,7 +35,7 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		override public function setUp():void
 		{
-			fileHandler = new HTTPStreamingF4FFileHandler(null);
+			fileHandler = new HTTPStreamingF4FFileHandler();
 			bytes = new ByteArray();
 			eventDispatcher = new EventDispatcher();
 		}

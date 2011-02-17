@@ -79,10 +79,10 @@ package org.osmf.net.httpstreaming.f4f
 			assertTrue(afrt.findFragmentIdByTime(60923, abst.totalDuration) == null);
 		}
 
-		public function testTotalDuration():void
-		{
-			assertTrue(afrt.totalDuration == 60923);
-		}
+//		public function testTotalDuration():void
+//		{
+//			assertTrue(afrt.totalDuration == 60923);
+//		}
 		
 		// Internals
 		//

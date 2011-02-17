@@ -365,6 +365,8 @@ package org.osmf
 
 			// This test fails intermittently on the build machine.
 			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
+			
+			addTestSuite(TestHTTPStreamingSwitchManager);
 			 	
 		}
 	}
