@@ -67,7 +67,7 @@ package
 		}
 		
 		/**
-		 * Creates an URL resource and starts playing it.
+		 * Adds an event listener to the media player.
 		 */ 
 		private function javascriptAddEventListener(eventName:String, callbackFunctionName:String):void
 		{

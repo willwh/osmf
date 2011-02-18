@@ -17,8 +17,8 @@
 			var flashvars = false;
 			var params = {};
 			var attributes = {
-			  id: "HelloWorldJavaScript",
-			  name: "HelloWorldJavaScript"
+			  id: "JavaScriptDynamicStreamSwitchControl",
+			  name: "JavaScriptDynamicStreamSwitchControl"
 			};
 	
 			swfobject.embedSWF("JavaScriptDynamicStreamSwitchControl.swf", "player", "640", "352", "10.0.0", "expressInstall.swf", flashvars, params, attributes);    	
@@ -41,25 +41,30 @@
 			}
 		}
 		
+		function changeSwitchMode()
+		{
+			player.setAutoDynamicStreamSwitch(!player.getAutoDynamicStreamSwitch());
+		}
+		
 		function updateDynamicStreamItems()
 		{
-			document.getElementById("dssc").style.display = "block";
+			document.getElementById("dynamic-stream-switch-control").style.display = "block";
 			var dynamicStreams = player.getStreamItems();
 			
-			var ds = document.getElementById("dssc-items");
+			var ds = document.getElementById("dynamic-stream-switch-control-items");
 			var switchMode = player.getAutoDynamicStreamSwitch() ? "Auto" : "Manual"; 
 							
-			var dsItems = '<strong><a href="#" onclick="player.setAutoDynamicStreamSwitch(!player.getAutoDynamicStreamSwitch()); return false;"> Switch Mode: ' + switchMode + '</a></strong><br /><br />\n';
+			var dsItems = '<strong><a href="#" onclick="changeSwitchMode(); return false;"> Switch Mode: ' + switchMode + '</a></strong><br /><br />\n';
 			var currentStreamIndex = player.getCurrentDynamicStreamIndex();
 			
-			for (var idx = 0; idx < dynamicStreams.length; idx ++)
+			for (var i = 0; i < dynamicStreams.length; i ++)
 			{
 				var playing = "";
-				if (currentStreamIndex == idx)
+				if (currentStreamIndex == i)
 				{
 					playing = "playing";
 				}
-				dsItems += '<a href="#" class="' + playing + '" onclick="switchDynamicStreamIndex(' + idx + '); return false;">' + dynamicStreams[idx].streamName +' : ' + dynamicStreams[idx].bitrate + '</a><br />\n';
+				dsItems += '<a href="#" class="' + playing + '" onclick="switchDynamicStreamIndex(' + i + '); return false;">' + dynamicStreams[i].streamName +' : ' + dynamicStreams[i].bitrate + '</a><br />\n';
 			}
 			ds.innerHTML = dsItems;
 		}
@@ -79,9 +84,9 @@
     <div id="player">
       <p>Alternative content</p>
     </div>
-    <div id="dssc" style="display:none">
+    <div id="dynamic-stream-switch-control" style="display:none">
         <h4>Video Quality Control</h4>
-		<div id="dssc-items">
+		<div id="dynamic-stream-switch-control-items">
 			The available qualities will be loaded once the playback starts...
 		</div>
 	</div>
