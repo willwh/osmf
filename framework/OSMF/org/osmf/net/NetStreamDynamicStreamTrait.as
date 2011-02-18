@@ -130,15 +130,38 @@ package org.osmf.net
 		{			
 			switch (event.info.code)
 			{
+				case NetStreamCodes.NETSTREAM_PLAY_START:
+					// Don't try to grab the index if there is no stream name	
+				    if(event.info.details)
+				    { 												
+				        index = dsResource.indexFromName(event.info.details);
+				 
+				        // If starting a stream that is not the current index, let the system know that it is transitioning
+				        if(index != this.currentIndex)
+				        {
+				            inSetSwitching = true;
+				            setSwitching(true, index);
+				            inSetSwitching = false;
+				        }
+				       
+						// Notify the system that the stream has transitioned
+				        setSwitching(false, index);					
+				    }
+				    break;
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
+
 					// This switch is driven by the NetStream, we set a member
 					// variable so that we don't assume it's being requested by
-					// the client (and thus trigger a second switch).
-					inSetSwitching = true;
+					// the client (and thus trigger a second switch).					
 					
-					setSwitching(true, dsResource.indexFromName(event.info.details));
+					index = dsResource.indexFromName(event.info.details);
+				    if(index != currentIndex)
+					{
+						inSetSwitching = true;
+					    setSwitching(true, index);
+						inSetSwitching = false;		
+					}
 					
-					inSetSwitching = false;		
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
 					setSwitching(false, currentIndex);					
@@ -162,6 +185,7 @@ package org.osmf.net
 		private var switchManager:NetStreamSwitchManagerBase;
 		private var inSetSwitching:Boolean;
 		private var dsResource:DynamicStreamingResource;
-		private var indexToSwitchTo:int;	
+		private var indexToSwitchTo:int;
+		private var index;
 	}
 }
