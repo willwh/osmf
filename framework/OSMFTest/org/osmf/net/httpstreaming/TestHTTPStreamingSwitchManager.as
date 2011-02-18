@@ -126,9 +126,14 @@ package org.osmf.net.httpstreaming
 			
 			assertEquals(0, switchManager.currentIndex);
 			
+			stream.addEventListener(NetStatusEvent.NET_STATUS, 
+				function(event:NetStatusEvent):void
+				{
+					fail();				
+				});
+			
 			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END));
 			
-			switchManager.autoSwitch = false;
 			assertEquals(0, switchManager.currentIndex);
 			
 			switchingRule.newIndex = 1;
@@ -136,7 +141,7 @@ package org.osmf.net.httpstreaming
 			eventDispatcher.addEventListener("testComplete", addAsync(doNotExpectEvent, 5000, null, expectEvent));
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUp);
 			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END))
-		}			
+		}
 		
 		private function onTestAutoSwitchWithSwitchUp(info:Object):void
 		{
