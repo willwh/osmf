@@ -291,7 +291,8 @@ package org.osmf.net.httpstreaming
 			
 			indexIsReady = false;
 			indexHandler.initialize(_indexInfo != null ? _indexInfo : args[0]);
-		
+			setQualityLevelForStreamName(args[0]);
+						
 			if (args.length >= 2)
 			{
 				_seekTarget = Number(args[1]);
@@ -349,7 +350,10 @@ package org.osmf.net.httpstreaming
 				
 				// The only difference between play and play2 for the RESET
 				// case is that play2 might start at a specific quality level.
-				setQualityLevelForStreamName(param.streamName);
+				// commented out due the fact that _streamNames array is initialized
+				// after the play has been called - until play this array is null
+				// from now on, the setQualityLevelForStreamName is called inside play method
+				// setQualityLevelForStreamName(param.streamName);
 				
 				play(param.streamName, param.start, param.len);
 			}
