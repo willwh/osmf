@@ -44,6 +44,7 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaTypeUtil;
 	import org.osmf.media.URLResource;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -113,6 +114,16 @@ package org.osmf.elements
 			}
 			else if (resource is URLResource)
 			{
+				// FIX for FM-1167 (http://bugs.adobe.com/jira/browse/FM-1167)
+				// If the url contains a ".f4m" in path part, it will be handled twice 
+				// by the F4MLoaded. Check to see if the .f4m file hasn't been processed before.
+				if (resource is DynamicStreamingResource)
+				{
+					var dynResource:DynamicStreamingResource = DynamicStreamingResource(resource);
+					if (dynResource.streamItems.length > 0)
+						return false;
+				}
+
 				var urlResource:URLResource = URLResource(resource);
 				var extension:String = new URL(urlResource.url).extension;
 				return extension == F4M_EXTENSION;
