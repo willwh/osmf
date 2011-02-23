@@ -202,10 +202,9 @@ package org.osmf.net
 			}
 			if (url.protocol.search(/file$|http$|https$/i) != -1)
 			{
-				
 				return (url.path == null ||
 						url.path.length <= 0 ||
-						url.path.indexOf(".") == -1 ||
+						url.extension.length == 0 ||
 						extensionPattern.test(url.path));
 			}
 			
