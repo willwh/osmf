@@ -320,8 +320,8 @@ package org.osmf.utils
 		public function get extension():String
 		{
 			var lastPathElement:int = path.lastIndexOf("/");
-			var lastDot:int = path.indexOf(".", lastPathElement+1);
-			if (lastDot != -1)
+			var lastDot:int = path.lastIndexOf(".");
+			if (lastDot != -1 && lastDot > lastPathElement)
 			{
 				return path.substr(lastDot+1);
 			}
