@@ -52,6 +52,8 @@
 		<antcall target="init"/>
 		<antcall target="clean.bin"/>
 		<antcall target="compile.osmf"/>
+		<antcall target="doc.osmf"/>
+		<antcall target="compile.libs"/>
 		<antcall target="compile.plugins"/>
 		<antcall target="compile.samples"/>
 		<antcall target="compile.zeri"/>
@@ -109,11 +111,9 @@
 	<target name="compile.samples">
 	
 		<application.compile project="ControlBarPluginSample" projectDir="${source.dir}/apps/samples/plugins/ControlBarPluginSample"/>
-
-		<mxml.compile project="AkamaiPluginSample" projectDir="${source.dir}/apps/samples/plugins/AkamaiPluginSample"/>
-		<mxml.compile project="DynamicStreamingSample" projectDir="${source.dir}/apps/samples/framework/DynamicStreamingSample"/>
-		
-		<mxml.compile project="ExamplePlayer" projectDir="${source.dir}/apps/samples/framework/ExamplePlayer" srcDir=""/>
+		<mxml.compile project="DynamicStreamingSample" projectDir="${source.dir}/apps/samples/framework/DynamicStreamingSample" width="100%" height="100%"/>
+		<mxml.compile project="AkamaiPluginSample" projectDir="${source.dir}/apps/samples/plugins/AkamaiPluginSample" width="100%" height="100%" />
+		<mxml.compile project="ExamplePlayer" projectDir="${source.dir}/apps/samples/framework/ExamplePlayer" width="100%" height="100%" srcDir=""/>
 
 	</target>
 	
@@ -123,22 +123,21 @@
 		<component.compile project="FlexUnit4UIListener" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4UIListener"/>
 		<component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent"/>
 		
-		<mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest"/>	
-		
-		<mxml.compile project="ZeriCertificationPlayer" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer"/>
+		<mxml.compile project="ZeriCertificationPlayer" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer" width="100%" height="100%"/>
+
+		<mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%"/>			
 	</target>
 	
 	
 	<target name="tmp">
-
-		<unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
-
+		<mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%"/>	
 
 	</target>
 
 
 
 	<target name="doc.osmf">
+		<component.doc project="OSMF" projectDir="${source.dir}/framework/OSMF" />
 	</target>
 
 	<target name="compile.NetMocker">
@@ -220,6 +219,27 @@
 
     </sequential>
   </macrodef>
+  
+   <macrodef name="component.doc">
+    <attribute name="project"/>
+	<attribute name="projectDir"/>
+	<attribute name="srcDir" default="/org"/>
+
+    <sequential>
+	  <generateClassList project="@{project}" projectDir="@{projectDir}"/>	  
+      <asdoc output="${dist.dir}/@{project}" lenient="true" failonerror="true"> 
+			<load-config filename="@{projectDir}/@{project}-build-config.xml"/>	
+	  			<define name="CONFIG::useFlexClasses" value="true" />
+			<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
+			<define name="CONFIG::LOGGING" value="${logging}" />
+			<define name="CONFIG::PLATFORM" value="${platform}" />
+			<define name="CONFIG::MOCK" value="${mock}" />
+		<doc-sources 
+                path-element="@{projectDir}@{srcDir}"/> 
+		</asdoc> 
+		
+    </sequential>
+  </macrodef>
 
 
   <!-- Define a task for compiling an application project. -->
@@ -244,15 +264,6 @@
 		<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/player/${flash.target.player.base}" append="true">
 			    <include name="playerglobal.swc" />
 		</compiler.external-library-path>
-		
-		<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/mx" append="true">
-				<include name="mx.swc" />
-		</compiler.external-library-path>
-		
-		<compiler.library-path dir="${FLEX_HOME}/frameworks/libs/mx" append="true">
-				<include name="mx.swc" />
-		</compiler.library-path>
-		
 		
 		<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
 		<define name="CONFIG::LOGGING" value="${logging}" />
@@ -293,9 +304,7 @@
 				 swf-version="${swfversion}"
 				 static-link-runtime-shared-libraries="true">
 			<load-config filename="@{projectDir}/@{project}-build-config.xml"/>
-			<compiler.library-path dir="${build.dir}" append="true">
-					<include name="*.swc" />
-			</compiler.library-path>
+
 			<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/player/${flash.target.player.base}" append="true">
 			    <include name="playerglobal.swc" />
 			</compiler.external-library-path>
@@ -376,38 +385,9 @@
 			 
 			<load-config filename="@{projectDir}/@{project}-build-config.xml"/>
 			
-			<!-- List of SWC files or directories that contain SWC files. -->
-            <compiler.library-path dir="${FLEX_HOME}/frameworks" append="true">
-              <include name="libs" />
-			  <include name="libs/air" />
-			  <include name="*.swc" />
-			</compiler.library-path>
-			<!-- compiler.library-path dir="${FLEX_UNIT_HOME}" append="true">
-				<include name="libs/version4libs/Common/*.swc" />  
-				<include name="libs/version4libs/FlexProject/*.swc" />  
-				<include name="locale/version4locale/*.swc" />  
-				<include name="*.swc"/>
-			</compiler.library-path -->	
 			<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/player/${flash.target.player.base}" append="true">
 			    <include name="playerglobal.swc" />
 			</compiler.external-library-path>
-		
-		
-			<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/mx" append="true">
-				<include name="mx.swc" />
-			</compiler.external-library-path>
-			
-			<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs" append="true">
-				<include name="*.swc" />
-			</compiler.external-library-path>
-			
-			<compiler.library-path dir="${FLEX_HOME}/frameworks/libs/mx" append="true">
-				<include name="mx.swc" />
-			</compiler.library-path>
-			<compiler.library-path dir="${FLEX_HOME}/frameworks/libs" append="true">
-				<include name="*.swc" />
-			</compiler.library-path>
-		
 		
 			<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
 			<define name="CONFIG::LOGGING" value="false" />
@@ -439,7 +419,7 @@
 		  haltonfailure="false"
 		  verbose="true"
 		  failureproperty="flexunit.failed"	
-		  timeout = "120000"
+		  timeout = "1200000"
 		  />
 		  
 		<!--junitreport todir="${reports.dir}/@{project}">
