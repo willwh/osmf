@@ -111,7 +111,7 @@
          </namespace>
          <namespace>
             <uri>http://www.adobe.com/2009/flexUnitUIRunner</uri>
-            <manifest>src\FlexUnit4UIRunner-manifest.xml</manifest>
+            <manifest>src/FlexUnit4UIRunner-manifest.xml</manifest>
          </namespace>
       </namespaces>
 
