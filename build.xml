@@ -52,39 +52,61 @@
 		<antcall target="init"/>
 		<antcall target="clean.bin"/>
 		<antcall target="compile.osmf"/>
+		<!--antcall target="doc.osmf"/-->
 		<antcall target="compile.libs"/>
 		<antcall target="compile.plugins"/>
 		<antcall target="compile.samples"/>
 		<antcall target="compile.zeri"/>
-        <!-- TODO: Uncomment building the ASDocs -->
-		<!--antcall target="doc.osmf"/-->
 	</target>
 	
 	<target name="test">
 		<antcall target="compile.unittest"/>
 		<antcall target="run.unittest"/>
-        <!-- TODO: Uncomment the following lines and make them work-->
-		<!--antcall target="compile.integrationtest"/-->
-		<!--antcall target="run.integrationtest"/-->
+		<antcall target="compile.integrationtest"/>
+		<antcall target="run.integrationtest"/>
 	</target>
 	
 	<target name="dist">
-		<!-- copy todir="${dist.dir}" overwrite="true" failonerror="false">
-			<fileset dir="${source.dir}/player/StrobeMediaPlayback/bin"/>
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/framework/OSMF/bin"/>
 		</copy>
 		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
-			<fileset dir="${source.dir}/plugins/YouTubePlugin/bin"/>
+			<fileset dir="${source.dir}/apps/samples/plugins/AkamaiPluginSample/bin"/>
 		</copy>
-		<zip destfile="${dist.dir}/StrobeMediaPlayback_for_Flash_Player_${flash.player.name.to.use}.zip" >
-			<zipfileset dir="${source.dir}/player/StrobeMediaPlayback/bin"  excludes="10.0/**, *.zip, history/**, Flash*.*, MediaPlayback**, dist/**, *Test/**, *.xml, Configuration*, *.swz, NetMocker.*"/>
-		</zip-->
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/apps/samples/framework/DynamicStreamingSample/bin"/>
+		</copy>
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/apps/samples/framework/ExamplePlayer/bin"/>
+		</copy>
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/apps/samples/plugins/ControlBarPluginSample/bin"/>
+		</copy>
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/apps/samples/plugins/ControlBarPlugin/bin"/>
+		</copy>
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/plugins/samples/MASTPlugin/bin"/>
+		</copy>
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/plugins/samples/SMILPlugin/bin"/>
+		</copy>
+		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/plugins/samples/AkamaiBasicStreamingPlugin/bin"/>
+		</copy>
+		<copy todir="${dist.dir}/Zeri" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/apps/certification/zeri/ZeriCertificationTest"/>
+		</copy>
+		<copy todir="${dist.dir}/Zeri" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer/bin"/>
+		</copy>
 	</target>
 	
 	<target name="source">		
-	  <!--zip destfile="${source.dir}/../StrobeMediaPlayback_source_code.zip"  >
-		<zipfileset dir="${source.dir}" prefix="StrobeMediaPlayback" excludes="preloader/**, plugins/Youtube*/**, dist/**, build/**, **/bin/**"/>
+	  <zip destfile="${build.dir}/OSMF_src.zip"  >
+		<zipfileset dir="${source.dir}" prefix="OSMF" excludes="dist/**, build/**, **/bin/**, **/bin-*/**, **/generated/**"/>
 	  </zip>
-	  <move file="${source.dir}/../StrobeMediaPlayback_source_code.zip" todir="${dist.dir}" overwrite="true" failonerror="false"/-->
+	  <copy file="${build.dir}/OSMF_src.zip" todir="${dist.dir}" overwrite="true" failonerror="false"/>
 	</target>
 
 	<!-- compile OSMF  -->
@@ -96,7 +118,9 @@
 		<component.compile project="VAST" projectDir="${source.dir}/libs/samples/VAST"/>
 		<component.compile project="Syndication" projectDir="${source.dir}/libs/samples/Syndication"/>
 		<component.compile project="ChromeLibrary" projectDir="${source.dir}/libs/samples/ChromeLibrary"/>
-        <component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent"/>
+
+		<component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent"/>
+
 	</target>
 		
 	<target name="compile.plugins" >
@@ -123,11 +147,11 @@
 		<component.compile project="FlexUnit4" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4"/>
 		<component.compile project="ZeriCertificationUtils" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationUtils"/>
 		<component.compile project="FlexUnit4UIListener" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4UIListener"/>
-
+		<component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent"/>
+		
 		<mxml.compile project="ZeriCertificationPlayer" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer" width="100%" height="100%"/>
 
-        <!-- TODO: Uncomment the following line(s) and make them work -->
-		<!--mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%"/-->
+		<mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%"/>			
 	</target>
 	
 	
@@ -142,35 +166,25 @@
 		<component.doc project="OSMF" projectDir="${source.dir}/framework/OSMF" />
 	</target>
 
-	<target name="compile.NetMocker">
-		<replace file="${source.dir}/libs/testing/NetMocker/netmocker-build-config.xml">
-		  <replacetoken><![CDATA[../../../build/lib/OSMF.swc]]></replacetoken>
-		  <replacevalue><![CDATA[../../../framework/OSMF/bin/OSMF.swc]]></replacevalue>
-		</replace>
-		<component.compile project="NetMocker" projectDir="${source.dir}/libs/testing/NetMocker"/>
-    </target>
-	
-	<!-- compile player  -->
-    <target name="compile.strobe">
-		<application.compile project="StrobeMediaPlayback" projectDir="${source.dir}/player/StrobeMediaPlayback" />
-    </target>
   
 	<!-- compile unit tests  -->
     <target name="compile.unittest">
 		<component.compile project="NetMocker" projectDir="${source.dir}/libs/testing/NetMocker" />		
 		<unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
 		<unittest.compile project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
-
     </target>
-
-
-
 
 	<!-- prepare and run unit tests  -->
 	<target name="run.unittest">
 		<unittest.run project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" flexUnitPlayer="air"/>	
-		<unittest.run project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" flexUnitPlayer="air"/>	
+		<unittest.run project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" flexUnitPlayer="air"/>	
     </target>
+	
+	<target name="compile.integrationtest">
+	</target>
+	<target name="run.integrationtest">
+	</target>
+	
  
   <!-- Define a task for generating the class list for compc from the 
        appropriate .flexLibProperties file -->
@@ -210,10 +224,6 @@
 			<define name="CONFIG::MOCK" value="${mock}" />
 			<warnings>true</warnings>
 			
-			<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/mx" append="true">
-				<include name="mx.swc" />
-			</compiler.external-library-path>
-			
 			<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/player/${flash.target.player.base}" append="true">
 			    <include name="playerglobal.swc" />
 			</compiler.external-library-path>
@@ -231,12 +241,12 @@
 	  <generateClassList project="@{project}" projectDir="@{projectDir}"/>	  
       <asdoc output="${dist.dir}/@{project}" lenient="true" failonerror="true"> 
 			<load-config filename="@{projectDir}/@{project}-build-config.xml"/>	
-	  			<define name="CONFIG::useFlexClasses" value="true" />
+	  		<define name="CONFIG::useFlexClasses" value="true" />
 			<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
 			<define name="CONFIG::LOGGING" value="${logging}" />
 			<define name="CONFIG::PLATFORM" value="${platform}" />
 			<define name="CONFIG::MOCK" value="${mock}" />
-		<doc-sources 
+			<doc-sources 
                 path-element="@{projectDir}@{srcDir}"/> 
 		</asdoc> 
 		
@@ -421,7 +431,7 @@
 		  haltonfailure="false"
 		  verbose="true"
 		  failureproperty="flexunit.failed"	
-		  timeout = "1200000"
+		  timeout = "120000"
 		  />
 		  
 		<!--junitreport todir="${reports.dir}/@{project}">
