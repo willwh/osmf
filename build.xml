@@ -151,7 +151,7 @@
 		
 		<mxml.compile project="ZeriCertificationPlayer" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer" width="100%" height="100%"/>
 
-		<mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%"/>			
+		<!-- <mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%"/>			 -->
 	</target>
 	
 	

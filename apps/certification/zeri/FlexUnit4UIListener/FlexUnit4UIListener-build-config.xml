@@ -58,8 +58,23 @@
       <!-- List of SWC files or directories that contain SWC files. -->
       <library-path>
 	  
-	     <path-element>${flexlib}/libs</path-element>
+	     
+		 <path-element>${flexlib}/libs/framework.swc</path-element>
+         <path-element>${flexlib}/libs/textLayout.swc</path-element>
+         <path-element>${flexlib}/libs/spark.swc</path-element>
+         <path-element>${flexlib}/libs/sparkskins.swc</path-element>
+         <path-element>${flexlib}/libs/rpc.swc</path-element>
+         <path-element>${flexlib}/libs/osmf.swc</path-element>
+         <path-element>${flexlib}/libs/mx/mx.swc</path-element>
+         <path-element>${flexlib}/libs/advancedgrids.swc</path-element>
+         <path-element>${flexlib}/libs/authoringsupport.swc</path-element>
+         <path-element>${flexlib}/libs/charts.swc</path-element>
+         <path-element>${flexlib}/libs/core.swc</path-element>
+         <path-element>${flexlib}/libs/flash-integration.swc</path-element>
+         <path-element>${flexlib}/libs/spark_dmv.swc</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
+	  
+		 
          <path-element>../../../../framework/OSMF/bin/OSMF.swc</path-element>
 		 <path-element>../../../../libs/samples/ChromeLibrary/bin/ChromeLibrary.swc</path-element>
          <path-element>../../../../apps/samples/framework/MediaContainerUIComponent/bin/MediaContainerUIComponent.swc</path-element>
@@ -74,11 +89,6 @@
          <path-element>../FlexUnit4/libs/fluint-1_2.swc</path-element>
          <path-element>../FlexUnit4/libs/hamcrest-1.0.2.swc</path-element>
 
-         <path-element>${flexlib}/libs</path-element>
-         <path-element>${flexlib}/locale/{locale}</path-element>
-		 
-		 <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
-         <path-element>${flexlib}/libs/air/airframework.swc</path-element>
 		 
 <!-- 
 		 <path-element>../Libraries/corelib/corelib.swc</path-element>
