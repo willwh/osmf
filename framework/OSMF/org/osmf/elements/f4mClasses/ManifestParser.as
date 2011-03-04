@@ -251,7 +251,25 @@ package org.osmf.elements.f4mClasses
 				{
 					var header:String = data.readObject() as String;
 					var metaInfo:Object = data.readObject();
-					media.metadata = metaInfo;			
+					media.metadata = metaInfo;
+					
+					// if width and height are not already set by the media
+					// attributes and they are already present in metadata 
+					// object, then copy their values to the media properties
+					if (
+							(isNaN(media.width) || media.width == 0) &&
+							media.metadata.hasOwnProperty("width")
+						)
+					{
+						media.width = media.metadata["width"];	
+					}
+					if (
+						(isNaN(media.height) || media.height == 0) &&
+						media.metadata.hasOwnProperty("height")
+					)
+					{
+						media.height = media.metadata["height"];	
+					}
 				}
 				catch (e:Error)
 				{
