@@ -22,7 +22,7 @@
 package org.osmf.utils
 {
 	import flexunit.framework.TestCase;
-
+ 
 	public class TestURL extends TestCase
 	{
 		public function testURL():void
