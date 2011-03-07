@@ -73,7 +73,8 @@ package org.osmf.net
 			, netStream:NetStream
 			, resource:DynamicStreamingResource
 			, metrics:NetStreamMetricsBase
-			, switchingRules:Vector.<SwitchingRuleBase>)
+			, switchingRules:Vector.<SwitchingRuleBase>,
+			autoSwitch:Boolean = true)
 		{
 			super();
 			
@@ -87,6 +88,7 @@ package org.osmf.net
 
 			checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
 			checkRulesTimer.addEventListener(TimerEvent.TIMER, checkRules);
+			super.autoSwitch = autoSwitch;
 			
 			failedDSI = new Dictionary();
 			
@@ -112,7 +114,7 @@ package org.osmf.net
 				debug("autoSwitch() - setting to " + value);
 			}
 			
-			if (autoSwitch)
+			if (_autoSwitch)
 			{
 				CONFIG::LOGGING
 				{
@@ -470,7 +472,7 @@ package org.osmf.net
 				actualIndex = dsResource.initialIndex;
 			}
 
-			if (autoSwitch)
+			if (_autoSwitch)
 			{
 				checkRulesTimer.start();
 			}

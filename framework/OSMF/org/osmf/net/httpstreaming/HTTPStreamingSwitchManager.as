@@ -39,10 +39,9 @@ package org.osmf.net.httpstreaming
 	public class HTTPStreamingSwitchManager extends NetStreamSwitchManager
 	{
 		public function HTTPStreamingSwitchManager(connection:NetConnection, netStream:NetStream, resource:DynamicStreamingResource, metrics:NetStreamMetricsBase, switchingRules:Vector.<SwitchingRuleBase>)
-		{
-			super(connection, netStream, resource, metrics, switchingRules);
+		{	
+			super(connection, netStream, resource, metrics, switchingRules, false);
 			
-			super.autoSwitch = false;			
 			this.netStream = netStream;
 		}
 		
