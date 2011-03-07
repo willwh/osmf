@@ -5,15 +5,7 @@
       <!-- Turn on generatation of accessible swfs. -->
       <accessible>false</accessible>
       
-      <define>
-        <name>CONFIG::LOGGING</name>
-        <value>false</value>
-      </define>
-
-      <define>
-        <name>CONFIG::FLASH_10_1</name>
-        <value>true</value>
-      </define>      
+      
 
       <!-- Specifies the locales for internationalization. -->
       <locale>
@@ -24,6 +16,7 @@
       <source-path>
          <path-element>.</path-element>
          <path-element>../OSMFTest</path-element>
+		 <path-element>../../libs/testing/StrobeUnit</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
@@ -60,13 +53,27 @@
       
       <!-- List of SWC files or directories that contain SWC files. -->
       <library-path>
+	  
+	  <path-element>${flexlib}/libs/textLayout.swc</path-element>
+         <path-element>${flexlib}/libs/osmf.swc</path-element>
+         <path-element>${flexlib}/libs/framework.swc</path-element>
+         <path-element>${flexlib}/libs/mx/mx.swc</path-element>
+         <path-element>${flexlib}/libs/spark.swc</path-element>
+         <path-element>${flexlib}/libs/rpc.swc</path-element>
+         <path-element>${flexlib}/libs/advancedgrids.swc</path-element>
+         <path-element>${flexlib}/libs/authoringsupport.swc</path-element>
+         <path-element>${flexlib}/libs/charts.swc</path-element>
+         <path-element>${flexlib}/libs/core.swc</path-element>
+         <path-element>${flexlib}/libs/flash-integration.swc</path-element>
+         <path-element>${flexlib}/libs/sparkskins.swc</path-element>
+         <path-element>${flexlib}/libs/spark_dmv.swc</path-element>
+	  
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
-         <path-element>../../build/unittests/libs/StrobeUnit.swc</path-element>
-         <path-element>../../build/lib/OSMF.swc</path-element>
-         <path-element>../../build/lib/VAST.swc</path-element>
+         <path-element>../../framework/OSMF/bin/OSMF.swc</path-element>
+         <path-element>../../libs/samples/VAST/bin/VAST.swc</path-element>
          <path-element>../../libs/testing/FlexUnit/FlexUnit.swc</path-element>
-         <path-element>../../build/unittests/libs/NetMocker.swc</path-element>
+         <path-element>../../libs/testing/NetMocker/bin/NetMocker.swc</path-element>
          <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
          <path-element>${flexlib}/libs/air/airframework.swc</path-element>
       </library-path>

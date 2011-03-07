@@ -51,10 +51,39 @@
       
       <!-- List of SWC files or directories that contain SWC files. -->
       <library-path>
-         <path-element>${flexlib}/libs</path-element>
+	  
+		
+	  
+	     <path-element>${flexlib}/libs/textLayout.swc</path-element>
+         <path-element>${flexlib}/libs/osmf.swc</path-element>
+         <path-element>${flexlib}/libs/framework.swc</path-element>
+         <path-element>${flexlib}/libs/mx/mx.swc</path-element>
+         <path-element>${flexlib}/libs/spark.swc</path-element>
+         <path-element>${flexlib}/libs/rpc.swc</path-element>
+         <path-element>${flexlib}/libs/advancedgrids.swc</path-element>
+         <path-element>${flexlib}/libs/authoringsupport.swc</path-element>
+         <path-element>${flexlib}/libs/charts.swc</path-element>
+         <path-element>${flexlib}/libs/core.swc</path-element>
+         <path-element>${flexlib}/libs/flash-integration.swc</path-element>
+         <path-element>${flexlib}/libs/sparkskins.swc</path-element>
+         <path-element>${flexlib}/libs/spark_dmv.swc</path-element>
+        
+		<path-element>${flexlib}/libs/air/aircore.swc</path-element>
+         <path-element>${flexlib}/libs/air/airframework.swc</path-element>
+         <path-element>${flexlib}/libs/air/airspark.swc</path-element>
+         <path-element>${flexlib}/libs/air/applicationupdater.swc</path-element>
+         <path-element>${flexlib}/libs/air/applicationupdater_ui.swc</path-element>
+         <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>		
+		 
+		 
+	  
+		 <path-element>${flexlib}/locale/{locale}</path-element>
+         <!--
+		 <path-element>${flexlib}/libs</path-element>
 	 	 <path-element>${flexlib}/libs/air/airframework.swc</path-element>
-         <path-element>${flexlib}/locale/{locale}</path-element>
-         <path-element>../FlexUnit/FlexUnit.swc</path-element>
+         -->
+		 <path-element>./libs</path-element>
+         <path-element>../FlexUnit</path-element>
       </library-path>
       
       <namespaces>
@@ -74,11 +103,27 @@
             <manifest>mx-manifest.xml</manifest>
          </namespace>
 -->
+		 
+		 <namespace>
+            <uri>http://ns.adobe.com/mxml/2009</uri>
+            <manifest>${flexlib}/mxml-2009-manifest.xml</manifest>
+         </namespace>
+         <namespace>
+            <uri>library://ns.adobe.com/flex/spark</uri>
+            <manifest>${flexlib}/spark-manifest.xml</manifest>
+         </namespace>
+         <namespace>
+            <uri>library://ns.adobe.com/flex/mx</uri>
+            <manifest>${flexlib}/mx-manifest.xml</manifest>
+         </namespace>
          <namespace>
             <uri>http://www.adobe.com/2006/mxml</uri>
             <manifest>${flexlib}/mxml-manifest.xml</manifest>
          </namespace>
+		 
       </namespaces>
+	  
+	  
 
 	  <!-- Enable post-link SWF optimization. -->
       <optimize>true</optimize>
@@ -313,6 +358,100 @@
    </runtime-shared-libraries>
    -->
    
+   
+    	<!-- runtime-shared-library-path: specifies a SWC or directory to link against and an RSL URL to load with optional failover URLs -->
+      <!-- Framework SWC -->
+	<runtime-shared-library-path>
+		<path-element>libs/framework.swc</path-element>
+		<rsl-url>framework_4.5.0.19786.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/framework_4.5.0.19786.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+   
+	<!-- TextLayout SWC -->
+      <runtime-shared-library-path>
+		<path-element>libs/textLayout.swc</path-element>
+		<rsl-url>textLayout_2.0.0.229.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/textLayout_2.0.0.229.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+    
+      <!-- Spark SWC-->
+   	<runtime-shared-library-path>
+		<path-element>libs/spark.swc</path-element>
+		<rsl-url>spark_4.5.0.19786.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/spark_4.5.0.19786.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+	
+      <!-- Sparkskins SWC-->
+   	<runtime-shared-library-path>
+		<path-element>libs/sparkskins.swc</path-element>
+		<rsl-url>sparkskins_4.5.0.19786.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/sparkskins_4.5.0.19786.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+	 
+	<!-- RPC SWC -->
+	<runtime-shared-library-path>
+		<path-element>libs/rpc.swc</path-element>
+		<rsl-url>rpc_4.5.0.19786.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/rpc_4.5.0.19786.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+    	
+      <!-- Charts SWC -->
+	<runtime-shared-library-path>
+		<path-element>libs/charts.swc</path-element>
+		<rsl-url>charts_4.5.0.19786.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/charts_4.5.0.19786.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+
+      <!-- Spark_dmv SWC -->
+	<runtime-shared-library-path>
+		<path-element>libs/spark_dmv.swc</path-element>
+		<rsl-url>spark_4.5.0.19786_4.5.0.0.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/spark_4.5.0.19786_4.5.0.0.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+
+      <!-- OSMF SWC -->
+     <runtime-shared-library-path>
+		<path-element>libs/osmf.swc</path-element>
+		<rsl-url>osmf_1.0.0.16316.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/osmf_1.0.0.16316.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+      
+      <!-- MX SWC -->
+	<runtime-shared-library-path>
+		<path-element>libs/mx/mx.swc</path-element>
+		<rsl-url>mx_4.5.0.19786.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/mx_4.5.0.19786.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+   
+      <!-- Advancedgrids SWC -->
+	<runtime-shared-library-path>
+		<path-element>libs/advancedgrids.swc</path-element>
+		<rsl-url>advancedgrids_4.5.0.19786.swf</rsl-url>
+		<policy-file-url></policy-file-url>
+		<rsl-url>http://fpdownload.adobe.com/pub/swz/flex/4.5.0.19786/advancedgrids_4.5.0.19786.swf</rsl-url>
+		<policy-file-url>http://fpdownload.adobe.com/pub/swz/crossdomain.xml</policy-file-url>
+	</runtime-shared-library-path>
+   
+   
+   
    <!-- runtime-shared-library-path: specifies a SWC or directory to link against and an RSL URL to load with optional failover URLs -->
    <runtime-shared-library-path>
       <path-element>libs/framework.swc</path-element>
@@ -343,5 +482,7 @@
       <language>EN</language>
    </metadata>
 
+  
+   
 </flex-config>
 

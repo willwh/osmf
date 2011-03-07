@@ -118,9 +118,15 @@
 		<component.compile project="VAST" projectDir="${source.dir}/libs/samples/VAST"/>
 		<component.compile project="Syndication" projectDir="${source.dir}/libs/samples/Syndication"/>
 		<component.compile project="ChromeLibrary" projectDir="${source.dir}/libs/samples/ChromeLibrary"/>
+		
+		<!-- <component.compile project="StrobeUnit" projectDir="${source.dir}/libs/testing/StrobeUnit"/> -->
 
 		<component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent"/>
 
+	</target>
+	
+	<target name="ttt">
+		<aircomponent.compile project="StrobeUnit" projectDir="${source.dir}/libs/testing/StrobeUnit"/>
 	</target>
 		
 	<target name="compile.plugins" >
@@ -172,12 +178,80 @@
 		<component.compile project="NetMocker" projectDir="${source.dir}/libs/testing/NetMocker" />		
 		<unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
 		<unittest.compile project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
+		
+		<airtest.compile project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" srcDir=""/>
     </target>
+	
+	<target name="compunit">
+		<!-- <unittest.compile project="StrobeMediaPlaybackTest" projectDir="${source.dir}/framework/StrobeMediaPlaybackTest"/> -->
+		<unittest.compile project="OSMFUnitTest" projectDir="${source.dir}/framework/OSMFUnitTest"/>
+	</target>
+	
+	<target name="rununit">
+		<!-- <unittest.run project="OSMFUnitTest" projectDir="${source.dir}/framework/OSMFUnitTest" flexUnitPlayer="air"/> -->
+		<unittest.run project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest"/>
+	</target>
+	
+	<target name="asd">
+		<unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
+		<unittest.compile project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
+		
+		<airtest.compile project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" srcDir=""/>
+	</target>
+	
 
+	<macrodef name="airtest.compile">
+    <attribute name="project"/>
+	<attribute name="projectDir"/>
+	<attribute name="srcDir" default="/src"/>
+    <sequential>
+      <mkdir dir="${build.dir}/@{project}"/>
+      <mxmlc output="@{projectDir}/bin/@{project}.swf"
+             file="@{projectDir}@{srcDir}/@{project}.mxml" keep-generated-actionscript="true"
+			 debug="${logging}"
+			 fork="false"
+			 target-player="${flash.target.player}"
+			 configname="air"
+			 >
+			 <!-- Deleted from previous tag:
+			 	* swf-version="${swfversion}"
+				
+				Reason:
+					AIR 2.5 does not support the swf-version 11 or the swf-version parameter.
+				
+				Update:
+					Tried using AIR 2.6, but it appears that FlexUnit doesn't recognize it.
+					
+				Current resolution:
+					Compile the unit tests without swf-version 11.
+				
+				Impact:
+					Tests relying on swf-version 11 API will not work.
+			 -->
+			 
+			<load-config filename="@{projectDir}/@{project}-build-config.xml"/>
+			
+			
+			
+			<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
+			<define name="CONFIG::LOGGING" value="false" />
+			<define name="CONFIG::PLATFORM" value="${platform}" />
+			<define name="CONFIG::MOCK" value="${mock}" />
+			<compiler.verbose-stacktraces>false</compiler.verbose-stacktraces>
+            <compiler.headless-server>true</compiler.headless-server>
+      </mxmlc>
+    </sequential>
+  </macrodef>
+	
 	<!-- prepare and run unit tests  -->
 	<target name="run.unittest">
+		<unittest.run project="OSMFUnitTest" projectDir="${source.dir}/framework/OSMFUnitTest" flexUnitPlayer="air"/>
+	<!--
+		
 		<unittest.run project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" flexUnitPlayer="air"/>	
-		<unittest.run project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" flexUnitPlayer="air"/>	
+
+		<unittest.run project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" flexUnitPlayer="air"/>
+		-->
     </target>
 	
 	<target name="compile.integrationtest">
@@ -231,6 +305,40 @@
 
     </sequential>
   </macrodef>
+  
+  
+  <!-- Define a task for building an air component project. -->
+  <macrodef name="aircomponent.compile">
+    <attribute name="project"/>
+	<attribute name="projectDir"/>
+    <sequential>
+	  <generateClassList project="@{project}" projectDir="@{projectDir}"/>	  
+	  
+      <compc output="@{projectDir}/bin/@{project}.swc"
+        include-classes="${@{project}.classes}" 
+		optimize="true" 
+		debug="false"
+		fork="false"
+		target-player="${flash.target.player}"
+		configname="air"
+		>
+			<load-config filename="@{projectDir}/@{project}-build-config.xml"/>	
+			<define name="CONFIG::useFlexClasses" value="true" />
+			<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
+			<define name="CONFIG::LOGGING" value="${logging}" />
+			<define name="CONFIG::PLATFORM" value="${platform}" />
+			<define name="CONFIG::MOCK" value="${mock}" />
+			<warnings>true</warnings>
+			<!--
+			<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/player/${flash.target.player.base}" append="true">
+			    <include name="playerglobal.swc" />
+			</compiler.external-library-path>
+			-->
+      </compc>
+
+    </sequential>
+  </macrodef>
+  
   
    <macrodef name="component.doc">
     <attribute name="project"/>
@@ -360,9 +468,23 @@
 			<load-config filename="@{projectDir}/@{project}-build-config.xml"/>
 			
 			<!-- List of SWC files or directories that contain SWC files. -->
+            <compiler.library-path dir="${FLEX_HOME}/frameworks" append="true">
+              <include name="libs" />
+			  <include name="libs/air" />
+			  <include name="*.swc" />
+			</compiler.library-path>
+			
+			<compiler.library-path dir="${FLEX_UNIT_HOME}" append="true">
+			  <include name="*.swc" />
+			</compiler.library-path>		
+			
         	<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/player/${flash.target.player.base}" append="true">
 			    <include name="playerglobal.swc" />
 			</compiler.external-library-path>		
+		
+		<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/mx" append="true">
+				<include name="mx.swc" />
+			</compiler.external-library-path>
 		
 		
 			<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
