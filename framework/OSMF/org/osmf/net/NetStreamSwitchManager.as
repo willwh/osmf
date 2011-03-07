@@ -82,6 +82,7 @@ package org.osmf.net
 			this.netStream = netStream;
 			this.dsResource = resource;
 			this.metrics = metrics;
+			metrics.resource = resource;
 			this.switchingRules = switchingRules || new Vector.<SwitchingRuleBase>();
 			
 			_currentIndex = Math.max(0, Math.min(maxAllowedIndex, dsResource.initialIndex));
@@ -91,6 +92,7 @@ package org.osmf.net
 			super.autoSwitch = autoSwitch;
 			
 			failedDSI = new Dictionary();
+			initDSIFailedCounts();
 			
 			// We set the bandwidth in both directions based on a multiplier applied to the bitrate level. 
 			_bandwidthLimit = 1.4 * resource.streamItems[resource.streamItems.length-1].bitrate * 1000/8;

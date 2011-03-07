@@ -64,13 +64,13 @@ package org.osmf.net.httpstreaming
 			{
 				netStream.removeEventListener(HTTPStreamingEvent.FRAGMENT_END, onFragmentEnd);
 			}
-		}
-		
+		}	
 		
 		override public function get autoSwitch():Boolean
 		{
 			return httpStreamingSwitchManagerAutoSwitch;
 		}
+		
 		/**
 		 * @private
 		 * 

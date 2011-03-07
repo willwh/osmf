@@ -57,7 +57,7 @@ package org.osmf.net.httpstreaming
 		 **/
 		public function getBitrateForIndex(index:int):Number
 		{
-			return this.resource.streamItems[index].bitrate;
+			return resource.streamItems[index].bitrate;
 		}
 		
 		private var httpNetStream:HTTPNetStream;
