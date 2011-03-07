@@ -24,10 +24,12 @@ package org.osmf.media.videoClasses
 		/**
 		 * Default constructor.
 		 */
-		public function VideoSurfaceInfo(stageVideoInUse:Boolean, renderStatus:String)
+		public function VideoSurfaceInfo(stageVideoInUse:Boolean, renderStatus:String, stageVideoInUseCount:int, stageVideoCount:int)
 		{
-			this._stageVideoInUse = stageVideoInUse;
-			this._renderStatus = renderStatus;
+			_stageVideoInUse = stageVideoInUse;
+			_renderStatus = renderStatus;
+			_stageVideoInUseCount = stageVideoInUseCount;
+			_stageVideoCount = stageVideoCount;
 		}
 		
 		/**
@@ -46,19 +48,27 @@ package org.osmf.media.videoClasses
 			return _renderStatus;
 		}
 
-		/// Internals
+		/**
+		 * The number of StageVideo instances that are being currently used.
+		 */ 
+		public function get stageVideoInUseCount():int
+		{
+			return _stageVideoInUseCount;
+		}
 		
 		/**
-		 * @private
-		 * Internal flag for use of StageVideo.
-		 */
+		 * The total number of StageVideo instances.
+		 */ 
+		public function get stageVideoCount():int
+		{
+			return _stageVideoCount;
+		}
+		
+		/// Internals		
+
 		protected var _stageVideoInUse:Boolean;
-		
-		/**
-		 * @private
-		 * Internal render status.
-		 */
-		protected var _renderStatus:String;
-		
+		protected var _renderStatus:String;		
+		protected var _stageVideoInUseCount:int;
+		protected var _stageVideoCount:int;		
 	}
 }

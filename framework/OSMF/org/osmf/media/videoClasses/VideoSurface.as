@@ -55,7 +55,7 @@ package org.osmf.media.videoClasses
 		 */
 		public function get info():VideoSurfaceInfo
 		{
-			return new VideoSurfaceInfo(stageVideo != null, renderStatus);	
+			return new VideoSurfaceInfo(stageVideo != null, renderStatus, videoSurfaceManager ? videoSurfaceManager.stageVideoInUseCount : 0, videoSurfaceManager ? videoSurfaceManager.stageVideoCount : 0);	
 		}
 		
 		/**
@@ -137,13 +137,16 @@ package org.osmf.media.videoClasses
 		override public function set visible(value:Boolean):void
 		{			
 			_visible = value;
-			if (_visible)
+			if (videoSurfaceManager)
 			{
-				videoSurfaceManager.provideRenderer(this);
-			}
-			else
-			{
-				videoSurfaceManager.releaseRenderer(this);
+				if (_visible)
+				{
+					videoSurfaceManager.provideRenderer(this);
+				}
+				else
+				{
+					videoSurfaceManager.releaseRenderer(this);
+				}
 			}
 		}
 		

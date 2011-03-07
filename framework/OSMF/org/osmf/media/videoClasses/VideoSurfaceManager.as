@@ -24,6 +24,29 @@ package org.osmf.media.videoClasses
 	 */ 
 	internal class VideoSurfaceManager
 	{	
+		public function registerVideoSurface(videoSurface:VideoSurface):void
+		{			
+			videoSurface.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			videoSurface.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+		}
+		
+		public function get stageVideoInUseCount():int
+		{
+			var result:int = 0;
+			for each (var renderer:* in activeVideoSurfaces)
+			{
+				if (renderer && renderer is StageVideo)
+				{
+					result ++;
+				}
+			}
+			return result;
+		}
+		
+		public function get stageVideoCount():int
+		{
+			return _stage ? _stage.stageVideos.length : 0;
+		}
 		/**
 		 * Registers the current stage.
 		 * VideoSurfaceManager object will monitor the changes in StageVideo availability
@@ -35,14 +58,8 @@ package org.osmf.media.videoClasses
 			_stage.addEventListener("stageVideoAvailability", onStageVideoAvailability);
 			
 			stageVideoIsAvailable = _stage.hasOwnProperty("stageVideos") && _stage.stageVideos.length > 0;
-		}
-		
-		public function registerVideoSurface(videoSurface:VideoSurface):void
-		{			
-			videoSurface.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			videoSurface.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-		}
-
+		}		
+	
 		internal function provideRenderer(videoSurface:VideoSurface):void
 		{
 			if (videoSurface == null)
@@ -200,7 +217,7 @@ package org.osmf.media.videoClasses
 					// There is an available stageVideo instance. 
 					activeVideoSurfaces[videoSurface] = stageVideo;
 					videoSurface.stageVideo = stageVideo;
-					renderer = stageVideo;
+					renderer = stageVideo;			
 					stageVideo.depth = maxDepth + 1;
 					renderer.addEventListener(StageVideoEvent.RENDER_STATE, onStageVideoRenderState);				
 				}
