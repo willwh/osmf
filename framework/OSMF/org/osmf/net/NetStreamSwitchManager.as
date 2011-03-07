@@ -165,7 +165,7 @@ package org.osmf.net
 		 **/
 		override public function switchTo(index:int):void
 		{
-			if (!autoSwitch)
+			if (!_autoSwitch)
 			{
 				if (index < 0 || index > maxAllowedIndex)
 				{
@@ -253,6 +253,8 @@ package org.osmf.net
 		}
 	
 		/**
+		 * Forces the evaluation of all the rules. 
+		 * 
 		 * @private
 		 **/
 		protected function doCheckRules():void
@@ -308,7 +310,7 @@ package org.osmf.net
 			
 			oldStreamName = dsResource.streamItems[targetIndex].streamName;
 			
-			if (targetIndex < actualIndex && autoSwitch) 
+			if (targetIndex < actualIndex && _autoSwitch) 
 			{
 				// This is a failure for the current stream, so let's tag it as such.
 				incrementDSIFailedCount(actualIndex);
@@ -394,7 +396,7 @@ package org.osmf.net
 					{
 						prepareForSwitching();
 					}
-					else if (autoSwitch && checkRulesTimer.running == false)
+					else if (_autoSwitch && checkRulesTimer.running == false)
 					{
 						checkRulesTimer.start();
 					}

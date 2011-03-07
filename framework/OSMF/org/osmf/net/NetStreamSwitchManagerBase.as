@@ -144,7 +144,7 @@ package org.osmf.net
 		// Internals
 		//
 		
-		private var _autoSwitch:Boolean;
-		private var _maxAllowedIndex:int;
+		protected var _autoSwitch:Boolean;
+		protected var _maxAllowedIndex:int;
 	}
 }

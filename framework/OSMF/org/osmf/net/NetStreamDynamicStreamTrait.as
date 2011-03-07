@@ -186,6 +186,6 @@ package org.osmf.net
 		private var inSetSwitching:Boolean;
 		private var dsResource:DynamicStreamingResource;
 		private var indexToSwitchTo:int;
-		private var index;
+		private var index:int;
 	}
 }
