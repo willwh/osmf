@@ -90,6 +90,7 @@ package org.osmf.net.httpstreaming
 			stream.close();
 			stream = null;
 			rules = null;
+			connection = null;
 		}
 		
 		public function testAutoSwitchTrue():void
@@ -170,7 +171,7 @@ package org.osmf.net.httpstreaming
 		private var netFactory:NetFactory;
 		private var switchingRule:DynamicSwitchingRule;
 		private var switchManager:NetStreamSwitchManager;
-		private var metrics:MockRTMPNetStreamMetrics;
+		private var metrics:NetStreamMetricsBase;
 		private var stream:NetStream;
 		private var dsResource:DynamicStreamingResource;
 		private var rules:Vector.<SwitchingRuleBase>;

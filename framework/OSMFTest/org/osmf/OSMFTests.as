@@ -271,6 +271,7 @@ package org.osmf
 			addTestSuite(TestHTTPStreamingUtils);
 			addTestSuite(TestHTTPNetStreamMetrics);
 			addTestSuite(TestHTTPStreamingNetLoader);
+			addTestSuite(TestHTTPStreamingSwitchManager);
 			
 			// DVR
 			//
@@ -364,10 +365,7 @@ package org.osmf
 			addTestSuite(TestMediaPlayerSprite);
 
 			// This test fails intermittently on the build machine.
-			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
-			
-			addTestSuite(TestHTTPStreamingSwitchManager);
-			 	
+			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);	
 		}
 	}
 }

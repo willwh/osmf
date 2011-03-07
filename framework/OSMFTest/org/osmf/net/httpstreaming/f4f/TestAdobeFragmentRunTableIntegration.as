@@ -79,6 +79,7 @@ package org.osmf.net.httpstreaming.f4f
 			assertTrue(afrt.findFragmentIdByTime(60923, abst.totalDuration) == null);
 		}
 
+//      TODO: Review this unit test		
 //		public function testTotalDuration():void
 //		{
 //			assertTrue(afrt.totalDuration == 60923);
