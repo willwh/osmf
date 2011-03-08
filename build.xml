@@ -339,6 +339,7 @@
 				swf-version="${swfversion}"
 				static-link-runtime-shared-libraries="true"
 			>
+			
 				<load-config filename="@{projectDir}/@{project}-build-config.xml" />
 
 				<compiler.external-library-path dir="${FLEX_HOME}/frameworks/libs/player/${flash.target.player.base}" append="true">
