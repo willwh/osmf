@@ -45,7 +45,6 @@
 	<target name="OSMF.all">
 		<antcall target="OSMF.clean" />
 		<antcall target="OSMF.build" />
-		<antcall target="OSMF.test" />
 		<antcall target="OSMF.dist" />
 		<antcall target="OSMF.source" />
 	</target>
@@ -58,6 +57,7 @@
 		<antcall target="OSMF.compile.plugins" />
 		<antcall target="OSMF.compile.samples" />
 		<antcall target="OSMF.compile.zeri" />
+		<target name="OSMF.test">
 	</target>
 
 	<target name="OSMF.test">
@@ -96,7 +96,7 @@
 			<fileset dir="${source.dir}/plugins/samples/AkamaiBasicStreamingPlugin/bin" />
 		</copy>
 		<copy todir="${dist.dir}/Zeri" overwrite="true" failonerror="false">
-			<fileset dir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" />
+			<fileset dir="${source.dir}/apps/certification/zeri/ZeriCertificationTest/bin" />
 		</copy>
 		<copy todir="${dist.dir}/Zeri" overwrite="true" failonerror="false">
 			<fileset dir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer/bin" />
