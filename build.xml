@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="OSMF" default="all" basedir=".">
+<project name="OSMF" default="OSMF.all" basedir=".">
 
 	<property environment="env"/>
 	
@@ -11,14 +11,14 @@
 	<taskdef resource="flexUnitTasks.tasks"  classpath="${FLEX_UNIT_HOME}/flexUnitTasks-4.1.0_RC2-4.jar"/>
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${buildtools.dir}/libs/ant-contrib-1.0b3.jar"/>
 	
-	<target name="init">
+	<target name="OSMF.init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${reports.dir}" />	
 	</target>
 	
 	<!-- cleans the output directory -->
-	<target name="clean.bin">
+	<target name="OSMF.clean.bin">
 		<sequential>
 			<delete includeemptydirs="true" quiet="true">
 				<fileset dir="${source.dir}" includes="**/bin/**/*" />
@@ -29,8 +29,8 @@
 		</sequential>		
 	</target>
 
-	<target name="clean">	
-		<antcall target="clean.bin"/>
+	<target name="OSMF.clean">	
+		<antcall target="OSMF.clean.bin"/>
 		<sequential>
 			<delete includeemptydirs="true" quiet="true">
 				<fileset dir="${dist.dir}" />
@@ -41,32 +41,32 @@
 		</sequential>
 	</target>
 	<!-- main -->
-	<target name="all">
-		<antcall target="clean"/>
-		<antcall target="build"/>
-		<antcall target="dist"/>
-		<antcall target="source"/>	
+	<target name="OSMF.all">
+		<antcall target="OSMF.clean"/>
+		<antcall target="OSMF.build"/>
+		<antcall target="OSMF.dist"/>
+		<antcall target="OSMF.source"/>	
 	</target>
 	
-	<target name="build">
-		<antcall target="init"/>
-		<antcall target="clean.bin"/>
-		<antcall target="compile.osmf"/>
-		<!--antcall target="doc.osmf"/-->
-		<antcall target="compile.libs"/>
-		<antcall target="compile.plugins"/>
-		<antcall target="compile.samples"/>
-		<antcall target="compile.zeri"/>
+	<target name="OSMF.build">
+		<antcall target="OSMF.init"/>
+		<antcall target="OSMF.clean.bin"/>
+		<antcall target="OSMF.compile.osmf"/>
+		<!--antcall target="OSMF.doc.osmf"/-->
+		<antcall target="OSMF.compile.libs"/>
+		<antcall target="OSMF.compile.plugins"/>
+		<antcall target="OSMF.compile.samples"/>
+		<antcall target="OSMF.compile.zeri"/>
 	</target>
 	
-	<target name="test">
-		<antcall target="compile.unittest"/>
-		<antcall target="run.unittest"/>
-		<antcall target="compile.integrationtest"/>
-		<antcall target="run.integrationtest"/>
+	<target name="OSMF.test">
+		<antcall target="OSMF.compile.unittest"/>
+		<antcall target="OSMF.run.unittest"/>
+		<antcall target="OSMF.compile.integrationtest"/>
+		<antcall target="OSMF.run.integrationtest"/>
 	</target>
 	
-	<target name="dist">
+	<target name="OSMF.dist">
 		<copy todir="${dist.dir}" overwrite="true" failonerror="false">
 			<fileset dir="${source.dir}/framework/OSMF/bin"/>
 		</copy>
@@ -102,7 +102,7 @@
 		</copy>
 	</target>
 	
-	<target name="source">		
+	<target name="OSMF.source">		
 	  <zip destfile="${build.dir}/OSMF_src.zip"  >
 		<zipfileset dir="${source.dir}" prefix="OSMF" excludes="dist/**, build/**, **/bin/**, **/bin-*/**, **/generated/**"/>
 	  </zip>
@@ -110,11 +110,11 @@
 	</target>
 
 	<!-- compile OSMF  -->
-    <target name="compile.osmf">
+    <target name="OSMF.compile.osmf">
 		<component.compile project="OSMF" projectDir="${source.dir}/framework/OSMF"/>
 	</target>
 	
-	<target name="compile.libs">
+	<target name="OSMF.compile.libs">
 		<component.compile project="VAST" projectDir="${source.dir}/libs/samples/VAST"/>
 		<component.compile project="Syndication" projectDir="${source.dir}/libs/samples/Syndication"/>
 		<component.compile project="ChromeLibrary" projectDir="${source.dir}/libs/samples/ChromeLibrary"/>
@@ -125,11 +125,11 @@
 
 	</target>
 	
-	<target name="ttt">
+	<target name="OSMF.ttt">
 		<aircomponent.compile project="StrobeUnit" projectDir="${source.dir}/libs/testing/StrobeUnit"/>
 	</target>
 		
-	<target name="compile.plugins" >
+	<target name="OSMF.compile.plugins" >
 		
 		<plugin.compile project="AkamaiBasicStreamingPlugin" projectDir="${source.dir}/plugins/samples/AkamaiBasicStreamingPlugin" srcDir="" />
 		<plugin.compile project="SMILPlugin" projectDir="${source.dir}/plugins/samples/SMILPlugin" srcDir="" />
@@ -140,7 +140,7 @@
 	
 
 	
-	<target name="compile.samples">
+	<target name="OSMF.compile.samples">
 	
 		<application.compile project="ControlBarPluginSample" projectDir="${source.dir}/apps/samples/plugins/ControlBarPluginSample"/>
 		<mxml.compile project="DynamicStreamingSample" projectDir="${source.dir}/apps/samples/framework/DynamicStreamingSample" width="100%" height="100%"/>
@@ -149,7 +149,7 @@
 
 	</target>
 	
-	<target name="compile.zeri">
+	<target name="OSMF.compile.zeri">
 		<component.compile project="FlexUnit4" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4"/>
 		<component.compile project="ZeriCertificationUtils" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationUtils"/>
 		<component.compile project="FlexUnit4UIListener" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4UIListener"/>
@@ -161,20 +161,20 @@
 	</target>
 	
 	
-	<target name="tmp">
+	<target name="OSMF.tmp">
 		<mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%"/>	
 
 	</target>
 
 
 
-	<target name="doc.osmf">
+	<target name="OSMF.doc.osmf">
 		<component.doc project="OSMF" projectDir="${source.dir}/framework/OSMF" />
 	</target>
 
   
 	<!-- compile unit tests  -->
-    <target name="compile.unittest">
+    <target name="OSMF.compile.unittest">
 		<component.compile project="NetMocker" projectDir="${source.dir}/libs/testing/NetMocker" />		
 		<unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
 		<unittest.compile project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
@@ -182,17 +182,17 @@
 		<airtest.compile project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" srcDir=""/>
     </target>
 	
-	<target name="compunit">
+	<target name="OSMF.compunit">
 		<!-- <unittest.compile project="StrobeMediaPlaybackTest" projectDir="${source.dir}/framework/StrobeMediaPlaybackTest"/> -->
 		<unittest.compile project="OSMFUnitTest" projectDir="${source.dir}/framework/OSMFUnitTest"/>
 	</target>
 	
-	<target name="rununit">
+	<target name="OSMF.rununit">
 		<!-- <unittest.run project="OSMFUnitTest" projectDir="${source.dir}/framework/OSMFUnitTest" flexUnitPlayer="air"/> -->
 		<unittest.run project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest"/>
 	</target>
 	
-	<target name="asd">
+	<target name="OSMF.asd">
 		<unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
 		<unittest.compile project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" srcDir=""/>
 		
@@ -244,7 +244,7 @@
   </macrodef>
 	
 	<!-- prepare and run unit tests  -->
-	<target name="run.unittest">
+	<target name="OSMF.run.unittest">
 		<unittest.run project="OSMFUnitTest" projectDir="${source.dir}/framework/OSMFUnitTest" flexUnitPlayer="air"/>
 	<!--
 		
@@ -254,9 +254,9 @@
 		-->
     </target>
 	
-	<target name="compile.integrationtest">
+	<target name="OSMF.compile.integrationtest">
 	</target>
-	<target name="run.integrationtest">
+	<target name="OSMF.run.integrationtest">
 	</target>
 	
  
@@ -562,7 +562,7 @@
 			</fileset>
 			<report format="frames" todir="${dist.dir}/test-reports/@{project}"/>
 		</junitreport-->
-		<!-- antcall target="unittest.reports">
+		<!-- antcall target="OSMF.unittest.reports">
 		</antcall -->
 		<junitreport todir="${reports.dir}/@{project}">
 			<fileset dir="${reports.dir}/@{project}">
@@ -574,7 +574,7 @@
     </sequential>
   </macrodef>
  
-   <target name="unittest.reports" if="flexunit.failed">
+   <target name="OSMF.unittest.reports" if="flexunit.failed">
 
    </target>
 </project>
