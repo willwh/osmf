@@ -112,56 +112,56 @@
 
 	<!-- compile OSMF -->
 	<target name="OSMF.compile.osmf">
-		<component.compile project="OSMF" projectDir="${source.dir}/framework/OSMF" />
+		<OSMF.component.compile project="OSMF" projectDir="${source.dir}/framework/OSMF" />
 	</target>
 
 	<target name="OSMF.compile.libs">
-		<component.compile project="VAST" projectDir="${source.dir}/libs/samples/VAST" />
-		<component.compile project="Syndication" projectDir="${source.dir}/libs/samples/Syndication" />
-		<component.compile project="ChromeLibrary" projectDir="${source.dir}/libs/samples/ChromeLibrary" />
-		<component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent" />
+		<OSMF.component.compile project="VAST" projectDir="${source.dir}/libs/samples/VAST" />
+		<OSMF.component.compile project="Syndication" projectDir="${source.dir}/libs/samples/Syndication" />
+		<OSMF.component.compile project="ChromeLibrary" projectDir="${source.dir}/libs/samples/ChromeLibrary" />
+		<OSMF.component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent" />
 	</target>
 
 	<target name="OSMF.compile.plugins">
-		<plugin.compile project="AkamaiBasicStreamingPlugin" projectDir="${source.dir}/plugins/samples/AkamaiBasicStreamingPlugin" srcDir="" />
-		<plugin.compile project="SMILPlugin" projectDir="${source.dir}/plugins/samples/SMILPlugin" srcDir="" />
-		<plugin.compile project="MASTPlugin" projectDir="${source.dir}/plugins/samples/MASTPlugin" srcDir="" />
-		<plugin.compile project="ControlBarPlugin" projectDir="${source.dir}/apps/samples/plugins/ControlBarPlugin" />
+		<OSMF.plugin.compile project="AkamaiBasicStreamingPlugin" projectDir="${source.dir}/plugins/samples/AkamaiBasicStreamingPlugin" srcDir="" />
+		<OSMF.plugin.compile project="SMILPlugin" projectDir="${source.dir}/plugins/samples/SMILPlugin" srcDir="" />
+		<OSMF.plugin.compile project="MASTPlugin" projectDir="${source.dir}/plugins/samples/MASTPlugin" srcDir="" />
+		<OSMF.plugin.compile project="ControlBarPlugin" projectDir="${source.dir}/apps/samples/plugins/ControlBarPlugin" />
 	</target>
 
 	<target name="OSMF.compile.samples">
-		<application.compile project="ControlBarPluginSample" projectDir="${source.dir}/apps/samples/plugins/ControlBarPluginSample" />
-		<mxml.compile project="DynamicStreamingSample" projectDir="${source.dir}/apps/samples/framework/DynamicStreamingSample" width="100%" height="100%" />
-		<mxml.compile project="AkamaiPluginSample" projectDir="${source.dir}/apps/samples/plugins/AkamaiPluginSample" width="100%" height="100%" />
-		<mxml.compile project="ExamplePlayer" projectDir="${source.dir}/apps/samples/framework/ExamplePlayer" width="100%" height="100%" srcDir="" />
+		<OSMF.application.compile project="ControlBarPluginSample" projectDir="${source.dir}/apps/samples/plugins/ControlBarPluginSample" />
+		<OSMF.mxml.compile project="DynamicStreamingSample" projectDir="${source.dir}/apps/samples/framework/DynamicStreamingSample" width="100%" height="100%" />
+		<OSMF.mxml.compile project="AkamaiPluginSample" projectDir="${source.dir}/apps/samples/plugins/AkamaiPluginSample" width="100%" height="100%" />
+		<OSMF.mxml.compile project="ExamplePlayer" projectDir="${source.dir}/apps/samples/framework/ExamplePlayer" width="100%" height="100%" srcDir="" />
 	</target>
 
 	<target name="OSMF.compile.zeri">
-		<component.compile project="FlexUnit4" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4" />
-		<component.compile project="ZeriCertificationUtils" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationUtils" />
-		<component.compile project="FlexUnit4UIListener" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4UIListener" />
-		<component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent" />
+		<OSMF.component.compile project="FlexUnit4" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4" />
+		<OSMF.component.compile project="ZeriCertificationUtils" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationUtils" />
+		<OSMF.component.compile project="FlexUnit4UIListener" projectDir="${source.dir}/apps/certification/zeri/FlexUnit4UIListener" />
+		<OSMF.component.compile project="MediaContainerUIComponent" projectDir="${source.dir}/apps/samples/framework/MediaContainerUIComponent" />
 
-		<mxml.compile project="ZeriCertificationPlayer" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer" width="100%" height="100%" />
-		<!-- <mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%" /> -->
+		<OSMF.mxml.compile project="ZeriCertificationPlayer" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer" width="100%" height="100%" />
+		<!-- <OSMF.mxml.compile project="ZeriCertificationTest" projectDir="${source.dir}/apps/certification/zeri/ZeriCertificationTest" width="100%" height="100%" /> -->
 	</target>
 
 	<target name="OSMF.doc.osmf">
-		<component.doc project="OSMF" projectDir="${source.dir}/framework/OSMF" />
+		<OSMF.component.doc project="OSMF" projectDir="${source.dir}/framework/OSMF" />
 	</target>
 
 	<!-- compile unit tests -->
 	<target name="OSMF.compile.unittest">
-		<component.compile project="NetMocker" projectDir="${source.dir}/libs/testing/NetMocker" />
-		<unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir="" />
-		<unittest.compile project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" srcDir="" />
-		<airtest.compile project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" srcDir="" />
+		<OSMF.component.compile project="NetMocker" projectDir="${source.dir}/libs/testing/NetMocker" />
+		<OSMF.unittest.compile project="OSMFTestHeadless" projectDir="${source.dir}/framework/OSMFTest" srcDir="" />
+		<OSMF.unittest.compile project="OSMFTest" projectDir="${source.dir}/framework/OSMFTest" srcDir="" />
+		<OSMF.airtest.compile project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" srcDir="" />
 		
 		<!-- This is the new project for unit testing (stub): -->
-		<unittestnew.compile project="OSMFTestNew" projectDir="${source.dir}/framework/OSMFTestNew" srcDir="/src" />
+		<OSMF.unittestnew.compile project="OSMFTestNew" projectDir="${source.dir}/framework/OSMFTestNew" srcDir="/src" />
 	</target>
 	
-	<macrodef name="airtest.compile">
+	<macrodef name="OSMF.airtest.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="srcDir" default="/src" />
@@ -191,10 +191,10 @@
 	<!-- prepare and run unit tests -->
 	<target name="OSMF.run.unittest">
 		<!-- Run the new unit testing stub project - works well and generates reports. -->
-		<unittest.run project="OSMFTestNew" projectDir="${source.dir}/framework/OSMFTestNew" flexUnitPlayer="air" />
+		<OSMF.unittest.run project="OSMFTestNew" projectDir="${source.dir}/framework/OSMFTestNew" flexUnitPlayer="air" />
 		
 		<!-- The following line is commented out because it doesn't work automatically. It can be run manually though. -->
-		<!-- <unittest.run project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" flexUnitPlayer="air" /> -->
+		<!-- <OSMF.unittest.run project="OSMFAirTest" projectDir="${source.dir}/framework/OSMFAirTest" flexUnitPlayer="air" /> -->
 	</target>
 
 	<target name="OSMF.compile.integrationtest">
@@ -204,7 +204,7 @@
 	</target>
 
 	<!-- Define a task for generating the class list for compc from the appropriate .flexLibProperties file -->
-	<macrodef name="generateClassList">
+	<macrodef name="OSMF.generateClassList">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<sequential>
@@ -224,11 +224,11 @@
 	</macrodef>
 
 	<!-- Define a task for building a component project. -->
-	<macrodef name="component.compile">
+	<macrodef name="OSMF.component.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<sequential>
-			<generateClassList project="@{project}" projectDir="@{projectDir}" />
+			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}" />
 			<compc
 				output="@{projectDir}/bin/@{project}.swc"
 				include-classes="${@{project}.classes}"
@@ -254,13 +254,13 @@
 		</sequential>
 	</macrodef>
 
-	<macrodef name="component.doc">
+	<macrodef name="OSMF.component.doc">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="srcDir" default="/org" />
 
 		<sequential>
-			<generateClassList project="@{project}" projectDir="@{projectDir}" />
+			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}" />
 			<asdoc output="${dist.dir}/@{project}" lenient="true" failonerror="true">
 				<load-config filename="@{projectDir}/@{project}-build-config.xml" />
 				<define name="CONFIG::useFlexClasses" value="true" />
@@ -275,7 +275,7 @@
 
 
 	<!-- Define a task for compiling an application project. -->
-	<macrodef name="application.compile">
+	<macrodef name="OSMF.application.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="srcDir" default="/src" />
@@ -324,7 +324,7 @@
 	</macrodef>
 
 	<!-- Define a task for compiling a plugin project. -->
-	<macrodef name="plugin.compile">
+	<macrodef name="OSMF.plugin.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="srcDir" default="/src" />
@@ -355,7 +355,7 @@
 	</macrodef>
 
 	<!-- Define a task for compiling a unit test project. -->
-	<macrodef name="unittest.compile">
+	<macrodef name="OSMF.unittest.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="srcDir" default="/src" />
@@ -387,7 +387,7 @@
 	</macrodef>
 
 	<!-- Define a task for compiling a unit test project. -->
-	<macrodef name="unittestnew.compile">
+	<macrodef name="OSMF.unittestnew.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="srcDir" default="/src" />
@@ -432,7 +432,7 @@
 	</macrodef>
 
 	<!-- Define a task for compiling a unit test project. -->
-	<macrodef name="mxml.compile">
+	<macrodef name="OSMF.mxml.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="srcDir" default="/src" />
@@ -476,7 +476,7 @@
 	</macrodef>
 
 	<!-- Define a task for running an unit test -->
-	<macrodef name="unittest.run">
+	<macrodef name="OSMF.unittest.run">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="flexUnitPlayer" default="air" />
