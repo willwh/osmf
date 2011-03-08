@@ -57,7 +57,7 @@
 		<antcall target="OSMF.compile.plugins" />
 		<antcall target="OSMF.compile.samples" />
 		<antcall target="OSMF.compile.zeri" />
-		<target name="OSMF.test">
+		<antcall target="OSMF.test" />
 	</target>
 
 	<target name="OSMF.test">
