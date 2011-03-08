@@ -101,6 +101,15 @@
 		<copy todir="${dist.dir}/Zeri" overwrite="true" failonerror="false">
 			<fileset dir="${source.dir}/apps/certification/zeri/ZeriCertificationPlayer/bin" />
 		</copy>
+		<copy todir="${dist.dir}/Test" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/framework/OSMFTest/bin" />
+		</copy>
+		<copy todir="${dist.dir}/Test" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/framework/OSMFAirTest/bin" />
+		</copy>
+		<copy todir="${dist.dir}/Test" overwrite="true" failonerror="false">
+			<fileset dir="${source.dir}/framework/OSMFTestNew/bin" />
+		</copy>
 	</target>
 
 	<target name="OSMF.source">
