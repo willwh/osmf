@@ -236,6 +236,9 @@ package org.osmf.media.videoClasses
 			
 			// Start using the new renderer.
 			videoSurface.switchRenderer(renderer);
+			
+			VideoSurface.stageVideoCount = stageVideoCount;
+			VideoSurface.stageVideoInUseCount = stageVideoInUseCount;
 		}							
 		
 		internal var activeVideoSurfaces:Dictionary = new Dictionary(true);

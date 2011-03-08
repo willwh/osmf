@@ -55,7 +55,7 @@ package org.osmf.media.videoClasses
 		 */
 		public function get info():VideoSurfaceInfo
 		{
-			return new VideoSurfaceInfo(stageVideo != null, renderStatus, videoSurfaceManager ? videoSurfaceManager.stageVideoInUseCount : 0, videoSurfaceManager ? videoSurfaceManager.stageVideoCount : 0);	
+			return new VideoSurfaceInfo(stageVideo != null, renderStatus, stageVideoInUseCount, stageVideoCount);	
 		}
 		
 		/**
@@ -241,8 +241,7 @@ package org.osmf.media.videoClasses
 		}
 		
 		internal function switchRenderer(renderer:*):void
-		{		
-			
+		{
 			if (currentVideoRenderer == renderer)
 			{
 				CONFIG::LOGGING
@@ -330,7 +329,9 @@ package org.osmf.media.videoClasses
 		 * Internal surface used for actual rendering.
 		 */		
 		internal static var videoSurfaceManager:VideoSurfaceManager = null;		
-	
+		internal static var stageVideoInUseCount:int = 0;
+		internal static var stageVideoCount:int = 0;
+		
 		internal var createVideo:Function;		
 		
 		/** 
@@ -361,7 +362,7 @@ package org.osmf.media.videoClasses
 		 * Internal render status information.
 		 */
 		private var renderStatus:String;
-		
+
 		CONFIG::LOGGING 
 		private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurface");
 		
