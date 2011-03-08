@@ -25,10 +25,15 @@ package
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
 	
+	import org.osmf.elements.F4MElement;
+	import org.osmf.events.LoadEvent;
+	import org.osmf.events.TimeEvent;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaPlayerSprite;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.traits.LoadState;
 
 	/**
 	 * JavaScriptDynamicStreamSwitchControl
@@ -36,10 +41,41 @@ package
 	public class JavaScriptDynamicStreamSwitchControl extends Sprite
 	{
 		public function JavaScriptDynamicStreamSwitchControl()
-		{		
+		{	
  			sprite = new MediaPlayerSprite();
-			addChild(sprite);
-			sprite.resource = new URLResource("http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m");
+			initialIndex = 4;
+			maxIndex = 5;
+			preloadF4MFile("http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m");
+		}		
+		
+		/**
+		 * Preload a f4m file so that we can set the initialIndex and the maxIndex on the DynamicStreamingResource.
+		 */ 
+		private function preloadF4MFile(F4MURL:String):void
+		{
+			var resource:URLResource = new URLResource(F4MURL);		
+			var spriteTemp:MediaPlayerSprite = new MediaPlayerSprite();
+			spriteTemp.mediaPlayer.autoPlay = false; 
+			spriteTemp.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange); 
+			spriteTemp.resource = resource;
+			
+			function onDurationChange(event:Event):void 
+			{ 
+				// At this point the F4M file is fully loaded
+				(event.target as MediaPlayer).removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange); 
+				var resource:DynamicStreamingResource = (spriteTemp.media as F4MElement).proxiedElement.resource as DynamicStreamingResource;				
+				playDynamicStreamingResource(resource);
+			}
+		}		
+		
+		private function playDynamicStreamingResource(resource:DynamicStreamingResource):void
+		{
+			resource.initialIndex = initialIndex; 
+			
+			sprite.mediaPlayer.maxAllowedDynamicStreamIndex = maxIndex;
+			sprite.resource = resource; 			
+			
+			addChild(sprite); 
 			
 			if (ExternalInterface.available)
 			{				
@@ -102,10 +138,13 @@ package
 		private function getStreamItems():Vector.<DynamicStreamingItem>
 		{
 			var streamItems:Vector.<DynamicStreamingItem> = 
-				(sprite.mediaPlayer.media["proxiedElement"].resource as DynamicStreamingResource).streamItems;
+				(sprite.resource as DynamicStreamingResource).streamItems;
 			return streamItems;
 		}
 	
-		private var sprite:MediaPlayerSprite;
+		private var initialIndex:int;
+		private var maxIndex:int;
+		
+		private var sprite:MediaPlayerSprite;	
 	}
 }
