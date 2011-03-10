@@ -45,7 +45,7 @@ package org.osmf.advertisementplugin
 	import org.osmf.utils.OSMFSettings;
 
 	/**
-	 * The AdvertisementPluginInfo provides the reference implementation for ad insertions.
+	 * The AdvertisementPluginInfo class provides the reference implementation for ad insertions.
 	 */
 	public class AdvertisementPluginInfo extends PluginInfo
 	{
@@ -61,7 +61,7 @@ package org.osmf.advertisementplugin
 		}
 		
 		/**
-		 * Innitialize the plugin.
+		 * Initialize the plugin.
 		 */ 
 		override public function initializePlugin(resource:MediaResourceBase):void
 		{
@@ -77,14 +77,14 @@ package org.osmf.advertisementplugin
 			overlayURL = resource.getMetadataValue("overlay") as String;
 			overlayTime = int(resource.getMetadataValue("overlayTime"));
 						
-			// Expose so that we can disable the seek WORKARROUND: http://bugs.adobe.com/jira/browse/ST-397 
+			// Expose so that we can disable the seek WORKAROUND for http://bugs.adobe.com/jira/browse/ST-397 
 			// GPU Decoding issue on stagevideo: Win7, Flash Player version WIN 10,2,152,26 (debug)
-			seekWorkarround = resource.getMetadataValue("seekWorkarround") != "false";
+			seekWorkaround = resource.getMetadataValue("seekWorkaround") != "false";
 						
 			if (prerollURL)
 			{
-				// NOTE: For progressive video the pause will not take effect immediately after the playback has started.
-				// That's why we need to pause the main media before it starts playing, that's why we need to handle the 
+				// NOTE: For progressive video the pause will not take effect immediately after playback has started.
+				// So we need to pause the main media before it starts playing. To do this, we handle the 
 				// BufferEvent.BUFFERING_CHANGE event, instead of PlayEvent.PLAY_STATE_CHANGE.
 				// mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 				
@@ -93,7 +93,7 @@ package org.osmf.advertisementplugin
 			
 			if (postrollURL)
 			{
-				// TODO: We need to prebuffer the preroll before the playback completes.
+				// TODO: Prebuffer the preroll before the playback completes.
 				// The current implementation will likely change in future.
 				mediaPlayer.addEventListener(TimeEvent.COMPLETE, onComplete);
 			}			
@@ -127,25 +127,25 @@ package org.osmf.advertisementplugin
 		/*
 		* Displays a linear advertisement. 
 		* 
-		* The method does not check if an advertisement is currently being played or not.
+		* The method does not check if an ad is currently being played or not.
 		* This is up to the caller to check. 
 		* 
-		* The advertisement will use the same layout as the main media.
+		* The ad will use the same layout as the main media.
 		
-		* @param url - the path to the advertisement media which will be displayed.
-		* @resumePlaybackAfterTheAd - indicates if the playback of the main media should resume after the playback of the ad.
+		* @param url - the path to the ad media to be displayed.
+		* @resumePlaybackAfterAd - indicates if the playback of the main media should resume after the playback of the ad.
 		*/
-		public function displayLinearAd(url:String, resumePlaybackAfterTheAd:Boolean = true):void
+		public function displayLinearAd(url:String, resumePlaybackAfterAd:Boolean = true):void
 		{
-			displayAd(url, true, resumePlaybackAfterTheAd, true, null);
+			displayAd(url, true, resumePlaybackAfterAd, true, null);
 		}
 		
 		/**
 		 * Displays a non-linear (overlay) advertisement. 
-		 * If another advertisement is already being played, the new advertisement will be added on top.
+		 * If another ad is already being played, the new ad is added on top.
 		 * 
 		 * @param url - the path to the media
-		 * @param layoutMetadata - information about the advertisement layout
+		 * @param layoutMetadata - information about the ad layout
 		 */ 
 		public function displayNonLinearAd(url:String, layoutInfo:Object):void
 		{
@@ -155,21 +155,21 @@ package org.osmf.advertisementplugin
 		// Internals
 		
 		/**
-		 * Utility function which will play an advertisement.
+		 * Utility function which plays an ad.
 		 *  
-		 * @param url - the path to the advertisement media which will be displayed.
-		 * @param pauseTheMainMediaWhilePlayingTheAd - indicates if the main media needs to be paused while playing the ad.
-		 * @param resumePlaybackAfterTheAd - indicates if the playback of the main media should resume after the playback of the ad.
+		 * @param url - the path to the ad media to display.
+		 * @param pauseMainMediaWhilePlayingAd - indicates if the main media needs to be paused while playing the ad.
+		 * @param resumePlaybackAfterAd - indicates if the playback of the main media should resume after the playback of the ad.
 		 * @param preBufferAd - indicates if we need to prebuffer the ad before playing it.
 		 * @param layoutInfo - optional LayoutMetadata.
 		 */ 
 		private function displayAd(url:String, 
-								   pauseTheMainMediaWhilePlayingTheAd:Boolean = true, 
-								   resumePlaybackAfterTheAd:Boolean = true, 
+								   pauseMainMediaWhilePlayingAd:Boolean = true, 
+								   resumePlaybackAfterAd:Boolean = true, 
 								   preBufferAd:Boolean = true,
 								   layoutInfo:Object = null):void
 		{			
-			// Setup the Advertisement 
+			// Set up the ad 
 			var adMediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(url));	
 			
 			// Set the layout metadata, if present				
@@ -183,7 +183,7 @@ package org.osmf.advertisementplugin
 				
 				if (!layoutInfo.hasOwnProperty("index"))
 				{
-					// Make sure we add the last ad on top of the others
+					// Make sure we add the last ad on top of any others
 					layoutMetadata.index = adPlayerCount + 100;
 				}
 				
@@ -194,7 +194,7 @@ package org.osmf.advertisementplugin
 			adMediaPlayer.media = adMediaElement;
 			
 			// Save the reference to the ad player, so that we can adjust the volume/mute of all the ads
-			// whenever the volume or mute values in the video player.
+			// whenever the volume or mute values change in the video player.
 			adPlayers[adMediaPlayer] = true;
 			adPlayerCount ++;
 					
@@ -202,7 +202,7 @@ package org.osmf.advertisementplugin
 			
 			if (preBufferAd)
 			{
-				// Wait until the ad has the buffer full, and thus is ready to be played.
+				// Wait until the ad fills the buffer and is ready to be played.
 				adMediaPlayer.muted = true;
 				adMediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
 				function onBufferingChange(event:BufferEvent):void
@@ -221,18 +221,18 @@ package org.osmf.advertisementplugin
 			
 			function playAd():void
 			{		
-				// Copy the volume values
+				// Copy the player's current volume values
 				adMediaPlayer.volume = mediaPlayer.volume;
 				adMediaPlayer.muted = mediaPlayer.muted;
 				
-				if (pauseTheMainMediaWhilePlayingTheAd)
+				if (pauseMainMediaWhilePlayingAd)
 				{
-					// Indicates to the player that we currently are playing an advertisement,
-					// so that the player can adjust it's UI.
+					// Indicates to the player that we currently are playing an ad,
+					// so the player can adjust its UI.
 					mediaPlayer.media.metadata.addValue("Advertisement", url);
 					
-					// TODO: At this point we assume that the playback will pause immediately,
-					// but this is not the case for all the type of content.
+					// TODO: We assume that  playback pauses immediately,
+					// but this is not the case for all types of content.
 					// The linear ads should be inserted only after the player state becomes 'paused'.
 					mediaPlayer.pause();		
 					
@@ -257,7 +257,7 @@ package org.osmf.advertisementplugin
 					}					
 				}
 				
-				// Add the advertisement to the container
+				// Add the ad to the container
 				mediaContainer.addMediaElement(adMediaElement);
 			}
 			
@@ -273,33 +273,33 @@ package org.osmf.advertisementplugin
 				adPlayerCount --;
 				delete adPlayers[adMediaPlayer];					
 				
-				if (pauseTheMainMediaWhilePlayingTheAd)
+				if (pauseMainMediaWhilePlayingAd)
 				{					
-					// Remove the metadata that indicates that we play a linear ad. 
+					// Remove the metadata that indicates that we are playing a linear ad. 
 					mediaPlayer.media.metadata.removeValue("Advertisement");
 					
-					// Ad the main video back to the container.
+					// Add the main video back to the container.
 					mediaContainer.addMediaElement(mediaPlayer.media);
 				}
 				
-				if (pauseTheMainMediaWhilePlayingTheAd && resumePlaybackAfterTheAd)
+				if (pauseMainMediaWhilePlayingAd && resumePlaybackAfterAd)
 				{	
-					// WORKARROUND: http://bugs.adobe.com/jira/browse/ST-397 - GPU Decoding issue on stagevideo: Win7, Flash Player version WIN 10,2,152,26 (debug)
-					if (seekWorkarround && mediaPlayer.canSeek)
+					// WORKAROUND: http://bugs.adobe.com/jira/browse/ST-397 - GPU Decoding issue on stagevideo: Win7, Flash Player version WIN 10,2,152,26 (debug)
+					if (seekWorkaround && mediaPlayer.canSeek)
 					{
 						mediaPlayer.seek(mediaPlayer.currentTime);
 					}
 					
-					// Resume the playback
+					// Resume playback
 					mediaPlayer.play();				
 				}				
 			}
 		}
 		
-		// Non-linear ads insertion
+		// Non-linear ad insertion
 		
 		/**
-		 * Sample Non-Linear advertisment code. Uses the flash vars configuration
+		 * Sample Non-Linear ad code. Uses the flash vars configuration
 		 */ 
 		private function onOverlayCurrentTimeChange(event:TimeEvent):void
 		{			
@@ -320,7 +320,7 @@ package org.osmf.advertisementplugin
 			}	
 		}
 		
-		// Linear ads insertion
+		// Linear ad insertion
 		
 		/**
 		 * Display the pre-roll advertisement.
@@ -331,14 +331,14 @@ package org.osmf.advertisementplugin
 			{
 				mediaPlayer.removeEventListener(BufferEvent.BUFFERING_CHANGE, onBufferChange);
 				
-				// Do not prebuffer the Advertisement if playing a preroll ad.
+				// Do not prebuffer the ad if playing a preroll ad.
 				// Let the main content prebuffer while the ad is playing instead.
 				displayAd(prerollURL, true, true, false, null);				
 			}
 		}
 		
 		/**
-		 * Display the mid-roll advertisement.
+		 * Display the mid-roll ad.
 		 */ 
 		private function onMidrollCurrentTimeChange(event:TimeEvent):void
 		{	
@@ -351,13 +351,13 @@ package org.osmf.advertisementplugin
 		}	
 			
 		/**
-		 * Display the post-roll advertisement.
+		 * Display the post-roll ad.
 		 */ 
 		private function onComplete(event:Event):void
 		{
 			mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onComplete);
 			
-			// Resume the playback after the add only if loop is set to true
+			// Resume the playback after the ad only if loop is set to true
 			displayLinearAd(postrollURL, mediaPlayer.loop);
 		}
 		
@@ -377,6 +377,6 @@ package org.osmf.advertisementplugin
 		
 		private var overlayURL:String;
 		private var overlayTime:int;
-		private var seekWorkarround:Boolean = true;
+		private var seekWorkaround:Boolean = true;
 	}
 }

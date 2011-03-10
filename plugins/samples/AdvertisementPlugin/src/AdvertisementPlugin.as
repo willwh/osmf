@@ -32,7 +32,7 @@ package
 	import org.osmf.advertisementplugin.AdvertisementPluginInfo;
 	
 	/**
-	 * Entry class for the Reference Plug-in for Advertisement insertions.
+	 * Entry class for the Ad Plugin insertions.
 	 */
 	public class AdvertisementPlugin extends Sprite
 	{

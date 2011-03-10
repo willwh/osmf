@@ -17,7 +17,7 @@ package
 	import org.osmf.media.URLResource;
 	
 	/**
-	 * This is a sample project that is loading the Reference Plugin for Advertisement.
+	 * This is a sample project that loads the Ad Plugin.
 	 */ 
 	[SWF(frameRate="25", backgroundColor="#000000", width="640", height="480")]
 	public class AdvertisementPluginSample extends Sprite
@@ -29,6 +29,7 @@ package
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			var mediaContainer:MediaContainer = new MediaContainer();			
 			var resource:URLResource = new URLResource("rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/sample1_700kbps.f4v");
+
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);	
 			mediaContainer.addMediaElement(mediaElement);			
 			this.addChild(mediaContainer);			
@@ -49,16 +50,14 @@ package
 			pluginResource.addMetadataValue("midrollTime", 10);
 			
 			// Uncomment the following lines to see a pre-roll, overlay and post-roll ad.  
-			// pluginResource.addMetadataValue("preroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
-			// pluginResource.addMetadataValue("postroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
-			// pluginResource.addMetadataValue("overlay", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
-			// pluginResource.addMetadataValue("overlayTime", 20);		
+			 pluginResource.addMetadataValue("preroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
+			 pluginResource.addMetadataValue("postroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
+			 pluginResource.addMetadataValue("overlay", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
+			 pluginResource.addMetadataValue("overlayTime", 20);		
 			
-			// Once the plugin is load we will be ready to play the media
-			// The event handler is not needed if you use the statically linked plugin,
-			// but i'll leave it here for reference in case you need to use the dynamically
-			// loaded plugin.
-			// For readability sake, we don't provide sample error handling code here.
+			// Once the plugin is loaded, play the media.
+			// The event handler is not needed if you use the statically linked plugin, but is here in case you load the plugin dynamically.
+			// For readability, we don’t provide error handling here, but you should.
 			mediaFactory.addEventListener(
 				MediaFactoryEvent.PLUGIN_LOAD, 
 				function(event:MediaFactoryEvent):void
