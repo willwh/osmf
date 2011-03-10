@@ -29,7 +29,6 @@ package
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			var mediaContainer:MediaContainer = new MediaContainer();			
 			var resource:URLResource = new URLResource("rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/sample1_700kbps.f4v");
-
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);	
 			mediaContainer.addMediaElement(mediaElement);			
 			this.addChild(mediaContainer);			
@@ -50,10 +49,10 @@ package
 			pluginResource.addMetadataValue("midrollTime", 10);
 			
 			// Uncomment the following lines to see a pre-roll, overlay and post-roll ad.  
-			 pluginResource.addMetadataValue("preroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
-			 pluginResource.addMetadataValue("postroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
-			 pluginResource.addMetadataValue("overlay", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
-			 pluginResource.addMetadataValue("overlayTime", 20);		
+			// pluginResource.addMetadataValue("preroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
+			// pluginResource.addMetadataValue("postroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
+			// pluginResource.addMetadataValue("overlay", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
+			// pluginResource.addMetadataValue("overlayTime", 20);		
 			
 			// Once the plugin is loaded, play the media.
 			// The event handler is not needed if you use the statically linked plugin, but is here in case you load the plugin dynamically.
