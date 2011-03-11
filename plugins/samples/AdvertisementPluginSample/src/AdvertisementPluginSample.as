@@ -39,12 +39,12 @@ package
 			// You can load it as a dynamic plugin as well 
 			// var pluginResource:MediaResourceBase = new URLResource("http://localhost/AdvertisementPlugin/bin/AdvertisementPlugin.swf");
 			
-			// Pass the reference to the MediaPlayer and the MediaContainer instances to the plug-in.
+			// Pass the references to the MediaPlayer and the MediaContainer instances to the plug-in.
 			pluginResource.addMetadataValue("MediaPlayer", mediaPlayer);
 			pluginResource.addMetadataValue("MediaContainer", mediaContainer);
 			
 			// Configure the plugin with the advertisement information
-			// The following configuration will instruct the plugin to play a mid-roll ad after 20 seconds
+			// The following configuration will instruct the plugin to play a mid-roll ad after 10 seconds
 			pluginResource.addMetadataValue("midroll", "http://gcdn.2mdn.net/MotifFiles/html/1379578/PID_938961_1237818260000_women.flv");
 			pluginResource.addMetadataValue("midrollTime", 10);
 			

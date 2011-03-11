@@ -110,28 +110,28 @@ package org.osmf.advertisementplugin
 			
 			// Propagate the muted and volume changes from the video player to the advertisements.
 			mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, function(event:Event):void {
-				for (var adPlayer:*  in adPlayers)
+				for (var adPlayer:* in adPlayers)
 				{
 					adPlayer.muted = mediaPlayer.muted;
 				}
 			});
 			
 			mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, function(event:Event):void {
-				for (var adPlayer:*  in adPlayers)
+				for (var adPlayer:* in adPlayers)
 				{
 					adPlayer.volume = mediaPlayer.volume;
 				}
 			});
 		}
 		
-		/*
+		/**
 		* Displays a linear advertisement. 
 		* 
 		* The method does not check if an ad is currently being played or not.
 		* This is up to the caller to check. 
 		* 
 		* The ad will use the same layout as the main media.
-		
+		* 
 		* @param url - the path to the ad media to be displayed.
 		* @resumePlaybackAfterAd - indicates if the playback of the main media should resume after the playback of the ad.
 		*/
@@ -168,7 +168,7 @@ package org.osmf.advertisementplugin
 								   resumePlaybackAfterAd:Boolean = true, 
 								   preBufferAd:Boolean = true,
 								   layoutInfo:Object = null):void
-		{			
+		{
 			// Set up the ad 
 			var adMediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(url));	
 			
@@ -196,7 +196,7 @@ package org.osmf.advertisementplugin
 			// Save the reference to the ad player, so that we can adjust the volume/mute of all the ads
 			// whenever the volume or mute values change in the video player.
 			adPlayers[adMediaPlayer] = true;
-			adPlayerCount ++;
+			adPlayerCount++;
 					
 			adMediaPlayer.addEventListener(TimeEvent.COMPLETE, onAdComplete);			
 			
@@ -231,7 +231,7 @@ package org.osmf.advertisementplugin
 					// so the player can adjust its UI.
 					mediaPlayer.media.metadata.addValue("Advertisement", url);
 					
-					// TODO: We assume that  playback pauses immediately,
+					// TODO: We assume that playback pauses immediately,
 					// but this is not the case for all types of content.
 					// The linear ads should be inserted only after the player state becomes 'paused'.
 					mediaPlayer.pause();		
@@ -270,7 +270,7 @@ package org.osmf.advertisementplugin
 				mediaContainer.removeMediaElement(adMediaPlayer.media);
 				
 				// Remove the saved references
-				adPlayerCount --;
+				adPlayerCount--;
 				delete adPlayers[adMediaPlayer];					
 				
 				if (pauseMainMediaWhilePlayingAd)
@@ -331,8 +331,8 @@ package org.osmf.advertisementplugin
 			{
 				mediaPlayer.removeEventListener(BufferEvent.BUFFERING_CHANGE, onBufferChange);
 				
-				// Do not prebuffer the ad if playing a preroll ad.
-				// Let the main content prebuffer while the ad is playing instead.
+				// Do not pre-buffer the ad if playing a pre-roll ad.
+				// Let the main content pre-buffer while the ad is playing instead.
 				displayAd(prerollURL, true, true, false, null);				
 			}
 		}
