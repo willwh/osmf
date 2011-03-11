@@ -28,7 +28,7 @@ package
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			var mediaContainer:MediaContainer = new MediaContainer();			
-			var resource:URLResource = new URLResource("rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/sample1_700kbps.f4v");
+			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);	
 			mediaContainer.addMediaElement(mediaElement);			
 			this.addChild(mediaContainer);			
