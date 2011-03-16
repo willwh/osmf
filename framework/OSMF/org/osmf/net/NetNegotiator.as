@@ -355,7 +355,9 @@ package org.osmf.net
 		{
 			timeOutTimer.stop();
 			connectionTimer.stop();
-			for (var i:int = 0; i < netConnections.length; i++) 
+			
+			var i:int = 0;
+			while (i < netConnections.length) 
 			{
 				var nc:NetConnection = netConnections[i];
 				if (!nc.connected)
@@ -364,7 +366,11 @@ package org.osmf.net
 					nc.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onNetSecurityError);
 					nc.removeEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError);
 					nc.close();
-					delete netConnections[i];
+					netConnections.splice(i, 1);
+				}
+				else
+				{
+					i++;
 				}
 			}
 		}
