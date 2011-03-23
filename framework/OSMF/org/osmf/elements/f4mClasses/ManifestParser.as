@@ -23,6 +23,7 @@ package org.osmf.elements.f4mClasses
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.DRMAuthenticateEvent;
 	import flash.utils.ByteArray;
 	
 	import org.osmf.media.MediaResourceBase;
@@ -32,6 +33,8 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.MediaItem;
+	import org.osmf.net.MediaItemType;
 	import org.osmf.net.MulticastResource;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
@@ -69,6 +72,16 @@ package org.osmf.elements.f4mClasses
 			if (root.xmlns::id.length() > 0)
 			{
 				manifest.id = root.xmlns::id.text();
+			}
+			
+			if (root.xmlns::label.length() > 0)
+			{
+				manifest.label = root.xmlns::label.text();
+			}
+			
+			if (root.xmlns::lang.length() > 0)
+			{
+				manifest.lang = root.xmlns::lang.text();
 			}
 			
 			if (root.xmlns::duration.length() > 0)
@@ -124,8 +137,8 @@ package org.osmf.elements.f4mClasses
 			{
 				var newMedia:Media = parseMedia(media, baseUrl);
 				if ((newMedia.multicastGroupspec != null 
-						&& newMedia.multicastGroupspec.length > 0 
-						&& (newMedia.multicastStreamName == null || newMedia.multicastStreamName.length <= 0)) 
+					&& newMedia.multicastGroupspec.length > 0 
+					&& (newMedia.multicastStreamName == null || newMedia.multicastStreamName.length <= 0)) 
 					|| (newMedia.multicastStreamName != null 
 						&& newMedia.multicastStreamName.length > 0 
 						&& (newMedia.multicastGroupspec == null || newMedia.multicastGroupspec.length <= 0)))
@@ -137,7 +150,23 @@ package org.osmf.elements.f4mClasses
 				{
 					isMulticast = true;
 				}
-				manifest.media.push(newMedia);
+
+				if (isSupportedType(newMedia.type))
+				{
+					if (newMedia.alternate )
+					{
+						manifest.alternativeMedia.push(newMedia);	
+					}
+					else
+					{
+						if (newMedia.label == null)
+							newMedia.label = manifest.label;
+						if (newMedia.language == null)
+							newMedia.language = manifest.lang;
+						
+						manifest.media.push(newMedia);
+					}
+				}
 				bitrateMissing ||= isNaN(newMedia.bitrate);
 			}	
 			
@@ -202,6 +231,7 @@ package org.osmf.elements.f4mClasses
 				
 			if (value.attribute('drmAdditionalHeaderId').length() > 0)
 			{
+				media.drmAdditionalHeader = new DRMAdditionalHeader();
 				media.drmAdditionalHeader.id = value.@drmAdditionalHeaderId;
 			}
 			
@@ -229,6 +259,30 @@ package org.osmf.elements.f4mClasses
 			if (value.attribute('multicastStreamName').length() > 0)
 			{
 				media.multicastStreamName = value.@multicastStreamName;
+			}
+			
+			if (value.attribute('label').length() > 0)
+			{
+				media.label = value.@label;
+			}
+			
+			if (value.attribute('type').length() > 0)
+			{
+				media.type = value.@type;
+			}
+			else
+			{
+				media.type = MediaItemType.VIDEO;
+			}
+
+			if (value.attribute('lang').length() > 0)
+			{
+				media.language = value.@lang;
+			}
+			
+			if (value.hasOwnProperty("@alternate") || value.attribute('alternate').length() > 0)
+			{
+				media.alternate = true;
 			}
 			
 			if (value.xmlns::moov.length() > 0)
@@ -360,7 +414,7 @@ package org.osmf.elements.f4mClasses
 								
 			for each (media in allMedia)
 			{
-				if (media.drmAdditionalHeader.id == drmAdditionalHeader.id)
+				if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.id == drmAdditionalHeader.id)
 				{
 					media.drmAdditionalHeader = drmAdditionalHeader;					
 				}
@@ -680,6 +734,7 @@ package org.osmf.elements.f4mClasses
 			resource.addMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA, manifestResource);
 			
 			addDVRInfo(value, resource);
+			addAlternativeMedia(value, resource, manifestFolder);
 			
 			return resource;
 		}
@@ -688,6 +743,11 @@ package org.osmf.elements.f4mClasses
 		{
 			var theURL:URL = new URL(url);
 			return theURL.absolute;
+		}
+		
+		private function isSupportedType(type:String):Boolean
+		{
+			return (type == MediaItemType.VIDEO || type == MediaItemType.AUDIO);	
 		}
 		
 		private function extractDRMMetadata(data:ByteArray):ByteArray
@@ -719,6 +779,78 @@ package org.osmf.elements.f4mClasses
 			return metadata;
 		}
 
+		private function addAlternativeMedia(manifest:Manifest, resource:StreamingURLResource, manifestFolder):void
+		{
+			if (manifest.alternativeMedia.length == 0)
+				return;
+			
+			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
+			if (httpMetadata == null)
+			{
+				httpMetadata = new Metadata();
+				resource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, httpMetadata);
+					
+			}
+			
+			var drmMetadata:Metadata;
+			var alternativeMediaItems:Vector.<MediaItem> = new Vector.<MediaItem>();
+			for each (var media:Media in manifest.alternativeMedia)
+			{	
+				var stream:String;
+				
+				if (isAbsoluteURL(media.url))
+				{
+					stream = NetStreamUtils.getStreamNameFromURL(media.url);
+				}
+				else
+				{
+					stream = media.url;
+				}
+				
+				var item:MediaItem = new MediaItem(media.type, stream, media.bitrate, media.label, media.language);
+				alternativeMediaItems.push(item);
+				
+				if (media.drmAdditionalHeader != null)
+				{						
+					if (resource.getMetadataValue(MetadataNamespaces.DRM_METADATA) == null)
+					{
+						drmMetadata = new Metadata();
+						resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
+					}						
+					if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
+					{
+						drmMetadata.addValue(item.stream, extractDRMMetadata(media.drmAdditionalHeader.data));	
+						drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.stream, media.drmAdditionalHeader.data);
+					} 						
+				}
+				
+				if (media.bootstrapInfo	!= null)
+				{
+					var bootstrapInfoURLString:String = media.bootstrapInfo.url ? media.bootstrapInfo.url : null;
+					if (media.bootstrapInfo.url != null &&
+						isAbsoluteURL(media.bootstrapInfo.url) == false)
+					{
+						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
+						media.bootstrapInfo.url = bootstrapInfoURLString; 
+					}
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.stream, media.bootstrapInfo);
+				}
+				
+				if (media.metadata != null)
+				{
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.stream, media.metadata);					
+				}
+				
+				if (media.xmp != null)
+				{
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.stream, media.xmp);					
+				}
+			}
+			
+			resource.alternativeAudioItems = alternativeMediaItems;
+		}
+		
+		
 		private function addDVRInfo(manifest:Manifest, resource:StreamingURLResource):void
 		{
 			if (manifest.dvrInfo == null)

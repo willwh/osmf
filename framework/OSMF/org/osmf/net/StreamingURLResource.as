@@ -86,7 +86,7 @@ package org.osmf.net
 							, clipEndTime:Number = NaN
 							, connectionArguments:Vector.<Object> = null
 							, urlIncludesFMSApplicationInstance:Boolean = false
-							, drmContentData:ByteArray = null
+							, drmContentData:ByteArray = null							 
 							)
 		{
 			_streamType = streamType || StreamType.RECORDED;
@@ -226,11 +226,35 @@ package org.osmf.net
 			_urlIncludesFMSApplicationInstance = value;
 		}
 		
+		/**
+		 * Vector of AlternativeAudioItems. Each item represents a
+		 * different alternative audio stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.6
+		 */
+		public function get alternativeAudioItems():Vector.<MediaItem>
+		{
+			if (_alternativeAudioItems == null)
+			{
+				_alternativeAudioItems = new Vector.<MediaItem>();
+			}
+			return _alternativeAudioItems;
+		}
+		public function set alternativeAudioItems(value:Vector.<MediaItem>):void
+		{
+			_alternativeAudioItems = value;
+		}
+		
+		
 		private var _streamType:String; // StreamType
 		private var _clipStartTime:Number;
 		private var _clipEndTime:Number;
 		private var _connectionArguments:Vector.<Object>;
 		private var _drmContentData:ByteArray;
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
+		private var _alternativeAudioItems:Vector.<MediaItem> = null;
 	}
 }

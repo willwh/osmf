@@ -34,6 +34,66 @@ package org.osmf.elements.f4mClasses
 	internal class Media
 	{
 		/**
+		 * Location of the media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 		
+		public var url:String;
+		
+		/**
+		 * The bitrate of the media in kilobits per second.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var bitrate:Number;
+		
+		/**
+		 * The type of the media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var type:String;
+
+		/**
+		 * The label of the media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var label:String;
+
+		/**
+		 * The language of the media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var language:String;
+
+		/**
+		 * Flag indicating that this is an alternate media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var alternate:Boolean;
+
+		/**
 		 * Information about the |AdditionalHeader used with the media. |AdditionalHeader
 		 * contains DRM metadata.
 		 *  
@@ -42,7 +102,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var drmAdditionalHeader:DRMAdditionalHeader = new DRMAdditionalHeader();
+		public var drmAdditionalHeader:DRMAdditionalHeader;
 		
 		/**
 		 * Represents all information needed to bootstrap playback of 
@@ -77,25 +137,6 @@ package org.osmf.elements.f4mClasses
  		 */
  		public var xmp:ByteArray;
 
-		/**
-		 * Location of the media.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 		
-		public var url:String;
-		
-		/**
-		 * The bitrate of the media in kilobits per second.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public var bitrate:Number;
 		
 		/**
 		 * Represents the Movie Box, or "moov" atom, for one representation of 

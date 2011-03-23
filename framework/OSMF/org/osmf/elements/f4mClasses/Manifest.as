@@ -43,6 +43,26 @@ package org.osmf.elements.f4mClasses
 		public var id:String;
 		
 		/**
+		 * The label element represents a user-friendly description for the media. It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public var label:String;
+
+		/**
+		 * The lang element represents a language code identifier for the media. It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public var lang:String;
+
+		/**
 		 * The &lt;baseURL&gt; element contains the base URL for all relative (HTTP-based) URLs 
 		 * in the manifest. It is optional. When specified, its value is prepended to all 
 		 * relative URLs (i.e. those URLs that don't begin with "http://" or "https://" 
@@ -161,6 +181,16 @@ package org.osmf.elements.f4mClasses
 		 */ 
 		public var media:Vector.<Media> = new Vector.<Media>();
 
+		/**
+		 * The set of alternative streams associated with this media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var alternativeMedia:Vector.<Media> = new Vector.<Media>();
+		
 		/**
 		 * The dvrInfo element. It is needed to play DVR media.
 		 *  

@@ -716,6 +716,127 @@ package org.osmf.elements.f4mClasses
 			{
 				// expected
 			}
-		}				
+		}
+		
+		public function testAlternateStreamsWithoutMBR():void
+		{
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<streamType>recorded</streamType>
+								<duration>100</duration>
+								<label>English</label>
+								<lang>en</lang>
+								<mimeType>video/mp4</mimeType>
+								<baseURL>http://example.com/</baseURL>
+								<bootstrapInfo profile="named" id="boot1">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<bootstrapInfo profile="named" id="boot2">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<bootstrapInfo profile="named" id="boot3">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<media url="myvideo" bitrate="1300" bootstrapInfoId="boot1" />
+								<media url="myvideo_audio1" bitrate="192" bootstrapInfoId="boot2" type="audio" label="Espanol" lang="es" alternate="true" />
+								<media url="myvideo_audio2" bitrate="192" bootstrapInfoId="boot3" type="audio" label="Chinese" lang="zh" alternate="true" />
+							</manifest>;
+			var manifest:Manifest = parser.parse(test);
+			
+			assertNotNull(manifest);
+			assertEquals(manifest.label, "English");
+			assertEquals(manifest.lang, "en");
+			
+			assertNotNull(manifest.media);
+			assertEquals(manifest.media.length, 1);
+			assertFalse(manifest.media[0].alternate);
+			assertEquals(manifest.media[0].url, "myvideo");
+			assertEquals(manifest.media[0].bitrate, 1300);
+			assertEquals(manifest.media[0].label, "English");
+			assertEquals(manifest.media[0].language, "en");
+
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 2);
+			assertTrue(manifest.alternativeMedia[0].alternate);
+			assertEquals(manifest.alternativeMedia[0].url, "myvideo_audio1");
+			assertEquals(manifest.alternativeMedia[0].bitrate, 192);
+			assertEquals(manifest.alternativeMedia[0].type, "audio");
+			assertEquals(manifest.alternativeMedia[0].label, "Espanol");
+			assertEquals(manifest.alternativeMedia[0].language, "es");
+			
+			assertTrue(manifest.alternativeMedia[1].alternate);
+			assertEquals(manifest.alternativeMedia[1].url, "myvideo_audio2");
+			assertEquals(manifest.alternativeMedia[1].bitrate, 192);
+			assertEquals(manifest.alternativeMedia[1].type, "audio");
+			assertEquals(manifest.alternativeMedia[1].label, "Chinese");
+			assertEquals(manifest.alternativeMedia[1].language, "zh");
+			
+				
+		}
+		
+		public function testAlternateStreamsWithMBR():void
+		{
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<label>English</label>
+								<lang>en</lang>
+								<streamType>recorded</streamType>
+								<duration>100</duration>
+								<mimeType>video/mp4</mimeType>
+								<baseURL>http://example.com/</baseURL>
+								<bootstrapInfo profile="named" id="boot1">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<bootstrapInfo profile="named" id="boot2">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<bootstrapInfo profile="named" id="boot3">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<bootstrapInfo profile="named" id="boot4">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<bootstrapInfo profile="named" id="boot5">
+									BASE64 encoding of bootstrap information
+								</bootstrapInfo>
+								<media url="myvideo_250" bitrate="250" bootstrapInfoId="boot1" />
+								<media url="myvideo_500" bitrate="500" bootstrapInfoId="boot1" />
+								<media url="myvideo_900" bitrate="900" bootstrapInfoId="boot1" />
+								<media url="myvideo_1300" bitrate="1300" bootstrapInfoId="boot2" />
+								<media url="myvideo_2100" bitrate="2100" bootstrapInfoId="boot3" />
+								<media url="myvideo_audio1" bitrate="192" bootstrapInfoId="boot4" type="audio" label="Espanol" lang="es" alternate="true" />
+								<media url="myvideo_audio2" bitrate="192" bootstrapInfoId="boot5" type="audio" label="Chinese" lang="zh" alternate="true" />
+							</manifest>;
+			var manifest:Manifest = parser.parse(test);
+			assertNotNull(manifest);
+			assertEquals(manifest.label, "English");
+			assertEquals(manifest.lang, "en");
+			
+			assertNotNull(manifest.media);
+			assertEquals(manifest.media.length, 5);
+			for (var index:int = 0; index < 5; index++)
+			{
+				assertFalse(manifest.media[index].alternate);
+				assertEquals(manifest.media[index].label, "English");
+				assertEquals(manifest.media[index].language, "en");
+			}
+
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 2);
+			assertTrue(manifest.alternativeMedia[0].alternate);
+			assertEquals(manifest.alternativeMedia[0].url, "myvideo_audio1");
+			assertEquals(manifest.alternativeMedia[0].bitrate, 192);
+			assertEquals(manifest.alternativeMedia[0].type, "audio");
+			assertEquals(manifest.alternativeMedia[0].label, "Espanol");
+			assertEquals(manifest.alternativeMedia[0].language, "es");
+			
+			assertTrue(manifest.alternativeMedia[1].alternate);
+			assertEquals(manifest.alternativeMedia[1].url, "myvideo_audio2");
+			assertEquals(manifest.alternativeMedia[1].bitrate, 192);
+			assertEquals(manifest.alternativeMedia[1].type, "audio");
+			assertEquals(manifest.alternativeMedia[1].label, "Chinese");
+			assertEquals(manifest.alternativeMedia[1].language, "zh");
+			
+		}
 	}
 }
