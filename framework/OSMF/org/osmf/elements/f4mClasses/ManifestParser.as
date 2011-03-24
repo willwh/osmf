@@ -747,7 +747,7 @@ package org.osmf.elements.f4mClasses
 		
 		private function isSupportedType(type:String):Boolean
 		{
-			return (type == MediaItemType.VIDEO || type == MediaItemType.AUDIO);	
+			return (type == MediaItemType.AUDIO);	
 		}
 		
 		private function extractDRMMetadata(data:ByteArray):ByteArray
@@ -779,7 +779,7 @@ package org.osmf.elements.f4mClasses
 			return metadata;
 		}
 
-		private function addAlternativeMedia(manifest:Manifest, resource:StreamingURLResource, manifestFolder):void
+		private function addAlternativeMedia(manifest:Manifest, resource:StreamingURLResource, manifestFolder:String):void
 		{
 			if (manifest.alternativeMedia.length == 0)
 				return;
