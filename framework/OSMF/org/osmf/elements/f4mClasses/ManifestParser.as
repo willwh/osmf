@@ -747,7 +747,7 @@ package org.osmf.elements.f4mClasses
 		
 		private function isSupportedType(type:String):Boolean
 		{
-			return (type == MediaItemType.AUDIO);	
+			return (type == MediaItemType.VIDEO || type == MediaItemType.AUDIO);	
 		}
 		
 		private function extractDRMMetadata(data:ByteArray):ByteArray
