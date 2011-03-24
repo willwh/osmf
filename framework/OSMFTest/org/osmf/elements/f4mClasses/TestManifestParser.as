@@ -2256,7 +2256,7 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.alternativeMedia[1].drmAdditionalHeader);
 		}
 		
-		public function testHDSBaseMedia_2AlternateTracksSameURL():void
+		public function testHSBaseMedia_2AlternateTracksSameURL():void
 		{
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
@@ -2300,13 +2300,14 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.dvrInfo);
 			
 			assertNotNull(manifest.media);
-			assertEquals(manifest.media.length, 3);
+			assertEquals(manifest.media.length, 1);
 			
-			for (var index:int = 0; index < 3; index++)
-			{
-				assertFalse(manifest.media[index].alternate);
-				assertNull(manifest.media[index].drmAdditionalHeader);
-			}
+			assertFalse(manifest.media[0].alternate);
+			assertEquals(manifest.media[0].url, "neil_patrick_harris_video_only");
+			assertEquals(manifest.media[0].bitrate, "1234");
+			assertNull(manifest.media[0].label);
+			assertNull(manifest.media[0].language);
+			assertNull(manifest.media[0].drmAdditionalHeader);
 			
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 2);
