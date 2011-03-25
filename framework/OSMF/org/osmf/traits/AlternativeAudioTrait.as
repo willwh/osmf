@@ -298,7 +298,7 @@ package org.osmf.traits
 				);
 		}
 		
-		private var _currentIndex:int = 0;
+		private var _currentIndex:int = -1;
 		private var _numAlternativeAudioStreams:int;
 		private var _changingStream:Boolean;
 	}

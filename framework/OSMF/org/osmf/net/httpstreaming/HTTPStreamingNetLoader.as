@@ -34,13 +34,14 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.NetStreamSwitchManager;
 	import org.osmf.net.NetStreamSwitchManagerBase;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.SwitchingRuleBase;
+	import org.osmf.net.httpstreaming.HTTPStreamingSwitchManager;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
+	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait;
+	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
-	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait;
-	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait;
-	import org.osmf.net.httpstreaming.dvr.DVRInfo;
-	import org.osmf.net.httpstreaming.HTTPStreamingSwitchManager;
 	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
 	import org.osmf.traits.LoadState;
 
@@ -85,7 +86,15 @@ package org.osmf.net.httpstreaming
 		{
 			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler();
 			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler(fileHandler);
-			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler);
+			
+			var alternateSource:HTTPStreamingDataSource = null;
+			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+			if (streamingResource != null && streamingResource.alternativeAudioItems != null && streamingResource.alternativeAudioItems.length > 0 )
+			{
+				alternateSource = new HTTPStreamingDataSource(streamingResource);
+			}
+
+			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler, alternateSource);
 			httpNetStream.manualSwitchMode = true;
 			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(resource);
 			return httpNetStream;

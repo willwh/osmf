@@ -206,5 +206,11 @@ package org.osmf.net.httpstreaming
 		{
 			throw new IllegalOperationError("The dvrGetStreamInfo() method must be overridden by the derived class.");
 		}
+		
+		public function getFragmentDuration(fragId:uint):Number
+		{
+			throw new IllegalOperationError("The getFragmentDuration() method must be overridden by the derived class.");
+		}
+
 	}
 }

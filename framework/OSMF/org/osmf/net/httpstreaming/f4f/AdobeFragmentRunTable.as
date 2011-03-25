@@ -326,6 +326,21 @@ package org.osmf.net.httpstreaming.f4f
 				fdp.durationAccrued = value;
 			}
 		}
+		
+		public function getFragmentDuration(fragId:uint):Number
+		{
+			var fdp:FragmentDurationPair = null;
+			var i:uint = 0;			
+			while ((i<_fragmentDurationPairs.length) && (_fragmentDurationPairs[i].firstFragment <= fragId))
+			{
+				i++;
+			}
+			if (i)
+				return _fragmentDurationPairs[i-1].duration;
+			else
+				return 0;
+		}
+
 
 		// Internal
 		//

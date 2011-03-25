@@ -23,10 +23,21 @@ package org.osmf.net
 {
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
+	import flash.net.NetStreamPlayTransitions;
 	
 	import org.osmf.events.AlternativeAudioEvent;
 	import org.osmf.traits.AlternativeAudioTrait;
 	import org.osmf.utils.OSMFStrings;
+	
+	import spark.skins.spark.StackedFormHeadingSkin;
+	
+	CONFIG::LOGGING
+	{
+		import org.osmf.logging.Logger;
+		import org.osmf.logging.Log;
+	}
+
 
 	[ExcludeClass]
 	
@@ -107,10 +118,132 @@ package org.osmf.net
 		 */
 		protected function executeChangeStream(indexToChangeTo:int):void
 		{
+			var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
+			
+			var playArgs:Object = NetStreamUtils.getPlayArgsForResource(_streamingResource);
+			
+			nso.start = playArgs.start;
+			nso.len = playArgs.len;
+			
+			nso.streamName = _streamingResource.alternativeAudioItems[indexToChangeTo].stream;
+			//
+			// FM-925, it seems that the oldStreamName cannot contain parameters,
+			// therefore we must remove them
+			//
+			var sn:String = oldStreamName;
+			if (sn != null && sn.indexOf("?") >= 0)
+			{
+				nso.oldStreamName = sn.substr(0, sn.indexOf("?"));
+			}
+			else
+			{
+				nso.oldStreamName = oldStreamName;
+			}
+			
+			nso.transition = NetStreamPlayTransitions.SWAP;
+			
+			CONFIG::LOGGING
+			{
+				debug("executeChange() - Changing audio to stream " + _streamingResource.alternativeAudioItems[indexToChangeTo].stream);
+			}
+			
+			switching = true;
+			
+			_netStream.play2(nso);
+		}
+		
+		private function getIndexForName(url:String):int
+		{
+			var length:int = _streamingResource.alternativeAudioItems.length;
+			for (var  index:int  = 0; index < length; index++)
+			{
+				if (_streamingResource.alternativeAudioItems[index].stream == url)
+					return index;
+			}
+			return -1;
+		}
+		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			CONFIG::LOGGING
+			{
+				debug("onNetStatus() - event.info.code=" + event.info.code);
+			}
+			
+			switch (event.info.code) 
+			{
+				case NetStreamCodes.NETSTREAM_PLAY_START:
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
+					switching  = false;
+					actualIndex = getIndexForName(event.info.details);
+					lastTransitionIndex = actualIndex;
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
+					switching  = false;
+					break;
+				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
+					switching  = false;
+					if (lastTransitionIndex >= 0)
+					{
+						_currentIndex = lastTransitionIndex;
+					}					
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_STOP:
+					CONFIG::LOGGING
+				{
+					debug("onNetStatus() - Stopping rules since server has stopped sending data");
+				}
+					break;
+			}			
+		}
+		
+		private function onPlayStatus(info:Object):void
+		{
+			CONFIG::LOGGING
+			{
+				debug("onPlayStatus() - info.code=" + info.code);
+			}
+			
+			switch (info.code)
+			{
+				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
+					if (lastTransitionIndex >= 0)
+					{
+						_currentIndex = lastTransitionIndex;
+						lastTransitionIndex = -1;
+					}
+					
+					CONFIG::LOGGING
+				{
+					debug("onPlayStatus() - Transition complete to index: " + currentIndex + " with url " + _streamingResource.alternativeAudioItems[currentIndex]);
+				}
+					
+					break;
+			}
+		}
+
+		CONFIG::LOGGING
+		{
+			private function debug(...args):void
+			{
+				logger.debug(new Date().toTimeString() + ">>> NetStreamAlternativeAudioTrait." + args);
+			}
 		}
 		
 		private var _netStream:NetStream;
 		private var _streamingResource:StreamingURLResource;
 		private var _indexToChangeTo:int;
+		private var actualIndex:int = -1;
+		private var oldStreamName:String;
+		private var switching:Boolean;
+		private var _currentIndex:int;
+		private var lastTransitionIndex:int = -1;
+
+		CONFIG::LOGGING
+		{
+			private static const logger:Logger = Log.getLogger("org.osmf.net.NetStreamAlternativeAudioTrait");
+		}
+
 	}
 }

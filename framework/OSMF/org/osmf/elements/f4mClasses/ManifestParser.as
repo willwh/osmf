@@ -193,19 +193,21 @@ package org.osmf.elements.f4mClasses
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_BITRATE_MISSING));
 			}
-								
+							
+			var allMedia:Vector.<Media> = manifest.media.concat(manifest.alternativeMedia);
+			
 			// DRM Metadata	
 			
 			for each (var data:XML in root.xmlns::drmAdditionalHeader)
 			{
-				parseDRMAdditionalHeader(data, manifest.media, baseUrl, manifest);
+				parseDRMAdditionalHeader(data, allMedia, baseUrl, manifest);
 			}	
 			
 			// Bootstrap	
 			
 			for each (var info:XML in root.xmlns::bootstrapInfo)
 			{
-				parseBootstrapInfo(info, manifest.media, baseUrl, manifest);
+				parseBootstrapInfo(info, allMedia, baseUrl, manifest);
 			}	
 			
 			// Required if base URL is omitted from Manifest
@@ -473,7 +475,9 @@ package org.osmf.elements.f4mClasses
 				{
 					media.bootstrapInfo = bootstrapInfo;
 				}						
-			}								
+			}			
+			
+			
 		}		
 		
 		/**

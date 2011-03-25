@@ -283,6 +283,6 @@ package org.osmf.net
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
 
 		private var _alternativeAudioItems:Vector.<MediaItem> = null;
-		private var _initialAlternativeAudioIndex:int;
+		private var _initialAlternativeAudioIndex:int = -1;
 	}
 }

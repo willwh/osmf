@@ -169,5 +169,42 @@ package org.osmf.net.httpstreaming
 		{
 			throw new IllegalOperationError("The flushFileSegment() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
 		}
+		
+		public function mixFileSegment(input:IDataInput, input1:IDataInput):ByteArray
+		{
+			throw new IllegalOperationError("The processFileSegment() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+		}
+		public function mixMDATBytes(input:IDataInput, input1:IDataInput):ByteArray
+		{
+			throw new IllegalOperationError("The mixMDATBytes() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+		}
+		
+		public function get mixedAudioTime():uint
+		{
+			throw new IllegalOperationError("The mixedAudioTime() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+		}
+		public function get mixedVideoTime():uint
+		{
+			throw new IllegalOperationError("The mixedVideoTime() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+		}
+		public function get videoInput():ByteArray
+		{
+			throw new IllegalOperationError("The videoInput() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+		}
+		public function get audioInput():ByteArray
+		{
+			throw new IllegalOperationError("The audioInput() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+		}
+		public function flushVideoInput():void
+		{
+		}
+		public function flushAudioInput():void
+		{
+		}
+		public function get mdatBytesPending():uint
+		{
+			throw new IllegalOperationError("The mdatBytesPending() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+		}
+
 	}
 }

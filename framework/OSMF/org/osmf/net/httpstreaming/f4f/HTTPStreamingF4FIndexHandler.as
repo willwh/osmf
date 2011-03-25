@@ -264,6 +264,14 @@ package org.osmf.net.httpstreaming.f4f
 			}
 		}	
 		
+		override public function getFragmentDuration(fragId:uint):Number
+		{
+			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
+			// For now, we assume that there is only one fragment run table.
+			var afrt:AdobeFragmentRunTable = abst.fragmentRunTables[0];
+			return afrt.getFragmentDuration(fragId);
+		}
+
 		/**
 		 * @private
 		 */

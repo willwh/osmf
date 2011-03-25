@@ -44,8 +44,8 @@ package org.osmf.net.httpstreaming.flv
 		public static const TAG_TYPE_ENCRYPTED_SCRIPTDATAOBJECT:int = TAG_TYPE_SCRIPTDATAOBJECT + TAG_FLAG_ENCRYPTED;
 		
 		// but these are good here...
-		internal static const TAG_HEADER_BYTE_COUNT:int = 11;
-		internal static const PREV_TAG_BYTE_COUNT:int = 4;
+		public static const TAG_HEADER_BYTE_COUNT:int = 11;
+		public static const PREV_TAG_BYTE_COUNT:int = 4;
 		
 		public function FLVTag(type:int)
 		{

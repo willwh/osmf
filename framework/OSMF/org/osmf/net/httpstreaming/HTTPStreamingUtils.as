@@ -29,6 +29,8 @@ package org.osmf.net.httpstreaming
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.MediaItem;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
@@ -248,7 +250,7 @@ package org.osmf.net.httpstreaming
 				var streamName:String = resource.url;
 				streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamName, NaN, additionalHeader, streamMetadata, xmpMetadata));
 			}
-
+			
 			return streamInfos;
 		}
 	}

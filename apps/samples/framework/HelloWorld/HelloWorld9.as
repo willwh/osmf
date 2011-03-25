@@ -93,7 +93,7 @@ package
 			player = new MediaPlayer();
 			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-			player.muted = true;
+			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
 			player.media = mediaElement;
@@ -110,17 +110,24 @@ package
 			switch (event.state)
 			{
 				case MediaPlayerState.READY:
-				case MediaPlayerState.PLAYING:
 					trace("Alternative languages", player.hasAlternativeAudio ? "available" : " not available" );
 					if (player.hasAlternativeAudio)
 					{
-						var indexForRomanian:int = -1;
 						for (var index:int = 0; index < player.numAlternativeAudio; index++)
 						{
 							var item:MediaItem = player.getMediaItemForAlternativeAudioIndex(index);
 							trace("[", item.language, "]", item.description);
 						}
-						player.changeAlternativeAudioIndexTo(1);
+					}
+					break;
+				case MediaPlayerState.PLAYING:
+					if (player.hasAlternativeAudio)
+					{
+						if (!audioChanged && player.currentTime > 0.2)
+						{
+							player.changeAlternativeAudioIndexTo(1);
+							audioChanged = true;
+						}
 					}
 					break;
 			}
@@ -131,11 +138,13 @@ package
 			trace("[Error]", event.toString());	
 		}
 		
+		private var audioChanged:Boolean = false;
 		private var player:MediaPlayer;
 		private var container:MediaContainer;
 		
 		private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/sync_test/sync_test_lba.f4m";
-		private static const F4M_LIVE:String = "http://10.131.237.104/live/events/latebind/events/_definst_/liveevent.f4m";
-			
+		//private static const F4M_LIVE:String = "http://10.131.237.104/live/events/latebind/events/_definst_/liveevent.f4m";
+		private static const F4M_LIVE:String = "http://catherine.corp.adobe.com/osmf/late_bindings_audio_sp3/demo_live.f4m";	
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
 	}
 }
