@@ -61,6 +61,7 @@ package org.osmf.elements.f4mClasses
 		
 		public function testNoURL():void
 		{
+			
 			var errorSeen:Boolean = false;
 			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>myvideo</id>
@@ -1383,9 +1384,7 @@ package org.osmf.elements.f4mClasses
 			
 			assertNotNull(manifest.media);
 			assertEquals(manifest.media.length, 3);
-			var index:int = 0;
-			
-			for (index=0; index < 3; index++)
+			for (var index:int = 0; index < 3; index++)
 			{
 				assertFalse(manifest.media[index].alternate);
 			}
@@ -1393,7 +1392,7 @@ package org.osmf.elements.f4mClasses
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 10);
 			
-			for (index=0; index < 10; index++)
+			for (var index:int = 0; index < 10; index++)
 			{
 				assertTrue(manifest.alternativeMedia[index].alternate);
 				assertEquals(manifest.alternativeMedia[index].url, "neil_patrick_harris_audio_only"+ (index+1).toString());
@@ -1408,6 +1407,7 @@ package org.osmf.elements.f4mClasses
 		
 		public function testNoBaseMedia_2AlternateTracks():void
 		{
+			// TO DO: this test scenario needs to be defined...not suported code wise - Talk to Kimi
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
 									neil_patrick_harris_video_only
@@ -1436,28 +1436,38 @@ package org.osmf.elements.f4mClasses
 								</media>
 							</manifest>;
 			
-			var manifest:Manifest = parser.parse(test);			
+			var errorSeen:Boolean = false;
 			
-			assertNotNull(manifest);
+			try
+			{
+				var manifest:Manifest = parser.parse(test);			
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
 			
-			assertNotNull(manifest.media);
-			assertEquals(manifest.media.length, 0);
+			/*assertNotNull(manifest);
+			
+			assertNull(manifest.media);
 			
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 2);
 			assertTrue(manifest.alternativeMedia[0].alternate);
 			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
-			assertEquals(manifest.alternativeMedia[0].bitrate, 128);
+			assertEquals(manifest.alternativeMedia[0].bitrate, NaN);
 			assertEquals(manifest.alternativeMedia[0].type, "audio");
 			assertEquals(manifest.alternativeMedia[0].label, "label1");
 			assertEquals(manifest.alternativeMedia[0].language, "language1");
 			
 			assertTrue(manifest.alternativeMedia[1].alternate);
 			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only2");
-			assertEquals(manifest.alternativeMedia[1].bitrate, 128);
+			assertEquals(manifest.alternativeMedia[1].bitrate, NaN);
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "label2");
 			assertEquals(manifest.alternativeMedia[1].language, "language2");
+			*/
 		}
 		
 		public function testHSBaseMedia_1AlternateTrack_emptyLang_emptyLabel():void
@@ -1669,6 +1679,7 @@ package org.osmf.elements.f4mClasses
 		
 		public function testHSBaseMedia_1AlternateTrack_emptyType():void
 		{
+			// TO DO: Kimi needs to update code to return null vector for alternative media track if type is not audio or video
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
 									neil_patrick_harris_video_only
@@ -1708,12 +1719,12 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
 	
-			assertNotNull(manifest.alternativeMedia);
-			assertEquals(manifest.alternativeMedia.length, 0);
+			assertNull(manifest.alternativeMedia);
 		}
 		
 		public function testHSBaseMedia_1AlternateTrack_wrongType():void
 		{
+			// TO DO: Kimi needs to update code to return null vector for alternative media track if type is not audio or video
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
 									neil_patrick_harris_video_only
@@ -1753,8 +1764,7 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
 			
-			assertNotNull(manifest.alternativeMedia);
-			assertEquals(manifest.alternativeMedia.length, 0);
+			assertNull(manifest.alternativeMedia);
 		}
 
 
@@ -2311,7 +2321,7 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.alternativeMedia[0].drmAdditionalHeader);
 			
 			assertTrue(manifest.alternativeMedia[1].alternate);
-			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only");
+			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only2");
 			assertEquals(manifest.alternativeMedia[1].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "label2");
@@ -2319,7 +2329,7 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.alternativeMedia[1].drmAdditionalHeader);
 		}
 		
-		public function testBugFM1243_ResourceFromNoMedia():void
+		public function testHSBaseMedia_1AlternateTrack_MediaWithoutBitrate():void
 		{
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
@@ -2331,28 +2341,104 @@ package org.osmf.elements.f4mClasses
 								<duration>
 									114.715
 								</duration>
+								<bootstrapInfo profile="named" id="bootstrap7573">
+									AAAA02Fic3QAAAAAAAAABgAAAAPoAAAAAAABv/oAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAACGYWZydAAAAAAAAAPoAAAAAAcAAAABAAAAAAAAAAAAAFP8AAAAAgAAAAAAAFQSAABMLAAAAAMAAAAAAACgUQAAS2QAAAAEAAAAAAAA68kAAFLQAAAABQAAAAAAAT6uAABMLAAAAAYAAAAAAAGK7QAANSAAAAAAAAAAAAAAAAAAAAAAAA==
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_video_only_id" type="video" url="neil_patrick_harris_video_only" bootstrapInfoId="bootstrap7573">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK3Cj1wo9gAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAADnZpZGVvZnJhbWVyYXRlAEA9+E0JEk94AAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AGwAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA3VuZAAACQAHY3VzdGRlZgoAAAAAAAAJ
+									</metadata>
+								</media>
 								<bootstrapInfo profile="named" id="bootstrap7923">
 									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABv/oAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAQAAAACAAAAAgEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYaoAAA5bAAAAAAAAAAAAAAAAAAAAAAA
 								</bootstrapInfo>
-								<baseUrl>http://www.example.com</baseUrl>
+								<media streamId="neil_patrick_harris_audio_only_id" type="audio" description="description1" label="label1" lang="language1" url="neil_patrick_harris_audio_only" bootstrapInfoId="bootstrap7923" alternate="true" bitrate="128">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK0euFHrhQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAGYWFjYW90AAAAAAAAAAAAAA9hdWRpb3NhbXBsZXJhdGUAQOWIgAAAAAAADWF1ZGlvY2hhbm5lbHMAQAAAAAAAAAAACXRyYWNraW5mbwoAAAABAwAGbGVuZ3RoAEFTS+6AAAAAAAl0aW1lc2NhbGUAQOWIgAAAAAAACGxhbmd1YWdlAgADdW5kAAAJAAdjdXN0ZGVmCgAAAAAAAAk=
+									</metadata>
+								</media>
 							</manifest>;
+										
+			var manifest:Manifest = parser.parse(test);
+			assertNotNull(manifest);			
 			
-			var manifest:Manifest = parser.parse(test);	
-			assertNotNull(manifest);
+			assertNotNull(manifest.media);
+			assertEquals(manifest.media.length, 1);
 			
-			var errorSeen:Boolean = false;
-			try
-			{
-				var resource:MediaResourceBase = parser.createResource(manifest, new URLResource("http://example.com"));
-			}
-			catch(error:ArgumentError)
-			{
-				errorSeen = true;
-			}
-			assertTrue(errorSeen);
+			
+			assertFalse(manifest.media[0].alternate);
+			assertEquals(manifest.media[0].url, "neil_patrick_harris_video_only");
+			assertEquals(manifest.media[0].bitrate, NaN);
+			assertNull(manifest.media[0].label);
+			assertNull(manifest.media[0].language);
+			
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 1);
+			assertTrue(manifest.alternativeMedia[0].alternate);
+			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
+			assertEquals(manifest.alternativeMedia[0].bitrate, "128");
+			assertEquals(manifest.alternativeMedia[0].type, "audio");
+			assertEquals(manifest.alternativeMedia[0].label, "label1");
+			assertEquals(manifest.alternativeMedia[0].language, "language1");
+			
 		}
 		
-		public function testBugFM1243_OnlyAlternateTrack():void
+		
+		public function testHSBaseMedia_1AlternateTrack_AlternateMediaWithoutBitrate():void
+		{
+			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>
+									neil_patrick_harris_video_only
+								</id>
+								<streamType>
+									recorded
+								</streamType>
+								<duration>
+									114.715
+								</duration>
+								<bootstrapInfo profile="named" id="bootstrap7573">
+									AAAA02Fic3QAAAAAAAAABgAAAAPoAAAAAAABv/oAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAACGYWZydAAAAAAAAAPoAAAAAAcAAAABAAAAAAAAAAAAAFP8AAAAAgAAAAAAAFQSAABMLAAAAAMAAAAAAACgUQAAS2QAAAAEAAAAAAAA68kAAFLQAAAABQAAAAAAAT6uAABMLAAAAAYAAAAAAAGK7QAANSAAAAAAAAAAAAAAAAAAAAAAAA==
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_video_only_id" type="video" url="neil_patrick_harris_video_only" bootstrapInfoId="bootstrap7573" bitrate="1234">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK3Cj1wo9gAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAADnZpZGVvZnJhbWVyYXRlAEA9+E0JEk94AAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AGwAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA3VuZAAACQAHY3VzdGRlZgoAAAAAAAAJ
+									</metadata>
+								</media>
+								<bootstrapInfo profile="named" id="bootstrap7923">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABv/oAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAQAAAACAAAAAgEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYaoAAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_audio_only_id" type="audio" description="description1" label="label1" lang="language1" url="neil_patrick_harris_audio_only" bootstrapInfoId="bootstrap7923" alternate="true">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK0euFHrhQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAGYWFjYW90AAAAAAAAAAAAAA9hdWRpb3NhbXBsZXJhdGUAQOWIgAAAAAAADWF1ZGlvY2hhbm5lbHMAQAAAAAAAAAAACXRyYWNraW5mbwoAAAABAwAGbGVuZ3RoAEFTS+6AAAAAAAl0aW1lc2NhbGUAQOWIgAAAAAAACGxhbmd1YWdlAgADdW5kAAAJAAdjdXN0ZGVmCgAAAAAAAAk=
+									</metadata>
+								</media>
+							</manifest>;
+			
+			var manifest:Manifest = parser.parse(test);
+			assertNotNull(manifest);			
+			
+			assertNotNull(manifest.media);
+			assertEquals(manifest.media.length, 1);
+			
+			
+			assertFalse(manifest.media[0].alternate);
+			assertEquals(manifest.media[0].url, "neil_patrick_harris_video_only");
+			assertEquals(manifest.media[0].bitrate, "1234");
+			assertNull(manifest.media[0].label);
+			assertNull(manifest.media[0].language);
+			
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 1);
+			assertTrue(manifest.alternativeMedia[0].alternate);
+			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
+			assertEquals(manifest.alternativeMedia[0].bitrate, NaN);
+			assertEquals(manifest.alternativeMedia[0].type, "audio");
+			assertEquals(manifest.alternativeMedia[0].label, "label1");
+			assertEquals(manifest.alternativeMedia[0].language, "language1");
+			
+		}	
+		
+		public function testHDSBaseMedia_2AlternateTracks_MediaWithoutBitrate():void
 		{
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
@@ -2364,34 +2450,156 @@ package org.osmf.elements.f4mClasses
 								<duration>
 									278.76266666666669
 								</duration>
-							
-								<mimeType>video/mp4</mimeType>
-								<baseURL>rtmp://catherine.corp.adobe.com/vod</baseURL>
+								<bootstrapInfo
+									 profile="named"
+									 id="bootstrap1121"
+								>
+									AAAD62Fic3QAAAAAAAAAOAAAAAPoAAAAAAAEQNUAAAAAAAAAAAAAAAAAAQAAABlhc3J0AAAAAAAAAAABAAAAAQAAAEYBAAADpmFmcnQAAAAAAAAD6AAAAAA5AAAAAQAAAAAAAAAAAAATiAAAAAMAAAAAAAAnGgAACcQAAAAEAAAAAAAAMOAAABOIAAAABQAAAAAAAERtAAAJxAAAAAYAAAAAAABONAAAE4gAAAAIAAAAAAAAdU4AAAnEAAAACQAAAAAAAH8UAAATiAAAAAoAAAAAAACSoQAACcQAAAALAAAAAAAAnGgAABOIAAAADQAAAAAAAMOCAAAJxAAAAA4AAAAAAADNSAAAE4gAAAAPAAAAAAAA4NUAAAnEAAAAEAAAAAAAAOqcAAATiAAAABIAAAAAAAERtgAACcQAAAATAAAAAAABG3wAABOIAAAAFAAAAAAAAS8JAAAJxAAAABUAAAAAAAE40AAAE4gAAAAXAAAAAAABX+oAAAnEAAAAGAAAAAAAAWmwAAATiAAAABkAAAAAAAF9PQAACcQAAAAaAAAAAAABhwQAABOIAAAAHAAAAAAAAa4eAAAJxAAAAB0AAAAAAAG35AAAE4gAAAAeAAAAAAABy3EAAAnEAAAAHwAAAAAAAdU4AAATiAAAACEAAAAAAAH8UgAACcQAAAAiAAAAAAACBhgAABOIAAAAIwAAAAAAAhmlAAAJxAAAACQAAAAAAAIjbAAAE4gAAAAmAAAAAAACSoYAAAnEAAAAJwAAAAAAAlRMAAATiAAAACgAAAAAAAJn2QAACcQAAAApAAAAAAACcaAAABOIAAAAKwAAAAAAApi6AAAJxAAAACwAAAAAAAKigAAAE4gAAAAtAAAAAAACtg0AAAnEAAAALgAAAAAAAr/UAAATiAAAADAAAAAAAALm7gAACcQAAAAxAAAAAAAC8LQAABOIAAAAMgAAAAAAAwRBAAAJxAAAADMAAAAAAAMOCAAAE4gAAAA1AAAAAAADNPgAAAnEAAAANgAAAAAAAz6+AAATiAAAADcAAAAAAANSSwAACcQAAAA4AAAAAAADXBIAABOIAAAAOgAAAAAAA4MsAAAJxAAAADsAAAAAAAOM8gAAE4gAAAA8AAAAAAADoH8AAAnEAAAAPQAAAAAAA6pGAAATiAAAAD8AAAAAAAPRYAAACcQAAABAAAAAAAAD2yYAABOIAAAAQQAAAAAAA+6zAAAJxAAAAEIAAAAAAAP4egAAE4gAAABEAAAAAAAEH5QAAAnEAAAARQAAAAAABClaAAATiAAAAEYAAAAAAAQ85wAAA+gAAAAAAAAAAAAAAAAAAAAAAA==
+								</bootstrapInfo>
+								<media
+									 streamId="inoutedit_h264_1300"
+									 url="inoutedit_h264_1300"
+									 bootstrapInfoId="bootstrap1121"
+									 bitrate="1300"
+								>
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAcWwz4fZxUwAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDf53LURIocAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVmE5MAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWmFgAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=
+									</metadata>
+								</media>
+								<media
+									 streamId="inoutedit_h264_1700"
+									 url="inoutedit_h264_1700"
+									 bootstrapInfoId="bootstrap1121"
+								>
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAcWwz4fZxUwAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDf53LURIocAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVmE5MAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWmFgAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=
+									</metadata>
+								</media>
+								<media
+									 streamId="inoutedit_h264_2100"
+									 url="inoutedit_h264_2100"
+									 bootstrapInfoId="bootstrap1121"
+									 bitrate="2100"
+								>
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAcWwz4fZxUwAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDf53LURIocAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVmE5MAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWmFgAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=
+									</metadata>
+								</media>
+								
 							
 								<bootstrapInfo profile="named" id="bootstrap7472">
 									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABwCkAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYa2AAA5bAAAAAAAAAAAAAAAAAAAAAAA
 								</bootstrapInfo>
-								<media streamId="neil_patrick_harris_audio_only_id" type="audio" label="audio1" lang="language1" alternate="true" url="http://server/path/neil_patrick_harris_audio_only" bootstrapInfoId="bootstrap7472" bitrate="128">
+								<media streamId="neil_patrick_harris_audio_only" type="audio" label="audio1" lang="language1" alternate="true" url="neil_patrick_harris_audio_only" bootstrapInfoId="bootstrap7472" bitrate="128">
 									<metadata>
 										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK6n752yLQAMYXVkaW9jb2RlY2lkAgAELm1wMwAPYXVkaW9zYW1wbGVyYXRlAEDlfAAAAAAAAA1hdWRpb2NoYW5uZWxzAEAAAAAAAAAAAAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AKQAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA2VuZwAACQAHY3VzdGRlZgoAAAAAAAAJ
 									</metadata>
 								</media>
-								
+								<bootstrapInfo profile="named" id="bootstrap7981">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABwCkAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYa2AAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_audio_only2" type="audio" label="audio2" lang="language2" alternate="true" url="neil_patrick_harris_audio_only2" bootstrapInfoId="bootstrap7981" bitrate="128">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK6n752yLQAMYXVkaW9jb2RlY2lkAgAELm1wMwAPYXVkaW9zYW1wbGVyYXRlAEDlfAAAAAAAAA1hdWRpb2NoYW5uZWxzAEAAAAAAAAAAAAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AKQAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA2VuZwAACQAHY3VzdGRlZgoAAAAAAAAJ
+									</metadata>
+								</media>
 							</manifest>;
 			
-			var manifest:Manifest = parser.parse(test);
-			assertNotNull(manifest);
-			
-			var errorSeen:Boolean = false;
+			var errorSeen:Boolean=false;
 			try
 			{
-				var resource:MediaResourceBase = parser.createResource(manifest, new URLResource("http://example.com"));
+				var manifest:Manifest = parser.parse(test);			
 			}
 			catch(error:ArgumentError)
 			{
 				errorSeen = true;
+				assertEquals(error.message, "");
 			}
 			assertTrue(errorSeen);
+			
 		}
+		
+		public function testHDSBaseMedia_2AlternateTracks_AlternateMediaWithoutBitrate():void
+		{
+			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>
+									inoutedit_h264_1300
+								</id>
+								<streamType>
+									recorded
+								</streamType>
+								<duration>
+									278.76266666666669
+								</duration>
+								<bootstrapInfo
+									 profile="named"
+									 id="bootstrap1121"
+								>
+									AAAD62Fic3QAAAAAAAAAOAAAAAPoAAAAAAAEQNUAAAAAAAAAAAAAAAAAAQAAABlhc3J0AAAAAAAAAAABAAAAAQAAAEYBAAADpmFmcnQAAAAAAAAD6AAAAAA5AAAAAQAAAAAAAAAAAAATiAAAAAMAAAAAAAAnGgAACcQAAAAEAAAAAAAAMOAAABOIAAAABQAAAAAAAERtAAAJxAAAAAYAAAAAAABONAAAE4gAAAAIAAAAAAAAdU4AAAnEAAAACQAAAAAAAH8UAAATiAAAAAoAAAAAAACSoQAACcQAAAALAAAAAAAAnGgAABOIAAAADQAAAAAAAMOCAAAJxAAAAA4AAAAAAADNSAAAE4gAAAAPAAAAAAAA4NUAAAnEAAAAEAAAAAAAAOqcAAATiAAAABIAAAAAAAERtgAACcQAAAATAAAAAAABG3wAABOIAAAAFAAAAAAAAS8JAAAJxAAAABUAAAAAAAE40AAAE4gAAAAXAAAAAAABX+oAAAnEAAAAGAAAAAAAAWmwAAATiAAAABkAAAAAAAF9PQAACcQAAAAaAAAAAAABhwQAABOIAAAAHAAAAAAAAa4eAAAJxAAAAB0AAAAAAAG35AAAE4gAAAAeAAAAAAABy3EAAAnEAAAAHwAAAAAAAdU4AAATiAAAACEAAAAAAAH8UgAACcQAAAAiAAAAAAACBhgAABOIAAAAIwAAAAAAAhmlAAAJxAAAACQAAAAAAAIjbAAAE4gAAAAmAAAAAAACSoYAAAnEAAAAJwAAAAAAAlRMAAATiAAAACgAAAAAAAJn2QAACcQAAAApAAAAAAACcaAAABOIAAAAKwAAAAAAApi6AAAJxAAAACwAAAAAAAKigAAAE4gAAAAtAAAAAAACtg0AAAnEAAAALgAAAAAAAr/UAAATiAAAADAAAAAAAALm7gAACcQAAAAxAAAAAAAC8LQAABOIAAAAMgAAAAAAAwRBAAAJxAAAADMAAAAAAAMOCAAAE4gAAAA1AAAAAAADNPgAAAnEAAAANgAAAAAAAz6+AAATiAAAADcAAAAAAANSSwAACcQAAAA4AAAAAAADXBIAABOIAAAAOgAAAAAAA4MsAAAJxAAAADsAAAAAAAOM8gAAE4gAAAA8AAAAAAADoH8AAAnEAAAAPQAAAAAAA6pGAAATiAAAAD8AAAAAAAPRYAAACcQAAABAAAAAAAAD2yYAABOIAAAAQQAAAAAAA+6zAAAJxAAAAEIAAAAAAAP4egAAE4gAAABEAAAAAAAEH5QAAAnEAAAARQAAAAAABClaAAATiAAAAEYAAAAAAAQ85wAAA+gAAAAAAAAAAAAAAAAAAAAAAA==
+								</bootstrapInfo>
+								<media
+									 streamId="inoutedit_h264_1300"
+									 url="inoutedit_h264_1300"
+									 bootstrapInfoId="bootstrap1121"
+									 bitrate="1300"
+								>
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAcWwz4fZxUwAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDf53LURIocAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVmE5MAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWmFgAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=
+									</metadata>
+								</media>
+								<media
+									 streamId="inoutedit_h264_1700"
+									 url="inoutedit_h264_1700"
+									 bootstrapInfoId="bootstrap1121"
+									 bitrate="1700"
+								>
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAcWwz4fZxUwAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDf53LURIocAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVmE5MAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWmFgAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=
+									</metadata>
+								</media>
+								<media
+									 streamId="inoutedit_h264_2100"
+									 url="inoutedit_h264_2100"
+									 bootstrapInfoId="bootstrap1121"
+									 bitrate="2100"
+								>
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAcWwz4fZxUwAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDf53LURIocAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVmE5MAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWmFgAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=
+									</metadata>
+								</media>
+								
+							
+								<bootstrapInfo profile="named" id="bootstrap7472">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABwCkAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYa2AAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_audio_only" type="audio" label="audio1" lang="language1" alternate="true" url="neil_patrick_harris_audio_only" bootstrapInfoId="bootstrap7472" bitrate="128">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK6n752yLQAMYXVkaW9jb2RlY2lkAgAELm1wMwAPYXVkaW9zYW1wbGVyYXRlAEDlfAAAAAAAAA1hdWRpb2NoYW5uZWxzAEAAAAAAAAAAAAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AKQAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA2VuZwAACQAHY3VzdGRlZgoAAAAAAAAJ
+									</metadata>
+								</media>
+								<bootstrapInfo profile="named" id="bootstrap7981">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABwCkAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYa2AAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_audio_only2" type="audio" label="audio2" lang="language2" alternate="true" url="neil_patrick_harris_audio_only2" bootstrapInfoId="bootstrap7981" >
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK6n752yLQAMYXVkaW9jb2RlY2lkAgAELm1wMwAPYXVkaW9zYW1wbGVyYXRlAEDlfAAAAAAAAA1hdWRpb2NoYW5uZWxzAEAAAAAAAAAAAAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AKQAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA2VuZwAACQAHY3VzdGRlZgoAAAAAAAAJ
+									</metadata>
+								</media>
+							</manifest>;
+			
+			var errorSeen:Boolean=false;
+			try
+			{
+				var manifest:Manifest = parser.parse(test);			
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+				assertEquals(error.message, "");
+			}
+			assertTrue(errorSeen);
+			
+		}
+		
 	}
 }
