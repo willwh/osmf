@@ -1448,9 +1448,11 @@ package org.osmf.elements.f4mClasses
 			}
 			assertTrue(errorSeen);
 			
-			/*assertNotNull(manifest);
+			assertNotNull(manifest);
+			assertEquals(manifest.media.length, 0);
+
 			
-			assertNull(manifest.media);
+			assertNotNull(manifest.media);
 			
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 2);
@@ -1467,7 +1469,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "label2");
 			assertEquals(manifest.alternativeMedia[1].language, "language2");
-			*/
+			
 		}
 		
 		public function testHSBaseMedia_1AlternateTrack_emptyLang_emptyLabel():void
@@ -1719,7 +1721,9 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
 	
-			assertNull(manifest.alternativeMedia);
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 0);
+
 		}
 		
 		public function testHSBaseMedia_1AlternateTrack_wrongType():void
@@ -1764,11 +1768,13 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
 			
-			assertNull(manifest.alternativeMedia);
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 0);
+
 		}
 
 
-		public function disable_testHSBaseMedia_1AlternateTrack_typeVideo():void
+		public function testHSBaseMedia_1AlternateTrack_typeVideo():void
 		{
 			//to enable in sprint 4 after enabling generic type alternate media support
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
@@ -1812,13 +1818,7 @@ package org.osmf.elements.f4mClasses
 			
 			
 			assertNotNull(manifest.alternativeMedia);
-			assertEquals(manifest.alternativeMedia.length, 1);
-			assertTrue(manifest.alternativeMedia[0].alternate);
-			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
-			assertEquals(manifest.alternativeMedia[0].bitrate, "128");
-			assertEquals(manifest.alternativeMedia[0].type, "video");
-			assertEquals(manifest.alternativeMedia[0].label,"label1");
-			assertEquals(manifest.alternativeMedia[0].language, "language1");
+			assertEquals(manifest.alternativeMedia.length, 0);
 		}
 		
 		
@@ -2321,7 +2321,7 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.alternativeMedia[0].drmAdditionalHeader);
 			
 			assertTrue(manifest.alternativeMedia[1].alternate);
-			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only2");
+			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only");
 			assertEquals(manifest.alternativeMedia[1].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "label2");
@@ -2359,27 +2359,17 @@ package org.osmf.elements.f4mClasses
 								</media>
 							</manifest>;
 										
-			var manifest:Manifest = parser.parse(test);
-			assertNotNull(manifest);			
-			
-			assertNotNull(manifest.media);
-			assertEquals(manifest.media.length, 1);
-			
-			
-			assertFalse(manifest.media[0].alternate);
-			assertEquals(manifest.media[0].url, "neil_patrick_harris_video_only");
-			assertEquals(manifest.media[0].bitrate, NaN);
-			assertNull(manifest.media[0].label);
-			assertNull(manifest.media[0].language);
-			
-			assertNotNull(manifest.alternativeMedia);
-			assertEquals(manifest.alternativeMedia.length, 1);
-			assertTrue(manifest.alternativeMedia[0].alternate);
-			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
-			assertEquals(manifest.alternativeMedia[0].bitrate, "128");
-			assertEquals(manifest.alternativeMedia[0].type, "audio");
-			assertEquals(manifest.alternativeMedia[0].label, "label1");
-			assertEquals(manifest.alternativeMedia[0].language, "language1");
+			var errorSeen:Boolean=false;
+			try
+			{
+				var manifest:Manifest = parser.parse(test);			
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+				assertEquals(error.message, "Bitrate missing from Media tag");
+			}
+			assertTrue(errorSeen);
 			
 		}
 		
@@ -2414,27 +2404,17 @@ package org.osmf.elements.f4mClasses
 								</media>
 							</manifest>;
 			
-			var manifest:Manifest = parser.parse(test);
-			assertNotNull(manifest);			
-			
-			assertNotNull(manifest.media);
-			assertEquals(manifest.media.length, 1);
-			
-			
-			assertFalse(manifest.media[0].alternate);
-			assertEquals(manifest.media[0].url, "neil_patrick_harris_video_only");
-			assertEquals(manifest.media[0].bitrate, "1234");
-			assertNull(manifest.media[0].label);
-			assertNull(manifest.media[0].language);
-			
-			assertNotNull(manifest.alternativeMedia);
-			assertEquals(manifest.alternativeMedia.length, 1);
-			assertTrue(manifest.alternativeMedia[0].alternate);
-			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
-			assertEquals(manifest.alternativeMedia[0].bitrate, NaN);
-			assertEquals(manifest.alternativeMedia[0].type, "audio");
-			assertEquals(manifest.alternativeMedia[0].label, "label1");
-			assertEquals(manifest.alternativeMedia[0].language, "language1");
+			var errorSeen:Boolean=false;
+			try
+			{
+				var manifest:Manifest = parser.parse(test);			
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+				assertEquals(error.message, "Bitrate missing from Media tag");
+			}
+			assertTrue(errorSeen);
 			
 		}	
 		
@@ -2513,7 +2493,7 @@ package org.osmf.elements.f4mClasses
 			catch(error:ArgumentError)
 			{
 				errorSeen = true;
-				assertEquals(error.message, "");
+				assertEquals(error.message, "Bitrate missing from Media tag");
 			}
 			assertTrue(errorSeen);
 			
@@ -2595,7 +2575,7 @@ package org.osmf.elements.f4mClasses
 			catch(error:ArgumentError)
 			{
 				errorSeen = true;
-				assertEquals(error.message, "");
+				assertEquals(error.message, "Bitrate missing from Media tag");
 			}
 			assertTrue(errorSeen);
 			
