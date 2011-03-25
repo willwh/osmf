@@ -61,7 +61,6 @@ package org.osmf.elements.f4mClasses
 		
 		public function testNoURL():void
 		{
-			
 			var errorSeen:Boolean = false;
 			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>myvideo</id>
@@ -1384,7 +1383,9 @@ package org.osmf.elements.f4mClasses
 			
 			assertNotNull(manifest.media);
 			assertEquals(manifest.media.length, 3);
-			for (var index:int = 0; index < 3; index++)
+			var index:int = 0;
+			
+			for (index=0; index < 3; index++)
 			{
 				assertFalse(manifest.media[index].alternate);
 			}
@@ -1392,7 +1393,7 @@ package org.osmf.elements.f4mClasses
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 10);
 			
-			for (var index:int = 0; index < 10; index++)
+			for (index=0; index < 10; index++)
 			{
 				assertTrue(manifest.alternativeMedia[index].alternate);
 				assertEquals(manifest.alternativeMedia[index].url, "neil_patrick_harris_audio_only"+ (index+1).toString());
@@ -1407,7 +1408,6 @@ package org.osmf.elements.f4mClasses
 		
 		public function testNoBaseMedia_2AlternateTracks():void
 		{
-			// TO DO: this test scenario needs to be defined...not suported code wise - Talk to Kimi
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
 									neil_patrick_harris_video_only
@@ -1436,38 +1436,28 @@ package org.osmf.elements.f4mClasses
 								</media>
 							</manifest>;
 			
-			var errorSeen:Boolean = false;
+			var manifest:Manifest = parser.parse(test);			
 			
-			try
-			{
-				var manifest:Manifest = parser.parse(test);			
-			}
-			catch(error:ArgumentError)
-			{
-				errorSeen = true;
-			}
-			assertTrue(errorSeen);
+			assertNotNull(manifest);
 			
-			/*assertNotNull(manifest);
-			
-			assertNull(manifest.media);
+			assertNotNull(manifest.media);
+			assertEquals(manifest.media.length, 0);
 			
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 2);
 			assertTrue(manifest.alternativeMedia[0].alternate);
 			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
-			assertEquals(manifest.alternativeMedia[0].bitrate, NaN);
+			assertEquals(manifest.alternativeMedia[0].bitrate, 128);
 			assertEquals(manifest.alternativeMedia[0].type, "audio");
 			assertEquals(manifest.alternativeMedia[0].label, "label1");
 			assertEquals(manifest.alternativeMedia[0].language, "language1");
 			
 			assertTrue(manifest.alternativeMedia[1].alternate);
 			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only2");
-			assertEquals(manifest.alternativeMedia[1].bitrate, NaN);
+			assertEquals(manifest.alternativeMedia[1].bitrate, 128);
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "label2");
 			assertEquals(manifest.alternativeMedia[1].language, "language2");
-			*/
 		}
 		
 		public function testHSBaseMedia_1AlternateTrack_emptyLang_emptyLabel():void
@@ -1679,7 +1669,6 @@ package org.osmf.elements.f4mClasses
 		
 		public function testHSBaseMedia_1AlternateTrack_emptyType():void
 		{
-			// TO DO: Kimi needs to update code to return null vector for alternative media track if type is not audio or video
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
 									neil_patrick_harris_video_only
@@ -1719,12 +1708,12 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
 	
-			assertNull(manifest.alternativeMedia);
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 0);
 		}
 		
 		public function testHSBaseMedia_1AlternateTrack_wrongType():void
 		{
-			// TO DO: Kimi needs to update code to return null vector for alternative media track if type is not audio or video
 			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>
 									neil_patrick_harris_video_only
@@ -1764,7 +1753,8 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
 			
-			assertNull(manifest.alternativeMedia);
+			assertNotNull(manifest.alternativeMedia);
+			assertEquals(manifest.alternativeMedia.length, 0);
 		}
 
 
@@ -2321,7 +2311,7 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.alternativeMedia[0].drmAdditionalHeader);
 			
 			assertTrue(manifest.alternativeMedia[1].alternate);
-			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only2");
+			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only");
 			assertEquals(manifest.alternativeMedia[1].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "label2");
@@ -2329,5 +2319,79 @@ package org.osmf.elements.f4mClasses
 			assertNull(manifest.alternativeMedia[1].drmAdditionalHeader);
 		}
 		
+		public function testBugFM1243_ResourceFromNoMedia():void
+		{
+			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>
+									neil_patrick_harris_video_only
+								</id>
+								<streamType>
+									recorded
+								</streamType>
+								<duration>
+									114.715
+								</duration>
+								<bootstrapInfo profile="named" id="bootstrap7923">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABv/oAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAQAAAACAAAAAgEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYaoAAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<baseUrl>http://www.example.com</baseUrl>
+							</manifest>;
+			
+			var manifest:Manifest = parser.parse(test);	
+			assertNotNull(manifest);
+			
+			var errorSeen:Boolean = false;
+			try
+			{
+				var resource:MediaResourceBase = parser.createResource(manifest, new URLResource("http://example.com"));
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
+		}
+		
+		public function testBugFM1243_OnlyAlternateTrack():void
+		{
+			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>
+									inoutedit_h264_1300
+								</id>
+								<streamType>
+									recorded
+								</streamType>
+								<duration>
+									278.76266666666669
+								</duration>
+							
+								<mimeType>video/mp4</mimeType>
+								<baseURL>rtmp://catherine.corp.adobe.com/vod</baseURL>
+							
+								<bootstrapInfo profile="named" id="bootstrap7472">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABwCkAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYa2AAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_audio_only_id" type="audio" label="audio1" lang="language1" alternate="true" url="http://server/path/neil_patrick_harris_audio_only" bootstrapInfoId="bootstrap7472" bitrate="128">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK6n752yLQAMYXVkaW9jb2RlY2lkAgAELm1wMwAPYXVkaW9zYW1wbGVyYXRlAEDlfAAAAAAAAA1hdWRpb2NoYW5uZWxzAEAAAAAAAAAAAAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AKQAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA2VuZwAACQAHY3VzdGRlZgoAAAAAAAAJ
+									</metadata>
+								</media>
+								
+							</manifest>;
+			
+			var manifest:Manifest = parser.parse(test);
+			assertNotNull(manifest);
+			
+			var errorSeen:Boolean = false;
+			try
+			{
+				var resource:MediaResourceBase = parser.createResource(manifest, new URLResource("http://example.com"));
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
+		}
 	}
 }

@@ -25,6 +25,7 @@ package org.osmf.traits
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
+	import org.osmf.events.AlternativeAudioEvent;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DRMEvent;
@@ -198,6 +199,30 @@ package org.osmf.traits
 	[Event(name="autoSwitchChange",type="org.osmf.events.DynamicStreamEvent")]
 
 	/**
+	 * Dispatched when an alternative audio source change occurs.
+	 * 
+	 * @eventType org.osmf.events.AlternativeAudioEvent.SOURCE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="streamChange",type="org.osmf.events.AlternativeAudioEvent")]
+	
+	/**
+	 * Dispatched when the number of alternative audio streams has changed.
+	 * 
+	 * @eventType org.osmf.events.AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="numAlternativeAudioChange",type="org.osmf.events.AlternativeAudioEvent")]
+
+	/**
 	 * Dispatched when the <code>buffering</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.BufferEvent.BUFFERING_CHANGE
@@ -311,6 +336,10 @@ package org.osmf.traits
 				eventMaps[DynamicStreamEvent.SWITCHING_CHANGE] 			= MediaTraitType.DYNAMIC_STREAM;	
 				eventMaps[DynamicStreamEvent.AUTO_SWITCH_CHANGE] 		= MediaTraitType.DYNAMIC_STREAM;	
 				eventMaps[DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE] = MediaTraitType.DYNAMIC_STREAM;
+				
+				eventMaps[AlternativeAudioEvent.STREAM_CHANGE] 				  = MediaTraitType.ALTERNATIVE_AUDIO;	
+				eventMaps[AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE] = MediaTraitType.ALTERNATIVE_AUDIO;
+				
 				eventMaps[DisplayObjectEvent.DISPLAY_OBJECT_CHANGE]		= MediaTraitType.DISPLAY_OBJECT;	
 				eventMaps[DisplayObjectEvent.MEDIA_SIZE_CHANGE] 		= MediaTraitType.DISPLAY_OBJECT;	
 				eventMaps[LoadEvent.LOAD_STATE_CHANGE]					= MediaTraitType.LOAD;	
@@ -429,7 +458,11 @@ package org.osmf.traits
 					changeListeners(add, traitType, DynamicStreamEvent.SWITCHING_CHANGE);
 					changeListeners(add, traitType, DynamicStreamEvent.AUTO_SWITCH_CHANGE);
 					changeListeners(add, traitType, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE);
-					break;						
+					break;
+				case MediaTraitType.ALTERNATIVE_AUDIO:	
+					changeListeners(add, traitType, AlternativeAudioEvent.STREAM_CHANGE);
+					changeListeners(add, traitType, AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE);
+					break;
 				case MediaTraitType.DISPLAY_OBJECT:					
 					changeListeners(add, traitType, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE);											
 					changeListeners(add, traitType, DisplayObjectEvent.MEDIA_SIZE_CHANGE);

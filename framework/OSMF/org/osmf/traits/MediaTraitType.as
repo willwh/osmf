@@ -77,6 +77,16 @@ package org.osmf.traits
 		public static const DYNAMIC_STREAM:String = "dynamicStream";
 
 		/**
+		 * Identifies an instance of an AlternativeAudioTrait.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		public static const ALTERNATIVE_AUDIO:String = "alternativeAudio";
+
+		/**
 		 * Identifies an instance of a LoadTrait. 
 		 *  
 		 *  @langversion 3.0

@@ -210,6 +210,13 @@ package org.osmf.utils
 		 **/
 		public static const STREAMSWITCH_INVALID_INDEX:String			= "streamSwitchInvalidIndex";
 
+		// Alternative Audio
+		
+		/**
+		 * @private
+		 **/
+		public static const ALTERNATIVEAUDIO_INVALID_INDEX:String			= "alternativeAudioInvalidIndex";
+
 		/**
 		 * @private
 		 **/
@@ -377,6 +384,12 @@ package org.osmf.utils
 		 **/
 		public static const F4M_FILE_INVALID:String						= "f4MFileINVALID";
 		
+		/**
+		 * @private
+		 **/
+		public static const F4M_MEDIA_MISSING:String 					= "f4mMediaMissing";
+		
+		
 		private static const resourceDict:Dictionary = new Dictionary();
 		{
 			resourceDict[COMPOSITE_TRAIT_NOT_FOUND]	 				= "There is no composite trait for the given trait type";
@@ -411,6 +424,8 @@ package org.osmf.utils
 			resourceDict[STREAMSWITCH_INVALID_INDEX]				= "Dynamic Stream Switching - Invalid index requested";
 			resourceDict[STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE]	= "Dynamic Stream Switching - stream is not in manual mode";
 			
+			resourceDict[ALTERNATIVEAUDIO_INVALID_INDEX]			= "Alternative Audio Source Changing - Invalid index requested";
+
 			CONFIG::FLASH_10_1
 			{
 			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";
@@ -447,7 +462,7 @@ package org.osmf.utils
 			resourceDict[MULTICAST_PARAMETER_INVALID]				= "The groupspec or streamName is null or empty but not both";
 			resourceDict[MULTICAST_NOT_SUPPORT_MBR]					= "Multicast does not support MBR";
 			resourceDict[F4M_FILE_INVALID]							= "The F4M document contains errors";
-			
+			resourceDict[F4M_MEDIA_MISSING]							= "The F4M document doesn't contain media informations.";
 			
 			resourceDict["missingStringResource"]					= "No string for resource {0}";
 		}

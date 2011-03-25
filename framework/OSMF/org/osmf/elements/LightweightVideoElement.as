@@ -29,6 +29,7 @@ package org.osmf.elements
 	import flash.net.NetStream;
 	import flash.utils.ByteArray;
 	
+	import org.osmf.events.AlternativeAudioEvent;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -37,6 +38,7 @@ package org.osmf.elements
 	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.MediaType;
 	import org.osmf.media.URLResource;
 	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.metadata.CuePoint;
@@ -46,6 +48,7 @@ package org.osmf.elements
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionCodes;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamAlternativeAudioTrait;
 	import org.osmf.net.NetStreamAudioTrait;
 	import org.osmf.net.NetStreamBufferTrait;
 	import org.osmf.net.NetStreamCodes;
@@ -58,13 +61,20 @@ package org.osmf.elements
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.traits.AlternativeAudioTrait;
+	import org.osmf.traits.AudioTrait;
+	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.DRMState;
+	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFSettings;
 	import org.osmf.utils.OSMFStrings;
@@ -316,6 +326,8 @@ package org.osmf.elements
 		 */
 		override protected function processReadyState():void
 		{
+			trace("ProcessReady called. He wants his state back");
+			
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			stream = loadTrait.netStream;
 			
@@ -436,58 +448,74 @@ package org.osmf.elements
 			}
 		
 		}
-			
+		
 		
 		private function finishLoad():void
 		{
-			var trait:MediaTraitBase;
+			trace("finishLoad called. He wants his state back");
+
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			
-			trait = loadTrait.getTrait(MediaTraitType.DVR);
-			if (trait != null)
+			// setup dvr trait
+			var dvrTrait:MediaTraitBase = loadTrait.getTrait(MediaTraitType.DVR) as DVRTrait;
+			if (dvrTrait != null)
 			{
-	  			addTrait(MediaTraitType.DVR, trait);
-  			}
-  			
-	    	trait = loadTrait.getTrait(MediaTraitType.AUDIO);
-	    	addTrait(MediaTraitType.AUDIO, trait || new NetStreamAudioTrait(stream));
-	    	
-	    	trait = loadTrait.getTrait(MediaTraitType.BUFFER);
-	    	addTrait(MediaTraitType.BUFFER, trait || new NetStreamBufferTrait(stream));
+				addTrait(MediaTraitType.DVR, dvrTrait);
+			}
 			
-			var timeTrait:TimeTrait = (trait = loadTrait.getTrait(MediaTraitType.TIME)) as TimeTrait; 
-
+			// setup audio trait
+			var audioTrait:MediaTraitBase = loadTrait.getTrait(MediaTraitType.AUDIO) as AudioTrait;
+			if (audioTrait == null)
+			{
+				audioTrait = new NetStreamAudioTrait(stream);
+			}
+			addTrait(MediaTraitType.AUDIO, audioTrait);
+			
+			// setup buffer trait
+			var bufferTrait:BufferTrait = loadTrait.getTrait(MediaTraitType.BUFFER) as BufferTrait;
+			if (bufferTrait == null)
+			{
+				bufferTrait = new NetStreamBufferTrait(stream);
+			}
+			addTrait(MediaTraitType.BUFFER, bufferTrait);
+			
+			
+			// setup time trait
+			var timeTrait:TimeTrait = loadTrait.getTrait(MediaTraitType.TIME) as TimeTrait; 
 			if (timeTrait == null)
 			{
 				timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration);
 			}
 			addTrait(MediaTraitType.TIME, timeTrait);
 			
-			
-			trait = loadTrait.getTrait(MediaTraitType.DISPLAY_OBJECT);
-			addTrait
-				(	MediaTraitType.DISPLAY_OBJECT
-				,	trait
-				||	new NetStreamDisplayObjectTrait(stream, videoSurface, NaN, NaN)
-				);
-			
-			trait = loadTrait.getTrait(MediaTraitType.PLAY);
-			
-			var reconnectStreams:Boolean = false;
-
-			CONFIG::FLASH_10_1	
+			// setup display object trait
+			var displayObjectTrait:DisplayObjectTrait = loadTrait.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+			if (displayObjectTrait == null)
 			{
-				reconnectStreams = (loader as NetLoader).reconnectStreams;
+				displayObjectTrait = new NetStreamDisplayObjectTrait(stream, videoSurface, NaN, NaN); 
 			}
+			addTrait(MediaTraitType.DISPLAY_OBJECT,	displayObjectTrait);
 			
-			addTrait(MediaTraitType.PLAY, trait || new NetStreamPlayTrait(stream, resource, reconnectStreams, loadTrait.connection));
-			
-			trait = loadTrait.getTrait(MediaTraitType.SEEK);
-			if (trait == null && NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
+			// setup play trait
+			var playTrait:PlayTrait = loadTrait.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			if (playTrait == null)
 			{
-				trait = new NetStreamSeekTrait(timeTrait, loadTrait, stream, videoSurface);
+				var reconnectStreams:Boolean = false;
+				CONFIG::FLASH_10_1	
+				{
+					reconnectStreams = (loader as NetLoader).reconnectStreams;
+				}
+				playTrait = new NetStreamPlayTrait(stream, resource, reconnectStreams, loadTrait.connection);
+			}			
+			addTrait(MediaTraitType.PLAY, playTrait);
+
+			// setup seek trait
+			var seekTrait:SeekTrait = loadTrait.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			if (seekTrait == null && NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
+			{
+				seekTrait = new NetStreamSeekTrait(timeTrait, loadTrait, stream, videoSurface);
 	  		}
-	  		if (trait != null)
+	  		if (seekTrait != null)
 	  		{
 	  			// Only add the SeekTrait if/when the TimeTrait has a duration,
 	  			// otherwise the user might try to seek when a seek cannot actually
@@ -500,20 +528,37 @@ package org.osmf.elements
 	  				{
 	  					timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 	  					
-	  					addTrait(MediaTraitType.SEEK, trait);
+	  					addTrait(MediaTraitType.SEEK, seekTrait);
 	  				}
 	  			}
 	  			else
 	  			{
-	    			addTrait(MediaTraitType.SEEK, trait);
+	    			addTrait(MediaTraitType.SEEK, seekTrait);
 	    		}
 	    	}
 	    	
+			// setup dynamic resource trait
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dsResource != null && loadTrait.switchManager != null)
 			{
-				var dsTrait:MediaTraitBase = loadTrait.getTrait(MediaTraitType.DYNAMIC_STREAM);
-				addTrait(MediaTraitType.DYNAMIC_STREAM, dsTrait || new NetStreamDynamicStreamTrait(stream, loadTrait.switchManager, dsResource));
+				var dsTrait:MediaTraitBase = loadTrait.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+				if (dsTrait == null)
+				{
+					dsTrait = new NetStreamDynamicStreamTrait(stream, loadTrait.switchManager, dsResource);
+				}
+				addTrait(MediaTraitType.DYNAMIC_STREAM, dsTrait);
+			}
+			
+			//setup alternative audio trait
+			var sResource:StreamingURLResource = resource as StreamingURLResource;
+			if (sResource != null && sResource.alternativeAudioItems != null && sResource.alternativeAudioItems.length > 0)
+			{
+				var aaTrait:AlternativeAudioTrait = loadTrait.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait;
+				if (aaTrait == null)
+				{
+					aaTrait = new NetStreamAlternativeAudioTrait(stream, sResource);
+				}
+				addTrait(MediaTraitType.ALTERNATIVE_AUDIO, aaTrait);
 			}
 		}
 		

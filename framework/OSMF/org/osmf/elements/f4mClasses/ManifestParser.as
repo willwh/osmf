@@ -153,20 +153,24 @@ package org.osmf.elements.f4mClasses
 
 				if (isSupportedType(newMedia.type))
 				{
-					if (newMedia.alternate )
+					if (newMedia.label == null)
+						newMedia.label = manifest.label;
+					if (newMedia.language == null)
+						newMedia.language = manifest.lang;
+
+					if (newMedia.alternate) 
 					{
-						manifest.alternativeMedia.push(newMedia);	
+						if (newMedia.type == MediaItemType.AUDIO)
+						{
+							manifest.alternativeMedia.push(newMedia);
+						}
 					}
 					else
 					{
-						if (newMedia.label == null)
-							newMedia.label = manifest.label;
-						if (newMedia.language == null)
-							newMedia.language = manifest.lang;
-						
 						manifest.media.push(newMedia);
 					}
 				}
+				
 				bitrateMissing ||= isNaN(newMedia.bitrate);
 			}	
 			
@@ -185,7 +189,7 @@ package org.osmf.elements.f4mClasses
 				manifest.streamType = StreamType.LIVE;
 			}
 			
-			if (manifest.media.length > 1 && bitrateMissing)
+			if ( (manifest.media.length+manifest.alternativeMedia.length ) > 1 && bitrateMissing)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_BITRATE_MISSING));
 			}
@@ -713,6 +717,11 @@ package org.osmf.elements.f4mClasses
 				// This is a parse error, we need an rtmp url
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));					
 			}	
+			else if (value.media.length == 0)
+			{
+				// This is a parse error, we need at least one media tag
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_MEDIA_MISSING));					
+			}
 			
 			if (value.mimeType != null)
 			{

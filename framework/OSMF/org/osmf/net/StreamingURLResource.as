@@ -26,6 +26,7 @@ package org.osmf.net
 	import flash.utils.ByteArray;
 	
 	import org.osmf.media.URLResource;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * StreamingURLResource is a URLResource which is capable of being
@@ -248,6 +249,31 @@ package org.osmf.net
 			_alternativeAudioItems = value;
 		}
 		
+		/**
+		 * The preferred starting index.
+		 * 
+		 * @throws RangeError If the index is out of range.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get initialAlternativeAudioIndex():int
+		{
+			return _initialAlternativeAudioIndex;
+		}
+		
+		public function set initialAlternativeAudioIndex(value:int):void
+		{
+			if (_alternativeAudioItems == null || value >= _alternativeAudioItems.length)
+			{
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));				
+			}
+			
+			_initialAlternativeAudioIndex = value;
+		}
+
 		
 		private var _streamType:String; // StreamType
 		private var _clipStartTime:Number;
@@ -255,6 +281,8 @@ package org.osmf.net
 		private var _connectionArguments:Vector.<Object>;
 		private var _drmContentData:ByteArray;
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
+
 		private var _alternativeAudioItems:Vector.<MediaItem> = null;
+		private var _initialAlternativeAudioIndex:int;
 	}
 }

@@ -27,6 +27,7 @@ package org.osmf.media
 	import flash.utils.Timer;
 	
 	import org.osmf.events.*;
+	import org.osmf.net.MediaItem;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
 	 	 
@@ -116,6 +117,18 @@ package org.osmf.media
 	 */
 	[Event(name="isDynamicStreamChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
+	/**
+	 * Dispatched when the <code>hasAlternativeAudio</code> property has changed.
+	 * 
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_ALTERNATIVE_AUDIO_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="hasAlternativeAudio",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+
 	/**
 	 * Dispatched when the <code>temporal</code> property has changed.
 	 * 
@@ -538,6 +551,20 @@ package org.osmf.media
 		{
 			return _isDynamicStream;
 		}
+		
+		/**
+		 * Indicates whether the media has alternative audio sources..
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get hasAlternativeAudio():Boolean
+		{
+			return _hasAlternativeAudio;
+		}
+		
 				
 		/**
 		 *  Indicates whether the media can be loaded.
@@ -948,6 +975,53 @@ package org.osmf.media
 		}
 		
 		/**
+		 * The index of the alternative audio source currently in use.  Uses a zero-based index.
+		 *  
+		 * @throws IllegalOperationError If the media is not a alternative audio.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get currentAlternativeAudioIndex():int
+		{
+			return hasAlternativeAudio ? (getTraitOrThrow(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).currentIndex : 0; 
+		}
+		
+		/**
+		 * The total number of alternative audio sources.
+		 * 
+		 * @throws IllegalOperationError If the media is not a alternative audio.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get numAlternativeAudio():int
+		{
+			return hasAlternativeAudio ? (getTraitOrThrow(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams : 0; 
+		}
+		
+		/**
+		 * Gets the associated media item for the specified alternative audio stream index.
+		 * 
+		 * @throws RangeError If the specified alternative audio stream index is less than zero or
+		 * greater than or equal with <code>numAlternativeAudio</code>.
+		 * @throws IllegalOperationError If the media is not a alternative audio.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function getMediaItemForAlternativeAudioIndex(index:int):MediaItem
+		{
+			return hasAlternativeAudio ? (getTraitOrThrow(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).getMediaItemForIndex(index) : null;
+		}
+
+		/**
 		 * The maximum allowed dynamic stream index. This can be set at run-time to 
 		 * provide a ceiling for the switching profile, for example, to keep from
 		 * switching up to a higher quality stream when the current video is too small
@@ -996,6 +1070,23 @@ package org.osmf.media
 		}
 		
 		/**
+		 * Indicates whether or not a alternative audio stream change is currently in progress.
+		 * This property will return <code>true</code> while an audio stream change has been 
+		 * requested and the audio stream change has not yet been acknowledged and no stream
+		 * change failure has occurred.  Once the stream change request has been acknowledged or a 
+		 * failure occurs, the property will return <code>false</code>.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get alternativeAudioStreamChanging():Boolean
+		{
+			return hasAlternativeAudio ? (getTraitOrThrow(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).changingStream : false;
+		}
+
+		/**
 		 * Switch to a specific dynamic stream index. To switch up, use the <code>currentDynamicStreamIndex</code>
 		 * property, such as:<p>
 		 * <code>
@@ -1020,6 +1111,28 @@ package org.osmf.media
 			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switchTo(streamIndex);
 		}	    
 	
+		/**
+		 * Change audio stream to a specific alternative audio index.
+		 * 
+		 * Note:  If the media is paused, audio stream changing will not take place 
+		 * until after play resumes.
+		 *  
+		 * @throws RangeError If the specified alternative audio stream index is less than zero or
+		 * greater than <code>numAlternativeAudio</code>.
+		 * @throws IllegalOperationError If the media has not alternative audio streams.
+		 * 
+		 * @see numAlternativeAudio
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function changeAlternativeAudioIndexTo(streamIndex:int):void
+		{
+			(getTraitOrThrow(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).changeTo(streamIndex);
+		}	    
+
 		/**
 		 * DisplayObject for the media.
          *  
@@ -1464,6 +1577,15 @@ package org.osmf.media
 					}
 					dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
 					break;						
+				case MediaTraitType.ALTERNATIVE_AUDIO:					
+					_hasAlternativeAudio = add;	
+					var alternativeAudioTrait:AlternativeAudioTrait = AlternativeAudioTrait(media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO));
+					if (alternativeAudioTrait.changingStream) //If we are in the middle of a change, notify.
+					{
+						dispatchEvent(new AlternativeAudioEvent(AlternativeAudioEvent.STREAM_CHANGE, false, false, alternativeAudioTrait.changingStream));
+					}
+					dispatchEvent(new AlternativeAudioEvent(AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE, false, false, alternativeAudioTrait.changingStream));
+					break;						
 				case MediaTraitType.DISPLAY_OBJECT:						
 					_hasDisplayObject = add;
 					var displayObjectTrait:DisplayObjectTrait = DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT));
@@ -1570,6 +1692,10 @@ package org.osmf.media
 				case MediaTraitType.DYNAMIC_STREAM:
 					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;
 					_isDynamicStream = capabilityAdd;
+					break;				
+				case MediaTraitType.ALTERNATIVE_AUDIO:
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_ALTERNATIVE_AUDIO_CHANGE;
+					_hasAlternativeAudio = capabilityAdd;
 					break;				
 				case MediaTraitType.LOAD:					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;
@@ -1901,6 +2027,7 @@ package org.osmf.media
 		private var mediaPlayerAutoDynamicStreamSwitch:Boolean = true;
 		private var mediaPlayerAutoDynamicStreamSwitchSet:Boolean = false;
 		
+		
 		private var _canPlay:Boolean;
 		private var _canSeek:Boolean;
 		private var _temporal:Boolean;
@@ -1909,6 +2036,7 @@ package org.osmf.media
 		private var _canLoad:Boolean;
 		private var _canBuffer:Boolean;
 		private var _isDynamicStream:Boolean;
+		private var _hasAlternativeAudio:Boolean;
 		private var _hasDRM:Boolean;
 	}
 }

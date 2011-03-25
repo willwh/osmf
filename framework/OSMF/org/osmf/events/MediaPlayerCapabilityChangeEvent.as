@@ -91,6 +91,20 @@ package org.osmf.events
 		public static const HAS_AUDIO_CHANGE:String = "hasAudioChange";
 		
 		/**
+		 * The MediaPlayerCapabilityChangeEvent.HAS_ALTERNATIVE_AUDIO_CHANGE constant defines
+		 * the value of the type property of the event object for a hasAlternativeAudioChange
+		 * event.
+		 * 
+		 * @eventType hasAlternativeAudioChange 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public static const HAS_ALTERNATIVE_AUDIO_CHANGE:String = "hasAlternativeAudioChange";
+
+		/**
 		 * The MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE constant defines
 		 * the value of the type property of the event object for a isDynamicStreamChange
 		 * event.
