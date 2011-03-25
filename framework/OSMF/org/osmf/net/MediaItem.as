@@ -29,7 +29,7 @@ package org.osmf.net
 			_type = type;
 			_stream = stream;
 			_bitrate = bitrate;
-			_description = description;
+			_label = description;
 			_language = language;
 		}
 
@@ -68,9 +68,9 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.6
 		 */			
-		public function get description():String
+		public function get label():String
 		{
-			return _description;	
+			return _label;	
 		}
 		
 		/**
@@ -83,7 +83,7 @@ package org.osmf.net
 		 */			
 		public function get language():String
 		{
-			return _description;	
+			return _language;	
 		}
 
 		/**
@@ -103,7 +103,7 @@ package org.osmf.net
 		private var _type:String = null;
 		private var _stream:String = null;
 		private var _bitrate:Number;
-		private var _description:String = null;
+		private var _label:String = null;
 		private var _language:String = null;
 	}
 }

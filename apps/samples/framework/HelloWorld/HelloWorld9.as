@@ -116,7 +116,7 @@ package
 						for (var index:int = 0; index < player.numAlternativeAudio; index++)
 						{
 							var item:MediaItem = player.getMediaItemForAlternativeAudioIndex(index);
-							trace("[", item.language, "]", item.description);
+							trace("[", item.language, "]", item.label);
 						}
 					}
 					break;
