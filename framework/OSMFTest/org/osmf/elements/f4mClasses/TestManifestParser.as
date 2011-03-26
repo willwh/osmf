@@ -2581,5 +2581,80 @@ package org.osmf.elements.f4mClasses
 			
 		}
 		
+		public function testBugFM1243_ResourceFromNoMedia():void
+		{
+			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>
+									neil_patrick_harris_video_only
+								</id>
+								<streamType>
+									recorded
+								</streamType>
+								<duration>
+									114.715
+								</duration>
+								<bootstrapInfo profile="named" id="bootstrap7923">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABv/oAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAQAAAACAAAAAgEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYaoAAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<baseUrl>http://www.example.com</baseUrl>
+							</manifest>;
+			
+			var manifest:Manifest = parser.parse(test);	
+			assertNotNull(manifest);
+			
+			var errorSeen:Boolean = false;
+			try
+			{
+				var resource:MediaResourceBase = parser.createResource(manifest, new URLResource("http://example.com"));
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
+		}
+		
+		public function testBugFM1243_OnlyAlternateTrack():void
+		{
+			var test:XML = 	<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>
+									inoutedit_h264_1300
+								</id>
+								<streamType>
+									recorded
+								</streamType>
+								<duration>
+									278.76266666666669
+								</duration>
+							
+								<mimeType>video/mp4</mimeType>
+								<baseURL>rtmp://catherine.corp.adobe.com/vod</baseURL>
+							
+								<bootstrapInfo profile="named" id="bootstrap7472">
+									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABwCkAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAMAAAACAAAAAwEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYa2AAA5bAAAAAAAAAAAAAAAAAAAAAAA
+								</bootstrapInfo>
+								<media streamId="neil_patrick_harris_audio_only_id" type="audio" label="audio1" lang="language1" alternate="true" url="http://server/path/neil_patrick_harris_audio_only" bootstrapInfoId="bootstrap7472" bitrate="128">
+									<metadata>
+										AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAXK6n752yLQAMYXVkaW9jb2RlY2lkAgAELm1wMwAPYXVkaW9zYW1wbGVyYXRlAEDlfAAAAAAAAA1hdWRpb2NoYW5uZWxzAEAAAAAAAAAAAAl0cmFja2luZm8KAAAAAQMABmxlbmd0aABA/AKQAAAAAAAJdGltZXNjYWxlAECPQAAAAAAAAAhsYW5ndWFnZQIAA2VuZwAACQAHY3VzdGRlZgoAAAAAAAAJ
+									</metadata>
+								</media>
+								
+							</manifest>;
+			
+			var manifest:Manifest = parser.parse(test);
+			assertNotNull(manifest);
+			
+			var errorSeen:Boolean = false;
+			try
+			{
+				var resource:MediaResourceBase = parser.createResource(manifest, new URLResource("http://example.com"));
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
+		}
+
 	}
 }
