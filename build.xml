@@ -242,7 +242,7 @@
 				output="@{projectDir}/bin/@{project}.swc"
 				include-classes="${@{project}.classes}"
 				optimize="true"
-				debug="false"
+				debug="${logging}"
 				fork="false"
 				target-player="${flash.target.player}"
 			>
