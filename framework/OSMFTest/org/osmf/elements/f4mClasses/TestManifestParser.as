@@ -1458,14 +1458,14 @@ package org.osmf.elements.f4mClasses
 			assertEquals(manifest.alternativeMedia.length, 2);
 			assertTrue(manifest.alternativeMedia[0].alternate);
 			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
-			assertEquals(manifest.alternativeMedia[0].bitrate, NaN);
+			assertEquals(manifest.alternativeMedia[0].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[0].type, "audio");
 			assertEquals(manifest.alternativeMedia[0].label, "label1");
 			assertEquals(manifest.alternativeMedia[0].language, "language1");
 			
 			assertTrue(manifest.alternativeMedia[1].alternate);
 			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only2");
-			assertEquals(manifest.alternativeMedia[1].bitrate, NaN);
+			assertEquals(manifest.alternativeMedia[1].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "label2");
 			assertEquals(manifest.alternativeMedia[1].language, "language2");
