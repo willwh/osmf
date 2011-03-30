@@ -56,7 +56,7 @@ package org.osmf.player.media
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD_1V_2A));
 			
-			player = new MediaPlayer();
+			var player:MediaPlayer = new MediaPlayer();
 			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
@@ -106,7 +106,7 @@ package org.osmf.player.media
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD_HDS_2A));
 			
-			player = new MediaPlayer();
+			var player:MediaPlayer = new MediaPlayer();
 			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
@@ -120,7 +120,7 @@ package org.osmf.player.media
 			{
 				
 				assertTrue(player.canPlay);
-				assertTrue(player.hasAlternativeAudio, "No alternate audio present.");
+				assertTrue(player.hasAlternativeAudio);
 				
 				assertEquals(player.numAlternativeAudio, 2);
 				assertEquals(player.currentAlternativeAudioIndex, -1);
@@ -145,9 +145,7 @@ package org.osmf.player.media
 			{
 				fail(event.error.message + event.error.detail);
 			}
-			
 		}
-		
 		
 		[Test(async, timeout="10000")]
 		public function testLoader_bootstrap_in_url():void
@@ -156,7 +154,7 @@ package org.osmf.player.media
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD_BOOTSTRAP));
 			
-			player = new MediaPlayer();
+			var player:MediaPlayer = new MediaPlayer();
 			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
@@ -170,7 +168,7 @@ package org.osmf.player.media
 			{
 				
 				assertTrue(player.canPlay);
-				assertTrue(player.hasAlternativeAudio, "No alternate audio present.");
+				assertTrue(player.hasAlternativeAudio);
 				
 				assertEquals(player.numAlternativeAudio, 2);
 				assertEquals(player.currentAlternativeAudioIndex, -1);
@@ -196,7 +194,6 @@ package org.osmf.player.media
 			{
 				fail(event.error.message + event.error.detail);
 			}
-			
 		}
 		
 		[Test(async, timeout="10000")]
@@ -206,7 +203,7 @@ package org.osmf.player.media
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD_RTMP_1A));
 			
-			player = new MediaPlayer();
+			var player:MediaPlayer = new MediaPlayer();
 			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
@@ -220,7 +217,7 @@ package org.osmf.player.media
 			{
 				
 				//assertTrue(player.canPlay);
-				assertFalse(player.hasAlternativeAudio, "No alternate audio present.");
+				assertFalse(player.hasAlternativeAudio);
 				
 				assertEquals(player.numAlternativeAudio, 0);
 				assertFalse(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
@@ -233,7 +230,6 @@ package org.osmf.player.media
 			{
 				fail(event.error.message + event.error.detail);
 			}
-			
 		}
 		
 		[Test(async, timeout="10000")]
@@ -243,7 +239,7 @@ package org.osmf.player.media
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD_WRONG_TYPE));
 			
-			player = new MediaPlayer();
+			var player:MediaPlayer = new MediaPlayer();
 			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
@@ -257,7 +253,7 @@ package org.osmf.player.media
 			{
 				
 				//assertTrue(player.canPlay);
-				assertFalse(player.hasAlternativeAudio, "No alternate audio present.");
+				assertFalse(player.hasAlternativeAudio); 
 				
 				assertEquals(player.numAlternativeAudio, 0);
 				assertFalse(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
@@ -353,7 +349,7 @@ package org.osmf.player.media
 		
 		
 		
-		public var player:MediaPlayer;
+		//public var player:MediaPlayer;
 		
 		private static const F4M_VOD_1V_2A:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m"; 
 		
