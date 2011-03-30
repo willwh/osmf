@@ -132,14 +132,17 @@ package org.osmf.net.httpstreaming
 			
 			// setting up alternative source
 			this.alternativeSource = alternativeSource;
-			this.alternativeSource.dispatcher = this;
-			this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
-			//this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRates);
-			this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
-			this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromIndexHandler);
-			this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromIndexHandler);
-			this.alternativeSource.fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
-			this.alternativeSource.fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromFileHandler);
+			if (alternativeSource != null)
+			{
+				this.alternativeSource.dispatcher = this;
+				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
+				//this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRates);
+				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
+				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromIndexHandler);
+				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromIndexHandler);
+				this.alternativeSource.fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
+				this.alternativeSource.fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromFileHandler);
+			}
 			
 			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -304,7 +307,8 @@ package org.osmf.net.httpstreaming
 			
 			indexIsReady = false;
 			indexHandler.initialize(_indexInfo != null ? _indexInfo : args[0]);
-			alternativeSource.initializeIndex();
+			if (alternativeSource != null)
+				alternativeSource.initializeIndex();
 			
 			setQualityLevelForStreamName(args[0]);
 						
@@ -392,7 +396,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public function changeAudioStream(url:String):void
 		{
-			if (_state != HTTPStreamingState.INIT) 
+			if (_state != HTTPStreamingState.INIT && alternativeSource != null) 
 			{
 				
 				if (alternativeSource.indexInfo == null)
@@ -476,7 +480,8 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY_START_NEXT:
 				case HTTPStreamingState.PLAY_START_SEEK:
 					_urlStreamVideo.close();	// immediate abort
-					alternativeSource.closeStream();
+					if (alternativeSource != null)
+						alternativeSource.closeStream();
 			}
 			setState(HTTPStreamingState.HALT);
 			
@@ -971,7 +976,8 @@ package org.osmf.net.httpstreaming
 						case HTTPStreamingState.PLAY_START_NEXT:
 						case HTTPStreamingState.PLAY_START_SEEK:
 							_urlStreamVideo.close();	// immediate abort
-							alternativeSource.closeStream();
+							if (alternativeSource != null)
+								alternativeSource.closeStream();
 							break;
 						default:
 							// already not open
@@ -979,7 +985,8 @@ package org.osmf.net.httpstreaming
 					}
 					
 					_dataAvailable = false;
-					alternativeSource.dataAvailable = false;
+					if (alternativeSource != null)
+						alternativeSource.dataAvailable = false;
 					_savedBytes.length = 0;		// correct? XXX
 					
 					if (_enhancedSeekEnabled)
@@ -1000,7 +1007,7 @@ package org.osmf.net.httpstreaming
 					// XXX for now, we have a simplistic dynamic handler, in that if downloads are going poorly, we are a bit more aggressive about prefetching
 					if ( this.bufferLength < Math.max(4, this.bufferTime))
 					{
-						if (   alternativeSource.indexInfo 
+						if (   alternativeSource != null && alternativeSource.indexInfo 
 							&& ((videoBufferRemaining > 8000) || nextRequest == null) 
 							&& ((alternativeSource.bufferRemaining > 8000)|| alternativeSource.nextRequest == null ))
 						{
@@ -1050,7 +1057,8 @@ package org.osmf.net.httpstreaming
 					if (audioStreamHasChanged)
 					{
 						fileHandler.flushFileSegment(_urlStreamVideo);
-						alternativeSource.flushFileSegment();
+						if (alternativeSource != null)
+							alternativeSource.flushFileSegment();
 						fileHandler.flushVideoInput();
 						fileHandler.flushAudioInput();
 						
@@ -1092,7 +1100,8 @@ package org.osmf.net.httpstreaming
 					{
 						trace("Audio Stream changed:", _seekTarget);
 						fileHandler.flushFileSegment(_urlStreamVideo);
-						alternativeSource.flushFileSegment();
+						if (alternativeSource != null)
+							alternativeSource.flushFileSegment();
 						fileHandler.flushVideoInput();
 						fileHandler.flushAudioInput();
 						// XXX for testing, putting this reporting here, but it really needs to be more informative and thus generated up in the autoAdjustQuality code
@@ -1126,7 +1135,7 @@ package org.osmf.net.httpstreaming
 						case HTTPStreamingState.LOAD_SEEK:
 						case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
 							nextRequest = indexHandler.getFileForTime(_seekTarget, qualityLevel);
-							if (alternativeSource.endSegment && alternativeSource.indexInfo)
+							if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo)
 							{
 								if (alternativeSource.seekTarget < 0)
 								{
@@ -1141,7 +1150,7 @@ package org.osmf.net.httpstreaming
 							{
 								nextRequest = indexHandler.getNextFile(qualityLevel);
 							}
-							if (alternativeSource.endSegment && alternativeSource.indexInfo)
+							if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo)
 							{
 								alternativeSource.nextRequest = alternativeSource.indexHandler.getNextFile(qualityLevel);
 							}
@@ -1151,14 +1160,19 @@ package org.osmf.net.httpstreaming
 							break;
 					}
 					
-					if (endSegment && nextRequest == null && alternativeSource.endSegment && alternativeSource.nextRequest == null)
+					if ( endSegment && nextRequest == null  
+							&& 	(
+									alternativeSource == null
+									|| (alternativeSource.endSegment && alternativeSource.nextRequest == null) 
+								)
+						)
 					{
 						setState(HTTPStreamingState.HALT);
 					}
 					
 					if(
 							(nextRequest != null && nextRequest.urlRequest != null)
-						||  (alternativeSource.nextRequest != null && alternativeSource.nextRequest.urlRequest != null)
+						||  (alternativeSource != null && alternativeSource.nextRequest != null && alternativeSource.nextRequest.urlRequest != null)
 						)
 					{
 						if (endSegment && (nextRequest != null) && (nextRequest.urlRequest != null))
@@ -1172,7 +1186,7 @@ package org.osmf.net.httpstreaming
 												
 							_urlStreamVideo.load(nextRequest.urlRequest);
 						}
-						if (alternativeSource.endSegment && (alternativeSource.nextRequest != null) && (alternativeSource.nextRequest.urlRequest != null) && alternativeSource.indexInfo)
+						if (alternativeSource != null && alternativeSource.endSegment && (alternativeSource.nextRequest != null) && (alternativeSource.nextRequest.urlRequest != null) && alternativeSource.indexInfo)
 						{
 							alternativeSource.loadComplete = false;
 							CONFIG::LOGGING
@@ -1245,7 +1259,7 @@ package org.osmf.net.httpstreaming
 					{
 						fileHandler.beginProcessFile(false, 0);
 					}
-					if (alternativeSource.endSegment && alternativeSource.indexInfo != null)
+					if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo != null)
 					{
 						alternativeSource.fileHandler.beginProcessFile(false, 0);
 					}
@@ -1257,7 +1271,7 @@ package org.osmf.net.httpstreaming
 					{
 						fileHandler.beginProcessFile(true, _seekTarget);
 					}
-					if (alternativeSource.endSegment && alternativeSource.indexInfo != null)
+					if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo != null)
 					{
 						alternativeSource.fileHandler.beginProcessFile(true, _seekTarget);	
 					}
@@ -1283,14 +1297,15 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY:
 
 					endSegment = false;
-					alternativeSource.endSegment = false;
+					if (alternativeSource != null)
+						alternativeSource.endSegment = false;
 					var needMoreVideo:Boolean = false;
 					var needMoreAudio:Boolean = false;
 
 					if (
-							_dataAvailable || alternativeSource.dataAvailable 
-						|| ((videoBufferRemaining > 1000) && (alternativeSource.bufferRemaining > 1000)) 
-						|| (nextRequest == null) || (alternativeSource.nextRequest == null)
+							_dataAvailable || (alternativeSource != null && alternativeSource.dataAvailable) 
+						|| ((videoBufferRemaining > 1000) && (alternativeSource != null && alternativeSource.bufferRemaining > 1000)) 
+						|| (nextRequest == null) || (alternativeSource != null && alternativeSource.nextRequest == null)
 					)
 					{
 						var processLimit:int = 65000*4;	// XXX needs to be settable
@@ -1313,10 +1328,11 @@ package org.osmf.net.httpstreaming
 						var input:IDataInput = null;
 						_dataAvailable = false;
 						var inputAlt:IDataInput = null;
-						alternativeSource.dataAvailable= false;
+						if (alternativeSource != null)
+							alternativeSource.dataAvailable= false;
 						
 						
-						if (alternativeSource.indexInfo == null)
+						if (alternativeSource == null || alternativeSource.indexInfo == null)
 						{
 							while (_state == HTTPStreamingState.PLAY && (input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)))
 							{
@@ -1408,18 +1424,18 @@ package org.osmf.net.httpstreaming
 						// OR, if we don't do cross-segment saving then we simply need to ensure that we don't return but simply fall through to a later case
 						// for now, we do the latter (also see below)
 						if (nextRequest == null) needMoreAudio = true;
-						if (alternativeSource.nextRequest == null) needMoreVideo = true;
+						if (alternativeSource != null && alternativeSource.nextRequest == null) needMoreVideo = true;
 						
 						if (_loadComplete && needMoreVideo && !_urlStreamVideo.bytesAvailable)
 						{
 							endSegment = true;
 						}
 						// saayan start
-						if (alternativeSource.loadComplete && needMoreAudio && !alternativeSource.urlStream.bytesAvailable && alternativeSource.indexInfo)
+						if (alternativeSource != null && alternativeSource.loadComplete && needMoreAudio && !alternativeSource.urlStream.bytesAvailable && alternativeSource.indexInfo)
 						{
 							alternativeSource.endSegment = true;
 						}
-						if (endSegment && alternativeSource.endSegment)
+						if (endSegment && alternativeSource != null && alternativeSource.endSegment)
 						{
 							setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
 						}
@@ -1430,7 +1446,7 @@ package org.osmf.net.httpstreaming
 						{
 							endSegment = true;
 						}
-						if (alternativeSource.indexInfo && alternativeSource.loadComplete && !alternativeSource.urlStream.bytesAvailable)
+						if (alternativeSource != null && alternativeSource.indexInfo && alternativeSource.loadComplete && !alternativeSource.urlStream.bytesAvailable)
 						{
 							alternativeSource.endSegment = true;
 						}
@@ -1447,7 +1463,7 @@ package org.osmf.net.httpstreaming
 						{
 							_savedBytes.length = 0; // just to be sure
 						}
-						if (alternativeSource.indexInfo) // dont go to end segment for late bound stream
+						if (alternativeSource != null && alternativeSource.indexInfo != null) // dont go to end segment for late bound stream
 						{
 							setState(HTTPStreamingState.LOAD_WAIT); // saayan
 						}
@@ -1458,7 +1474,7 @@ package org.osmf.net.httpstreaming
 						
 					}
 					
-					if (alternativeSource.endSegment && alternativeSource.indexInfo != null)
+					if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo != null)
 					{
 						// then save any leftovers for the next segment round. if this is a kind of filehandler that needs that, they won't suck dry in onEndSegment.
 						if (alternativeSource.urlStream.bytesAvailable)
@@ -1472,7 +1488,7 @@ package org.osmf.net.httpstreaming
 						setState(HTTPStreamingState.LOAD_WAIT);
 					}
 					
-					if (endSegment && alternativeSource.endSegment)
+					if (endSegment && alternativeSource != null && alternativeSource.endSegment)
 					{
 						setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
 					}
@@ -1620,8 +1636,9 @@ package org.osmf.net.httpstreaming
 				_urlStreamVideo.addEventListener(Event.COMPLETE						, onURLComplete		, false, 0, true);
 				_urlStreamVideo.addEventListener(IOErrorEvent.IO_ERROR				, onVideoURLError	, false, 0, true);
 				_urlStreamVideo.addEventListener(SecurityErrorEvent.SECURITY_ERROR	, onVideoURLError	, false, 0, true);
-	
-				alternativeSource.openStream();
+				
+				if (alternativeSource != null)
+					alternativeSource.openStream();
 				
 				setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
 				indexIsReady = true;
