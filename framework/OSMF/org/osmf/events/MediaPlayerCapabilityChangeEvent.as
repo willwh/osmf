@@ -91,6 +91,8 @@ package org.osmf.events
 		public static const HAS_AUDIO_CHANGE:String = "hasAudioChange";
 		
 		/**
+		 * @private
+		 * 
 		 * The MediaPlayerCapabilityChangeEvent.HAS_ALTERNATIVE_AUDIO_CHANGE constant defines
 		 * the value of the type property of the event object for a hasAlternativeAudioChange
 		 * event.

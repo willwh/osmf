@@ -23,7 +23,11 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * An AlternativeAudioEvent is dispatched when the properties of an AlternativeAudioTrait
 	 * change.
 	 *  

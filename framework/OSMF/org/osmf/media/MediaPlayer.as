@@ -118,6 +118,8 @@ package org.osmf.media
 	[Event(name="isDynamicStreamChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when the <code>hasAlternativeAudio</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_ALTERNATIVE_AUDIO_CHANGE
@@ -553,6 +555,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Indicates whether the media has alternative audio sources..
 		 *  
 		 *  @langversion 3.0
@@ -975,6 +979,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * The index of the alternative audio source currently in use.  Uses a zero-based index.
 		 *  
 		 * @throws IllegalOperationError If the media is not a alternative audio.
@@ -990,6 +996,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * The total number of alternative audio sources.
 		 * 
 		 * @throws IllegalOperationError If the media is not a alternative audio.
@@ -1005,6 +1013,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Gets the associated media item for the specified alternative audio stream index.
 		 * 
 		 * @throws RangeError If the specified alternative audio stream index is less than zero or
@@ -1070,6 +1080,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Indicates whether or not a alternative audio stream change is currently in progress.
 		 * This property will return <code>true</code> while an audio stream change has been 
 		 * requested and the audio stream change has not yet been acknowledged and no stream
@@ -1112,6 +1124,8 @@ package org.osmf.media
 		}	    
 	
 		/**
+		 * @private
+		 * 
 		 * Change audio stream to a specific alternative audio index.
 		 * 
 		 * Note:  If the media is paused, audio stream changing will not take place 

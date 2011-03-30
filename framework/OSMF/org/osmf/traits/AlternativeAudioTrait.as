@@ -28,6 +28,8 @@ package org.osmf.traits
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when an alternative audio stream change is requested, completed, or failed.
 	 * 
 	 * @eventType org.osmf.events.AlternativeAudioEvent.SOURCE_CHANGE
@@ -40,6 +42,8 @@ package org.osmf.traits
 	[Event(name="streamChange",type="org.osmf.events.AlternativeAudioEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when the number of alternative audio streams has changed.
 	 * 
 	 * @eventType org.osmf.events.AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE
@@ -50,8 +54,12 @@ package org.osmf.traits
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="numAlternativeAudioChange",type="org.osmf.events.AlternativeAudioEvent")]
-		
+	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * AlternativeAudioTrait defines the trait interface for media supporting alternative
 	 * audio streams. It can also be used as the base class for a more specific AlternativeAudioTrait
 	 * subclass.

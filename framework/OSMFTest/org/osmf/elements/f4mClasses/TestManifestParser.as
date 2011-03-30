@@ -1384,7 +1384,9 @@ package org.osmf.elements.f4mClasses
 			
 			assertNotNull(manifest.media);
 			assertEquals(manifest.media.length, 3);
-			for (var index:int = 0; index < 3; index++)
+			var index:int = 0;
+			
+			for (index = 0; index < 3; index++)
 			{
 				assertFalse(manifest.media[index].alternate);
 			}
@@ -1392,7 +1394,7 @@ package org.osmf.elements.f4mClasses
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 10);
 			
-			for (var index:int = 0; index < 10; index++)
+			for (index = 0; index < 10; index++)
 			{
 				assertTrue(manifest.alternativeMedia[index].alternate);
 				assertEquals(manifest.alternativeMedia[index].url, "neil_patrick_harris_audio_only"+ (index+1).toString());
@@ -1436,22 +1438,10 @@ package org.osmf.elements.f4mClasses
 								</media>
 							</manifest>;
 			
-			var errorSeen:Boolean = false;
-			
-			try
-			{
-				var manifest:Manifest = parser.parse(test);			
-			}
-			catch(error:ArgumentError)
-			{
-				errorSeen = true;
-			}
-			assertTrue(errorSeen);
-			
+			var manifest:Manifest = parser.parse(test);			
 			assertNotNull(manifest);
 			assertEquals(manifest.media.length, 0);
 
-			
 			assertNotNull(manifest.media);
 			
 			assertNotNull(manifest.alternativeMedia);

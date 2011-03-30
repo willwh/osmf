@@ -22,6 +22,8 @@
 package org.osmf.net
 {
 	/**
+	 * @private
+	 * 
 	 * The StreamType class is an enumeration of constant values that you can
 	 * use to set the streamType property of the StreamingURLResource class.
 	 * This property allows the player to specify over which connection type

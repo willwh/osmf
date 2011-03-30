@@ -1,6 +1,8 @@
 package org.osmf.net
 {
 	/**
+	 * @private
+	 * 
 	 * MediaItem represents a part of a piece of media
 	 * inside a StreamingURLResource.
 	 *  

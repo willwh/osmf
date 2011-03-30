@@ -82,7 +82,7 @@ package org.osmf.net.httpstreaming
 			doCheckRules();
 		}
 		
-		private var httpStreamingSwitchManagerAutoSwitch:Boolean = true;
+		private var httpStreamingSwitchManagerAutoSwitch:Boolean = false;
 		private var netStream:NetStream;
 	}
 }
