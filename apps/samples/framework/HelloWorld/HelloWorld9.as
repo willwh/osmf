@@ -90,7 +90,7 @@ package
 
 			// create media elelemt
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_HDS));
 			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
 			container.addMediaElement(mediaElement);
 			
@@ -106,14 +106,15 @@ package
 			player.loop = false;
 			player.autoPlay = false;
 			player.media = mediaElement;
+			player.bufferTime = 8 ;
 		}
 		
 		private function scenario1():void
 		{
 			//hangs the browser
-			setTimeout(doPlay, 0);	
+			setTimeout(doPlay, 100);	
 			setTimeout(doChangeAlternativeIndexInTrait, 11900, 0);
-			//setTimeout(doPause, 30000);
+			setTimeout(doPause, 30000);
 			//setTimeout(doPlay, 33000);
 			//setTimeout(doSeek, 37000, 20);
 			//setTimeout(doChangeAlternativeIndex, 30000, 1);
@@ -149,23 +150,42 @@ package
 		}
 		private function doChangeAlternativeIndex(newIndex:Number):void
 		{
-			if (player.hasAlternativeAudio && player.numAlternativeAudio>newIndex && -1<=newIndex)
+			if (player.hasAlternativeAudio)
 			{
-				trace("[LBA] scenario LBA switch " + newIndex );
-				player.changeAlternativeAudioIndexTo(newIndex);
-			
+				if(player.numAlternativeAudio>newIndex && -1<=newIndex)
+				{
+					trace("[LBA] scenario LBA switch " + newIndex );
+					player.changeAlternativeAudioIndexTo(newIndex);
+				}
+				else
+				{
+					trace("[LBA] scenario LBA can't switch to " + newIndex );
+				}
+			} 
+			else
+			{
+				trace("[LBA] no alternate media");
 			}
 		}
 		private function doChangeAlternativeIndexInTrait(newIndex:Number):void
 		{
-			if (player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO) &&
-					(player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams>newIndex && 
-					-1<=newIndex)
+			if (player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO))
 			{
-				(player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).changeTo(newIndex);
-				trace("[LBA] scenario LBA switch [trait] " + newIndex );
+				if((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams>newIndex && 
+						-1<=newIndex)
+				{
+					(player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).changeTo(newIndex);
+					trace("[LBA] scenario LBA switch [trait] " + newIndex );
+				}
+				else
+				{
+					trace("[LBA] scenario LBA can't switch [trait] to " + newIndex );
+				}
 			}
-
+			else
+			{
+				trace("[LBA] no alternate media [trait]");
+			}
 		}
 		
 		
@@ -185,9 +205,7 @@ package
 								var item:MediaItem = player.getMediaItemForAlternativeAudioIndex(index);
 								trace("[LBA] [", item.language, "]", item.label);
 							}
-							
 						}
-						
 						scenario1();	
 					}
 					break;
@@ -250,5 +268,6 @@ package
 		//private static const F4M_LIVE:String = "http://10.131.237.104/live/events/latebind/events/_definst_/liveevent.f4m";
 		//private static const F4M_LIVE:String = "http://catherine.corp.adobe.com/osmf/late_bindings_audio_sp3/demo_live.f4m";	
 		private static const F4M_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
+		private static const F4M_HDS:String = "http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m";
 	}
 }
