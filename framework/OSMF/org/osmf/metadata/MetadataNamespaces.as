@@ -93,6 +93,11 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 **/
+		public static const OVERLAY_LAYOUT_PARAMETERS:String 			= "http://www.osmf.org/layout/overlay/1.0";
+
+		/**
+		 * @private
+		 **/
 		public static const BOX_LAYOUT_ATTRIBUTES:String				= "http://www.osmf.org/layout/attributes/box/1.0";
 		
 		/**

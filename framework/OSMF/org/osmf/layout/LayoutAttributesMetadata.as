@@ -40,18 +40,6 @@ package org.osmf.layout
 	{
 		/**
 		 * @private
-		 * 
-		 * Identifier for the index property.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const INDEX:String = "index";
-		
-		/**
-		 * @private
 		 *
 		 * Identifier for the index property.
 		 *  
@@ -143,10 +131,6 @@ package org.osmf.layout
 			{
 				return undefined;
 			}
-			else if (key == INDEX)
-			{
-				return index;
-			}
 			else if (key == SCALE_MODE)
 			{
 				return scaleMode;
@@ -175,26 +159,6 @@ package org.osmf.layout
 		
 		// Public interface
 		//
-		
-		/**
-		 * @private
-		 */
-		public function get index():Number
-		{
-			return _index;
-		}
-		public function set index(value:Number):void
-		{
-			if (_index != value)
-			{
-				var event:MetadataEvent
-					= new MetadataEvent(MetadataEvent.VALUE_CHANGE, false, false, INDEX, value, _index);
-					
-				_index = value;
-						
-				dispatchEvent(event);
-			}
-		}
 		
 		/**
 		 * @private
@@ -319,7 +283,6 @@ package org.osmf.layout
 		// Internals
 		//
 		
-		private var _index:Number = NaN;
 		private var _scaleMode:String;
 		private var _verticalAlign:String;
 		private var _horizontalAlign:String;

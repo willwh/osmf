@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import mx.states.AddChild;
+	
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.MediaElementEvent;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
@@ -254,6 +258,34 @@ package org.osmf.elements
 			{
 				metadataRemoveCount++;
 			} 
+		}
+		
+		// Parallel elements should add automatically index value 
+		// to children if they are not already set.
+		public function testAutomaticIndexForChildren():void
+		{
+			// create parralel element
+			var parallelElement:ParallelElement = createParallelElement();
+			
+			// create children and add them to the parallel element
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, false);
+			parallelElement.addChild(mediaElement1);
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, false);
+			parallelElement.addChild(mediaElement2);
+			
+			var container:MediaContainer = new MediaContainer();
+			container.addMediaElement(parallelElement);
+			container.validateNow();
+			
+			// test that indexes where automatically added to them
+			var layoutMetadata1:LayoutMetadata = mediaElement1.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+			assertNotNull(layoutMetadata1);
+			assertEquals(layoutMetadata1.index, 0);
+			
+			// test that indexes where automatically added to them
+			var layoutMetadata2:LayoutMetadata = mediaElement2.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+			assertNotNull(layoutMetadata2);
+			assertEquals(layoutMetadata2.index, 1);
 		}
 		
 		override public function testMediaErrorEventDispatch():void

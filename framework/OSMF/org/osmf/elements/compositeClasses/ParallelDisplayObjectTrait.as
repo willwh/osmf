@@ -26,6 +26,7 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.containers.IMediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.DisplayObjectEvent;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -77,7 +78,6 @@ package org.osmf.elements.compositeClasses
 					);
 				
 				mediaElementLayoutTargets[child] = target;
-				
 				setupLayoutTarget(target);
 			}
 		}
@@ -110,6 +110,19 @@ package org.osmf.elements.compositeClasses
 					);
 				
 				mediaElementLayoutTargets[child] = target;
+				
+				// [kimi-llnw] setup the index to reflect the position in list
+				var targetLayoutMetadata:LayoutMetadata = target.layoutMetadata;
+				if (targetLayoutMetadata == null)
+				{
+					targetLayoutMetadata = new LayoutMetadata();
+					target.mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, targetLayoutMetadata);
+				}
+				
+				if ( isNaN(targetLayoutMetadata.index))
+				{
+					targetLayoutMetadata.index = owner.getChildIndex(child);
+				}
 				
 				setupLayoutTarget(target);
 			}	

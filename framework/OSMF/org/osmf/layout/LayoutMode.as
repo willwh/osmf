@@ -62,5 +62,7 @@ package org.osmf.layout
 		 *  @productversion OSMF 1.0
 		 */
 		public static const	HORIZONTAL:String = "horizontal";
+		
+		public static const OVERLAY:String = "overlay";
 	}
 }

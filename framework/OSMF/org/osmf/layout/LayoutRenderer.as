@@ -27,6 +27,7 @@ package org.osmf.layout
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
 
@@ -126,7 +127,7 @@ package org.osmf.layout
 			
 			// If no layout properties are set on the target ...
 			var relative:RelativeLayoutMetadata = target.layoutMetadata.getValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutMetadata;
-			if	(	layoutMode == LayoutMode.NONE
+			if	(	(layoutMode == LayoutMode.NONE || layoutMode == LayoutMode.OVERLAY)
 				&&	relative == null
 				&&	attributes == null
 				&&	target.layoutMetadata.getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) == null
@@ -152,8 +153,8 @@ package org.osmf.layout
 			
 			var watcher:MetadataWatcher = new MetadataWatcher
 				( target.layoutMetadata
-				, MetadataNamespaces.LAYOUT_ATTRIBUTES
-				, LayoutAttributesMetadata.INDEX
+				, MetadataNamespaces.OVERLAY_LAYOUT_PARAMETERS
+				, OverlayLayoutMetadata.INDEX
 				, function(..._):void 
 					{
 						updateTargetOrder(target);
@@ -185,16 +186,16 @@ package org.osmf.layout
 		 */
 		override protected function compareTargets(x:ILayoutTarget, y:ILayoutTarget):Number
 		{
-			var attributesX:LayoutAttributesMetadata
-				= x.layoutMetadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES)
-				as LayoutAttributesMetadata;
+			var overlayX:OverlayLayoutMetadata
+				= x.layoutMetadata.getValue(MetadataNamespaces.OVERLAY_LAYOUT_PARAMETERS)
+				as OverlayLayoutMetadata;
 				
-			var attributesY:LayoutAttributesMetadata
-				= y.layoutMetadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES)
-				as LayoutAttributesMetadata;
+			var overlayY:OverlayLayoutMetadata
+				= y.layoutMetadata.getValue(MetadataNamespaces.OVERLAY_LAYOUT_PARAMETERS)
+				as OverlayLayoutMetadata;
 				
-			var indexX:Number = attributesX ? attributesX.index : NaN;
-			var indexY:Number = attributesY ? attributesY.index : NaN;
+			var indexX:Number = overlayX ? overlayX.index : NaN;
+			var indexY:Number = overlayY ? overlayY.index : NaN;
 			
 			if (isNaN(indexX) && isNaN(indexY))
 			{
@@ -340,6 +341,25 @@ package org.osmf.layout
 				}
 			}
 			
+			// before we apply anchors parameters, we need to fill out the 
+			// remaining dimensions using the measured ones.
+			if (attributes.scaleMode)
+			{
+				if ( (toDo & WIDTH) || (toDo & HEIGHT))
+				{
+					if ((toDo  & WIDTH) && !isNaN(target.measuredWidth))
+					{
+						rect.width = target.measuredWidth;
+						toDo ^= WIDTH;
+					}
+					if ((toDo & HEIGHT) && !isNaN(target.measuredHeight))
+					{
+						rect.height = target.measuredHeight;
+						toDo ^= HEIGHT;
+					}
+				}
+			}
+			
 			// Last, do anchors: (doing them last is a natural order because we require
 			// a set width and x to do 'right', as well as a set height and y to do
 			// 'bottom')
@@ -436,11 +456,15 @@ package org.osmf.layout
 			// Apply scaling layoutMode:
 			if (attributes.scaleMode)
 			{
-				if	(!	( toDo & WIDTH || toDo & HEIGHT)					
-					&&	target.measuredWidth
-					&&	target.measuredHeight
-					)
+				if ( 
+					!isNaN(target.measuredWidth) &&
+					!(toDo & WIDTH) && 
+					!isNaN(target.measuredHeight) &&
+					!(toDo & HEIGHT)
+				)
 				{
+					//  (target.displayObject is LayoutTargetSprite ? rect.height : 
+					
 					var size:Point = ScaleModeUtils.getScaledSize
 						( attributes.scaleMode
 						, rect.width
@@ -535,10 +559,11 @@ package org.osmf.layout
 			CONFIG::LOGGING
 			{
 				logger.debug
-					( "dimensions: {0} available: ({1}, {2}), media: ({3},{4})"
+					( "dimensions: {0} available: ({1}, {2}), media: ({3},{4}) target ({5})"
 					, rect
 					, availableWidth, availableHeight
-					, target.measuredWidth, target.measuredHeight
+					, target.measuredWidth, target.measuredHeight,
+					target.displayObject
 					);
 			}
 			
@@ -562,13 +587,13 @@ package org.osmf.layout
 				size.y = absolute.height;
 			}
 			
-			if (layoutMode != LayoutMode.NONE)
+			if (layoutMode != LayoutMode.NONE && layoutMode != LayoutMode.OVERLAY)
 			{
 				var boxAttributes:BoxAttributesMetadata = new BoxAttributesMetadata();
 				container.layoutMetadata.addValue(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES, boxAttributes);
 			}
 			
-			if (isNaN(size.x) || isNaN(size.y) || layoutMode != LayoutMode.NONE)
+			if (isNaN(size.x) || isNaN(size.y) || ( layoutMode != LayoutMode.NONE && layoutMode != LayoutMode.OVERLAY))
 			{
 				// Iterrate over all targets, calculating their bounds, combining the results
 				// into a bounds rectangle:
@@ -635,22 +660,22 @@ package org.osmf.layout
 							: absolute.height;
 			}
 			
-			CONFIG::LOGGING
-			{
-				logger.debug
-					( "calculated container size ({0}, {1}) (bounds: {2})"
-					, size.x, size.y
-					, containerBounds
-					);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug
+//					( "calculated container size ({0}, {1}) (bounds: {2})"
+//					, size.x, size.y
+//					, containerBounds
+//					);
+//			}
 			
 			return size;
 		}
 		
 		// Internals
 		//
-		
-		private static const USED_METADATAS:Vector.<String> = new Vector.<String>(5, true);
+		private static const USED_METADATAS_COUNT:int = 6;
+		private static const USED_METADATAS:Vector.<String> = new Vector.<String>(USED_METADATAS_COUNT, true);
 		
 		/* static */
 		{
@@ -659,6 +684,7 @@ package org.osmf.layout
 			USED_METADATAS[2] = MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS;
 			USED_METADATAS[3] = MetadataNamespaces.PADDING_LAYOUT_PARAMETERS;
 			USED_METADATAS[4] = MetadataNamespaces.LAYOUT_ATTRIBUTES;
+			USED_METADATAS[5] = MetadataNamespaces.OVERLAY_LAYOUT_PARAMETERS;
 		}
 		
 		private static const X:int = 0x1;

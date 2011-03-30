@@ -59,17 +59,9 @@ package org.osmf.layout
 			assertEquals(HorizontalAlign.RIGHT, lastEvent.value);
 			assertEquals(metadata.horizontalAlign, metadata.getValue(LayoutAttributesMetadata.HORIZONTAL_ALIGN), HorizontalAlign.RIGHT);
 			
-			metadata.index = 2;
-			
-			assertEquals(3, eventCounter);
-			assertEquals(LayoutAttributesMetadata.INDEX, lastEvent.key);
-			assertEquals(NaN, lastEvent.oldValue);
-			assertEquals(2, lastEvent.value);
-			assertEquals(metadata.index, metadata.getValue(LayoutAttributesMetadata.INDEX), 2);
-			
 			metadata.snapToPixel = false;
 			
-			assertEquals(4, eventCounter);
+			assertEquals(3, eventCounter);
 			assertEquals(LayoutAttributesMetadata.SNAP_TO_PIXEL, lastEvent.key);
 			assertEquals(true, lastEvent.oldValue);
 			assertEquals(false, lastEvent.value);
@@ -77,7 +69,7 @@ package org.osmf.layout
 			
 			metadata.scaleMode = ScaleMode.LETTERBOX;
 			
-			assertEquals(5, eventCounter);
+			assertEquals(4, eventCounter);
 			assertEquals(LayoutAttributesMetadata.SCALE_MODE, lastEvent.key);
 			assertEquals(null, lastEvent.oldValue);
 			assertEquals(ScaleMode.LETTERBOX, lastEvent.value);

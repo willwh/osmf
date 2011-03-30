@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="OSMF.as" projectUUID="00360a41-7e4f-4ecb-86fb-4b38545919ba" version="7">
+<actionScriptProperties analytics="false" mainApplicationPath="OSMF.as" projectUUID="00360a41-7e4f-4ecb-86fb-4b38545919ba" version="6">
   <compiler additionalCompilerArguments="-swf-version=11 -define CONFIG::LOGGING true -define CONFIG::FLASH_10_1 true -define CONFIG::MOCK false -define CONFIG::PLATFORM true" autoRSLOrdering="true" copyDependentFiles="false" flex3CompatMode="false" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin" strict="true" targetPlayerVersion="10.2.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
@@ -21,5 +21,4 @@
   </applications>
   <modules/>
   <buildCSSFiles/>
-  <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>

@@ -77,11 +77,11 @@ package org.osmf.layout
 		 */	
 		public function get index():Number
 		{
-			return lazyAttributes ? lazyAttributes.index : NaN;
+			return lazyOverlay ? lazyOverlay.index : NaN;
 		}
 		public function set index(value:Number):void
 		{
-			eagerAttributes.index = value;
+			eagerOverlay.index = value;
 		}
 		
 		/**
@@ -561,7 +561,23 @@ package org.osmf.layout
 			}
 			return result;
 		}
+
+		private function get lazyOverlay():OverlayLayoutMetadata
+		{
+			return getValue(MetadataNamespaces.OVERLAY_LAYOUT_PARAMETERS) as OverlayLayoutMetadata;
+		}
 		
+		private function get eagerOverlay():OverlayLayoutMetadata
+		{
+			var result:OverlayLayoutMetadata = lazyOverlay;
+			if (result == null)
+			{
+				result = new OverlayLayoutMetadata();
+				addValue(MetadataNamespaces.OVERLAY_LAYOUT_PARAMETERS, result);
+			}
+			return result;
+		}
+
 		private function get lazyAbsolute():AbsoluteLayoutMetadata
 		{
 			return getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) as AbsoluteLayoutMetadata;
