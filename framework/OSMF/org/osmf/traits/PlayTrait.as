@@ -180,7 +180,7 @@ package org.osmf.traits
 			{
 				_canPause = value;
 				
-				dispatchEvent(new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE));
+				dispatchEvent(new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE, false, false, playState, _canPause));
 			}
 		}
 		
