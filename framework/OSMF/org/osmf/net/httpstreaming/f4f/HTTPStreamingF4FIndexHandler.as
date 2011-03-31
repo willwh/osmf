@@ -807,7 +807,7 @@ package org.osmf.net.httpstreaming.f4f
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.HTTPStreamF4FIndexHandler");
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.HTTPStreamF4FIndexHandler");
 		}
 	}
 }

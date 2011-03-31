@@ -255,7 +255,7 @@ package org.osmf.media.pluginClasses
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:Logger = Log.getLogger("org.osmf.elements.loaderClasses.PluginLoader");
+			private static const logger:Logger = Log.getLogger("org.osmf.media.pluginClasses.PluginLoader");
 		}
 	}
 }
