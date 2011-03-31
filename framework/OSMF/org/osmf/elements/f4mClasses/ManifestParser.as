@@ -698,17 +698,26 @@ package org.osmf.elements.f4mClasses
 							bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
 							media.bootstrapInfo.url = bootstrapInfoURLString; 
 						}
-						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName, media.bootstrapInfo);
+						if (httpMetadata != null)
+						{
+							httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName, media.bootstrapInfo);
+						}
 					}
 			
 					if (media.metadata != null)
 					{
-						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName, media.metadata);					
+						if (httpMetadata != null)
+						{
+							httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName, media.metadata);
+						}
 					}
 					
 					if (media.xmp != null)
 					{
-						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);					
+						if (httpMetadata != null) 
+						{
+							httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);
+						}
 					}
 				}
 				
@@ -747,8 +756,12 @@ package org.osmf.elements.f4mClasses
 			resource.addMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA, manifestResource);
 			
 			addDVRInfo(value, resource);
-			addAlternativeMedia(value, resource, manifestFolder);
 			
+			// we add alternative media only for HTTP Streaming
+			if (NetStreamUtils.isRTMPStream(baseURL) == false)
+			{
+				addAlternativeMedia(value, resource, manifestFolder);
+			}
 			return resource;
 		}
 		
