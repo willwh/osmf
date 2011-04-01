@@ -27,7 +27,12 @@ package org.osmf.media.videoClasses
 		 * Default constructor.
 		 */
 		public function VideoSurface(useStageVideo:Boolean = true, createVideo:Function = null)
-		{	
+		{
+			// Enable double click event on VideoSurface.
+			// This is done in order to make a VideoSurface object behave
+			// like a Video object (handles double click events).
+			this.doubleClickEnabled = true;
+			
 			if (createVideo != null)
 			{
 				this.createVideo = createVideo;
