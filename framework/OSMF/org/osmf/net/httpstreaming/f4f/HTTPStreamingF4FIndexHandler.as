@@ -382,8 +382,14 @@ package org.osmf.net.httpstreaming.f4f
 			if (quality >= 0 && quality < streamInfos.length)
 			{
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
+				if (frt == null)
+					return null;
+				
 				var oldCurrentFAI:FragmentAccessInformation = currentFAI;
-				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
+				if (oldCurrentFAI == null)
+					return null;
+				
+				currentFAI = frt.validateFragment(oldCurrentFAI.fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
 				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
 					if (!abst.live || abst.contentComplete())

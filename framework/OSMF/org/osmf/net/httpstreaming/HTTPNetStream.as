@@ -396,6 +396,8 @@ package org.osmf.net.httpstreaming
 		 */
 		public function changeAudioStream(url:String):void
 		{
+			audioStreamUrl = url;
+			audioStreamNeedsChanging = true;
 			if (_state != HTTPStreamingState.INIT && alternativeSource != null) 
 			{
 				
@@ -410,7 +412,7 @@ package org.osmf.net.httpstreaming
 					alternativeSource.seekTarget = fileHandler.mixedAudioTime/1000;
 				}
 				
-				alternativeSource.initialize(url);
+				alternativeSource.initialize(audioStreamUrl);
 				
 				// testing
 				videoBufferRemaining = 0;
@@ -421,6 +423,7 @@ package org.osmf.net.httpstreaming
 				setState(HTTPStreamingState.LOAD_SEEK);		
 				
 				audioStreamHasChanged = true;
+				audioStreamNeedsChanging = false;
 				dispatchEvent
 				( new NetStatusEvent
 					( NetStatusEvent.NET_STATUS
@@ -1037,6 +1040,9 @@ package org.osmf.net.httpstreaming
 				
 				case HTTPStreamingState.LOAD_NEXT:
 					autoAdjustQuality(false);
+					if (audioStreamNeedsChanging)
+						changeAudioStream(audioStreamUrl);
+					
 					if (qualityLevelHasChanged)
 					{
 						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
@@ -1304,7 +1310,8 @@ package org.osmf.net.httpstreaming
 
 					if (
 							_dataAvailable || (alternativeSource != null && alternativeSource.dataAvailable) 
-						|| ((videoBufferRemaining > 1000) && (alternativeSource != null && alternativeSource.bufferRemaining > 1000)) 
+						|| (videoBufferRemaining > 1000) 
+						|| (alternativeSource != null && alternativeSource.bufferRemaining > 1000) 
 						|| (nextRequest == null) || (alternativeSource != null && alternativeSource.nextRequest == null)
 					)
 					{
@@ -1353,11 +1360,21 @@ package org.osmf.net.httpstreaming
 						}
 						else
 						{
-							while (_state == HTTPStreamingState.PLAY && 
-								((input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)) || (videoBufferRemaining > 1000) || (nextRequest == null)) 
-								&& ((inputAlt = alternativeSource.getInput()) || (alternativeSource.bufferRemaining > 1000) || (alternativeSource.nextRequest == null))
-							)
+							var processingData:Boolean = true;
+							
+							while (processingData)
 							{
+								input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded);
+								inputAlt = alternativeSource.getInput();
+								
+								processingData = _state == HTTPStreamingState.PLAY && 
+												( 
+													(input != null || (videoBufferRemaining > 1000) || (nextRequest == null)) && 
+													((inputAlt != null) || (alternativeSource.bufferRemaining > 1000) || (alternativeSource.nextRequest == null))
+												);
+								if (!processingData)
+									break;
+								
 								// saayan start
 								prevAudioTime = fileHandler.mixedAudioTime;
 								prevVideoTime = fileHandler.mixedVideoTime;
@@ -1374,29 +1391,36 @@ package org.osmf.net.httpstreaming
 								}
 								
 								bytes = fileHandler.mixMDATBytes(vbytes,abytes);
+								processed += processAndAppend(bytes);
 								
 								if (fileHandler.videoInput.bytesAvailable == 0)
 									videoBufferRemaining = 0;
 								if (fileHandler.audioInput.bytesAvailable == 0)
 									alternativeSource.bufferRemaining = 0;
 								
-								
 								videoBufferRemaining -= fileHandler.mixedVideoTime - prevVideoTime;
 								alternativeSource.bufferRemaining -= fileHandler.mixedAudioTime - prevAudioTime;
 								//	trace("video:", videoBufferRemaining, "(",fileHandler.videoInput.bytesAvailable, "bytes), audio:", audioBufferRemaining, "(",fileHandler.audioInput.bytesAvailable, "bytes)");
 								
 								// one of the buffers is empty
-								if ((fileHandler.mixedAudioTime == prevAudioTime) && !(input && (input.bytesAvailable > 0)) 
-									&& ((alternativeSource.bufferRemaining > 1000) && (videoBufferRemaining < 1000) )) 
-								{
-									needMoreVideo =  true;
-								}
+								needMoreVideo =    input == null 
+												|| input.bytesAvailable == 0 
+												|| (fileHandler.mixedAudioTime == prevAudioTime && alternativeSource.bufferRemaining > 1000 && videoBufferRemaining < 1000);
+//								if ((fileHandler.mixedAudioTime == prevAudioTime) && !(input && (input.bytesAvailable > 0)) 
+//									&& ((alternativeSource.bufferRemaining > 1000) && (videoBufferRemaining < 1000) )) 
+//								{
+//									needMoreVideo =  true;
+//								}
 								
-								if (!(inputAlt && (inputAlt.bytesAvailable > 0)) && (fileHandler.mixedVideoTime == prevVideoTime) 
-									&& ((videoBufferRemaining > 1000) && (alternativeSource.bufferRemaining < 1000)))
-								{
-									needMoreAudio = true;
-								}
+								needMoreAudio = 	inputAlt == null 
+												|| inputAlt.bytesAvailable == 0 
+												|| (fileHandler.mixedVideoTime == prevVideoTime && videoBufferRemaining > 1000 && alternativeSource.bufferRemaining < 1000);
+												
+//								if (!(inputAlt && (inputAlt.bytesAvailable > 0)) && (fileHandler.mixedVideoTime == prevVideoTime) 
+//									&& ((videoBufferRemaining > 1000) && (alternativeSource.bufferRemaining < 1000)))
+//								{
+//									needMoreAudio = true;
+//								}
 								
 								if ((needMoreVideo && (nextRequest != null)) || (needMoreAudio && (alternativeSource.nextRequest != null))) 
 								{
@@ -1405,8 +1429,8 @@ package org.osmf.net.httpstreaming
 								//_socket.writeBytes(bytes);
 								//_socket.flush();
 								
-								processed += processAndAppend(bytes);
 								// saayan end
+								
 								
 								if (processLimit > 0 && processed >= processLimit)
 								{
@@ -1435,9 +1459,10 @@ package org.osmf.net.httpstreaming
 						{
 							alternativeSource.endSegment = true;
 						}
-						if (endSegment && alternativeSource != null && alternativeSource.endSegment)
+						if (endSegment || (alternativeSource != null && alternativeSource.endSegment))
 						{
-							setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
+							setState(HTTPStreamingState.LOAD_NEXT); // LOAD_NEXT?
+							//setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
 						}
 					}
 					else
@@ -1873,11 +1898,14 @@ package org.osmf.net.httpstreaming
 		private var _signalPlayStartPending:Boolean = false;
 		
 		private var alternativeSource:HTTPStreamingDataSource = null;
-		
+		private var principalSource:HTTPStreamingDataSource = null;
 		
 		private	var videoBufferRemaining:Number = 0;
 		private var endSegment:Boolean = true;
 		private var audioStreamHasChanged:Boolean = false;
+		private var audioStreamNeedsChanging:Boolean = false;
+		private var audioStreamUrl:String = null;
+		
 		private var nextRequest:HTTPStreamRequest;
 		private	var prevVideoTime:uint = 0;
 		private	var prevAudioTime:uint = 0;
