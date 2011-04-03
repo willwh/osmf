@@ -87,14 +87,18 @@ package org.osmf.net.httpstreaming
 			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler();
 			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler(fileHandler);
 			
+			var fileHandler1:HTTPStreamingFileHandlerBase = null;
+			var indexHandler1:HTTPStreamingIndexHandlerBase = null;
+			
 			var alternateSource:HTTPStreamingDataSource = null;
 			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
 			if (streamingResource != null && streamingResource.alternativeAudioItems != null && streamingResource.alternativeAudioItems.length > 0 )
 			{
-				alternateSource = new HTTPStreamingDataSource(streamingResource);
+				fileHandler1 = new HTTPStreamingF4FFileHandler();
+				indexHandler1 = new HTTPStreamingF4FIndexHandler(fileHandler1);
 			}
 
-			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler, alternateSource);
+			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler, indexHandler1, fileHandler1, resource);
 			httpNetStream.manualSwitchMode = true;
 			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(resource);
 			return httpNetStream;

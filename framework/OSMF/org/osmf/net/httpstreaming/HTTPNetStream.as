@@ -40,10 +40,13 @@ package org.osmf.net.httpstreaming
 	import flash.utils.IDataInput;
 	import flash.utils.Timer;
 	
+	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
@@ -54,6 +57,8 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
+	import org.osmf.net.StreamingURLResource;
+	import org.osmf.media.URLResource;
 
 	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
 	
@@ -107,7 +112,9 @@ package org.osmf.net.httpstreaming
 			( connection:NetConnection
 			, indexHandler:HTTPStreamingIndexHandlerBase
 			, fileHandler:HTTPStreamingFileHandlerBase
-			, alternativeSource:HTTPStreamingDataSource = null
+			, indexHandlerAlt:HTTPStreamingIndexHandlerBase = null
+			, fileHandlerAlt:HTTPStreamingFileHandlerBase = null
+			, resource:URLResource = null
 			)
 		{
 			super(connection);
@@ -131,17 +138,23 @@ package org.osmf.net.httpstreaming
 			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_ERROR, onErrorFromFileHandler);
 			
 			// setting up alternative source
-			this.alternativeSource = alternativeSource;
-			if (alternativeSource != null)
+			_savedBytesAlt = new ByteArray();
+			this.resource = resource;
+			this.indexHandlerAlt = indexHandlerAlt;
+			this.fileHandlerAlt = fileHandlerAlt;
+			if (indexHandlerAlt != null)
 			{
-				this.alternativeSource.dispatcher = this;
-				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
-				//this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRates);
-				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
-				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromIndexHandler);
-				this.alternativeSource.indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromIndexHandler);
-				this.alternativeSource.fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
-				this.alternativeSource.fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromFileHandler);
+				indexHandlerAlt.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
+				indexHandlerAlt.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRates);
+				indexHandlerAlt.addEventListener(HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX, onRequestLoadIndexFileAlt);
+				indexHandlerAlt.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
+				indexHandlerAlt.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromIndexHandler);
+				indexHandlerAlt.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromIndexHandler);
+			}
+			if (fileHandlerAlt != null)
+			{
+				fileHandlerAlt.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
+				fileHandlerAlt.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromFileHandler);
 			}
 			
 			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
@@ -228,6 +241,15 @@ package org.osmf.net.httpstreaming
 			_indexInfo = value;
 		}
 		
+		public function get indexInfoAlt():HTTPStreamingIndexInfoBase
+		{
+			return _indexInfoAlt;
+		}
+		public function set indexInfoAlt(value:HTTPStreamingIndexInfoBase):void
+		{
+			_indexInfoAlt = value;
+		}
+		
 		// new functionality
 			
 		public function DVRGetStreamInfo(streamName:Object):void
@@ -307,8 +329,8 @@ package org.osmf.net.httpstreaming
 			
 			indexIsReady = false;
 			indexHandler.initialize(_indexInfo != null ? _indexInfo : args[0]);
-			if (alternativeSource != null)
-				alternativeSource.initializeIndex();
+			if (_indexInfoAlt != null && indexHandlerAlt != null)
+				indexHandlerAlt.initialize(_indexInfoAlt);
 			
 			setQualityLevelForStreamName(args[0]);
 						
@@ -398,28 +420,29 @@ package org.osmf.net.httpstreaming
 		{
 			audioStreamUrl = url;
 			audioStreamNeedsChanging = true;
-			if (_state != HTTPStreamingState.INIT && alternativeSource != null) 
+			if (_state != HTTPStreamingState.INIT) 
 			{
 				
-				if (alternativeSource.indexInfo == null)
+				if (_indexInfoAlt == null)
 				{
 					_seekTarget = videoBufferRemaining/1000;
-					alternativeSource.seekTarget = _seekTarget;
+					_seekTargetAlt = _seekTarget;
 				}
 				else 
 				{
 					_seekTarget = fileHandler.mixedVideoTime/1000;
-					alternativeSource.seekTarget = fileHandler.mixedAudioTime/1000;
+					_seekTargetAlt = fileHandler.mixedAudioTime/1000;
 				}
 				
-				alternativeSource.initialize(audioStreamUrl);
+				
+				initializeAlt(audioStreamUrl);
 				
 				// testing
 				videoBufferRemaining = 0;
-				alternativeSource.bufferRemaining = 0;
+				audioBufferRemaining = 0;
 				
 				endSegment = true;
-				alternativeSource.endSegment = true;
+				endSegmentAlt = true;
 				setState(HTTPStreamingState.LOAD_SEEK);		
 				
 				audioStreamHasChanged = true;
@@ -483,8 +506,8 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY_START_NEXT:
 				case HTTPStreamingState.PLAY_START_SEEK:
 					_urlStreamVideo.close();	// immediate abort
-					if (alternativeSource != null)
-						alternativeSource.closeStream();
+					if (_urlStreamAlternate.connected)
+						_urlStreamAlternate.close(); 
 			}
 			setState(HTTPStreamingState.HALT);
 			
@@ -515,7 +538,6 @@ package org.osmf.net.httpstreaming
 					//  the only thing we could do better is also run a timer to ask ourselves what it is whenever it might be valid and save that, just in case the
 					//  user doesn't ask... but it turns out most consumers poll this all the time in order to update playback position displays
 			}
-			
 			return _lastValidTimeTime;
 		}
 				
@@ -899,6 +921,42 @@ package org.osmf.net.httpstreaming
 			return input;
 		}
 		
+		private function byteSourceAlt(input:IDataInput, numBytes:Number):IDataInput
+		{
+			if (numBytes < 0)
+			{
+				return null;
+			}
+			
+			if (numBytes)
+			{
+				if (_savedBytesAlt.bytesAvailable + input.bytesAvailable < numBytes)
+				{
+					return null;
+				}
+			}
+			else
+			{
+				if (_savedBytesAlt.bytesAvailable + input.bytesAvailable < 1)
+				{
+					return null;
+				}
+			}
+			
+			if (_savedBytesAlt.bytesAvailable)
+			{
+				var needed:int = numBytes - _savedBytesAlt.bytesAvailable;
+				if (needed > 0)
+				{
+					input.readBytes(_savedBytesAlt, _savedBytesAlt.length, needed);
+				}
+				
+				return _savedBytesAlt;
+			}
+			_savedBytesAlt.length = 0;
+			return input;
+		}
+
 		private function processAndAppend(inBytes:ByteArray):uint
 		{
 			var bytes:ByteArray;
@@ -950,6 +1008,7 @@ package org.osmf.net.httpstreaming
 		private function onMainTimer(timerEvent:TimerEvent):void
 		{	
 			var bytes:ByteArray;
+			var d:Date = new Date();
 			var info:Object = null;
 			var sdoTag:FLVTagScriptDataObject = null;
 			
@@ -979,8 +1038,8 @@ package org.osmf.net.httpstreaming
 						case HTTPStreamingState.PLAY_START_NEXT:
 						case HTTPStreamingState.PLAY_START_SEEK:
 							_urlStreamVideo.close();	// immediate abort
-							if (alternativeSource != null)
-								alternativeSource.closeStream();
+							if (_urlStreamAlternate.connected)
+								_urlStreamAlternate.close(); 
 							break;
 						default:
 							// already not open
@@ -988,8 +1047,7 @@ package org.osmf.net.httpstreaming
 					}
 					
 					_dataAvailable = false;
-					if (alternativeSource != null)
-						alternativeSource.dataAvailable = false;
+					_dataAvailableAlt = false;
 					_savedBytes.length = 0;		// correct? XXX
 					
 					if (_enhancedSeekEnabled)
@@ -1010,9 +1068,7 @@ package org.osmf.net.httpstreaming
 					// XXX for now, we have a simplistic dynamic handler, in that if downloads are going poorly, we are a bit more aggressive about prefetching
 					if ( this.bufferLength < Math.max(4, this.bufferTime))
 					{
-						if (   alternativeSource != null && alternativeSource.indexInfo 
-							&& ((videoBufferRemaining > 8000) || nextRequest == null) 
-							&& ((alternativeSource.bufferRemaining > 8000)|| alternativeSource.nextRequest == null ))
+						if (_indexInfoAlt && ((videoBufferRemaining > 8000) || nextRequest == null) && ((audioBufferRemaining > 8000)||nextRequestAlt == null ))
 						{
 							setState(HTTPStreamingState.PLAY);
 						}
@@ -1063,8 +1119,7 @@ package org.osmf.net.httpstreaming
 					if (audioStreamHasChanged)
 					{
 						fileHandler.flushFileSegment(_urlStreamVideo);
-						if (alternativeSource != null)
-							alternativeSource.flushFileSegment();
+						fileHandlerAlt.flushFileSegment(_urlStreamAlternate);
 						fileHandler.flushVideoInput();
 						fileHandler.flushAudioInput();
 						
@@ -1106,8 +1161,7 @@ package org.osmf.net.httpstreaming
 					{
 						trace("Audio Stream changed:", _seekTarget);
 						fileHandler.flushFileSegment(_urlStreamVideo);
-						if (alternativeSource != null)
-							alternativeSource.flushFileSegment();
+						fileHandlerAlt.flushFileSegment(_urlStreamAlternate);
 						fileHandler.flushVideoInput();
 						fileHandler.flushAudioInput();
 						// XXX for testing, putting this reporting here, but it really needs to be more informative and thus generated up in the autoAdjustQuality code
@@ -1140,14 +1194,17 @@ package org.osmf.net.httpstreaming
 					{
 						case HTTPStreamingState.LOAD_SEEK:
 						case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
-							nextRequest = indexHandler.getFileForTime(_seekTarget, qualityLevel);
-							if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo)
+							if (endSegment)
 							{
-								if (alternativeSource.seekTarget < 0)
+								nextRequest = indexHandler.getFileForTime(_seekTarget, qualityLevel);
+							}
+							if (endSegmentAlt && _indexInfoAlt)
+							{
+								if (_seekTargetAlt < 0)
 								{
-									alternativeSource.seekTarget = _seekTarget;
+									_seekTargetAlt = _seekTarget;
 								}
-								alternativeSource.nextRequest = alternativeSource.indexHandler.getFileForTime(alternativeSource.seekTarget, qualityLevel);
+								nextRequestAlt = indexHandlerAlt.getFileForTime(_seekTargetAlt, qualityLevel);
 							}
 							break;
 						case HTTPStreamingState.LOAD_NEXT:
@@ -1156,9 +1213,9 @@ package org.osmf.net.httpstreaming
 							{
 								nextRequest = indexHandler.getNextFile(qualityLevel);
 							}
-							if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo)
+							if (endSegmentAlt && _indexInfoAlt)
 							{
-								alternativeSource.nextRequest = alternativeSource.indexHandler.getNextFile(qualityLevel);
+								nextRequestAlt = indexHandlerAlt.getNextFile(qualityLevel);
 							}
 							break;
 						default:
@@ -1166,20 +1223,12 @@ package org.osmf.net.httpstreaming
 							break;
 					}
 					
-					if ( endSegment && nextRequest == null  
-							&& 	(
-									alternativeSource == null
-									|| (alternativeSource.endSegment && alternativeSource.nextRequest == null) 
-								)
-						)
-					{
+					if ((endSegment && nextRequest == null)
+						&& (endSegmentAlt && nextRequestAlt == null))
 						setState(HTTPStreamingState.HALT);
-					}
 					
-					if(
-							(nextRequest != null && nextRequest.urlRequest != null)
-						||  (alternativeSource != null && alternativeSource.nextRequest != null && alternativeSource.nextRequest.urlRequest != null)
-						)
+					if ((nextRequest != null && nextRequest.urlRequest != null)
+						|| (nextRequestAlt != null && nextRequestAlt.urlRequest != null))
 					{
 						if (endSegment && (nextRequest != null) && (nextRequest.urlRequest != null))
 						{
@@ -1192,14 +1241,14 @@ package org.osmf.net.httpstreaming
 												
 							_urlStreamVideo.load(nextRequest.urlRequest);
 						}
-						if (alternativeSource != null && alternativeSource.endSegment && (alternativeSource.nextRequest != null) && (alternativeSource.nextRequest.urlRequest != null) && alternativeSource.indexInfo)
+						if (endSegmentAlt && (nextRequestAlt != null) && (nextRequestAlt.urlRequest != null) && _indexInfoAlt)
 						{
-							alternativeSource.loadComplete = false;
+							_loadCompleteAlt = false;
 							CONFIG::LOGGING
 							{
-								logger.debug("loading alternate stream: " + 	alternativeSource.nextRequest.urlRequest.url.toString());
+								logger.debug("loading for alternate src: " + 	nextRequestAlt.urlRequest.url.toString());
 							}
-							alternativeSource.load();
+							_urlStreamAlternate.load(nextRequestAlt.urlRequest);
 						}
 
 						date = new Date();
@@ -1265,10 +1314,8 @@ package org.osmf.net.httpstreaming
 					{
 						fileHandler.beginProcessFile(false, 0);
 					}
-					if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo != null)
-					{
-						alternativeSource.fileHandler.beginProcessFile(false, 0);
-					}
+					if (endSegmentAlt && _indexInfoAlt)
+						fileHandlerAlt.beginProcessFile(false, 0); // saayan
 					setState(HTTPStreamingState.PLAY_START_COMMON);
 					break;
 					
@@ -1277,10 +1324,8 @@ package org.osmf.net.httpstreaming
 					{
 						fileHandler.beginProcessFile(true, _seekTarget);
 					}
-					if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo != null)
-					{
-						alternativeSource.fileHandler.beginProcessFile(true, _seekTarget);	
-					}
+					if (endSegmentAlt && _indexInfoAlt != null)
+						fileHandlerAlt.beginProcessFile(true, _seekTarget); 
 					setState(HTTPStreamingState.PLAY_START_COMMON);
 					break;		
 				
@@ -1303,17 +1348,13 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY:
 
 					endSegment = false;
-					if (alternativeSource != null)
-						alternativeSource.endSegment = false;
+					endSegmentAlt = false;
 					var needMoreVideo:Boolean = false;
 					var needMoreAudio:Boolean = false;
-
-					if (
-							_dataAvailable || (alternativeSource != null && alternativeSource.dataAvailable) 
-						|| (videoBufferRemaining > 1000) 
-						|| (alternativeSource != null && alternativeSource.bufferRemaining > 1000) 
-						|| (nextRequest == null) || (alternativeSource != null && alternativeSource.nextRequest == null)
-					)
+					
+					if (_dataAvailable || _dataAvailableAlt 
+						|| ((videoBufferRemaining > 1000) && (audioBufferRemaining > 1000)) 
+						|| (nextRequest == null) || (nextRequestAlt == null))
 					{
 						var processLimit:int = 65000*4;	// XXX needs to be settable
 						var processed:int = 0;
@@ -1334,12 +1375,13 @@ package org.osmf.net.httpstreaming
 						
 						var input:IDataInput = null;
 						_dataAvailable = false;
+						// saayan start
 						var inputAlt:IDataInput = null;
-						if (alternativeSource != null)
-							alternativeSource.dataAvailable= false;
+						_dataAvailableAlt= false;
+						// saayan end
 						
 						
-						if (alternativeSource == null || alternativeSource.indexInfo == null)
+						if (indexInfoAlt == null)
 						{
 							while (_state == HTTPStreamingState.PLAY && (input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)))
 							{
@@ -1360,21 +1402,11 @@ package org.osmf.net.httpstreaming
 						}
 						else
 						{
-							var processingData:Boolean = true;
-							
-							while (processingData)
+							while (_state == HTTPStreamingState.PLAY && 
+								((input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)) || (videoBufferRemaining > 1000) || (nextRequest == null)) 
+								&& ((inputAlt = byteSourceAlt(_urlStreamAlternate, fileHandlerAlt.inputBytesNeeded)) || (audioBufferRemaining > 1000) || (nextRequestAlt == null))
+							)
 							{
-								input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded);
-								inputAlt = alternativeSource.getInput();
-								
-								processingData = _state == HTTPStreamingState.PLAY && 
-												( 
-													(input != null || (videoBufferRemaining > 1000) || (nextRequest == null)) && 
-													((inputAlt != null) || (alternativeSource.bufferRemaining > 1000) || (alternativeSource.nextRequest == null))
-												);
-								if (!processingData)
-									break;
-								
 								// saayan start
 								prevAudioTime = fileHandler.mixedAudioTime;
 								prevVideoTime = fileHandler.mixedVideoTime;
@@ -1387,55 +1419,48 @@ package org.osmf.net.httpstreaming
 								}
 								if (inputAlt && (inputAlt.bytesAvailable > 0))
 								{
-									abytes = alternativeSource.fileHandler.processFileSegment(inputAlt);
+									abytes = fileHandlerAlt.processFileSegment(inputAlt);
 								}
 								
 								bytes = fileHandler.mixMDATBytes(vbytes,abytes);
-								processed += processAndAppend(bytes);
 								
 								if (fileHandler.videoInput.bytesAvailable == 0)
 									videoBufferRemaining = 0;
 								if (fileHandler.audioInput.bytesAvailable == 0)
-									alternativeSource.bufferRemaining = 0;
+									audioBufferRemaining = 0;
+								
 								
 								videoBufferRemaining -= fileHandler.mixedVideoTime - prevVideoTime;
-								alternativeSource.bufferRemaining -= fileHandler.mixedAudioTime - prevAudioTime;
+								audioBufferRemaining -= fileHandler.mixedAudioTime - prevAudioTime;
 								//	trace("video:", videoBufferRemaining, "(",fileHandler.videoInput.bytesAvailable, "bytes), audio:", audioBufferRemaining, "(",fileHandler.audioInput.bytesAvailable, "bytes)");
 								
 								// one of the buffers is empty
-								needMoreVideo =    input == null 
-												|| input.bytesAvailable == 0 
-												|| (fileHandler.mixedAudioTime == prevAudioTime && alternativeSource.bufferRemaining > 1000 && videoBufferRemaining < 1000);
-//								if ((fileHandler.mixedAudioTime == prevAudioTime) && !(input && (input.bytesAvailable > 0)) 
-//									&& ((alternativeSource.bufferRemaining > 1000) && (videoBufferRemaining < 1000) )) 
-//								{
-//									needMoreVideo =  true;
-//								}
+								if ((fileHandler.mixedAudioTime == prevAudioTime) && !(input && (input.bytesAvailable > 0)) 
+									&& ((audioBufferRemaining > 1000) && (videoBufferRemaining < 1000) )) 
+								{
+									needMoreVideo =  true;
+								}
 								
-								needMoreAudio = 	inputAlt == null 
-												|| inputAlt.bytesAvailable == 0 
-												|| (fileHandler.mixedVideoTime == prevVideoTime && videoBufferRemaining > 1000 && alternativeSource.bufferRemaining < 1000);
-												
-//								if (!(inputAlt && (inputAlt.bytesAvailable > 0)) && (fileHandler.mixedVideoTime == prevVideoTime) 
-//									&& ((videoBufferRemaining > 1000) && (alternativeSource.bufferRemaining < 1000)))
-//								{
-//									needMoreAudio = true;
-//								}
+								if (!(inputAlt && (inputAlt.bytesAvailable > 0)) && (fileHandler.mixedVideoTime == prevVideoTime) 
+									&& ((videoBufferRemaining > 1000) && (audioBufferRemaining < 1000)))
+								{
+									needMoreAudio = true;
+								}
 								
-								if ((needMoreVideo && (nextRequest != null)) || (needMoreAudio && (alternativeSource.nextRequest != null))) 
+								if ((needMoreVideo && (nextRequest != null)) || (needMoreAudio && (nextRequestAlt != null))) 
 								{
 									break;	
 								}
 								//_socket.writeBytes(bytes);
 								//_socket.flush();
 								
+								processed += processAndAppend(bytes);
 								// saayan end
-								
 								
 								if (processLimit > 0 && processed >= processLimit)
 								{
 									_dataAvailable = true;
-									alternativeSource.dataAvailable = true;
+									_dataAvailableAlt = true;
 									break;
 								}
 							}
@@ -1448,21 +1473,20 @@ package org.osmf.net.httpstreaming
 						// OR, if we don't do cross-segment saving then we simply need to ensure that we don't return but simply fall through to a later case
 						// for now, we do the latter (also see below)
 						if (nextRequest == null) needMoreAudio = true;
-						if (alternativeSource != null && alternativeSource.nextRequest == null) needMoreVideo = true;
+						if (nextRequestAlt == null) needMoreVideo = true;
 						
 						if (_loadComplete && needMoreVideo && !_urlStreamVideo.bytesAvailable)
 						{
 							endSegment = true;
 						}
 						// saayan start
-						if (alternativeSource != null && alternativeSource.loadComplete && needMoreAudio && !alternativeSource.urlStream.bytesAvailable && alternativeSource.indexInfo)
+						if (_loadCompleteAlt && needMoreAudio && !_urlStreamAlternate.bytesAvailable && _indexInfoAlt)
 						{
-							alternativeSource.endSegment = true;
+							endSegmentAlt = true;
 						}
-						if (endSegment || (alternativeSource != null && alternativeSource.endSegment))
+						if (endSegment && endSegmentAlt)
 						{
-							setState(HTTPStreamingState.LOAD_NEXT); // LOAD_NEXT?
-							//setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
+							setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
 						}
 					}
 					else
@@ -1471,9 +1495,9 @@ package org.osmf.net.httpstreaming
 						{
 							endSegment = true;
 						}
-						if (alternativeSource != null && alternativeSource.indexInfo && alternativeSource.loadComplete && !alternativeSource.urlStream.bytesAvailable)
+						if (_indexInfoAlt && _loadCompleteAlt && !_urlStreamAlternate.bytesAvailable)
 						{
-							alternativeSource.endSegment = true;
+							endSegmentAlt = true;
 						}
 					}
 					
@@ -1488,7 +1512,7 @@ package org.osmf.net.httpstreaming
 						{
 							_savedBytes.length = 0; // just to be sure
 						}
-						if (alternativeSource != null && alternativeSource.indexInfo != null) // dont go to end segment for late bound stream
+						if (_indexInfoAlt) // dont go to end segment for late bound stream
 						{
 							setState(HTTPStreamingState.LOAD_WAIT); // saayan
 						}
@@ -1499,21 +1523,21 @@ package org.osmf.net.httpstreaming
 						
 					}
 					
-					if (alternativeSource != null && alternativeSource.endSegment && alternativeSource.indexInfo != null)
+					if (endSegmentAlt && _indexInfoAlt != null)
 					{
 						// then save any leftovers for the next segment round. if this is a kind of filehandler that needs that, they won't suck dry in onEndSegment.
-						if (alternativeSource.urlStream.bytesAvailable)
+						if (_urlStreamAlternate.bytesAvailable)
 						{
-							alternativeSource.readBytes(); 
+							_urlStreamAlternate.readBytes(_savedBytesAlt);
 						}
 						else
 						{
-							alternativeSource.savedBytes.length = 0; // just to be sure
+							_savedBytesAlt.length = 0; // just to be sure
 						}
 						setState(HTTPStreamingState.LOAD_WAIT);
 					}
-					
-					if (endSegment && alternativeSource != null && alternativeSource.endSegment)
+					// saayan end
+					if (endSegment && endSegmentAlt)
 					{
 						setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
 					}
@@ -1586,6 +1610,20 @@ package org.osmf.net.httpstreaming
 			videoBufferRemaining += fragDuration;
 		}
 
+		private function onURLStatusAlt(progressEvent:ProgressEvent):void
+		{
+			_dataAvailableAlt = true;
+		}
+		private function onURLCompleteAlt(event:Event):void
+		{
+			_loadCompleteAlt = true;
+			var fragId1:String = nextRequestAlt.urlRequest.url.substr(nextRequestAlt.urlRequest.url.indexOf("Frag")+4,nextRequestAlt.urlRequest.url.length);
+			var fragDuration1:Number = indexHandlerAlt.getFragmentDuration(uint(fragId1));
+			audioBufferRemaining += fragDuration1;
+			//	trace("audio: ", nextRequestAlt.urlRequest.url, fragDuration1);
+			//	trace("audio buffer: ", audioBufferRemaining, fileHandler.audioInput.bytesAvailable, " bytes");			
+		}
+
 		private function onRequestLoadIndexFile(event:HTTPStreamingIndexHandlerEvent):void
 		{
 			var urlLoader:URLLoader = new URLLoader(event.request);
@@ -1629,6 +1667,51 @@ package org.osmf.net.httpstreaming
 			}
 		}
 
+		private function onRequestLoadIndexFileAlt(event:HTTPStreamingIndexHandlerEvent):void
+		{
+			var urlLoader:URLLoader = new URLLoader(event.request);
+			var requestContext:Object = event.requestContext;
+			if (event.binaryData)
+			{
+				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+			}
+			else
+			{
+				urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+			}
+			
+			urlLoader.addEventListener(Event.COMPLETE, onIndexLoadCompleteAlt);
+			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIndexURLErrorAlt);
+			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLErrorAlt);
+			
+			function onIndexLoadCompleteAlt(innerEvent:Event):void
+			{
+				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadCompleteAlt);
+				urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexURLErrorAlt);
+				urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLErrorAlt);
+				if (indexHandlerAlt != null) {
+					indexHandlerAlt.processIndexData(urlLoader.data, requestContext);
+				}
+				
+			}
+			
+			function onIndexURLErrorAlt(errorEvent:Event):void
+			{
+				CONFIG::LOGGING
+				{			
+					logger.error("URLStream: " + _urlStreamAlternate );
+					logger.error("index url error: " + errorEvent );
+					logger.error( "******* attempting to download the index file (bootstrap) caused error!" );
+				}
+				
+				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadCompleteAlt);
+				urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexURLErrorAlt);
+				urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLErrorAlt);
+				
+				handleURLErrorAlt();
+			}
+		}
+
 		private function onSegmentDurationFromFileHandler(event:HTTPStreamingFileHandlerEvent):void
 		{
 			_segmentDuration = event.segmentDuration;
@@ -1662,8 +1745,11 @@ package org.osmf.net.httpstreaming
 				_urlStreamVideo.addEventListener(IOErrorEvent.IO_ERROR				, onVideoURLError	, false, 0, true);
 				_urlStreamVideo.addEventListener(SecurityErrorEvent.SECURITY_ERROR	, onVideoURLError	, false, 0, true);
 				
-				if (alternativeSource != null)
-					alternativeSource.openStream();
+				_urlStreamAlternate = new URLStream();
+				_urlStreamAlternate.addEventListener(ProgressEvent.PROGRESS			, onURLStatusAlt		, false, 0, true);	
+				_urlStreamAlternate.addEventListener(Event.COMPLETE					, onURLCompleteAlt	, false, 0, true);
+				_urlStreamAlternate.addEventListener(IOErrorEvent.IO_ERROR				, onVideoURLErrorAlt	, false, 0, true);
+				_urlStreamAlternate.addEventListener(SecurityErrorEvent.SECURITY_ERROR	, onVideoURLErrorAlt	, false, 0, true);
 				
 				setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
 				indexIsReady = true;
@@ -1693,6 +1779,31 @@ package org.osmf.net.httpstreaming
 					, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error"}
 					)
 				);
+		}
+		
+		private function onVideoURLErrorAlt(event:Event):void
+		{		
+			CONFIG::LOGGING
+			{			
+				logger.error("URLStream: " + _urlStreamAlternate );
+				logger.error("video error event: " + event );
+				logger.error( "******* attempting to download video fragment caused error event!" );
+			}
+			
+			handleURLErrorAlt();
+		}
+
+		private function handleURLErrorAlt():void
+		{
+			// We map all URL errors to Play.StreamNotFound.
+			dispatchEvent
+			( new NetStatusEvent
+				( NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error"}
+				)
+			);
 		}
 
 		private function onScriptDataFromIndexHandler(event:HTTPStreamingIndexHandlerEvent):void
@@ -1850,6 +1961,40 @@ package org.osmf.net.httpstreaming
 			}
 		}
 
+		private function initializeAlt(url:String):void
+		{
+			fileHandlerAlt = new HTTPStreamingF4FFileHandler();
+			
+			var bootstrap:BootstrapInfo = null;
+			var streamMetadata:Object;
+			var xmpMetadata:ByteArray;
+			
+			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
+			if (httpMetadata != null)
+			{
+				bootstrap = httpMetadata.getValue(
+					MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + url) as BootstrapInfo;
+				streamMetadata = httpMetadata.getValue(
+					MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + url);
+				xmpMetadata = httpMetadata.getValue(
+					MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + url) as ByteArray;
+			}
+			
+			// saayan fix: live
+			var serverBaseURLs:Vector.<String> = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY) as Vector.<String>;
+			var indexInfoResource:URLResource = new StreamingURLResource(serverBaseURLs[0].toString() + "/" + url);
+			var resourceMetadata:Metadata = new Metadata();
+			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY, bootstrap);
+			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY, streamMetadata);
+			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY, xmpMetadata);
+			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY,serverBaseURLs);
+			
+			indexInfoResource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, resourceMetadata);
+			_indexInfoAlt = HTTPStreamingUtils.createF4FIndexInfo(indexInfoResource);
+			indexHandlerAlt.initialize(_indexInfoAlt);
+		}
+
+		
 		private static const MAIN_TIMER_INTERVAL:int = 25;
 		
 		private var _indexInfo:HTTPStreamingIndexInfoBase = null;
@@ -1910,7 +2055,19 @@ package org.osmf.net.httpstreaming
 		private	var prevVideoTime:uint = 0;
 		private	var prevAudioTime:uint = 0;
 
-		
+		private var indexHandlerAlt:HTTPStreamingIndexHandlerBase;
+		private var fileHandlerAlt:HTTPStreamingFileHandlerBase;
+		private var _savedBytesAlt:ByteArray = null;
+		private var resource:URLResource = null;
+		private var _loadCompleteAlt:Boolean = false;
+		private var _urlStreamAlternate:URLStream = null;
+		private var _indexInfoAlt:HTTPStreamingIndexInfoBase = null;
+		private var _seekTargetAlt:Number = -1;
+		private	var audioBufferRemaining:Number = 0;
+		private var endSegmentAlt:Boolean = true;
+		private var _dataAvailableAlt:Boolean = false;
+		private var nextRequestAlt:HTTPStreamRequest;
+
 		CONFIG::LOGGING
 		{
 			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");
