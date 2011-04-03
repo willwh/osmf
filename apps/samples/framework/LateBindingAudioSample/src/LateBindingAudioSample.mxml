@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   
+			   minWidth="955" 
+			   minHeight="600"
+			   
+			   initialize="onApplicationInitialize(event)"
+			   applicationComplete="onApplicationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import org.osmf.containers.MediaContainer;
+			import org.osmf.events.MediaErrorEvent;
+			import org.osmf.events.MediaPlayerCapabilityChangeEvent;
+			import org.osmf.events.MediaPlayerStateChangeEvent;
+			import org.osmf.layout.HorizontalAlign;
+			import org.osmf.layout.LayoutMetadata;
+			import org.osmf.layout.LayoutMode;
+			import org.osmf.layout.ScaleMode;
+			import org.osmf.layout.VerticalAlign;
+			import org.osmf.media.DefaultMediaFactory;
+			import org.osmf.media.MediaElement;
+			import org.osmf.media.MediaFactory;
+			import org.osmf.media.MediaPlayer;
+			import org.osmf.media.MediaPlayerState;
+			import org.osmf.media.URLResource;
+			import org.osmf.metadata.MetadataNamespaces;
+			import org.osmf.net.MediaItem;
+			import org.osmf.utils.OSMFSettings;
+			
+			import spark.components.supportClasses.DropDownController;
+			import spark.events.IndexChangeEvent;
+			
+			/**
+			 * @private
+			 * We just create the initial collection of resources.
+			 */
+			protected function onApplicationInitialize(event:FlexEvent):void
+			{
+				urls = new ArrayCollection(URLS);
+			}
+			
+			/**
+			 * @private
+			 * We'll create all our application objects.
+			 **/
+			protected function onApplicationComplete(event:FlexEvent):void
+			{
+				OSMFSettings.enableStageVideo = false;
+				
+				// factory
+				factory = new DefaultMediaFactory();
+				
+				// player
+				player = new MediaPlayer();
+				player.autoPlay = false;
+				player.autoRewind = false;
+				player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
+				player.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayerCanPlayChange);
+				player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onPlayerError);
+								
+				// container
+				container = new MediaContainer();
+				container.width = 690;
+				container.height = 480;
+				videoContainer.addChild(container);
+				
+				updateUI();
+			}
+				
+			/**
+			 * @private
+			 * When resources combo box selected index changes, we stop the playback of the current resource
+			 * and switch to the new media.
+			 **/
+			protected function onResourceSelectionChange(event:IndexChangeEvent):void
+			{
+				var dropDown:DropDownList = event.target as DropDownList;
+				if (dropDown != null)
+				{
+					var selectedIndex:int = dropDown.selectedIndex;
+					var selectedUrl:String = null;
+					if (dropDown.selectedItem != null && dropDown.selectedItem.hasOwnProperty("data"))
+						selectedUrl = dropDown.selectedItem["data"];
+					
+					trace("[LBA - Sample] Selected index :", selectedIndex);
+					trace("[LBA - Sample] Selected url   :", selectedUrl);
+					
+					unloadResource();
+					if (selectedUrl != null)
+						createResource(selectedUrl);
+				}
+			}
+			
+			/**
+			 * @private
+			 **/
+			protected function onLanguageSelectionChange(event:IndexChangeEvent):void
+			{
+				var dropDown:DropDownList = event.target as DropDownList;
+				if (dropDown != null)
+				{
+					alternativeLanguage = dropDown.selectedIndex;
+					trace("[LBA - Sample] Selected language index :", alternativeLanguage);
+					if (dropDown.selectedItem != null && dropDown.selectedItem.hasOwnProperty("label"))
+						trace("[LBA - Sample] Selected language :", dropDown.selectedItem["label"]);
+					
+					if (player.hasAlternativeAudio)
+					{
+						player.changeAlternativeAudioIndexTo(alternativeLanguage);
+					}
+				}
+			}
+			
+			/**
+			 * @private
+			 * Clears existing resource.
+			 **/			
+			private function unloadResource():void
+			{
+				if (player.canPlay && player.state == MediaPlayerState.PLAYING)
+					player.stop();
+				
+				player.media = null;
+			}
+			
+			/**
+			 * @private
+			 * Create a resource from the specified url.
+			 **/
+			private function createResource(url:String):void
+			{
+				var element:MediaElement = factory.createMediaElement(new URLResource(url));
+				
+				var elementLayout:LayoutMetadata = new LayoutMetadata();
+				elementLayout.percentHeight = 100;
+				elementLayout.percentWidth = 100;
+				elementLayout.scaleMode = ScaleMode.LETTERBOX;
+				elementLayout.layoutMode = LayoutMode.NONE;
+				elementLayout.verticalAlign = VerticalAlign.MIDDLE;
+				elementLayout.horizontalAlign = HorizontalAlign.CENTER;
+				element.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, elementLayout);
+				
+				container.addMediaElement(element);
+				player.media = element;
+			}
+			
+			/**
+			 * @private
+			 * Updates UI elements to reflect the player states.
+			 **/
+			private function updateUI():void
+			{
+				btnPlayPause.enabled = player.canPlay;
+				listLanguages.enabled = (player.state == MediaPlayerState.READY && player.hasAlternativeAudio);
+			}
+			
+			/**
+			 * @private
+			 * Track when the player is capable to play in order to enable UI.
+			 */
+			private function onPlayerCanPlayChange(event:MediaPlayerCapabilityChangeEvent):void
+			{
+				updateUI();
+			}
+			
+			/**
+			 * @private
+			 * When the player is ready for playback, iterate through alternate
+			 * audio tracks and update the UI.
+			 **/
+			private function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
+			{
+				updateUI();
+				var targetPlayer:MediaPlayer = event.target as MediaPlayer;
+				if (targetPlayer != null && event.state == MediaPlayerState.READY)
+				{
+					languages = new ArrayCollection();
+					alternativeLanguage = -1;
+					
+					if (targetPlayer.hasAlternativeAudio)
+					{
+						trace("[LBA - Sample] Alterntive audio tracks available.");
+						for (var index:int = 0; index < targetPlayer.numAlternativeAudio; index++)
+						{
+							var item:MediaItem = targetPlayer.getMediaItemForAlternativeAudioIndex(index);
+							trace("[LBA - Sample] ", item.language, "]", item.label);
+							
+							var languageItem:Object = new Object();
+							languageItem["label"] = item.label + "(" + item.language + ")";
+							languageItem["data"] = index;
+							languages.addItem(languageItem); 
+						}
+					}
+				}
+			}
+			
+			/**
+			 * @private
+			 * Executed when player encounters an error.
+			 **/
+			private function onPlayerError(event:MediaErrorEvent):void
+			{
+				updateUI();
+			}
+			
+			/**
+			 * @private 
+			 * Play the current media element.
+			 **/
+			private function onPlayPauseClick(event:MouseEvent):void
+			{
+				if (player.canPlay)
+					player.play();
+			}
+			
+			/**
+			 * @private
+			 **/
+			private var player:MediaPlayer = null;
+			private var factory:MediaFactory = null;
+			private var container:MediaContainer = null;
+			private var alternativeLanguage:int = -1;
+			
+			[Bindable]
+			protected var languages:ArrayCollection = null;
+			
+			[Bindable]
+			protected var urls:ArrayCollection = null;
+			private static const URLS:Array = 
+						[
+							{
+								label:"Legacy HDS manifest", 
+								data:"http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m"	
+							},
+							{
+								label:"VOD: 1 video with 2 alternative audio tracks", 
+								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m"	
+							},
+							{
+								label:"VOD: 1 video with 2 alternative audio tracks",
+								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m"	
+							}		
+						];
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout 
+					paddingTop="20"
+					horizontalAlign="center" />
+		</s:layout>
+		
+		<s:Panel title="Late-binding audio on HDS sample" >
+			<s:layout>
+				<s:VerticalLayout 
+					gap="5" 
+					paddingTop="10" paddingLeft="10" paddingBottom="10" paddingRight="10"
+					horizontalAlign="left"
+					/>
+			</s:layout>
+			
+			<s:HGroup verticalAlign="middle" height="20" width="100%"  >
+				<s:Label text="Please select the desired resource :" />
+				<s:DropDownList id="listResources" width="500" dataProvider="{urls}" change="onResourceSelectionChange(event)"/>
+			</s:HGroup>
+			
+			<s:Line width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="0x999999"  caps="square" weight="2"/>
+				</s:stroke>
+			</s:Line>
+			
+			<s:BorderContainer width="100%" minWidth="640" minHeight="480" backgroundColor="0x000000">
+				<s:SpriteVisualElement id="videoContainer" />
+			</s:BorderContainer>
+
+			<s:Line width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="0x999999"  caps="square" weight="2"/>
+				</s:stroke>
+			</s:Line>
+
+			<s:Group id="videoMenu" width="100%">
+				<s:layout>
+					<s:HorizontalLayout 
+							gap="5"
+							verticalAlign="middle" 
+							horizontalAlign="left"
+							/>
+				</s:layout>
+				<s:Button id="btnPlayPause" label="Play" click="onPlayPauseClick(event)" />
+				<s:Spacer width="100%" />
+				<s:DropDownList id="listLanguages" width="200" dataProvider="{languages}" change="onLanguageSelectionChange(event)"/>
+			</s:Group>
+		</s:Panel>
+	</s:Group>
+</s:Application>
