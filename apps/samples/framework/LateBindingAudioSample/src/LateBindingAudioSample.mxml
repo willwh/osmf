@@ -14,6 +14,8 @@
 			import mx.events.FlexEvent;
 			
 			import org.osmf.containers.MediaContainer;
+			import org.osmf.events.AlternativeAudioEvent;
+			import org.osmf.events.BufferEvent;
 			import org.osmf.events.MediaErrorEvent;
 			import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 			import org.osmf.events.MediaPlayerStateChangeEvent;
@@ -61,6 +63,7 @@
 				player.autoRewind = false;
 				player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 				player.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayerCanPlayChange);
+				player.addEventListener(AlternativeAudioEvent.STREAM_CHANGE, onPlayerAudioStreamChange);
 				player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onPlayerError);
 								
 				// container
@@ -184,7 +187,7 @@
 					
 					if (targetPlayer.hasAlternativeAudio)
 					{
-						trace("[LBA - Sample] Alterntive audio tracks available.");
+						trace("[LBA - Sample] Alternative audio tracks available.");
 						for (var index:int = 0; index < targetPlayer.numAlternativeAudio; index++)
 						{
 							var item:MediaItem = targetPlayer.getMediaItemForAlternativeAudioIndex(index);
@@ -220,6 +223,18 @@
 			
 			/**
 			 * @private
+			 * Listen for audio stream events.
+			 **/
+			private function onPlayerAudioStreamChange(event:AlternativeAudioEvent):void
+			{
+				if (event.streamChanging)
+					trace("[LBA - Sample] Alternative audio stream is changing.");
+				else
+					trace("[LBA - Sample] Alternative audio change is complete.");
+			}
+			
+			/**
+			 * @private
 			 **/
 			private var player:MediaPlayer = null;
 			private var factory:MediaFactory = null;
@@ -242,9 +257,13 @@
 								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m"	
 							},
 							{
-								label:"VOD: 1 video with 2 alternative audio tracks",
+								label:"VOD: 1 audio-video with 2 alternative audio tracks",
 								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m"	
-							}		
+							},
+							{
+								label:"LIVE: 1 video with 2 alternative audio tracks",
+								data:"http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m"
+							}
 						];
 		]]>
 	</fx:Script>
@@ -297,6 +316,7 @@
 							/>
 				</s:layout>
 				<s:Button id="btnPlayPause" label="Play" click="onPlayPauseClick(event)" />
+				<s:HSlider id="sldSeek" snapInterval="1" width="300" />
 				<s:Spacer width="100%" />
 				<s:DropDownList id="listLanguages" width="200" dataProvider="{languages}" change="onLanguageSelectionChange(event)"/>
 			</s:Group>

@@ -66,6 +66,8 @@ package org.osmf.net
 			
 			_netStream = netStream;
 			_streamingResource = streamingResource;
+			
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 		}
 		
 		override public function dispose():void
@@ -125,7 +127,9 @@ package org.osmf.net
 			nso.start = playArgs.start;
 			nso.len = playArgs.len;
 			
+			lastTransitionIndex = indexToChangeTo;
 			nso.streamName = _streamingResource.alternativeAudioItems[indexToChangeTo].stream;
+			
 			//
 			// FM-925, it seems that the oldStreamName cannot contain parameters,
 			// therefore we must remove them
@@ -152,51 +156,51 @@ package org.osmf.net
 			_netStream.play2(nso);
 		}
 		
-		private function getIndexForName(url:String):int
-		{
-			var length:int = _streamingResource.alternativeAudioItems.length;
-			for (var  index:int  = 0; index < length; index++)
-			{
-				if (_streamingResource.alternativeAudioItems[index].stream == url)
-					return index;
-			}
-			return -1;
-		}
-		
-		private function onNetStatus(event:NetStatusEvent):void
-		{
-			CONFIG::LOGGING
-			{
-				debug("onNetStatus() - event.info.code=" + event.info.code);
-			}
-			
-			switch (event.info.code) 
-			{
-				case NetStreamCodes.NETSTREAM_PLAY_START:
-					break;
-				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
-					switching  = false;
-					actualIndex = getIndexForName(event.info.details);
-					lastTransitionIndex = actualIndex;
-					break;
-				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
-					switching  = false;
-					break;
-				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
-					switching  = false;
-					if (lastTransitionIndex >= 0)
-					{
-						_currentIndex = lastTransitionIndex;
-					}					
-					break;
-				case NetStreamCodes.NETSTREAM_PLAY_STOP:
-					CONFIG::LOGGING
-				{
-					debug("onNetStatus() - Stopping rules since server has stopped sending data");
-				}
-					break;
-			}			
-		}
+//		private function getIndexForName(url:String):int
+//		{
+//			var length:int = _streamingResource.alternativeAudioItems.length;
+//			for (var  index:int  = 0; index < length; index++)
+//			{
+//				if (_streamingResource.alternativeAudioItems[index].stream == url)
+//					return index;
+//			}
+//			return -1;
+//		}
+//		
+//		private function onNetStatus(event:NetStatusEvent):void
+//		{
+//			CONFIG::LOGGING
+//			{
+//				debug("onNetStatus() - event.info.code=" + event.info.code);
+//			}
+//			
+//			switch (event.info.code) 
+//			{
+//				case NetStreamCodes.NETSTREAM_PLAY_START:
+//					break;
+//				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
+//					switching  = false;
+//					actualIndex = getIndexForName(event.info.details);
+//					lastTransitionIndex = actualIndex;
+//					break;
+//				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
+//					switching  = false;
+//					break;
+//				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
+//					switching  = false;
+//					if (lastTransitionIndex >= 0)
+//					{
+//						_currentIndex = lastTransitionIndex;
+//					}					
+//					break;
+//				case NetStreamCodes.NETSTREAM_PLAY_STOP:
+//					CONFIG::LOGGING
+//				{
+//					debug("onNetStatus() - Stopping rules since server has stopped sending data");
+//				}
+//					break;
+//			}			
+//		}
 		
 		private function onPlayStatus(info:Object):void
 		{
@@ -213,12 +217,13 @@ package org.osmf.net
 						_currentIndex = lastTransitionIndex;
 						lastTransitionIndex = -1;
 					}
+					switching = false;
+					setChangingStream(switching, _currentIndex);
 					
 					CONFIG::LOGGING
-				{
-					debug("onPlayStatus() - Transition complete to index: " + currentIndex + " with url " + _streamingResource.alternativeAudioItems[currentIndex]);
-				}
-					
+					{
+						debug("onPlayStatus() - Transition complete to index: " + currentIndex + " with url " + _streamingResource.alternativeAudioItems[currentIndex]);
+					}
 					break;
 			}
 		}

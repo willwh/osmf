@@ -962,7 +962,7 @@ package org.osmf.net.httpstreaming
 			var bytes:ByteArray;
 			var processed:uint = 0;
 			
-			if (!inBytes)
+			if (!inBytes || inBytes.length == 0)
 			{
 				return 0;
 			}

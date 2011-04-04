@@ -639,6 +639,9 @@ package org.osmf.net.httpstreaming.f4f
 
 		private function getFragmentRunTable(abst:AdobeBootstrapBox):AdobeFragmentRunTable
 		{
+			if (abst == null)
+				return null;
+			
 			// For now, we assume that there is only one fragment run table.
 			return abst.fragmentRunTables[0];
 		}
