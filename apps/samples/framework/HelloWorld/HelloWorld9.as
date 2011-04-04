@@ -107,16 +107,19 @@ package
 			player.autoPlay = false;
 			player.media = mediaElement;
 			player.bufferTime = 8 ;
+			if (player.hasAlternativeAudio)
+			{
+				doChangeAlternativeIndex(0);
+			}
 		}
 		
 		private function scenario1():void
 		{
 			//hangs the browser
-			setTimeout(doPlay, 100);	
-			setTimeout(doChangeAlternativeIndexInTrait, 11900, 0);
-			setTimeout(doPause, 30000);
-			//setTimeout(doPlay, 33000);
-			//setTimeout(doSeek, 37000, 20);
+			//setTimeout(doChangeAlternativeIndexInTrait, 11900, 1);
+			setTimeout(doPause, 5000);
+			setTimeout(doPlay, 10000);
+			//setTimeout(doSeek, 5000, 30);
 			//setTimeout(doChangeAlternativeIndex, 30000, 1);
 			//setTimeout(doChangeAlternativeIndexInTrait, 5000, 1);
 		}
@@ -127,7 +130,6 @@ package
 			{
 				trace("[LBA] scenario play");
 				player.play();
-				
 			}
 		}
 		private function doPause():void
@@ -136,7 +138,6 @@ package
 			{
 				trace("[LBA] scenario pause");
 				player.pause();
-				
 			}
 		}
 		private function doSeek(pos:Number):void
@@ -145,7 +146,6 @@ package
 			{
 				trace("[LBA] scenario seek " + pos);
 				player.seek(pos);
-			
 			}
 		}
 		private function doChangeAlternativeIndex(newIndex:Number):void
@@ -188,7 +188,6 @@ package
 			}
 		}
 		
-		
 		private function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
 		{
 			switch (event.state)
@@ -205,13 +204,14 @@ package
 								var item:MediaItem = player.getMediaItemForAlternativeAudioIndex(index);
 								trace("[LBA] [", item.language, "]", item.label);
 							}
-						}
-						scenario1();	
+						}	
+						player.play();
+						scenario1();
+						doChangeAlternativeIndex(0);
+
 					}
 					break;
 				case MediaPlayerState.PLAYING:
-					//bad workaround to start changing
-					//setTimeout(doChangeAlternativeIndex, 25000, 0);
 					break;
 			}
 		}
