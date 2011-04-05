@@ -1149,7 +1149,11 @@ package org.osmf.net.httpstreaming
 						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
 						if (_indexInfoAlt != null)
 							bytes = fileHandlerAlt.flushFileSegment(_savedBytesAlt.bytesAvailable ? _savedBytesAlt : null);
-						// processAndAppend(bytes);	// XXX this might be unneccessary as we are about to RESET
+						
+						fileHandler.flushAudioInput();
+						fileHandler.flushVideoInput();
+						prevAudioTime = 0;
+						prevVideoTime = 0;
 					}
 					CONFIG::FLASH_10_1
 					{

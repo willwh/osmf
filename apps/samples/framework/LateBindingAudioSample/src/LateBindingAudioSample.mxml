@@ -163,6 +163,8 @@
 			{
 				btnPlayPause.enabled = player.canPlay;
 				listLanguages.enabled = (player.state == MediaPlayerState.READY && player.hasAlternativeAudio);
+				chkAutoRewind.selected = player.autoRewind;
+				chkAutoRewind.enabled = (player.state != MediaPlayerState.PLAYBACK_ERROR && player.state != MediaPlayerState.UNINITIALIZED);
 			}
 			
 			/**
@@ -244,6 +246,11 @@
 					player.seek(seekTarget);
 			}
 			
+			private function onAutoRewindChange(event:Event):void
+			{
+				player.autoRewind = chkAutoRewind.selected;
+			}
+
 			/**
 			 * @private
 			 * Listen for audio stream events.
@@ -288,6 +295,7 @@
 								data:"http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m"
 							}
 						];
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -342,6 +350,16 @@
 				<s:HSlider id="sldSeek" snapInterval="1" width="300" change="onSeekRequest()" />
 				<s:Spacer width="100%" />
 				<s:DropDownList id="listLanguages" width="200" dataProvider="{languages}" change="onLanguageSelectionChange(event)"/>
+			</s:Group>
+			<s:Group>
+				<s:layout>
+					<s:VerticalLayout
+							gap="5" 
+							verticalAlign="middle" 
+							horizontalAlign="left"
+						/>
+				</s:layout>
+				<s:CheckBox id="chkAutoRewind" label="autoRewind" change="onAutoRewindChange(event)" />
 			</s:Group>
 		</s:Panel>
 	</s:Group>
