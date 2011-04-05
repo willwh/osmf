@@ -294,6 +294,10 @@
 								data:"http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m"	
 							},
 							{
+								label:"Legacy Live HDS manifest",
+								data:"http://10.131.237.107/live/videostream.f4m"
+							},
+							{
 								label:"VOD: 1 video with 2 alternative audio tracks", 
 								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m"	
 							},

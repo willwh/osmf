@@ -58,10 +58,8 @@ package org.osmf.net.httpstreaming.flv
 			var source:IDataInput;
 			
 			var date:Date = new Date();
-			trace("[FLV - Parser] parsing start ", date.toString());
 			while (continueParsing)
 			{
-				trace ("[FLV - Parser] inner parsing"); 
 				switch (state)
 				{
 					case FLVParserState.FILE_HEADER:

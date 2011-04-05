@@ -278,6 +278,9 @@ package org.osmf.net.httpstreaming.f4f
 		override public function getFileForTime(time:Number, quality:int):HTTPStreamRequest
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
+			if (abst == null)
+				return null;
+			
 			var streamRequest:HTTPStreamRequest = null;
 
 			if (!playInProgress && stopPlaying(abst))
@@ -533,7 +536,7 @@ package org.osmf.net.httpstreaming.f4f
 		
 		private function checkMetadata(quality:int, abst:AdobeBootstrapBox):void
 		{
-			if (currentQuality != quality)
+			if (currentQuality != quality && abst != null)
 			{
 				notifyTotalDuration(abst.totalDuration / abst.timeScale, quality);
 			}
@@ -726,7 +729,7 @@ package org.osmf.net.httpstreaming.f4f
 		private function stopPlaying(abst:AdobeBootstrapBox):Boolean
 		{
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-			if ((f4fIndexInfo.dvrInfo == null && abst.live && frt.tableComplete()) ||
+			if ((f4fIndexInfo.dvrInfo == null && abst != null && abst.live && frt != null && frt.tableComplete()) ||
 				(f4fIndexInfo.dvrInfo != null && f4fIndexInfo.dvrInfo.offline))
 			{
 				return true;

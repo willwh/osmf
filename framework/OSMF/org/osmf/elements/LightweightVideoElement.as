@@ -326,8 +326,6 @@ package org.osmf.elements
 		 */
 		override protected function processReadyState():void
 		{
-			trace("ProcessReady called. He wants his state back");
-			
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			stream = loadTrait.netStream;
 			
@@ -452,8 +450,6 @@ package org.osmf.elements
 		
 		private function finishLoad():void
 		{
-			trace("finishLoad called. He wants his state back");
-
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			
 			// setup dvr trait
