@@ -222,6 +222,8 @@ package org.osmf.net.httpstreaming.f4f
 			_videoInput.clear();
 			tagHeaderPending = true;
 			tagBodyPending = false;
+			_mixedVideoTime = 0;
+			currTime = 0;
 		}
 		
 		override public function flushAudioInput():void
@@ -229,6 +231,8 @@ package org.osmf.net.httpstreaming.f4f
 			_audioInput.clear();
 			tagHeaderPending1 = true;
 			tagBodyPending1 = false;
+			_mixedAudioTime = 0;
+			currTime = 0;
 		}
 		
 		override public function get mdatBytesPending():uint

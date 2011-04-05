@@ -1154,6 +1154,12 @@ package org.osmf.net.httpstreaming
 						fileHandler.flushVideoInput();
 						prevAudioTime = 0;
 						prevVideoTime = 0;
+
+						audioBufferRemaining = 0;
+						videoBufferRemaining = 0;
+						
+						fileHandler.flushFileSegment(_urlStreamVideo);
+						fileHandlerAlt.flushFileSegment(_urlStreamAlternate);
 					}
 					CONFIG::FLASH_10_1
 					{

@@ -66,6 +66,7 @@
 				player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 				player.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayerCanPlayChange);
 				player.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
+				player.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onPlayerCurrentTimeChange);
 				player.addEventListener(AlternativeAudioEvent.STREAM_CHANGE, onPlayerAudioStreamChange);
 				player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onPlayerError);
 								
@@ -187,6 +188,16 @@
 			private function onPlayerCanPlayChange(event:MediaPlayerCapabilityChangeEvent):void
 			{
 				updateUI();
+			}
+			
+			/**
+			 * @private
+			 * Called when the player current time has changed. We update the slider position.
+			 **/
+			private function onPlayerCurrentTimeChange(event:TimeEvent):void
+			{
+				if (event.time >= sldSeek.minimum && event.time <= sldSeek.maximum) 
+					sldSeek.value = event.time;
 			}
 			
 			/**
