@@ -286,6 +286,11 @@ package org.osmf.net.httpstreaming.f4f
 						}
 						videoTime = (videoHeaderBytes[7] << 24) | (videoHeaderBytes[4] << 16) | (videoHeaderBytes[5] << 8) | (videoHeaderBytes[6]);
 						videoDataSize = (videoHeaderBytes[1] << 16) | (videoHeaderBytes[2] << 8) | (videoHeaderBytes[3]);
+						if (videoDataSize > 0x58B6F0)
+						{
+							mixedBytes.position = 0;
+							return mixedBytes;
+						}
 						//trace("video",videoTag,videoTime,videoDataSize);
 					}
 					if ((_videoInput.bytesAvailable < videoDataSize + 4) && tagBodyPending)

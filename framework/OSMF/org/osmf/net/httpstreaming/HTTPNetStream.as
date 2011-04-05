@@ -484,6 +484,7 @@ package org.osmf.net.httpstreaming
 				{
 					_seekTarget = offset + _initialTime;
 				}
+				_seekTargetAlt = _seekTarget;
 				
 				_seekTime = -1;		// but _initialTime stays known
 				setState(HTTPStreamingState.SEEK);		
@@ -1049,6 +1050,9 @@ package org.osmf.net.httpstreaming
 					_dataAvailable = false;
 					_dataAvailableAlt = false;
 					_savedBytes.length = 0;		// correct? XXX
+					_savedBytesAlt.length = 0;
+					endSegment = true;
+					endSegmentAlt = true;
 					
 					if (_enhancedSeekEnabled)
 					{						
@@ -1143,6 +1147,8 @@ package org.osmf.net.httpstreaming
 					if (!_seekAfterInit)
 					{
 						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
+						if (_indexInfoAlt != null)
+							bytes = fileHandlerAlt.flushFileSegment(_savedBytesAlt.bytesAvailable ? _savedBytesAlt : null);
 						// processAndAppend(bytes);	// XXX this might be unneccessary as we are about to RESET
 					}
 					CONFIG::FLASH_10_1
@@ -1154,7 +1160,7 @@ package org.osmf.net.httpstreaming
 					{
 						autoAdjustQuality(true);
 					}
-						
+					
 					_seekAfterInit = false;
 					
 					if (audioStreamHasChanged)

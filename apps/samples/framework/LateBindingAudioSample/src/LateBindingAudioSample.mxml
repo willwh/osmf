@@ -14,11 +14,13 @@
 			import mx.events.FlexEvent;
 			
 			import org.osmf.containers.MediaContainer;
+			import org.osmf.elements.DurationElement;
 			import org.osmf.events.AlternativeAudioEvent;
 			import org.osmf.events.BufferEvent;
 			import org.osmf.events.MediaErrorEvent;
 			import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 			import org.osmf.events.MediaPlayerStateChangeEvent;
+			import org.osmf.events.TimeEvent;
 			import org.osmf.layout.HorizontalAlign;
 			import org.osmf.layout.LayoutMetadata;
 			import org.osmf.layout.LayoutMode;
@@ -63,6 +65,7 @@
 				player.autoRewind = false;
 				player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 				player.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayerCanPlayChange);
+				player.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				player.addEventListener(AlternativeAudioEvent.STREAM_CHANGE, onPlayerAudioStreamChange);
 				player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onPlayerError);
 								
@@ -164,6 +167,19 @@
 			
 			/**
 			 * @private
+			 * Updates ui element to reflect the new duration.
+			 **/
+			private function onDurationChange(event:TimeEvent):void
+			{
+				if (player.temporal)
+				{
+					sldSeek.maximum = player.duration;
+					sldSeek.minimum = 0;
+				}
+			}
+			
+			/**
+			 * @private
 			 * Track when the player is capable to play in order to enable UI.
 			 */
 			private function onPlayerCanPlayChange(event:MediaPlayerCapabilityChangeEvent):void
@@ -219,6 +235,13 @@
 			{
 				if (player.canPlay)
 					player.play();
+			}
+			
+			private function onSeekRequest():void
+			{
+				var seekTarget:Number = sldSeek.value;	
+				if (player.canSeek)
+					player.seek(seekTarget);
 			}
 			
 			/**
@@ -316,7 +339,7 @@
 							/>
 				</s:layout>
 				<s:Button id="btnPlayPause" label="Play" click="onPlayPauseClick(event)" />
-				<s:HSlider id="sldSeek" snapInterval="1" width="300" />
+				<s:HSlider id="sldSeek" snapInterval="1" width="300" change="onSeekRequest()" />
 				<s:Spacer width="100%" />
 				<s:DropDownList id="listLanguages" width="200" dataProvider="{languages}" change="onLanguageSelectionChange(event)"/>
 			</s:Group>
