@@ -36,6 +36,7 @@ package
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.AlternativeAudioEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
@@ -52,6 +53,7 @@ package
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaPlayerState;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.MediaItem;
 	import org.osmf.traits.AlternativeAudioTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -88,9 +90,9 @@ package
 			layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
 			layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 
-			// create media elelemt
+			// create media element
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_HDS));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_MBR_DRM2));
 			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
 			container.addMediaElement(mediaElement);
 			
@@ -101,25 +103,35 @@ package
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener(AlternativeAudioEvent.STREAM_CHANGE, onAlternateAudioChange);
 			player.addEventListener(AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE, onNumAlternativeAudioChange);
+			
+			player.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, onAutoSwitchChange);
+			player.addEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, onNumDynamicStreamChange);
+			player.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
 
 			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
 			player.media = mediaElement;
-			player.bufferTime = 8 ;
-			if (player.hasAlternativeAudio)
-			{
-				doChangeAlternativeIndex(0);
-			}
+			player.bufferTime = 4 ;
+			player.autoDynamicStreamSwitch=false;
+			//player.autoRewind=false;
+			//if (player.hasAlternativeAudio)
+			//{
+				//doChangeAlternativeIndex(1);
+			//}
 		}
 		
 		private function scenario1():void
 		{
 			//hangs the browser
-			//setTimeout(doChangeAlternativeIndexInTrait, 11900, 1);
-			setTimeout(doPause, 5000);
-			setTimeout(doPlay, 10000);
-			//setTimeout(doSeek, 5000, 30);
+			setTimeout(doChangeAlternativeIndexInTrait, 1000, 1);
+			setTimeout(doSwitch, 10000, 2);
+
+			//setTimeout(doPause, 10000);
+			//setTimeout(doPlay, 13000);
+			//setTimeout(doSeek, 15000, 30);
+			//setTimeout(doSeek, 20000, 1);
+			//setTimeout(doSeek, 40000, 100);
 			//setTimeout(doChangeAlternativeIndex, 30000, 1);
 			//setTimeout(doChangeAlternativeIndexInTrait, 5000, 1);
 		}
@@ -132,6 +144,17 @@ package
 				player.play();
 			}
 		}
+		
+		private function doSwitch(index:Number):void
+		{
+			if (index >=0 && player.numDynamicStreams>index)
+			{
+				trace("[LBA] scenario switch index to " + index);
+				player.switchDynamicStreamIndex(index);
+			}
+		}
+		
+		
 		private function doPause():void
 		{
 			if (player.canPause)
@@ -148,6 +171,7 @@ package
 				player.seek(pos);
 			}
 		}
+		
 		private function doChangeAlternativeIndex(newIndex:Number):void
 		{
 			if (player.hasAlternativeAudio)
@@ -207,13 +231,26 @@ package
 						}	
 						player.play();
 						scenario1();
-						doChangeAlternativeIndex(0);
+						//doChangeAlternativeIndex(1);
 
 					}
 					break;
 				case MediaPlayerState.PLAYING:
 					break;
 			}
+		}
+		
+		private function onAutoSwitchChange(event:DynamicStreamEvent):void
+		{
+			trace("[LBA] [MBR]", event.toString());	
+		}
+		private function onNumDynamicStreamChange(event:DynamicStreamEvent):void
+		{
+			trace("[LBA] [MBR]", event.toString());	
+		}
+		private function onSwitchingChange(event:DynamicStreamEvent):void
+		{
+			trace("[LBA] [MBR]", event.toString());	
 		}
 		
 		private function onMediaError(event:MediaErrorEvent):void
@@ -268,6 +305,11 @@ package
 		//private static const F4M_LIVE:String = "http://10.131.237.104/live/events/latebind/events/_definst_/liveevent.f4m";
 		//private static const F4M_LIVE:String = "http://catherine.corp.adobe.com/osmf/late_bindings_audio_sp3/demo_live.f4m";	
 		private static const F4M_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
-		private static const F4M_HDS:String = "http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m";
+		private static const F4M_HDS:String = "http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m";		
+		private static const F4M_LIVE1:String = "http://10.131.237.107/vod/live/videostream.f4m";
+		private static const F4M_MBR:String = "http://10.131.237.107/vod/mbr/sample1_audio2.f4m";
+		private static const F4M_MBR_DRM:String = "http://10.131.237.107/vod/mbr/drm/sample1_1500kbps.f4m";
+		private static const F4M_MBR_DRM2:String = "http://10.131.237.107/vod/mbr/drm/sample1_audio2.f4m";
+
 	}
 }
