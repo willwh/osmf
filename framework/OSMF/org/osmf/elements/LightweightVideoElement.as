@@ -577,6 +577,7 @@ package org.osmf.elements
 			removeTrait(MediaTraitType.DISPLAY_OBJECT);
 	    	removeTrait(MediaTraitType.SEEK);
     		removeTrait(MediaTraitType.DYNAMIC_STREAM);
+			removeTrait(MediaTraitType.ALTERNATIVE_AUDIO);
     		removeTrait(MediaTraitType.DVR);
     		
 	    	CONFIG::FLASH_10_1
