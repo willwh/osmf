@@ -214,7 +214,6 @@
     <classEntry path="org.osmf.net.dvr.DVRUtils"/>
     <classEntry path="org.osmf.net.dvr.TestableResponder"/>
     <classEntry path="org.osmf.net.httpstreaming.DownloadRatioRule"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPNetStream"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStreamMetrics"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamRequest"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase"/>
