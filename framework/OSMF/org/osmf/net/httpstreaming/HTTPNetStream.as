@@ -423,27 +423,27 @@ package org.osmf.net.httpstreaming
 			if (_state != HTTPStreamingState.INIT) 
 			{
 				
-				if (_indexInfoAlt == null)
-				{
-					_seekTarget = videoBufferRemaining/1000;
-					_seekTargetAlt = _seekTarget;
-				}
-				else 
-				{
-					_seekTarget = fileHandler.mixedVideoTime/1000;
-					_seekTargetAlt = fileHandler.mixedAudioTime/1000;
-				}
+//				if (_indexInfoAlt == null)
+//				{
+//					_seekTarget = Math.max(time, videoBufferRemaining / 1000);
+//					_seekTargetAlt = _seekTarget;
+//				}
+//				else 
+//				{
+//					_seekTarget = fileHandler.mixedVideoTime/1000;
+//					_seekTargetAlt = fileHandler.mixedAudioTime/1000;
+//				}
 				
 				
 				initializeAlt(audioStreamUrl);
 				
 				// testing
-				videoBufferRemaining = 0;
+//				videoBufferRemaining = 0;
 				audioBufferRemaining = 0;
-				
-				endSegment = true;
+//				
+//				endSegment = true;
 				endSegmentAlt = true;
-				setState(HTTPStreamingState.LOAD_SEEK);		
+//				setState(HTTPStreamingState.LOAD_SEEK);		
 				
 				audioStreamHasChanged = true;
 				audioStreamNeedsChanging = false;
@@ -1081,6 +1081,10 @@ package org.osmf.net.httpstreaming
 							setState(HTTPStreamingState.LOAD_NEXT);
 						}
 					}
+					else
+					{
+						setState(HTTPStreamingState.PLAY);
+					}
 
 //					if (this._lastDownloadRatio < 2.0)	// XXX this needs to be more linear, and/or settable
 //					{
@@ -1424,14 +1428,14 @@ package org.osmf.net.httpstreaming
 							while (
 									_state == HTTPStreamingState.PLAY 
 									&& (
-											(input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)) 
+											(_urlStreamVideo != null && _urlStreamVideo.connected && (input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded))) 
 											|| (videoBufferRemaining > 1000) 
 											|| (nextRequest == null)
 										) 
 									&& (
 											(_urlStreamAlternate != null && _urlStreamAlternate.connected && (inputAlt = byteSourceAlt(_urlStreamAlternate, fileHandlerAlt.inputBytesNeeded))) 
 											|| (audioBufferRemaining > 1000) 
-											|| (nextRequestAlt == null)
+											/*|| (nextRequestAlt == null)*/
 										)
 									)
 							{
@@ -1508,14 +1512,18 @@ package org.osmf.net.httpstreaming
 							endSegment = true;
 						}
 						// saayan start
-						if ((_loadCompleteAlt && needMoreAudio) && _urlStreamAlternate.connected && !_urlStreamAlternate.bytesAvailable && _indexInfoAlt)
+						if (	_indexInfoAlt 
+								&& _loadCompleteAlt 
+								&& needMoreAudio
+								&& _urlStreamAlternate.connected 
+								&& !_urlStreamAlternate.bytesAvailable
+						)
 						{
 							endSegmentAlt = true;
 						}
-						if (endSegment && endSegmentAlt)
+						if ( _indexInfoAlt && _urlStreamAlternate != null && !_urlStreamAlternate.connected)
 						{
-							//setState(HTTPStreamingState.LOAD_NEXT);
-							setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
+							endSegmentAlt = true;
 						}
 					}
 					else
@@ -1533,7 +1541,7 @@ package org.osmf.net.httpstreaming
 					if (endSegment)
 					{
 						// then save any leftovers for the next segment round. if this is a kind of filehandler that needs that, they won't suck dry in onEndSegment.
-						if (_urlStreamVideo.bytesAvailable)
+						if (_urlStreamVideo.connected && _urlStreamVideo.bytesAvailable)
 						{
 							_urlStreamVideo.readBytes(_savedBytes);
 						}
@@ -1543,19 +1551,18 @@ package org.osmf.net.httpstreaming
 						}
 						if (_indexInfoAlt) // dont go to end segment for late bound stream
 						{
-							setState(HTTPStreamingState.LOAD_WAIT); // saayan
+							setState(HTTPStreamingState.LOAD_NEXT); // saayan
 						}
 						else 
 						{
 							setState(HTTPStreamingState.END_SEGMENT);
 						}
-						
 					}
 					
 					if (endSegmentAlt && _indexInfoAlt != null)
 					{
 						// then save any leftovers for the next segment round. if this is a kind of filehandler that needs that, they won't suck dry in onEndSegment.
-						if (_urlStreamAlternate.bytesAvailable)
+						if (_urlStreamAlternate.connected && _urlStreamAlternate.bytesAvailable)
 						{
 							_urlStreamAlternate.readBytes(_savedBytesAlt);
 						}
@@ -1563,12 +1570,13 @@ package org.osmf.net.httpstreaming
 						{
 							_savedBytesAlt.length = 0; // just to be sure
 						}
-						setState(HTTPStreamingState.LOAD_WAIT);
+						setState(HTTPStreamingState.LOAD_NEXT);
 					}
 					// saayan end
 					if (endSegment && endSegmentAlt)
 					{
-						setState(HTTPStreamingState.LOAD_WAIT); // LOAD_NEXT?
+						setState(HTTPStreamingState.LOAD_NEXT); 
+						//setState(HTTPStreamingState.LOAD_WAIT); 
 					}
 					
 					break;
@@ -1655,7 +1663,7 @@ package org.osmf.net.httpstreaming
 
 		private function onRequestLoadIndexFile(event:HTTPStreamingIndexHandlerEvent):void
 		{
-			var urlLoader:URLLoader = new URLLoader(event.request);
+			var urlLoader:URLLoader = new URLLoader();
 			var requestContext:Object = event.requestContext;
 			if (event.binaryData)
 			{
@@ -1669,7 +1677,7 @@ package org.osmf.net.httpstreaming
 			urlLoader.addEventListener(Event.COMPLETE, onIndexLoadComplete);
 			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIndexURLError);
 			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLError);
-
+			
 			function onIndexLoadComplete(innerEvent:Event):void
 			{
 				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadComplete);
@@ -1694,11 +1702,13 @@ package org.osmf.net.httpstreaming
 
 				handleURLError();
 			}
+			
+			urlLoader.load(event.request);
 		}
 
 		private function onRequestLoadIndexFileAlt(event:HTTPStreamingIndexHandlerEvent):void
 		{
-			var urlLoader:URLLoader = new URLLoader(event.request);
+			var urlLoader:URLLoader = new URLLoader();
 			var requestContext:Object = event.requestContext;
 			if (event.binaryData)
 			{
@@ -1739,6 +1749,8 @@ package org.osmf.net.httpstreaming
 				
 				handleURLErrorAlt();
 			}
+			
+			urlLoader.load(event.request);
 		}
 
 		private function onSegmentDurationFromFileHandler(event:HTTPStreamingFileHandlerEvent):void
@@ -1796,12 +1808,18 @@ package org.osmf.net.httpstreaming
 		{
 			if (!_indexIsReadyAlt)
 			{
+				if (event.live && _dvrInfo == null && !isNaN(event.offset))
+				{
+					_seekTarget = event.offset;
+				}
+				
 				_urlStreamAlternate = new URLStream();
 				_urlStreamAlternate.addEventListener(ProgressEvent.PROGRESS			, onURLStatusAlt		, false, 0, true);	
 				_urlStreamAlternate.addEventListener(Event.COMPLETE					, onURLCompleteAlt	, false, 0, true);
 				_urlStreamAlternate.addEventListener(IOErrorEvent.IO_ERROR				, onVideoURLErrorAlt	, false, 0, true);
 				_urlStreamAlternate.addEventListener(SecurityErrorEvent.SECURITY_ERROR	, onVideoURLErrorAlt	, false, 0, true);
 				
+				setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
 				_indexIsReadyAlt = true;
 			}
 		}
