@@ -1431,7 +1431,7 @@ package org.osmf.net.httpstreaming
 									&& (
 											(_urlStreamAlternate != null && _urlStreamAlternate.connected && (inputAlt = byteSourceAlt(_urlStreamAlternate, fileHandlerAlt.inputBytesNeeded))) 
 											|| (audioBufferRemaining > 1000) 
-											|| (nextRequestAlt == null)
+											/*|| (nextRequestAlt == null)*/
 										)
 									)
 							{
