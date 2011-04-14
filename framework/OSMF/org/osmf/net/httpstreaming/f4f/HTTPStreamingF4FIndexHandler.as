@@ -224,6 +224,18 @@ package org.osmf.net.httpstreaming.f4f
 			else
 			{
 				pendingIndexUpdates--;
+				
+				var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[index] as HTTPStreamingF4FStreamInfo;
+				if (streamInfo != null)
+				{
+					var requestedUrl:String = streamInfo.bootstrapInfo.url;
+					if (requestedUrl != null)
+					{
+						pendingUrlLoads[requestedUrl] = null;
+						delete pendingUrlLoads[requestedUrl];
+					}
+				}
+				
 				if (pendingIndexUpdates == 0)
 				{
 					fragmentRunTablesUpdating = false;
@@ -548,11 +560,21 @@ package org.osmf.net.httpstreaming.f4f
 
 		private function refreshBootstrapInfo(quality:uint):void
 		{
+			var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[quality] as HTTPStreamingF4FStreamInfo;
+			if (streamInfo == null)
+				return;
+			var requestedUrl:String = streamInfo.bootstrapInfo.url;
+			if (requestedUrl == null)
+				return;
+			if (pendingUrlLoads.hasOwnProperty(requestedUrl))
+				return;
+			
 			pendingIndexUpdates++;
+			pendingUrlLoads[requestedUrl] = true;
 			fragmentRunTablesUpdating = true;
 			CONFIG::LOGGING
 			{
-				logger.debug("refresh frt: " + (streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url);
+				logger.debug("refresh frt: " + requestedUrl);
 			}
 			dispatchEvent
 				(	new HTTPStreamingIndexHandlerEvent
@@ -563,7 +585,7 @@ package org.osmf.net.httpstreaming.f4f
 						, NaN
 						, null
 						, null
-						, new URLRequest(HTTPStreamingUtils.normalizeURL((streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url))
+						, new URLRequest(HTTPStreamingUtils.normalizeURL(requestedUrl))
 						, quality
 						, true
 						)
@@ -800,6 +822,8 @@ package org.osmf.net.httpstreaming.f4f
 				} 
 			}
 		}
+
+		private var pendingUrlLoads:Object = new Object();
 		
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
