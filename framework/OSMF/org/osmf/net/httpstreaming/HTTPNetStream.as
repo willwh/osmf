@@ -507,7 +507,7 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY_START_NEXT:
 				case HTTPStreamingState.PLAY_START_SEEK:
 					_urlStreamVideo.close();	// immediate abort
-					if (_urlStreamAlternate.connected)
+					if (_urlStreamAlternate != null && _urlStreamAlternate.connected)
 						_urlStreamAlternate.close(); 
 			}
 			setState(HTTPStreamingState.HALT);
