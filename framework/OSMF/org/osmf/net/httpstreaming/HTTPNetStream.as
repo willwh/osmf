@@ -1081,6 +1081,10 @@ package org.osmf.net.httpstreaming
 							setState(HTTPStreamingState.LOAD_NEXT);
 						}
 					}
+					else
+					{
+						setState(HTTPStreamingState.PLAY);
+					}
 
 //					if (this._lastDownloadRatio < 2.0)	// XXX this needs to be more linear, and/or settable
 //					{
