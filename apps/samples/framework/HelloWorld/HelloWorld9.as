@@ -92,7 +92,7 @@ package
 
 			// create media element
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_MBR_DRM2));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD));
 			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
 			container.addMediaElement(mediaElement);
 			
@@ -113,7 +113,7 @@ package
 			player.autoPlay = false;
 			player.media = mediaElement;
 			player.bufferTime = 4 ;
-			player.autoDynamicStreamSwitch=false;
+			//player.autoDynamicStreamSwitch=false;
 			//player.autoRewind=false;
 			//if (player.hasAlternativeAudio)
 			//{
@@ -123,14 +123,17 @@ package
 		
 		private function scenario1():void
 		{
-			//hangs the browser
-			setTimeout(doChangeAlternativeIndexInTrait, 1000, 1);
-			setTimeout(doSwitch, 10000, 2);
+			setTimeout(doChangeAlternativeIndexInTrait, 10000, 1);
+			setTimeout(doChangeAlternativeIndex, 35000, 0);
+			//setTimeout(doSwitch, 15000, 2);
+			//setTimeout(doChangeAlternativeIndexInTrait, 30000, 0);
+			//setTimeout(doSwitch, 45000, 1);
 
-			//setTimeout(doPause, 10000);
-			//setTimeout(doPlay, 13000);
-			//setTimeout(doSeek, 15000, 30);
-			//setTimeout(doSeek, 20000, 1);
+			setTimeout(doPause, 45000);
+			setTimeout(doPlay, 55000);
+			//setTimeout(doSeek, 30000, 10);
+			//setTimeout(doSeek, 450000, 50);
+			//setTimeout(doSeek, 25000, 1);
 			//setTimeout(doSeek, 40000, 100);
 			//setTimeout(doChangeAlternativeIndex, 30000, 1);
 			//setTimeout(doChangeAlternativeIndexInTrait, 5000, 1);
@@ -231,7 +234,7 @@ package
 						}	
 						player.play();
 						scenario1();
-						//doChangeAlternativeIndex(1);
+						//doChangeAlternativeIndex(0);
 
 					}
 					break;
@@ -293,7 +296,7 @@ package
 		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m";
 		
 		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m";
-		private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m";
+		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m";
 		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_longer_alternate_a/1_media_av_2_longer_alternate_a.f4m";
 		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_shorter_alternate_a/1_media_av_2_shorter_alternate_a.f4m";
 		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a_diff_frag_and_seg_length/1_media_av_2_alternate_a_diff_frag_and_seg_length.f4m";
@@ -304,12 +307,43 @@ package
 		
 		//private static const F4M_LIVE:String = "http://10.131.237.104/live/events/latebind/events/_definst_/liveevent.f4m";
 		//private static const F4M_LIVE:String = "http://catherine.corp.adobe.com/osmf/late_bindings_audio_sp3/demo_live.f4m";	
-		private static const F4M_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
-		private static const F4M_HDS:String = "http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m";		
-		private static const F4M_LIVE1:String = "http://10.131.237.107/vod/live/videostream.f4m";
-		private static const F4M_MBR:String = "http://10.131.237.107/vod/mbr/sample1_audio2.f4m";
-		private static const F4M_MBR_DRM:String = "http://10.131.237.107/vod/mbr/drm/sample1_1500kbps.f4m";
-		private static const F4M_MBR_DRM2:String = "http://10.131.237.107/vod/mbr/drm/sample1_audio2.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
+		//private static const F4M_HDS:String = "http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m";		
+		//private static const F4M_LIVE1:String = "http://10.131.237.107/vod/live/videostream.f4m";
+		//private static const F4M_MBR:String = "http://10.131.237.107/vod/mbr/sample1_audio2.f4m";
+		//private static const F4M_MBR_DRM:String = "http://10.131.237.107/vod/mbr/drm/sample1_1500kbps.f4m";
+		//private static const F4M_MBR_DRM2:String = "http://10.131.237.107/vod/mbr/drm/sample1_audio2.f4m";
+		
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr_2alt/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr_2alt_drm/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr_drm/events/_definst_/liveevent.f4m";
+		
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live_2alt/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live_2alt_drm/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live_drm/events/_definst_/liveevent.f4m";
+		
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr_2alt/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr_2alt_drm/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr_drm/events/_definst_/liveevent.f4m";
+		
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live_2alt/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live_2alt_drm/events/_definst_/liveevent.f4m";
+		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live_drm/events/_definst_/liveevent.f4m";
+		
+		
+		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod/ex.f4m";
+		private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_2alt/ex.f4m";
+		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_2alt_drm/ex.f4m";
+		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_drm/ex.f4m";
+		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr/ex.f4m";
+		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr_2alt/ex.f4m";
+		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr_2alt_drm/ex.f4m";
+		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr_drm/ex.f4m";
+
 
 	}
 }
