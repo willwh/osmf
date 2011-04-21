@@ -119,8 +119,6 @@ package org.osmf.net.httpstreaming
 		{
 			super(connection);
 			
-			_savedBytes = new ByteArray();
-			
 			this.indexHandler = indexHandler;
 			this.fileHandler = fileHandler;
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
@@ -500,13 +498,17 @@ package org.osmf.net.httpstreaming
 		override public function close():void
 		{
 			indexIsReady = false;
-			
+
+			if (_source != null)
+			{
+				_source.close();	
+			}
+
 			switch (_state)
 			{
 				case HTTPStreamingState.PLAY:
 				case HTTPStreamingState.PLAY_START_NEXT:
 				case HTTPStreamingState.PLAY_START_SEEK:
-					_urlStreamVideo.close();	// immediate abort
 					if (_urlStreamAlternate != null && _urlStreamAlternate.connected)
 						_urlStreamAlternate.close(); 
 			}
@@ -884,44 +886,6 @@ package org.osmf.net.httpstreaming
 			} // !manualSwitch
 		}
 		
-		private function byteSource(input:IDataInput, numBytes:Number):IDataInput
-		{
-			if (numBytes < 0)
-			{
-				return null;
-			}
-			
-			if (numBytes)
-			{
-			 	if (_savedBytes.bytesAvailable + input.bytesAvailable < numBytes)
-			 	{
-					return null;
-				}
-			}
-			else
-			{
-				if (_savedBytes.bytesAvailable + input.bytesAvailable < 1)
-				{
-					return null;
-				}
-			}
-			
-			if (_savedBytes.bytesAvailable)
-			{
-				var needed:int = numBytes - _savedBytes.bytesAvailable;
-				if (needed > 0)
-				{
-					input.readBytes(_savedBytes, _savedBytes.length, needed);
-				}
-				
-				return _savedBytes;
-			}
-			
-			_savedBytes.length = 0;
-			
-			return input;
-		}
-		
 		private function byteSourceAlt(input:IDataInput, numBytes:Number):IDataInput
 		{
 			if (numBytes < 0)
@@ -1031,14 +995,15 @@ package org.osmf.net.httpstreaming
 					
 			
 				// SEEK case
-			
 				case HTTPStreamingState.SEEK:
+					if (_source != null)
+						_source.close();
+					
 					switch (_prevState)
 					{
 						case HTTPStreamingState.PLAY:
 						case HTTPStreamingState.PLAY_START_NEXT:
 						case HTTPStreamingState.PLAY_START_SEEK:
-							_urlStreamVideo.close();	// immediate abort
 							if (_urlStreamAlternate != null && _urlStreamAlternate.connected)
 								_urlStreamAlternate.close(); 
 							break;
@@ -1047,9 +1012,7 @@ package org.osmf.net.httpstreaming
 							break;
 					}
 					
-					_dataAvailable = false;
 					_dataAvailableAlt = false;
-					_savedBytes.length = 0;		// correct? XXX
 					_savedBytesAlt.length = 0;
 					endSegment = true;
 					endSegmentAlt = true;
@@ -1072,7 +1035,7 @@ package org.osmf.net.httpstreaming
 					// XXX for now, we have a simplistic dynamic handler, in that if downloads are going poorly, we are a bit more aggressive about prefetching
 					if ( this.bufferLength < Math.max(4, this.bufferTime))
 					{
-						if (_indexInfoAlt && ((videoBufferRemaining > 8000) || nextRequest == null) && ((audioBufferRemaining > 8000)||nextRequestAlt == null ))
+						if (_indexInfoAlt && ((videoBufferRemaining > 500) || nextRequest == null) && ((audioBufferRemaining > 500)||nextRequestAlt == null ))
 						{
 							setState(HTTPStreamingState.PLAY);
 						}
@@ -1109,7 +1072,8 @@ package org.osmf.net.httpstreaming
 					
 					if (qualityLevelHasChanged)
 					{
-						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
+						// process remaining bytes
+						bytes = fileHandler.flushFileSegment(_source.getBytes());
 						processAndAppend(bytes);
 						
 						// XXX for testing, putting this reporting here, but it really needs to be more informative and thus generated up in the autoAdjustQuality code
@@ -1126,7 +1090,7 @@ package org.osmf.net.httpstreaming
 
 					if (audioStreamHasChanged)
 					{
-						fileHandler.flushFileSegment(_urlStreamVideo);
+						fileHandler.flushFileSegment(_source.getBytes());
 						fileHandlerAlt.flushFileSegment(_urlStreamAlternate);
 						fileHandler.flushVideoInput();
 						fileHandler.flushAudioInput();
@@ -1150,9 +1114,9 @@ package org.osmf.net.httpstreaming
 					// seek always must flush per contract
 					if (!_seekAfterInit)
 					{
-						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
+						fileHandler.flushFileSegment(_source.getBytes());
 						if (_indexInfoAlt != null)
-							bytes = fileHandlerAlt.flushFileSegment(_savedBytesAlt.bytesAvailable ? _savedBytesAlt : null);
+							fileHandlerAlt.flushFileSegment(_savedBytesAlt.bytesAvailable ? _savedBytesAlt : null);
 						
 						fileHandler.flushAudioInput();
 						fileHandler.flushVideoInput();
@@ -1162,7 +1126,6 @@ package org.osmf.net.httpstreaming
 						audioBufferRemaining = 0;
 						videoBufferRemaining = 0;
 						
-						fileHandler.flushFileSegment(_urlStreamVideo);
 						if (_indexInfoAlt != null)
 							fileHandlerAlt.flushFileSegment(_urlStreamAlternate);
 					}
@@ -1175,13 +1138,17 @@ package org.osmf.net.httpstreaming
 					{
 						autoAdjustQuality(true);
 					}
+					if (audioStreamNeedsChanging)
+					{
+						changeAudioStream(audioStreamUrl);
+					}
 					
 					_seekAfterInit = false;
 					
 					if (audioStreamHasChanged)
 					{
 						trace("Audio Stream changed:", _seekTarget);
-						fileHandler.flushFileSegment(_urlStreamVideo);
+						fileHandler.flushFileSegment(_source.getBytes());
 						fileHandlerAlt.flushFileSegment(_urlStreamAlternate);
 						fileHandler.flushVideoInput();
 						fileHandler.flushAudioInput();
@@ -1253,14 +1220,12 @@ package org.osmf.net.httpstreaming
 					{
 						if (endSegment && (nextRequest != null) && (nextRequest.urlRequest != null))
 						{
-							_loadComplete = false;	
-	
 							CONFIG::LOGGING
 							{
 								logger.debug("loading: " + 	nextRequest.urlRequest.url.toString());
 							}
 												
-							_urlStreamVideo.load(nextRequest.urlRequest);
+							_source.open(nextRequest.urlRequest);
 						}
 						if (endSegmentAlt && (nextRequestAlt != null) && (nextRequestAlt.urlRequest != null) && _indexInfoAlt)
 						{
@@ -1311,7 +1276,7 @@ package org.osmf.net.httpstreaming
 					}
 					else
 					{
-						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
+						bytes = fileHandler.flushFileSegment(_source.getBytes());
 						processAndAppend(bytes);
 						setState(HTTPStreamingState.STOP);
 						if (nextRequest != null && nextRequest.unpublishNotify)
@@ -1375,8 +1340,8 @@ package org.osmf.net.httpstreaming
 					var needMoreVideo:Boolean = false;
 					var needMoreAudio:Boolean = false;
 					
-					if (_dataAvailable || _dataAvailableAlt 
-						|| ((videoBufferRemaining > 1000) && (audioBufferRemaining > 1000)) 
+					if (_source.hasData || _dataAvailableAlt 
+						|| ((videoBufferRemaining > 500) && (audioBufferRemaining > 500)) 
 						|| (nextRequest == null) || (nextRequestAlt == null))
 					{
 						var processLimit:int = 65000*4;	// XXX needs to be settable
@@ -1397,7 +1362,7 @@ package org.osmf.net.httpstreaming
 						*/
 						
 						var input:IDataInput = null;
-						_dataAvailable = false;
+						//_dataAvailable = false;
 						// saayan start
 						var inputAlt:IDataInput = null;
 						_dataAvailableAlt= false;
@@ -1406,97 +1371,98 @@ package org.osmf.net.httpstreaming
 						
 						if (indexInfoAlt == null || !_indexIsReadyAlt)
 						{
-							while (_state == HTTPStreamingState.PLAY && (input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)))
+							do 
 							{
-								bytes = fileHandler.processFileSegment(input);
-								
-								processed += processAndAppend(bytes);
-								trace(processed);
-								
-								//								var b1:ByteArray = bytes;
-								//								bytes = new ByteArray();
-								
-								if (processLimit > 0 && processed >= processLimit)
+								input = _source.getBytes(fileHandler.inputBytesNeeded);
+								if (input != null)
 								{
-									_dataAvailable = true;
-									break;
+									bytes = fileHandler.processFileSegment(input);
+									if (bytes != null)									
+										processed += processAndAppend(bytes);
+									
+									if (processLimit > 0 && processed >= processLimit)
+									{
+										//_dataAvailable = true;
+										break;
+									}
 								}
 							}
+							while (_state == HTTPStreamingState.PLAY && input != null);
 						}
-						else
-						{
-							while (
-									_state == HTTPStreamingState.PLAY 
-									&& (
-											(input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)) 
-											|| (videoBufferRemaining > 1000) 
-											|| (nextRequest == null)
-										) 
-									&& (
-											(_urlStreamAlternate != null && _urlStreamAlternate.connected && (inputAlt = byteSourceAlt(_urlStreamAlternate, fileHandlerAlt.inputBytesNeeded))) 
-											|| (audioBufferRemaining > 1000) 
-											/*|| (nextRequestAlt == null)*/
-										)
-									)
-							{
-								// saayan start
-								prevAudioTime = fileHandler.mixedAudioTime;
-								prevVideoTime = fileHandler.mixedVideoTime;
-								
-								var vbytes:ByteArray = new ByteArray();
-								var abytes:ByteArray = new ByteArray();
-								if (input && (input.bytesAvailable > 0))
-								{
-									vbytes = fileHandler.processFileSegment(input);
-								}
-								if (inputAlt && (inputAlt.bytesAvailable > 0))
-								{
-									abytes = fileHandlerAlt.processFileSegment(inputAlt);
-								}
-								
-								bytes = fileHandler.mixMDATBytes(vbytes,abytes);
-								
-								if (fileHandler.videoInput.bytesAvailable == 0)
-									videoBufferRemaining = 0;
-								if (fileHandler.audioInput.bytesAvailable == 0)
-									audioBufferRemaining = 0;
-								
-								
-								videoBufferRemaining -= fileHandler.mixedVideoTime - prevVideoTime;
-								audioBufferRemaining -= fileHandler.mixedAudioTime - prevAudioTime;
-								//	trace("video:", videoBufferRemaining, "(",fileHandler.videoInput.bytesAvailable, "bytes), audio:", audioBufferRemaining, "(",fileHandler.audioInput.bytesAvailable, "bytes)");
-								
-								// one of the buffers is empty
-								if ((fileHandler.mixedAudioTime == prevAudioTime) && !(input && (input.bytesAvailable > 0)) 
-									&& ((audioBufferRemaining > 1000) && (videoBufferRemaining < 1000) )) 
-								{
-									needMoreVideo =  true;
-								}
-								
-								if (!(inputAlt && (inputAlt.bytesAvailable > 0)) && (fileHandler.mixedVideoTime == prevVideoTime) 
-									&& ((videoBufferRemaining > 1000) && (audioBufferRemaining < 1000)))
-								{
-									needMoreAudio = true;
-								}
-								
-								if ((needMoreVideo && (nextRequest != null)) || (needMoreAudio && (nextRequestAlt != null))) 
-								{
-									break;	
-								}
-								//_socket.writeBytes(bytes);
-								//_socket.flush();
-								
-								processed += processAndAppend(bytes);
-								// saayan end
-								
-								if (processLimit > 0 && processed >= processLimit)
-								{
-									_dataAvailable = true;
-									_dataAvailableAlt = true;
-									break;
-								}
-							}
-						}
+//						else
+//						{
+//							while (
+//									_state == HTTPStreamingState.PLAY 
+//									&& (
+//											(_urlStreamVideo != null && _urlStreamVideo.connected && (input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded))) 
+//											|| (videoBufferRemaining > 500) 
+//											|| (nextRequest == null)
+//										) 
+//									&& (
+//											(_urlStreamAlternate != null && _urlStreamAlternate.connected && (inputAlt = byteSourceAlt(_urlStreamAlternate, fileHandlerAlt.inputBytesNeeded))) 
+//											|| (audioBufferRemaining > 500) 
+//											/*|| (nextRequestAlt == null)*/
+//										)
+//									)
+//							{
+//								// saayan start
+//								prevAudioTime = fileHandler.mixedAudioTime;
+//								prevVideoTime = fileHandler.mixedVideoTime;
+//								
+//								var vbytes:ByteArray = new ByteArray();
+//								var abytes:ByteArray = new ByteArray();
+//								if (input && (input.bytesAvailable > 0))
+//								{
+//									vbytes = fileHandler.processFileSegment(input);
+//								}
+//								if (inputAlt && (inputAlt.bytesAvailable > 0))
+//								{
+//									abytes = fileHandlerAlt.processFileSegment(inputAlt);
+//								}
+//								
+//								bytes = fileHandler.mixMDATBytes(vbytes,abytes);
+//								
+//								if (fileHandler.videoInput.bytesAvailable == 0)
+//									videoBufferRemaining = 0;
+//								if (fileHandler.audioInput.bytesAvailable == 0)
+//									audioBufferRemaining = 0;
+//								
+//								
+//								videoBufferRemaining -= fileHandler.mixedVideoTime - prevVideoTime;
+//								audioBufferRemaining -= fileHandler.mixedAudioTime - prevAudioTime;
+//								//	trace("video:", videoBufferRemaining, "(",fileHandler.videoInput.bytesAvailable, "bytes), audio:", audioBufferRemaining, "(",fileHandler.audioInput.bytesAvailable, "bytes)");
+//								
+//								// one of the buffers is empty
+//								if ((fileHandler.mixedAudioTime == prevAudioTime) && !(input && (input.bytesAvailable > 0)) 
+//									&& ((audioBufferRemaining > 1000) && (videoBufferRemaining < 1000) )) 
+//								{
+//									needMoreVideo =  true;
+//								}
+//								
+//								if (!(inputAlt && (inputAlt.bytesAvailable > 0)) && (fileHandler.mixedVideoTime == prevVideoTime) 
+//									&& ((videoBufferRemaining > 1000) && (audioBufferRemaining < 1000)))
+//								{
+//									needMoreAudio = true;
+//								}
+//								
+//								if ((needMoreVideo && (nextRequest != null)) || (needMoreAudio && (nextRequestAlt != null))) 
+//								{
+//									break;	
+//								}
+//								//_socket.writeBytes(bytes);
+//								//_socket.flush();
+//								
+//								processed += processAndAppend(bytes);
+//								// saayan end
+//								
+//								if (processLimit > 0 && processed >= processLimit)
+//								{
+//									_dataAvailable = true;
+//									_dataAvailableAlt = true;
+//									break;
+//								}
+//							}
+//						}
 						
 						if(_state != HTTPStreamingState.PLAY)
 							break;
@@ -1507,7 +1473,7 @@ package org.osmf.net.httpstreaming
 						if (nextRequest == null) needMoreAudio = true;
 						if (nextRequestAlt == null) needMoreVideo = true;
 						
-						if (_loadComplete && needMoreVideo && !_urlStreamVideo.bytesAvailable)
+						if (_source.isComplete && !_source.hasData && needMoreVideo)
 						{
 							endSegment = true;
 						}
@@ -1524,7 +1490,7 @@ package org.osmf.net.httpstreaming
 					}
 					else
 					{
-						if (_loadComplete && !_urlStreamVideo.bytesAvailable)
+						if (_source.isComplete && !_source.hasData)
 						{
 							endSegment = true;
 						}
@@ -1537,14 +1503,9 @@ package org.osmf.net.httpstreaming
 					if (endSegment)
 					{
 						// then save any leftovers for the next segment round. if this is a kind of filehandler that needs that, they won't suck dry in onEndSegment.
-						if (_urlStreamVideo.bytesAvailable)
-						{
-							_urlStreamVideo.readBytes(_savedBytes);
-						}
-						else
-						{
-							_savedBytes.length = 0; // just to be sure
-						}
+						_source.saveBytes();
+						
+						
 						if (_indexInfoAlt) // dont go to end segment for late bound stream
 						{
 							setState(HTTPStreamingState.LOAD_WAIT); // saayan
@@ -1580,8 +1541,9 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.END_SEGMENT:
 					// give fileHandler a crack at any remaining data 
 
-					bytes = fileHandler.endProcessFile(_savedBytes.bytesAvailable ? _savedBytes : null);
+					bytes = fileHandler.endProcessFile(_source.getBytes());
 					processAndAppend(bytes);
+					
 					_lastDownloadRatio = _segmentDuration / _lastDownloadDuration;	// urlcomplete would have fired by now, otherwise we couldn't be done, and onEndSegment is the last possible chance to report duration
 					postEndSegment();					
 					if (_state != HTTPStreamingState.STOP && _state != HTTPStreamingState.HALT)
@@ -1627,20 +1589,14 @@ package org.osmf.net.httpstreaming
 			this.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END));
 		}
 		
-		private function onURLStatus(progressEvent:ProgressEvent):void
-		{
-			_dataAvailable = true;
-		}
-		
 		private function onURLComplete(event:Event):void
 		{
-			var date:Date = new Date;
-			
-			_lastDownloadDuration = (date.getTime() - _lastDownloadStartTime) / 1000.0;
-			_loadComplete = true;
-			var fragId:String = nextRequest.urlRequest.url.substr(nextRequest.urlRequest.url.indexOf("Frag")+4,nextRequest.urlRequest.url.length);
-			var fragDuration:Number = indexHandler.getFragmentDuration(uint(fragId));
-			videoBufferRemaining += fragDuration;
+			if (nextRequest != null && nextRequest.urlRequest != null)
+			{
+				var fragId:String = nextRequest.urlRequest.url.substr(nextRequest.urlRequest.url.indexOf("Frag")+4,nextRequest.urlRequest.url.length);
+				var fragDuration:Number = indexHandler.getFragmentDuration(uint(fragId));
+				videoBufferRemaining += fragDuration;
+			}
 		}
 
 		private function onURLStatusAlt(progressEvent:ProgressEvent):void
@@ -1687,7 +1643,7 @@ package org.osmf.net.httpstreaming
 			{
 				CONFIG::LOGGING
 				{			
-					logger.error("URLStream: " + _urlStreamVideo );
+					logger.error("URLStream: " + _source.toString() );
 					logger.error("index url error: " + errorEvent );
 					logger.error( "******* attempting to download the index file (bootstrap) caused error!" );
 				}
@@ -1778,12 +1734,8 @@ package org.osmf.net.httpstreaming
 					_seekTarget = _seekTargetAlt = event.offset;
 				}
 				
-				_urlStreamVideo = new URLStream();
-			
-				_urlStreamVideo.addEventListener(ProgressEvent.PROGRESS				, onURLStatus		, false, 0, true);	
-				_urlStreamVideo.addEventListener(Event.COMPLETE						, onURLComplete		, false, 0, true);
-				_urlStreamVideo.addEventListener(IOErrorEvent.IO_ERROR				, onVideoURLError	, false, 0, true);
-				_urlStreamVideo.addEventListener(SecurityErrorEvent.SECURITY_ERROR	, onVideoURLError	, false, 0, true);
+				if (_source == null)
+					_source = new HTTPStreamSource(this);
 				
 				setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
 				indexIsReady = true;
@@ -1809,30 +1761,6 @@ package org.osmf.net.httpstreaming
 				setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
 			}
 		}
-		private function onVideoURLError(event:Event):void
-		{		
-			CONFIG::LOGGING
-			{			
-				logger.error("URLStream: " + _urlStreamVideo );
-				logger.error("video error event: " + event );
-				logger.error( "******* attempting to download video fragment caused error event!" );
-			}
-				
-			handleURLError();
-		}
-		
-		private function handleURLError():void
-		{
-			// We map all URL errors to Play.StreamNotFound.
-			dispatchEvent
-				( new NetStatusEvent
-					( NetStatusEvent.NET_STATUS
-					, false
-					, false
-					, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error"}
-					)
-				);
-		}
 		
 		private function onVideoURLErrorAlt(event:Event):void
 		{		
@@ -1844,6 +1772,19 @@ package org.osmf.net.httpstreaming
 			}
 			
 			handleURLErrorAlt();
+		}
+
+		private function handleURLError():void
+		{
+			// We map all URL errors to Play.StreamNotFound.
+			dispatchEvent
+			( new NetStatusEvent
+				( NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error"}
+				)
+			);
 		}
 
 		private function handleURLErrorAlt():void
@@ -2055,10 +1996,7 @@ package org.osmf.net.httpstreaming
 		private var _qualityRates:Array; 	
 		private var _streamNames:Array;
 		private var _segmentDuration:Number = -1;
-		private var _urlStreamVideo:URLStream = null;
-		private var _loadComplete:Boolean = false;
 		private var mainTimer:Timer;
-		private var _dataAvailable:Boolean = false;
 		private var _qualityLevel:int = 0;
 		private var qualityLevelHasChanged:Boolean = false;
 		private var _seekTarget:Number = -1;
@@ -2074,7 +2012,6 @@ package org.osmf.net.httpstreaming
 		private var _enhancedSeekEnabled:Boolean = false;
 		private var _enhancedSeekTags:Vector.<FLVTagVideo>;
 		private var _flvParserIsSegmentStart:Boolean = false;
-		private var _savedBytes:ByteArray = null;
 		private var _state:String = HTTPStreamingState.INIT;
 		private var _prevState:String = null;
 		private var _seekAfterInit:Boolean;
@@ -2083,10 +2020,12 @@ package org.osmf.net.httpstreaming
 		private var _flvParser:FLVParser = null;	// this is the new common FLVTag Parser
 		private var _flvParserDone:Boolean = true;	// signals that common parser has done everything and can be removed from path
 		private var _flvParserProcessed:uint;
+		
 		private var _initialTime:Number = -1;	// this is the timestamp derived at start-of-play (offset or not)... what FMS would call "0"
 		private var _seekTime:Number = -1;		// this is the timestamp derived at end-of-seek (enhanced or not)... what we need to add to super.time (assuming play started at zero)
 		private var _fileTimeAdjustment:Number = 0;	// this is what must be added (IN SECONDS) to the timestamps that come in FLVTags from the file handler to get to the index handler timescale
 													// XXX an event to set the _fileTimestampAdjustment is needed
+		
 		private var _playForDuration:Number = -1;
 		private var _lastValidTimeTime:Number = 0;
 		private var _retryAfterWaitUntil:Number = 0;	// millisecond timestamp (as per date.getTime) of when we retry next
@@ -2095,8 +2034,8 @@ package org.osmf.net.httpstreaming
 		private var _unpublishNotifyPending:Boolean = false;
 		private var _signalPlayStartPending:Boolean = false;
 		
-		private var alternativeSource:HTTPStreamingDataSource = null;
-		private var principalSource:HTTPStreamingDataSource = null;
+		//private var alternativeSource:HTTPStreamSource = null;
+		//private var principalSource:HTTPStreamingDataSource = null;
 		
 		private	var videoBufferRemaining:Number = 0;
 		private var endSegment:Boolean = true;
@@ -2123,7 +2062,10 @@ package org.osmf.net.httpstreaming
 		private var _qualityLevelAlt:int = 0;
 		private var _indexIsReadyAlt:Boolean = false;
 		
-
+		
+		private var _source:HTTPStreamSource = null;
+		
+		
 		CONFIG::LOGGING
 		{
 			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");

@@ -229,10 +229,9 @@ package org.osmf.net.httpstreaming.f4f
 				if (streamInfo != null)
 				{
 					var requestedUrl:String = streamInfo.bootstrapInfo.url;
-					if (requestedUrl != null)
+					if (requestedUrl != null && pendingUrlLoads.hasOwnProperty(requestedUrl))
 					{
-						pendingUrlLoads[requestedUrl] = null;
-						delete pendingUrlLoads[requestedUrl];
+						pendingUrlLoads[requestedUrl].active = false;
 					}
 				}
 				
@@ -566,11 +565,31 @@ package org.osmf.net.httpstreaming.f4f
 			var requestedUrl:String = streamInfo.bootstrapInfo.url;
 			if (requestedUrl == null)
 				return;
+
+			var pendingUrlRequest:Object = null;
 			if (pendingUrlLoads.hasOwnProperty(requestedUrl))
+			{
+				pendingUrlRequest = pendingUrlLoads[requestedUrl];
+			}
+			else
+			{
+				pendingUrlRequest = new Object();
+				pendingUrlRequest["active"] = false;
+				pendingUrlRequest["date"] = null;
+				pendingUrlLoads[requestedUrl] = pendingUrlRequest;
+			}
+			
+			if (pendingUrlRequest.active)
 				return;
 			
+			// XXX this must be extracted so that a developer can overwrite it. 
+			var previousRequestDate:Date = pendingUrlRequest["date"];
+			var newRequestDate:Date = new Date();
+			if (BOOTSTRAP_REFRESH_INTERVAL && previousRequestDate != null && (newRequestDate.valueOf() - previousRequestDate.valueOf() < BOOTSTRAP_REFRESH_INTERVAL))
+				return;
+			pendingUrlLoads[requestedUrl].date = newRequestDate;
+			pendingUrlLoads[requestedUrl].active = true;
 			pendingIndexUpdates++;
-			pendingUrlLoads[requestedUrl] = true;
 			fragmentRunTablesUpdating = true;
 			CONFIG::LOGGING
 			{
@@ -823,8 +842,6 @@ package org.osmf.net.httpstreaming.f4f
 			}
 		}
 
-		private var pendingUrlLoads:Object = new Object();
-		
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
 		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
@@ -845,6 +862,10 @@ package org.osmf.net.httpstreaming.f4f
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		
+		public static const BOOTSTRAP_REFRESH_INTERVAL:uint = 2000;
+		
+		private var pendingUrlLoads:Object = new Object();
+
 		CONFIG::LOGGING
 		{
 			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.HTTPStreamF4FIndexHandler");

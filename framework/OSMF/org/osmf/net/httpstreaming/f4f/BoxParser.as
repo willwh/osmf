@@ -553,13 +553,13 @@ package org.osmf.net.httpstreaming.f4f
 				fdp.discontinuityIndicator = readUnsignedByte();
 			}
 			
-			CONFIG::LOGGING
-			{
-				logger.debug("    firstFragment=" + fdp.firstFragment + 
-					"  duration=" + fdp.duration + 
-					"  durationAccrued=" + fdp.durationAccrued +
-					"  discontinuityIndicator=" + fdp.discontinuityIndicator);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug("    firstFragment=" + fdp.firstFragment + 
+//					"  duration=" + fdp.duration + 
+//					"  durationAccrued=" + fdp.durationAccrued +
+//					"  discontinuityIndicator=" + fdp.discontinuityIndicator);
+//			}
 		}
 		
 		private function parseAdobeFragmentRandomAccessBox(boxInfo:BoxInfo, afra:AdobeFragmentRandomAccessBox):void
@@ -573,12 +573,12 @@ package org.osmf.net.httpstreaming.f4f
 			
 			afra.timeScale = readUnsignedInt();
 			
-			CONFIG::LOGGING
-			{
-				logger.debug("------------------- AFRA -------------------");
-				
-				logger.debug(" timeScale=" + afra.timeScale);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug("------------------- AFRA -------------------");
+//				
+//				logger.debug(" timeScale=" + afra.timeScale);
+//			}
 
 			var entryCount:uint = readUnsignedInt();
 			
@@ -617,10 +617,10 @@ package org.osmf.net.httpstreaming.f4f
 				lrae.offset = readUnsignedInt();
 			}
 			
-			CONFIG::LOGGING
-			{
-				logger.debug("    time=" + lrae.time + "   offset=" + lrae.offset);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug("    time=" + lrae.time + "   offset=" + lrae.offset);
+//			}
 		}
 
 		private function parseGlobalRandomAccessEntry(grae:GlobalRandomAccessEntry, longIdFields:Boolean, longOffsetFields:Boolean):void
@@ -649,15 +649,15 @@ package org.osmf.net.httpstreaming.f4f
 				grae.offsetFromAfra = readUnsignedInt();
 			}
 			
-			CONFIG::LOGGING
-			{
-				logger.debug(
-					"    time=" + grae.time + 
-					"   segment=" + grae.segment + 
-					"   fragment=" + grae.fragment + 
-					"   afraOffset=" + grae.afraOffset + 
-					"   offsetFromAfra=" + grae.offsetFromAfra);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug(
+//					"    time=" + grae.time + 
+//					"   segment=" + grae.segment + 
+//					"   fragment=" + grae.fragment + 
+//					"   afraOffset=" + grae.afraOffset + 
+//					"   offsetFromAfra=" + grae.offsetFromAfra);
+//			}
 		}
 		
 		private function parseMediaDataBox(boxInfo:BoxInfo, mdat:MediaDataBox):void
