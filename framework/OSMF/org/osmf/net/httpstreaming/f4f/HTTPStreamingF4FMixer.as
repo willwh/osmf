@@ -24,7 +24,6 @@ package org.osmf.net.httpstreaming.f4f
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	
-	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
@@ -171,7 +170,8 @@ package org.osmf.net.httpstreaming.f4f
 								false, 
 								0, 
 								null, 
-								null, 
+								false, 
+								false, 
 								abst));
 					}
 				} 
@@ -197,6 +197,206 @@ package org.osmf.net.httpstreaming.f4f
 			return returnByteArray;
 		}
 		
+		override public function get mixedAudioTime():uint
+		{
+			return _mixedAudioTime;
+		}
+		
+		override public function get mixedVideoTime():uint
+		{
+			return _mixedVideoTime;
+		}
+		
+		override public function get videoInput():ByteArray
+		{
+			return _videoInput;
+		}
+		
+		override public function get audioInput():ByteArray
+		{
+			return _audioInput;
+		}
+		
+		override public function flushVideoInput():void
+		{
+			_videoInput.clear();
+			tagHeaderPending = true;
+			tagBodyPending = false;
+			_mixedVideoTime = 0;
+			currTime = 0;
+		}
+		
+		override public function flushAudioInput():void
+		{
+			_audioInput.clear();
+			tagHeaderPending1 = true;
+			tagBodyPending1 = false;
+			_mixedAudioTime = 0;
+			currTime = 0;
+		}
+		
+		override public function get mdatBytesPending():uint
+		{
+			return _mdatBytesPending;
+		}
+		
+		// saayan - parsing the input for mixing, probably again will be parsed later
+		override public function mixMDATBytes(xvideoInput:IDataInput, xaudioInput:IDataInput):ByteArray
+		{
+			var mixedBytes:ByteArray = new ByteArray();
+			
+			
+			// have to save beginning of video sample for next round
+			var leftoverBytes:ByteArray = new ByteArray();
+			_videoInput.readBytes(leftoverBytes, 0, _videoInput.bytesAvailable);
+			_videoInput.clear();
+			leftoverBytes.readBytes(_videoInput, 0, leftoverBytes.bytesAvailable);
+			leftoverBytes.clear();
+			_audioInput.readBytes(leftoverBytes, 0, _audioInput.bytesAvailable);
+			_audioInput.clear();
+			leftoverBytes.readBytes(_audioInput, 0, leftoverBytes.bytesAvailable);
+			
+			if (xvideoInput)
+				xvideoInput.readBytes(_videoInput,_videoInput.length,xvideoInput.bytesAvailable);
+			if (xaudioInput)
+				xaudioInput.readBytes(_audioInput,_audioInput.length,xaudioInput.bytesAvailable);
+			
+			//_mdatBytesPending -= videoInput.bytesAvailable;
+			//	_mdatBytesPending1 -= audioInput.bytesAvailable;
+			//	videoInput.readBytes(mixedBytes,0,videoInput.bytesAvailable);
+			//return mixedBytes;
+			
+			
+			
+			while (_videoInput.bytesAvailable && _audioInput.bytesAvailable)
+			{
+				
+				do
+				{
+					if ((_videoInput.bytesAvailable < FLVTag.TAG_HEADER_BYTE_COUNT) && tagHeaderPending)
+					{
+						mixedBytes.position = 0;
+						return mixedBytes;
+					}
+					if (tagHeaderPending && !tagBodyPending)
+					{
+						_videoInput.readBytes(videoHeaderBytes, 0, FLVTag.TAG_HEADER_BYTE_COUNT);
+						tagHeaderPending = false;
+						tagBodyPending = true;
+						videoTag = videoHeaderBytes[0];
+						if (videoTag != 9 && videoTag != 8 && videoTag != 41 && videoTag != 40)
+						{
+							trace("video source corrupted");
+						}
+						videoTime = (videoHeaderBytes[7] << 24) | (videoHeaderBytes[4] << 16) | (videoHeaderBytes[5] << 8) | (videoHeaderBytes[6]);
+						videoDataSize = (videoHeaderBytes[1] << 16) | (videoHeaderBytes[2] << 8) | (videoHeaderBytes[3]);
+						if (videoDataSize > 0x58B6F0)
+						{
+							mixedBytes.position = 0;
+							return mixedBytes;
+						}
+						//trace("video",videoTag,videoTime,videoDataSize);
+					}
+					if ((_videoInput.bytesAvailable < videoDataSize + 4) && tagBodyPending)
+					{
+						mixedBytes.position = 0;
+						return mixedBytes;
+					}
+					if (tagBodyPending && (videoTag == 9 || videoTag == 8 || videoTag == 40 || videoTag == 41))
+					{
+						_videoInput.readBytes(videoDataBytes, 0, videoDataSize);
+						tagBodyPending = false;
+						tagHeaderPending = true;
+						/*var prevTagSize:uint = */videoInput.readUnsignedInt();
+					}
+					
+				} while ( ((videoTag != FLVTag.TAG_TYPE_VIDEO) && (videoTag != FLVTag.TAG_TYPE_ENCRYPTED_VIDEO))
+					|| videoTime < _mixedVideoTime); 
+				// in case of refetch in audio src change throw away previous timestamps
+				do
+				{
+					if (tagHeaderPending1 && (_audioInput.bytesAvailable < FLVTag.TAG_HEADER_BYTE_COUNT))
+					{
+						mixedBytes.position = 0;
+						return mixedBytes;
+					}
+					
+					if (tagHeaderPending1 && !tagBodyPending1)
+					{
+						_audioInput.readBytes(audioHeaderBytes, 0, FLVTag.TAG_HEADER_BYTE_COUNT);
+						_mdatBytesPending1 -= FLVTag.TAG_HEADER_BYTE_COUNT;
+						tagHeaderPending1 = false;
+						tagBodyPending1 = true;
+						audioTag = audioHeaderBytes[0];
+						if (audioTag != 9 && audioTag != 8 && audioTag != 41 && audioTag != 40)
+						{
+							trace("audio source corrupted");
+						}
+						audioTime = (audioHeaderBytes[7] << 24) | (audioHeaderBytes[4] << 16) | (audioHeaderBytes[5] << 8) | (audioHeaderBytes[6]);
+						audioDataSize = (audioHeaderBytes[1] << 16) | (audioHeaderBytes[2] << 8) | (audioHeaderBytes[3]);
+						//trace("audio",audioTag,audioTime,audioDataSize);
+					}
+					
+					if (tagBodyPending1 && (_audioInput.bytesAvailable < audioDataSize + 4))
+					{
+						mixedBytes.position = 0;
+						return mixedBytes;
+					}
+					if (tagBodyPending1 && (audioTag == 9 || audioTag == 8 || audioTag == 40 || audioTag == 41))
+					{
+						_audioInput.readBytes(audioDataBytes, 0, audioDataSize);
+						_mdatBytesPending1 -= audioDataSize;
+						tagBodyPending1 = false;
+						tagHeaderPending1 = true;
+						/*var prevTagSize:uint = */audioInput.readUnsignedInt();
+						_mdatBytesPending1 -= 4;
+						//trace("audio bytes actually read:",audioDataSize,"prev tag size:",prevTagSize);
+						
+					}
+					
+				} while (( (audioTag != FLVTag.TAG_TYPE_AUDIO) && (audioTag != FLVTag.TAG_TYPE_ENCRYPTED_AUDIO))// read only audio
+					|| (audioTime < _mixedAudioTime)); 
+				
+				
+				if ((audioTime >= currTime) && (audioTime <= videoTime))
+				{
+					currTime = audioTime;
+					mixedBytes.writeBytes(audioHeaderBytes, 0, FLVTag.TAG_HEADER_BYTE_COUNT);
+					mixedBytes.writeBytes(audioDataBytes, 0, audioDataSize);
+					mixedBytes.writeUnsignedInt(audioDataSize + FLVTag.TAG_HEADER_BYTE_COUNT);
+					//trace("last written audio: ",audioDataSize);
+					
+					audioHeaderBytes = new ByteArray();
+					audioDataBytes = new ByteArray();
+					tagHeaderPending = false;
+					tagBodyPending = false;
+					tagHeaderPending1 = true;
+					_mixedAudioTime = audioTime;
+				}
+				else if ((videoTime >= currTime) && (videoTime <= audioTime))
+				{
+					currTime = videoTime;
+					mixedBytes.writeBytes(videoHeaderBytes, 0 , FLVTag.TAG_HEADER_BYTE_COUNT);
+					mixedBytes.writeBytes(videoDataBytes, 0 , videoDataSize);
+					mixedBytes.writeUnsignedInt(videoDataSize + FLVTag.TAG_HEADER_BYTE_COUNT);
+					//trace("last written video: ",videoDataSize);
+					videoHeaderBytes = new ByteArray();
+					videoDataBytes = new ByteArray();
+					tagHeaderPending = true;
+					tagHeaderPending1 = false;
+					tagBodyPending1 = false;
+					_mixedVideoTime = videoTime;
+				}
+				/*	if (mixedBytes.length > 5120)
+				{
+				mixedBytes.position = 0;
+				return mixedBytes;
+				}*/
+			}
+			mixedBytes.position = 0;
+			return mixedBytes;
+		}
+
 		/**
 		 * @private
 		 */	
@@ -211,15 +411,16 @@ package org.osmf.net.httpstreaming.f4f
 				}
 				
 				dispatchEvent(
-					new HTTPStreamingEvent(
-						HTTPStreamingEvent.FILE_ERROR, 
+					new HTTPStreamingFileHandlerEvent(
+						HTTPStreamingFileHandlerEvent.NOTIFY_ERROR, 
 						false, 
 						false, 
 						0, 
 						null, 
-						null
-					)
-				);
+						false, 
+						false, 
+						null, 
+						true));
 			}
 			
 			return getMDATBytes(input, true);

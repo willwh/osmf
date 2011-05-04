@@ -40,8 +40,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait;
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait;
-	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
-	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
+	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFactory;
 	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
 	import org.osmf.traits.LoadState;
 
@@ -84,22 +83,8 @@ package org.osmf.net.httpstreaming
 		 */
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler();
-			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler(fileHandler);
-			
-			var fileHandler1:HTTPStreamingFileHandlerBase = null;
-			var indexHandler1:HTTPStreamingIndexHandlerBase = null;
-			
-//			var alternateSource:HTTPStreamingDataSource = null;
-//			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
-//			if (streamingResource != null && streamingResource.alternativeAudioItems != null && streamingResource.alternativeAudioItems.length > 0 )
-//			{
-//				fileHandler1 = new HTTPStreamingF4FFileHandler();
-//				indexHandler1 = new HTTPStreamingF4FIndexHandler(fileHandler1);
-//			}
-
-			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler, indexHandler1, fileHandler1, resource);
-			httpNetStream.manualSwitchMode = true;
+			var factory:HTTPStreamingFactory = new HTTPStreamingF4FFactory();
+			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, factory, resource);
 			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(resource);
 			return httpNetStream;
 		}

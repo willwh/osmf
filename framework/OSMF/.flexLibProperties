@@ -281,6 +281,8 @@
     <classEntry path="org.osmf.utils.TimeUtil"/>
     <classEntry path="org.osmf.utils.URL"/>
     <classEntry path="org.osmf.utils.Version"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFactory"/>
+    <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

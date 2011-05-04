@@ -27,16 +27,36 @@ package org.osmf.net.httpstreaming
 	import flash.utils.IDataInput;
 
 	/**
-	 * Dispatched when the segment duration value becomes available, after
-	 * beginProcessFile has been invoked.
+	 * Dispatched when the index handler or file handler obtain the current fragment duration.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="notifySegmentDuration", type="org.osmf.events.HTTPStreamingFileHandlerEvent")]
+	[Event(name="fragmentDuration", type="org.osmf.events.HTTPStreamingEvent")]
 	
+	/**
+	 * Dispatched when the index handler or file handler provides additional script data tags.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="scriptData", type="org.osmf.events.HTTPStreamingEvent")]
+	
+	/**
+	 * Dispatched when the index handler encounters an unrecoverable error, such as an invalid 
+	 * bootstrap box or an empty server base url.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="fileError", type="org.osmf.events.HTTPStreamingEvent")]
+
 	/**
 	 * Dispatched when the time bias value becomes available, after beginProcessFile
 	 * has been invoked.
@@ -169,42 +189,5 @@ package org.osmf.net.httpstreaming
 		{
 			throw new IllegalOperationError("The flushFileSegment() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
 		}
-		
-		public function mixFileSegment(input:IDataInput, input1:IDataInput):ByteArray
-		{
-			throw new IllegalOperationError("The processFileSegment() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		public function mixMDATBytes(input:IDataInput, input1:IDataInput):ByteArray
-		{
-			throw new IllegalOperationError("The mixMDATBytes() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		
-		public function get mixedAudioTime():uint
-		{
-			throw new IllegalOperationError("The mixedAudioTime() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		public function get mixedVideoTime():uint
-		{
-			throw new IllegalOperationError("The mixedVideoTime() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		public function get videoInput():ByteArray
-		{
-			throw new IllegalOperationError("The videoInput() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		public function get audioInput():ByteArray
-		{
-			throw new IllegalOperationError("The audioInput() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		public function flushVideoInput():void
-		{
-		}
-		public function flushAudioInput():void
-		{
-		}
-		public function get mdatBytesPending():uint
-		{
-			throw new IllegalOperationError("The mdatBytesPending() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-
 	}
 }

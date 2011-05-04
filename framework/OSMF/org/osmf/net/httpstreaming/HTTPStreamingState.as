@@ -150,7 +150,7 @@ package org.osmf.net.httpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		internal static const END_SEGMENT:String = "endSegment";
+		internal static const END_FRAGMENT:String = "endFragment";
 		
 		/**
 		 * Indicates the HTTPNetStream is currently seeking.

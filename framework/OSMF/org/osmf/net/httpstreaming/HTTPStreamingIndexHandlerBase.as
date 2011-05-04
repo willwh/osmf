@@ -32,7 +32,7 @@ package org.osmf.net.httpstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="notifyIndexReady", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
+	[Event(name="indexReady", type="org.osmf.events.HTTPStreamingIndexHandlerEvent")]
 	
 	/**
 	 * Dispatched when rates information becomes available. The rates usually becomes available
@@ -43,28 +43,37 @@ package org.osmf.net.httpstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="notifyRates", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
+	[Event(name="ratesReady", type="org.osmf.events.HTTPStreamingIndexHandlerEvent")]
 
 	/**
-	 * Dispatched when total duration value becomes available. The total duration usually becomes available
-	 * when the bootstrap information has been parsed.
+	 * Dispatched when index handler needs to reload the index file.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="notifyTotalDuration", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
+	[Event(name="requestLoadIndex", type="org.osmf.events.HTTPStreamingIndexHandlerEvent")]
 
 	/**
-	 * Dispatched when the index handler needs the index to be downloaded.
+	 * Dispatched when the index handler or file handler obtain the current fragment duration.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="requestLoadIndex", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
+	[Event(name="fragmentDuration", type="org.osmf.events.HTTPStreamingEvent")]
+	
+	/**
+	 * Dispatched when the index handler or file handler provides additional script data tags.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="scriptData", type="org.osmf.events.HTTPStreamingEvent")]
 	
 	/**
 	 * Dispatched when the index handler encounters an unrecoverable error, such as an invalid 
@@ -75,7 +84,7 @@ package org.osmf.net.httpstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="notifyError", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
+	[Event(name="indexError", type="org.osmf.events.HTTPStreamingEvent")]
 
 	/**
 	 * Dispatched whenever the index handler learns of (new) DVR metadata 
@@ -207,9 +216,17 @@ package org.osmf.net.httpstreaming
 			throw new IllegalOperationError("The dvrGetStreamInfo() method must be overridden by the derived class.");
 		}
 		
-		public function getFragmentDuration(fragId:uint):Number
+		/**
+		 * Returns the duration of the fragment identified thorugh the provided url.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function getFragmentDurationFromUrl(fragmentUrl:String):Number
 		{
-			throw new IllegalOperationError("The getFragmentDuration() method must be overridden by the derived class.");
+			throw new IllegalOperationError("The getFragmentDurationFromUrl() method must be overridden by the derived class.");
 		}
 
 	}

@@ -28,6 +28,7 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
+	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.net.dvr.DVRUtils;
@@ -36,6 +37,7 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 
 	CONFIG::LOGGING 
 	{	
@@ -107,7 +109,7 @@ package org.osmf.net.httpstreaming.f4f
 					logger.error( "******* F4M wrong or contains insufficient information!" );
 				}
 				
-				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+				dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
 				return;					
 			}
 			
@@ -132,7 +134,7 @@ package org.osmf.net.httpstreaming.f4f
 						logger.error( "******* bootstrap null or contains inadequate information!" );
 					}
 					
-					dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+					dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
 					return;					
 				}
 				if (bootstrap.data != null)
@@ -146,7 +148,7 @@ package org.osmf.net.httpstreaming.f4f
 							logger.error( "******* bootstrapBox is null, potentially from bad bootstrap data!" );
 						}
 						
-						dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+						dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
 						return;					
 					}
 					bootstrapBoxes[i] = bootstrapBox;
@@ -175,7 +177,7 @@ package org.osmf.net.httpstreaming.f4f
 			{
 				dispatchEvent
 					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
+						( HTTPStreamingIndexHandlerEvent.RATES_READY
 						, false
 						, false
 						, false
@@ -205,7 +207,7 @@ package org.osmf.net.httpstreaming.f4f
 						"live or live+dvr stream!" );
 				}
 				
-				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+				dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
 				return;					
 			}
 			
@@ -261,7 +263,7 @@ package org.osmf.net.httpstreaming.f4f
 			{
 				dispatchEvent
 					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
+						( HTTPStreamingIndexHandlerEvent.RATES_READY
 						, false
 						, false
 						, false
@@ -275,10 +277,13 @@ package org.osmf.net.httpstreaming.f4f
 			}
 		}	
 		
-		override public function getFragmentDuration(fragId:uint):Number
+		override public function getFragmentDurationFromUrl(fragmentUrl:String):Number
 		{
+			// we assume that there is only one afrt in bootstrap
+			
+			var tempFragmentId:String = fragmentUrl.substr(fragmentUrl.indexOf("Frag")+4, fragmentUrl.length);
+			var fragId:uint = uint(tempFragmentId);
 			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-			// For now, we assume that there is only one fragment run table.
 			var afrt:AdobeFragmentRunTable = abst.fragmentRunTables[0];
 			return afrt.getFragmentDuration(fragId);
 		}
@@ -528,21 +533,13 @@ package org.osmf.net.httpstreaming.f4f
 					var flvTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
 					flvTag.data = newAdditionalHeader;
 					dispatchEvent
-						( new HTTPStreamingIndexHandlerEvent
-							( HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA
+						( new HTTPStreamingEvent
+							( HTTPStreamingEvent.SCRIPT_DATA
 							, false
 							, false
-							, false
-							, NaN
-							, null
-							, null
-							, null
-							, null
-							, true
 							, 0
 							, flvTag
-							, true
-							, false
+							, FLVTagScriptDataMode.FIRST
 							)
 						);
 				}
@@ -706,21 +703,13 @@ package org.osmf.net.httpstreaming.f4f
 
 			sdo.objects = ["onMetaData", metaInfo];
 			dispatchEvent
-				( new HTTPStreamingIndexHandlerEvent
-					( HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA
+				( new HTTPStreamingEvent
+					( HTTPStreamingEvent.SCRIPT_DATA
 					, false
-					, false
-					, false
-					, NaN
-					, null
-					, null
-					, null
-					, null
 					, false
 					, 0
 					, sdo
-					, false
-					, true
+					, FLVTagScriptDataMode.IMMEDIATE
 					)
 				);
 		}
@@ -728,18 +717,13 @@ package org.osmf.net.httpstreaming.f4f
 		private function notifyFragmentDuration(duration:Number):void
 		{
 			dispatchEvent
-				(	new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION 
+				(	new HTTPStreamingEvent
+						( HTTPStreamingEvent.FRAGMENT_DURATION 
 						, false
 						, false
-						, false
-						, NaN
-						, null
-						, null
-						, null
-						, null
-						, true
 						, duration
+						, null
+						, null
 						)
 				);				
 		}
@@ -760,7 +744,7 @@ package org.osmf.net.httpstreaming.f4f
 
 				dispatchEvent
 					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
+						( HTTPStreamingIndexHandlerEvent.INDEX_READY
 						, false
 						, false
 						, abst.live

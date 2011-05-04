@@ -25,38 +25,50 @@ package org.osmf.events
 	import flash.net.URLRequest;
 	
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
-
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
+	
 	[ExcludeClass]
 	
 	/**
 	 * @private
 	 */
-	public class HTTPStreamingIndexHandlerEvent extends Event
+	public class HTTPStreamingIndexHandlerEvent extends HTTPStreamingEvent
 	{
-		public static const NOTIFY_INDEX_READY:String = "notifyIndexReady";
-		public static const NOTIFY_RATES:String = "notifyRates";
+		/**
+		 * Dispatched when the index is ready and processed.
+		 */
+		public static const INDEX_READY:String = "indexReady";
+		
+		/**
+		 * Dispatched when the rates become available.
+		 */
+		public static const RATES_READY:String = "ratesReady";
+		
+		/**
+		 * Dispatched when the index handler needs to reload the index file.
+		 */
 		public static const REQUEST_LOAD_INDEX:String = "requestLoadIndex";
-		public static const NOTIFY_ERROR:String = "notifyError";
-		public static const NOTIFY_SEGMENT_DURATION:String = "notifySegmentDuration";
-		public static const NOTIFY_SCRIPT_DATA:String = "notifyScriptData";
 
+		/**
+		 * Default constructor.
+		 */
 		public function HTTPStreamingIndexHandlerEvent(
-			type:String, 
-			bubbles:Boolean=false, 
-			cancelable:Boolean=false,
-			live:Boolean = false,
-			offset:Number = NaN,
-			streamNames:Array = null, 
-			rates:Array = null, 
-			request:URLRequest = null,
-			requestContext:Object = null,
-			binaryData:Boolean = true,
-			segmentDuration:Number = 0,
-			scriptDataObject:FLVTagScriptDataObject = null,
-			scriptDataFirst:Boolean = false,
-			scriptDataImmediate:Boolean = false)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
+				type:String, 
+				bubbles:Boolean=false, 
+				cancelable:Boolean=false,
+				live:Boolean = false,
+				offset:Number = NaN,
+				streamNames:Array = null, 
+				rates:Array = null, 
+				request:URLRequest = null,
+				requestContext:Object = null,
+				binaryData:Boolean = true,
+				fragmentDuration:Number = 0,
+				scriptDataObject:FLVTagScriptDataObject = null,
+				scriptDataMode:String = FLVTagScriptDataMode.NORMAL
+				)
 		{
-			super(type, bubbles, cancelable);
+			super(type, bubbles, cancelable, fragmentDuration, scriptDataObject, scriptDataMode);
 			
 			_live = live;
 			_offset = offset;
@@ -65,10 +77,6 @@ package org.osmf.events
 			_request = request;
 			_requestContext = requestContext;
 			_binaryData = binaryData;
-			_segmentDuration = segmentDuration;
-			_scriptDataObject = scriptDataObject;
-			_scriptDataFirst = scriptDataFirst;
-			_scriptDataImmediate = scriptDataImmediate
 		}
 		
 		public function get live():Boolean
@@ -106,26 +114,6 @@ package org.osmf.events
 			return _binaryData;
 		}
 		
-		public function get segmentDuration():Number
-		{
-			return _segmentDuration;
-		}
-		
-		public function get scriptDataObject():FLVTagScriptDataObject
-		{
-			return _scriptDataObject;
-		}
-		
-		public function get scriptDataFirst():Boolean
-		{
-			return _scriptDataFirst;
-		}
-		
-		public function get scriptDataImmediate():Boolean
-		{
-			return _scriptDataImmediate;
-		}
-
 		override public function clone():Event
 		{
 			return new HTTPStreamingIndexHandlerEvent
@@ -139,25 +127,18 @@ package org.osmf.events
 				, request
 				, requestContext
 				, binaryData
-				, segmentDuration
+				, fragmentDuration
 				, scriptDataObject
-				, scriptDataFirst
-				, scriptDataImmediate
+				, scriptDataMode
 				);
 		}
 		
-		// Internal
-		//
-		
+		/// Internal
 		private var _streamNames:Array;
 		private var _rates:Array;
 		private var _request:URLRequest;
 		private var _requestContext:Object;
 		private var _binaryData:Boolean;
-		private var _segmentDuration:Number;
-		private var _scriptDataObject:FLVTagScriptDataObject;
-		private var _scriptDataFirst:Boolean;
-		private var _scriptDataImmediate:Boolean;	
 		private var _live:Boolean;
 		private var _offset:Number;
 	}

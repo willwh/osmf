@@ -23,10 +23,12 @@ package org.osmf.events
 {
 	import flash.events.Event;
 
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
+	
 	[ExcludeClass]
 	
 	/**
-	 * 
 	 * @private
 	 *
 	 * This is an event class for common stream events. The stream could be 
@@ -35,11 +37,92 @@ package org.osmf.events
 	 */ 
 	public class HTTPStreamingEvent extends Event
 	{
+		/**
+		 * Dispatched when the end of a fragment/chunk has been reached.
+		 */
 		public static const FRAGMENT_END:String = "fragmentEnd";
 		
-		public function HTTPStreamingEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		/**
+		 * Dispatched when the duration of the current fragment/chunk has been calculated.
+		 */
+		public static const FRAGMENT_DURATION:String = "fragmentDuration";
+
+		/**
+		 * Dispatched when the file handler has encounter an error.
+		 */
+		public static const FILE_ERROR:String = "fileError";
+		
+		/**
+		 * Dispatched when the index handler has encouter an error.
+		 */
+		public static const INDEX_ERROR:String = "indexError";
+		
+		/**
+		 * Dispacthed when script data needs to be passed between streaming objects.
+		 */
+		public static const SCRIPT_DATA:String = "scriptData";
+
+		/**
+		 * Default constructor.
+		 */
+		public function HTTPStreamingEvent(
+				type:String, 
+				bubbles:Boolean = false, 
+				cancelable:Boolean = false,
+				fragmentDuration:Number = 0,
+				scriptDataObject:FLVTagScriptDataObject = null,
+				scriptDataMode:String = FLVTagScriptDataMode.NORMAL
+				)
 		{
 			super(type, bubbles, cancelable);
+			
+			_fragmentDuration = fragmentDuration;
+			_scriptDataObject = scriptDataObject;
+			_scriptDataMode   = scriptDataMode;
 		}
+		
+		/**
+		 * Fragment duration.
+		 */
+		public function get fragmentDuration():Number
+		{
+			return _fragmentDuration;
+		}
+		
+		/**
+		 * Script data object.
+		 */
+		public function get scriptDataObject():FLVTagScriptDataObject
+		{
+			return _scriptDataObject;
+		}
+		
+		/**
+		 * Script data mode.
+		 */
+		public function get scriptDataMode():String
+		{
+			return _scriptDataMode;
+		}
+
+		/**
+		 * Clones the event.
+		 */
+		override public function clone():Event
+		{
+			return new HTTPStreamingEvent(
+							type, 
+							bubbles, 
+							cancelable, 
+							fragmentDuration, 
+							scriptDataObject, 
+							scriptDataMode
+					);
+		}
+		
+		/// Internals
+		private var _fragmentDuration:Number;
+		private var _scriptDataObject:FLVTagScriptDataObject;
+		private var _scriptDataMode:String;
 	}
 }

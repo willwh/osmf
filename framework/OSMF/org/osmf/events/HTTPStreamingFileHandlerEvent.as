@@ -25,93 +25,63 @@ package org.osmf.events
 	
 	import org.osmf.net.httpstreaming.f4f.AdobeBootstrapBox;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 
 	[ExcludeClass]
 	
 	/**
 	 * @private
 	 */
-	public class HTTPStreamingFileHandlerEvent extends Event
+	public class HTTPStreamingFileHandlerEvent extends HTTPStreamingEvent
 	{
-		public static const NOTIFY_SEGMENT_DURATION:String = "notifySegmentDuration";
-		public static const NOTIFY_SCRIPT_DATA:String = "notifyScriptData";
+		/**
+		 * Dispatched when the file handler detects a bootstrap box inside 
+		 * stream.
+		 */
 		public static const NOTIFY_BOOTSTRAP_BOX:String = "notifyBootstrapBox";
-		public static const NOTIFY_ERROR:String = "notifyError";
 		
+		/**
+		 * Default constructor.
+		 */
 		public function HTTPStreamingFileHandlerEvent(
-			type:String, 
-			bubbles:Boolean=false, 
-			cancelable:Boolean=false, 
-			segmentDuration:Number=0,
-			scriptDataObject:FLVTagScriptDataObject = null,
-			scriptDataFirst:Boolean = false,
-			scriptDataImmediate:Boolean = false,
-			abst:AdobeBootstrapBox = null,
-			error:Boolean = false)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
+				type:String, 
+				bubbles:Boolean = false, 
+				cancelable:Boolean = false, 
+				fragmentDuration:Number = 0,
+				scriptDataObject:FLVTagScriptDataObject = null,
+				scriptDataMode:String = FLVTagScriptDataMode.NORMAL,
+				abst:AdobeBootstrapBox = null)	
 		{
-			super(type, bubbles, cancelable);
+			super(type, bubbles, cancelable, fragmentDuration, scriptDataObject, scriptDataMode);
 			
-			_segmentDuration = segmentDuration;
-			_scriptDataObject = scriptDataObject;
-			_scriptDataFirst = scriptDataFirst;
-			_scriptDataImmediate = scriptDataImmediate
 			_abst = abst;
-			_error = error;
 		}
 
-		public function get segmentDuration():Number
-		{
-			return _segmentDuration;
-		}
-
-	
-		public function get scriptDataObject():FLVTagScriptDataObject
-		{
-			return _scriptDataObject;
-		}
-		
-		public function get scriptDataFirst():Boolean
-		{
-			return _scriptDataFirst;
-		}
-		
-		public function get scriptDataImmediate():Boolean
-		{
-			return _scriptDataImmediate;
-		}
-		
+		/**
+		 * Bootstrap information.
+		 */		
 		public function get bootstrapBox():AdobeBootstrapBox
 		{
 			return _abst;
 		}
 		
-		public function get error():Boolean
-		{
-			return _error;				
-		}
-	
+		/**
+		 * Clones the event.
+		 */
 		override public function clone():Event
 		{
 			return new HTTPStreamingFileHandlerEvent(
-				type, 
-				bubbles, 
-				cancelable, 
-				segmentDuration, 
-				scriptDataObject, 
-				scriptDataFirst, 
-				scriptDataImmediate, 
-				bootstrapBox, 
-				error);
+							type, 
+							bubbles, 
+							cancelable, 
+							fragmentDuration, 
+							scriptDataObject, 
+							scriptDataMode, 
+							bootstrapBox 
+						);
 		}
 				
 		// Internal
-		//
-		
-		private var _segmentDuration:Number;
-		private var _scriptDataObject:FLVTagScriptDataObject;
-		private var _scriptDataFirst:Boolean;
-		private var _scriptDataImmediate:Boolean;	
 		private var _abst:AdobeBootstrapBox;
-		private var _error:Boolean;
 	}
 }

@@ -261,7 +261,7 @@ package org.osmf.net.httpstreaming
 			
 			CONFIG::LOGGING
 			{
-				logger.debug(" loading complete. It took " + _downloadDuration + "sec.");	
+				logger.debug(" loading complete. It took " + _downloadDuration + " sec.");	
 			}
 		}
 		
