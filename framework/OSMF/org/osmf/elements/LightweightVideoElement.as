@@ -42,6 +42,8 @@ package org.osmf.elements
 	import org.osmf.media.URLResource;
 	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.metadata.CuePoint;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.ModifiableTimeTrait;
@@ -354,11 +356,10 @@ package org.osmf.elements
     			stream.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     						    			 			
      			// Check for DRMContentData
-    			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
-    			if (streamingResource != null 
-					&& streamingResource.drmContentData)
+				var metadata:ByteArray = getDRMContentData(resource);
+    			if (metadata != null && metadata.bytesAvailable > 0)
     			{
-    				var metadata:ByteArray = streamingResource.drmContentData;
+					// Side-case case, metadata present in F4M or loaded direclty
     				setupDRMTrait(metadata);					    				 			
 	    		}
 				else
@@ -374,6 +375,77 @@ package org.osmf.elements
 		// DRM APIs
 		CONFIG::FLASH_10_1
     	{
+			/**
+			 * @private
+			 * 
+			 * Checks for DMR metadata both in SBR and MBR cases. In SBR case, the DRM metadata is 
+			 * saved in <code>drmContentData</code> property. In MBR case, the DRM metadata can  
+			 * also be present as stream-based metadata in DRM namespace. In this case, we will 
+			 * return the medatata for the initial index.
+			 */
+			private function getDRMContentData(resource:MediaResourceBase):ByteArray
+			{
+				var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+				if (streamingResource != null)
+				{
+					// [CASE 1] We are in SBR or MBR case where the DRM metadata is
+					// present in drmContentData property so we just return it.
+					if (streamingResource.drmContentData != null)
+					{
+						return streamingResource.drmContentData;
+					}
+					
+					// [CASE 2] We have a DRM namespace associated with this resource
+					// which may contain the actual drmData. We are going to look into it
+					// and return our best guess hopefully the DRM for the initial stream.
+					var drmMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.DRM_METADATA) as Metadata;
+					if (drmMetadata != null && drmMetadata.keys.length > 0)
+					{
+						// do we have a initial index for this resource?
+						// if yes, then its DRM metadata is our best candidate 
+						var streamName:String = null;
+						var dynamicStreamingResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+						if (   dynamicStreamingResource != null 
+							&& dynamicStreamingResource.initialIndex > -1 
+							&& dynamicStreamingResource.initialIndex < dynamicStreamingResource.streamItems.length)
+						{
+							
+							streamName = dynamicStreamingResource.streamItems[dynamicStreamingResource.initialIndex].streamName;
+						}
+						
+						var drmContentData:ByteArray = null;
+						
+						// if we know the initial stream name then try to use its DRM metadata
+						if (streamName != null)
+						{
+							drmContentData = drmMetadata.getValue(streamName) as ByteArray;
+						}
+						
+						// if we still haven't find one, then get any available one
+						if (drmContentData == null)
+						{
+							var keys:Vector.<String> = drmMetadata.keys;
+							var index:int = 0;
+							
+							do 
+							{
+								var drmKey:String = keys[index];
+								if (drmKey.indexOf(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY) != 0)
+								{
+									drmContentData = drmMetadata.getValue(drmKey);
+								}
+								index++;	
+							} while (drmContentData == null && index < keys.length)
+						}
+						
+						return drmContentData;
+					}
+				}
+				
+				
+				return null;
+			}
+			
   			private function onStatus(event:StatusEvent):void
 			{
 				if (event.code == DRM_STATUS_CODE 
