@@ -24,6 +24,7 @@ package org.osmf.net.httpstreaming
 	import flash.utils.ByteArray;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -82,6 +83,67 @@ package org.osmf.net.httpstreaming
 			return metadata;
 		}
 
+		/**
+		 * Creates a HTTP Streaming resource derived from an original resource.
+		 *  
+		 * @return The HDS streaming resource.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 * 
+		 */ 
+		public static function createHTTPStreamingResource(resource:MediaResourceBase, streamName:String):MediaResourceBase
+		{
+			var bootstrap:BootstrapInfo = null;
+			var streamMetadata:Object;
+			var xmpMetadata:ByteArray;
+			var serverBaseURLs:Vector.<String>;
+
+			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
+			if (httpMetadata == null)
+			{
+				// XXX maybe we should throw an exception here?
+				return null;
+			}
+			var resourceMetadata:Metadata = new Metadata();
+			
+			bootstrap = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamName) as BootstrapInfo;
+			if (bootstrap != null)
+			{
+				resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY, bootstrap);
+			}
+			
+			streamMetadata = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamName);
+			if (streamMetadata != null)
+			{
+				resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY, streamMetadata);
+			}
+			
+			xmpMetadata = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + streamName) as ByteArray;
+			if (xmpMetadata != null)
+			{
+				resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY, xmpMetadata);
+			}
+			
+			serverBaseURLs = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY) as Vector.<String>;
+			if (serverBaseURLs != null)
+			{
+				resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY,serverBaseURLs);
+			}
+			
+			var baseUrl:String = "";
+			if (serverBaseURLs != null && serverBaseURLs.length > 0)
+			{
+				baseUrl = serverBaseURLs[0].toString();
+			}
+			
+			var httpResource:MediaResourceBase = new StreamingURLResource(baseUrl + "/" + streamName);
+			httpResource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, resourceMetadata);
+			return httpResource;
+		}
+		
 		/**
 		 * @private
 		 **/

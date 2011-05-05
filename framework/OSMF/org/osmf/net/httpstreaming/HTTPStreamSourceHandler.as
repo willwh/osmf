@@ -34,6 +34,7 @@ package org.osmf.net.httpstreaming
 	
 	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
+	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.media.MediaResourceBase;
 
 	CONFIG::LOGGING
@@ -107,6 +108,16 @@ package org.osmf.net.httpstreaming
 	[Event(name="fileError", type="org.osmf.events.HTTPStreamingEvent")]
 
 	/**
+	 * Dispatched when the index handler detects DVR information related to the current stream.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
+	
+	/**
 	 * @private
 	 * 
 	 * HTTPStreamSourceHandler is class which manages a specific HTTPStreamSource.
@@ -150,7 +161,7 @@ package org.osmf.net.httpstreaming
 			_indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
 			_indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.RATES_READY, onRatesReady);
 			_indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX, onRequestLoadIndex);
-//			_indexHandler.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
+			_indexHandler.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
 			_indexHandler.addEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, onFragmentDuration);
 			_indexHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
 			_indexHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onError);
@@ -393,6 +404,19 @@ package org.osmf.net.httpstreaming
 		{
 			_endFragment ||=  (_source != null && _source.isOpen && _source.isComplete && !_source.hasData);
 		}
+		
+		/**
+		 * @private
+		 * 
+		 * Event listener for <code>DVRSTREAMINFO</code>. This event indicates that 
+		 * index handler has detected DVR information while processing index file.
+		 * We just forward this further for processing as is needed by DVRCastTrait.
+		 */
+		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
+		{
+			dispatchEvent(event);
+		}
+
 		
 		/**
 		 * @private

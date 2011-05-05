@@ -359,6 +359,10 @@
 								label:"Legacy Live HDS manifest",
 								data:"http://10.131.237.107/live/videostream.f4m"
 							},
+							{
+								label:"Legacy Live HDS with DVR",
+								data:" http://10.131.237.107/live/events/hs_sbr_dvr/events/_definst_/liveevent.f4m"
+							},
 							{ 
 								label:"Legacy Live HDS manifest with MBR",
 								data:"http://10.131.237.107/live/events/hs_mbr_live/events/_definst_/liveevent.f4m"

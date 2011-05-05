@@ -116,37 +116,12 @@ package org.osmf.net.httpstreaming
 			this.resource = resource;
 			this.factory = factory;
 			
-			// setting up main resource
 			_mediaHandler = new HTTPStreamSourceHandler(factory, resource);
 			_mediaHandler.addEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
+			_mediaHandler.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
 			_mediaHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
 			_mediaHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onIndexError);
 			_mediaHandler.addEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
-			
-//			// setting up alternative source
-//			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
-//			if (streamingResource != null && streamingResource.alternativeAudioItems != null && streamingResource.alternativeAudioItems.length > 0 )
-//			{
-//				_audioMediaHandler = new HTTPStreamSourceHandler(factory, resource);
-//				
-//				_fileHandlerAudio = factory.createFileHandler(resource);
-//				_indexHandlerAudio = factory.createIndexHandler(resource, _fileHandlerAudio);
-//			}
-//
-//			if (_indexHandlerAudio != null)
-//			{
-//				_indexHandlerAudio.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReadyAlt);
-//				_indexHandlerAudio.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRatesAlt);
-//				_indexHandlerAudio.addEventListener(HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX, onRequestLoadIndexFileAlt);
-//				_indexHandlerAudio.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
-//				_indexHandlerAudio.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromIndexHandler);
-//				_indexHandlerAudio.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromIndexHandler);
-//			}
-//			if (_fileHandlerAudio != null)
-//			{
-//				_fileHandlerAudio.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
-//				_fileHandlerAudio.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromFileHandler);
-//			}
 			
 			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -167,34 +142,6 @@ package org.osmf.net.httpstreaming
 		{
 			return _lastDownloadRatio;
 		}
-		
-		/**
-		 * Initialization info for the HTTPStreamingIndexHandlerBase.
-		 * 
-		 * If specified, this will be passed to the index handler's
-		 * initialize method when playback is initiated.  Otherwise,
-		 * the argument to play (or play2) will be used.
-		 **/
-		public function get indexInfo():HTTPStreamingIndexInfoBase
-		{
-			return _indexInfo;
-		}
-		
-		public function set indexInfo(value:HTTPStreamingIndexInfoBase):void
-		{
-			_indexInfo = value;
-		}
-		
-		public function get indexInfoAlt():HTTPStreamingIndexInfoBase
-		{
-			return _indexInfoAlt;
-		}
-		public function set indexInfoAlt(value:HTTPStreamingIndexInfoBase):void
-		{
-			_indexInfoAlt = value;
-		}
-		
-		// new functionality
 		
 		public function DVRGetStreamInfo(streamName:Object):void
 		{
@@ -256,11 +203,8 @@ package org.osmf.net.httpstreaming
 			_seekTime = -1;
 			
 			indexIsReady = false;
-			
 			_mediaHandler.initialize(args[0]);
-			if (_audioHandler != null)
-				_audioHandler.initialize(args[0]);
-			
+						
 			if (args.length >= 2)
 			{
 				_seekTarget = Number(args[1]);
@@ -370,10 +314,13 @@ package org.osmf.net.httpstreaming
 		{
 			indexIsReady = false;
 			
-			_mediaHandler.close();	
-			if (_sourceAudio != null)
+			if (_mediaHandler != null)
 			{
-				_sourceAudio.close();
+				_mediaHandler.close();
+			}
+			if (_audioHandler != null)
+			{
+				_audioHandler.close();
 			}
 			
 			setState(HTTPStreamingState.HALT);
@@ -601,16 +548,13 @@ package org.osmf.net.httpstreaming
 					_seekAfterInit = true;
 					break;
 				
-				
 				// SEEK case
 				case HTTPStreamingState.SEEK:
 					_mediaHandler.close();
-					if (_sourceAudio != null)
+					if (_audioHandler != null)
 					{
-						_sourceAudio.close();
+						_audioHandler.close();
 					}
-					
-					_endFragmentAudio = true;
 					setState(HTTPStreamingState.LOAD_SEEK);
 					break;
 				
@@ -623,7 +567,7 @@ package org.osmf.net.httpstreaming
 					// XXX for now, we have a simplistic dynamic handler, in that if downloads are going poorly, we are a bit more aggressive about prefetching
 					if ( this.bufferLength < Math.max(4, this.bufferTime))
 					{
-						if (_indexInfoAlt && ((_bufferRemaining > 500) || _nextRequest == null) && ((_bufferRemainingAudio > 500) || _nextRequestAudio == null ))
+						if (_audioHandler != null && ((_bufferRemaining > 500) || _mediaRequest == null) && ((_bufferRemainingAudio > 500) || _audioRequest == null ))
 						{
 							setState(HTTPStreamingState.PLAY);
 						}
@@ -643,30 +587,31 @@ package org.osmf.net.httpstreaming
 					{
 						changeQualityLevelTo(_mediaUrl);
 					}
-					
 					if (_audioNeedsChanging)
-						changeAudioStreamTo(_sourceAudioUrl);
-					
-					if (_audioHasChanged)
 					{
-						flushExistingContent = true;
-						
-						if (_sourceAudio != null)
-						{
-							_fileHandlerAudio.flushFileSegment(_sourceAudio.getBytes());
-						}
-						
-//						_fileHandler.flushVideoInput();
-//						_fileHandler.flushAudioInput();
-						
-						notifyTransitionComplete(_sourceAudioUrl);
-						_audioHasChanged = false;
+						changeAudioStreamTo(_audioUrl);
 					}
 					
-					if (flushExistingContent)
-					{
-						_mediaHandler.flushContent();
-					}
+//					if (_audioHasChanged)
+//					{
+//						flushExistingContent = true;
+//						
+//						if (_sourceAudio != null)
+//						{
+//							_fileHandlerAudio.flushFileSegment(_sourceAudio.getBytes());
+//						}
+//						
+////						_fileHandler.flushVideoInput();
+////						_fileHandler.flushAudioInput();
+//						
+//						notifyTransitionComplete(_sourceAudioUrl);
+//						_audioHasChanged = false;
+//					}
+//					
+//					if (flushExistingContent)
+//					{
+//						_mediaHandler.flushContent();
+//					}
 					
 					setState(HTTPStreamingState.LOAD);
 					break;
@@ -676,16 +621,15 @@ package org.osmf.net.httpstreaming
 					{
 						changeQualityLevelTo(_mediaUrl);
 					}
-					
+					if (_audioNeedsChanging)
+					{
+						changeAudioStreamTo(_audioUrl);
+					}
 					
 					// seek always must flush per contract
 					if (!_seekAfterInit)
 					{
 						flushExistingContent = true;
-						if (_sourceAudio != null)
-						{
-							_fileHandlerAudio.flushFileSegment(_sourceAudio.getBytes());
-						}
 						
 //						_fileHandler.flushAudioInput();
 //						_fileHandler.flushVideoInput();
@@ -701,32 +645,31 @@ package org.osmf.net.httpstreaming
 						appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
 					}
 					
-					if (_audioNeedsChanging)
-					{
-						changeAudioStreamTo(_sourceAudioUrl);
-					}
-					
 					_seekAfterInit = false;
 					
 					
-					if (_audioHasChanged)
-					{
-						flushExistingContent = true;
-						if (_sourceAudio != null)
-						{
-							_fileHandlerAudio.flushFileSegment(_sourceAudio.getBytes());
-						}
-						
-//						_fileHandler.flushVideoInput();
-//						_fileHandler.flushAudioInput();
-
-						notifyTransitionComplete(_sourceAudioUrl);
-						_audioHasChanged = false;
-					}
+//					if (_audioHasChanged)
+//					{
+//						flushExistingContent = true;
+//						if (_sourceAudio != null)
+//						{
+//							_fileHandlerAudio.flushFileSegment(_sourceAudio.getBytes());
+//						}
+//						
+////						_fileHandler.flushVideoInput();
+////						_fileHandler.flushAudioInput();
+//
+//						notifyTransitionComplete(_sourceAudioUrl);
+//						_audioHasChanged = false;
+//					}
 
 					if (flushExistingContent)
 					{
 						_mediaHandler.flushContent();
+						if (_audioHandler != null)
+						{
+							_audioHandler.flushContent();
+						}
 					}
 					
 					setState(HTTPStreamingState.LOAD);
@@ -743,43 +686,52 @@ package org.osmf.net.httpstreaming
 					if (_mediaHasChanged)
 					{
 						// process remaining bytes
-						bytes = _mediaHandler.flushContent();
-						processAndAppend(bytes);
+						//bytes = _mediaHandler.flushContent();
+						//processAndAppend(bytes);
 						
 						_mediaHasChanged = false;
 						notifyTransitionComplete(_mediaHandler.url);
 					}
 					
+					if (_audioHasChanged)
+					{
+						_audioHasChanged = false;
+						notifyTransitionComplete(_audioHandler.url);
+					}
 					
-					// XXX the double test of _prevState in here is a little weird... might want to factor differently
+					var nextState:String = null;
+					var retryState:String = null;
 					
 					_fragmentDuration = -1;	// we now track whether or not this has been reported yet for this segment by the Index or File handler
 					switch (_previousState)
 					{
 						case HTTPStreamingState.LOAD_SEEK:
 						case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
+							nextState = HTTPStreamingState.PLAY_START_SEEK;
+							retryState = HTTPStreamingState.LOAD_SEEK_RETRY_WAIT;
+							
 							if (_mediaHandler.isFragmentEnd)
 							{
-								_nextRequest = _mediaHandler.getFileForTime(_seekTarget);
+								_mediaRequest = _mediaHandler.getFileForTime(_seekTarget);
 							}
-							if (_indexInfoAlt && _endFragmentAudio)
+							if (_audioHandler != null && _audioHandler.isFragmentEnd)
 							{
-								if (_seekTargetAlt < 0)
-								{
-									_seekTargetAlt = _seekTarget;
-								}
-								_nextRequestAudio = _indexHandlerAudio.getFileForTime(_seekTargetAlt, _qualityLevelAlt);
+								_audioRequest = _audioHandler.getFileForTime(_seekTarget);
 							}
 							break;
+						
 						case HTTPStreamingState.LOAD_NEXT:
 						case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
+							nextState = HTTPStreamingState.PLAY_START_NEXT;
+							retryState = HTTPStreamingState.LOAD_NEXT_RETRY_WAIT;
+
 							if (_mediaHandler.isFragmentEnd)
 							{
-								_nextRequest = _mediaHandler.getNextFile();
+								_mediaRequest = _mediaHandler.getNextFile();
 							}
-							if (_indexInfoAlt && _endFragmentAudio)
+							if (_audioHandler != null && _audioHandler.isFragmentEnd)
 							{
-								_nextRequestAudio = _indexHandlerAudio.getNextFile(_qualityLevelAlt);
+								_audioRequest = _audioHandler.getNextFile();
 							}
 							break;
 						default:
@@ -787,80 +739,58 @@ package org.osmf.net.httpstreaming
 							break;
 					}
 					
-					// if we finished processing current fragments
-					// and we don't have any additional data
-					// we halt
 					if (
-						(_mediaHandler.isFragmentEnd && _nextRequest == null)
-						&& 	(_endFragmentAudio && _nextRequestAudio == null)
+							(_mediaHandler.isFragmentEnd && _mediaRequest == null)
+						&& 	(_audioHandler != null && _audioHandler.isFragmentEnd && _audioRequest == null)
 					)
 					{
+						// if we finished processing current fragments and we know for sure 
+						// that we don't have any additional data, we halt
 						setState(HTTPStreamingState.HALT);
 					}
-					
-					if ((_nextRequest != null && _nextRequest.urlRequest != null)
-						|| (_nextRequestAudio != null && _nextRequestAudio.urlRequest != null))
+					else if (
+							(_mediaRequest != null && _mediaRequest.urlRequest != null)
+						||  (_audioRequest != null && _audioRequest.urlRequest != null)
+					)
 					{
-						if (_mediaHandler.isFragmentEnd && (_nextRequest != null) && (_nextRequest.urlRequest != null))
+						// if we finished processing current fragments and we have additional data
+						// we start loading the additional data
+						if (_mediaHandler.isFragmentEnd && (_mediaRequest != null) && (_mediaRequest.urlRequest != null))
 						{
-							CONFIG::LOGGING
-							{
-								logger.debug("loading: " + 	_nextRequest.urlRequest.url.toString());
-							}
-							
-							_mediaHandler.open(_nextRequest);
+							_mediaHandler.open(_mediaRequest);
 						}
-						if (_endFragmentAudio && (_nextRequestAudio != null) && (_nextRequestAudio.urlRequest != null) && _indexInfoAlt)
+						if (_audioHandler != null && _audioHandler.isFragmentEnd && (_audioRequest != null) && (_audioRequest.urlRequest != null))
 						{
-							CONFIG::LOGGING
-							{
-								logger.debug("loading for alternate src: " + 	_nextRequestAudio.urlRequest.url.toString());
-							}
-							_sourceAudio.open(_nextRequestAudio.urlRequest);
+							_audioHandler.open(_audioRequest);
 						}
 						
-						switch (_previousState)
-						{
-							case HTTPStreamingState.LOAD_SEEK:
-							case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
-								setState(HTTPStreamingState.PLAY_START_SEEK);
-								break;
-							case HTTPStreamingState.LOAD_NEXT:
-							case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
-								setState(HTTPStreamingState.PLAY_START_NEXT);
-								break;
-							default:
-								throw new Error("in HTTPStreamState.LOAD(2) with unknown previous state " + _previousState);
-								break;
-						}
+						setState(nextState);
 					}
-					else if(_nextRequest != null && _nextRequest.retryAfter >= 0)
+					else if (
+							(_mediaRequest != null && _mediaRequest.retryAfter >= 0)
+						||  (_audioRequest != null && _audioRequest.retryAfter >= 0)
+						)
 					{
+						// if we finished processing current fragments and we don't know if we have any additional
+						// data, we are waiting a little for things to update
+						var waitInterval:Number = 0; 
+						if (_mediaRequest != null)
+							waitInterval = _mediaRequest.retryAfter;
+						if (_audioRequest != null && waitInterval < _audioRequest.retryAfter)
+							waitInterval = _audioRequest.retryAfter;
+						
 						date = new Date();
-						_retryAfterWaitUntil = date.getTime() + (1000.0 * _nextRequest.retryAfter);
-						switch (_previousState)
-						{
-							case HTTPStreamingState.LOAD_SEEK:
-							case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
-								setState(HTTPStreamingState.LOAD_SEEK_RETRY_WAIT);
-								break;
-							case HTTPStreamingState.LOAD_NEXT:
-							case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
-								setState(HTTPStreamingState.LOAD_NEXT_RETRY_WAIT);
-								break;
-							default:
-								throw new Error("in HTTPStreamState.LOAD(3) with unknown previous state " + _previousState);
-								break;
-						}
+						_retryAfterWaitUntil = date.getTime() + (1000.0 * waitInterval);
+						setState(retryState);
 					}
 					else
 					{
 						// WHY ONLY VIDEO? IT SHOULD ALSO SUPPORT AUDIO
-						bytes = _mediaHandler.flushContent();
-						processAndAppend(bytes);
+						//bytes = _mediaHandler.flushContent();
+						//processAndAppend(bytes);
 						
 						setState(HTTPStreamingState.STOP);
-						if (_nextRequest != null && _nextRequest.unpublishNotify)
+						if (_mediaRequest != null && _mediaRequest.unpublishNotify)
 						{
 							_notifyPlayUnpublishPending = true;								
 						}
@@ -878,26 +808,26 @@ package org.osmf.net.httpstreaming
 				
 				case HTTPStreamingState.PLAY_START_NEXT:
 					_mediaHandler.beginProcessing(false, 0);
-					if (_indexInfoAlt != null && _endFragmentAudio)
+					if (_audioHandler != null /*&& _audioHandler.isFragmentEnd*/)
 					{
-						_fileHandlerAudio.beginProcessFile(false, 0); 
+						_audioHandler.beginProcessing(false, 0); 
 					}
+					
 					setState(HTTPStreamingState.PLAY_START_COMMON);
 					break;
 				
 				case HTTPStreamingState.PLAY_START_SEEK:		
 					_mediaHandler.beginProcessing(true, _seekTarget);
-					if (_indexInfoAlt != null && _endFragmentAudio)
+					if (_audioHandler != null /*&& _audioHandler.isFragmentEnd*/)
 					{
-						_fileHandlerAudio.beginProcessFile(true, _seekTargetAlt);
+						_audioHandler.beginProcessing(true, _seekTargetAlt);
 					}
+					
 					setState(HTTPStreamingState.PLAY_START_COMMON);
 					break;		
 				
 				case HTTPStreamingState.PLAY_START_COMMON:
-					
 					// need to run the common FLVParser?
-					
 					if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags ||  _playForDuration >= 0)
 					{
 						if (_playForDuration >= 0)
@@ -907,18 +837,35 @@ package org.osmf.net.httpstreaming
 						_flvParser = new FLVParser(false);
 						_flvParserDone = false;
 					}
+					
 					setState(HTTPStreamingState.PLAY);
 					break;
 				
 				case HTTPStreamingState.PLAY:
-					if (_mediaHandler.hasData)
+					
+					if (
+							_mediaHandler.hasData || 
+							(_audioHandler != null && _audioHandler.hasData)
+					)
 					{
 						var processLimit:int = 65000*4;	// XXX needs to be settable
 						var processed:int = 0;
-						
+					
 						do 
 						{
-							bytes = _mediaHandler.processContent();
+							if (_audioHandler == null)
+							{
+								bytes = _mediaHandler.processContent();
+							}
+							else
+							{
+								var mediaBytes:ByteArray = _mediaHandler.processContent();
+								var audioBytes:ByteArray = _audioHandler.processContent();
+								bytes = _mixer.mixMDATBytes(mediaBytes, audioBytes);
+								if (bytes != null && bytes.bytesAvailable == 0)
+									bytes = null;
+							}
+							
 							if (bytes != null)									
 								processed += processAndAppend(bytes);
 								
@@ -932,7 +879,20 @@ package org.osmf.net.httpstreaming
 					if (_state != HTTPStreamingState.PLAY)
 						break;
 					
+					var isFragmentEnd:Boolean = _mediaHandler.isFragmentEnd;
+					if (_audioHandler != null)
+						isFragmentEnd ||= _audioHandler.isFragmentEnd;
+					
 					if (_mediaHandler.isFragmentEnd)
+					{
+						_mediaHandler.saveContent();
+					}
+					if (_audioHandler != null && _audioHandler.isFragmentEnd)
+					{
+						_audioHandler.saveContent();
+					}
+					
+					if (isFragmentEnd)
 					{
 						setState(HTTPStreamingState.END_FRAGMENT);
 					}
@@ -946,7 +906,7 @@ package org.osmf.net.httpstreaming
 //						 _mediaHandler.hasData
 //						||  (_sourceAudio != null && _sourceAudio.hasData) 
 //						|| ((_bufferRemaining > 500) && (_bufferRemainingAudio > 500)) 
-//						|| (_nextRequest == null) || (_nextRequestAudio == null))
+//						|| (_mediaRequest == null) || (_nextRequestAudio == null))
 //					{
 //						var processLimit:int = 65000*4;	// XXX needs to be settable
 //						var processed:int = 0;
@@ -976,7 +936,7 @@ package org.osmf.net.httpstreaming
 ////								&& (
 ////									(_source != null && (input = _source.getBytes(_fileHandler.inputBytesNeeded))) 
 ////									|| (_bufferRemaining > 500) 
-////									|| (_nextRequest == null)
+////									|| (_mediaRequest == null)
 ////								) 
 ////								&& (
 ////									(_sourceAudio != null && (inputAlt = _sourceAudio.getBytes(_fileHandlerAudio.inputBytesNeeded))) 
@@ -1025,7 +985,7 @@ package org.osmf.net.httpstreaming
 ////									needMoreAudio = true;
 ////								}
 ////								
-////								if ((needMoreVideo && (_nextRequest != null)) || (needMoreAudio && (_nextRequestAudio != null))) 
+////								if ((needMoreVideo && (_mediaRequest != null)) || (needMoreAudio && (_nextRequestAudio != null))) 
 ////								{
 ////									break;	
 ////								}
@@ -1048,7 +1008,7 @@ package org.osmf.net.httpstreaming
 //						// XXX if the reason we bailed is that we didn't have enough bytes, then if loadComplete we need to consume the rest into our save buffer
 //						// OR, if we don't do cross-segment saving then we simply need to ensure that we don't return but simply fall through to a later case
 //						// for now, we do the latter (also see below)
-//						if (_nextRequest == null) needMoreAudio = true;
+//						if (_mediaRequest == null) needMoreAudio = true;
 //						if (_nextRequestAudio == null) needMoreVideo = true;
 //						
 //						if (_source.isComplete && !_source.hasData && needMoreVideo)
@@ -1111,8 +1071,8 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.END_FRAGMENT:
 					// give _fileHandler a crack at any remaining data 
 					
-					bytes = _mediaHandler.endProcessing();
-					processAndAppend(bytes);
+					//bytes = _mediaHandler.endProcessing();
+					//processAndAppend(bytes);
 					
 					_lastDownloadRatio = _fragmentDuration / _lastDownloadDuration;	// urlcomplete would have fired by now, otherwise we couldn't be done, and onEndSegment is the last possible chance to report duration
 					notifyFragmentEnd();					
@@ -1154,58 +1114,6 @@ package org.osmf.net.httpstreaming
 			}
 		}
 		
-		private function onRequestLoadIndexFileAlt(event:HTTPStreamingIndexHandlerEvent):void
-		{
-			var urlLoader:URLLoader = new URLLoader(event.request);
-			var requestContext:Object = event.requestContext;
-			if (event.binaryData)
-			{
-				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
-			}
-			else
-			{
-				urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			}
-			
-			urlLoader.addEventListener(Event.COMPLETE, onIndexLoadCompleteAlt);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIndexURLErrorAlt);
-			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLErrorAlt);
-			
-			function onIndexLoadCompleteAlt(innerEvent:Event):void
-			{
-				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadCompleteAlt);
-				urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexURLErrorAlt);
-				urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLErrorAlt);
-				if (_indexHandlerAudio != null) {
-					_indexHandlerAudio.processIndexData(urlLoader.data, requestContext);
-				}
-				
-			}
-			
-			function onIndexURLErrorAlt(errorEvent:Event):void
-			{
-				CONFIG::LOGGING
-				{			
-					logger.error("URLStream: " + _sourceAudio.toString() );
-					logger.error("index url error: " + errorEvent );
-					logger.error( "******* attempting to download the index file (bootstrap) caused error!" );
-				}
-				
-				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadCompleteAlt);
-				urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexURLErrorAlt);
-				urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLErrorAlt);
-				
-				notifyURLError(event.request.url);
-			}
-		}
-		
-		private function onRatesAlt(event:HTTPStreamingIndexHandlerEvent):void
-		{
-			//_qualityRates = event.rates;
-			//_streamNames = event.streamNames;
-			//_numQualityLevels = _qualityRates.length;
-		}	
-		
 		private function onIndexReady(event:HTTPStreamingIndexHandlerEvent):void
 		{
 			if (!indexIsReady)
@@ -1229,20 +1137,10 @@ package org.osmf.net.httpstreaming
 					_seekTarget = _seekTargetAlt = event.offset;
 				}
 				
-				if (_sourceAudio == null)
-					_sourceAudio = new HTTPStreamSource(this);
-				
-				_indexIsReadyAlt = true;
 				setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
+				_indexIsReadyAlt = true;
 			}
 		}
-		
-		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
-		{
-			_dvrInfo = event.info as DVRInfo;
-			dispatchEvent(event.clone());
-		}
-		
 		
 		
 		private function attemptAppendBytes(bytes:ByteArray):void
@@ -1266,45 +1164,6 @@ package org.osmf.net.httpstreaming
 			}
 		}
 		
-		/**
-		 * @private
-		 * 
-		 * Initialize audio stream.
-		 */
-		private function initializeAlt(url:String):void
-		{
-			
-			_fileHandlerAudio = new HTTPStreamingF4FFileHandler();
-			
-			var bootstrap:BootstrapInfo = null;
-			var streamMetadata:Object;
-			var xmpMetadata:ByteArray;
-			
-			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
-			if (httpMetadata != null)
-			{
-				bootstrap = httpMetadata.getValue(
-					MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + url) as BootstrapInfo;
-				streamMetadata = httpMetadata.getValue(
-					MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + url);
-				xmpMetadata = httpMetadata.getValue(
-					MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + url) as ByteArray;
-			}
-			
-			// saayan fix: live
-			var serverBaseURLs:Vector.<String> = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY) as Vector.<String>;
-			var indexInfoResource:URLResource = new StreamingURLResource(serverBaseURLs[0].toString() + "/" + url);
-			var resourceMetadata:Metadata = new Metadata();
-			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY, bootstrap);
-			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY, streamMetadata);
-			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY, xmpMetadata);
-			resourceMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY,serverBaseURLs);
-			
-			indexInfoResource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, resourceMetadata);
-			_indexInfoAlt = HTTPStreamingUtils.createF4FIndexInfo(indexInfoResource);
-			_indexHandlerAudio.initialize(_indexInfoAlt);
-		}
-		
 		///////////////////////////////////////////////////////////////////////
 		/// Public
 		///////////////////////////////////////////////////////////////////////
@@ -1317,36 +1176,45 @@ package org.osmf.net.httpstreaming
 		 * 
 		 * Changes audio track to load from an alternate track.
 		 */
-		private function changeAudioStreamTo(url:String):void
+		private function changeAudioStreamTo(streamName:String):void
 		{
-			_sourceAudioUrl = url;
 			_audioNeedsChanging = true;
+			_audioUrl = streamName;
 			if (_state != HTTPStreamingState.INIT) 
 			{
-				
-				if (_indexInfoAlt == null)
-				{
-					_seekTarget = _bufferRemaining/1000;
-					_seekTargetAlt = _seekTarget;
-				}
-				//				else 
-				//				{
-				//					_seekTarget = _fileHandler.mixedVideoTime/1000;
-				//					_seekTargetAlt = _fileHandler.mixedAudioTime/1000;
-				//				}
-				
-				initializeAlt(_sourceAudioUrl);
-				
-				// testing
-				_bufferRemaining = 0;
-				_bufferRemainingAudio = 0;
-				
-				_endFragmentAudio = true;
-				setState(HTTPStreamingState.LOAD_SEEK);		
-				
-				_audioHasChanged = true;
 				_audioNeedsChanging = false;
-				notifyTransition(_sourceAudioUrl);
+				if (_audioHandler == null || _audioHandler.url != _audioUrl)
+				{
+					_audioHasChanged = true;
+
+					if (_audioHandler != null)
+					{
+						_audioHandler.close();
+						_audioHandler.removeEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
+						_audioHandler.removeEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
+						_audioHandler.removeEventListener(HTTPStreamingEvent.INDEX_ERROR, onIndexError);
+						_audioHandler.removeEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
+						_audioHandler = null;
+					}
+					
+					var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(resource, streamName);
+					if (audioResource != null)
+					{
+						_audioHandler = new HTTPStreamSourceHandler(factory, audioResource);
+						_audioHandler.addEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
+						_audioHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
+						_audioHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onIndexError);
+						_audioHandler.addEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
+						_audioHandler.initialize(streamName);
+						
+						if (_mixer == null)
+						{
+							_mixer = factory.createMixer(resource);
+						}
+					}
+										
+					notifyTransition(_audioHandler != null ? _audioHandler.url : _audioUrl);
+				}
 			}
 			
 			_notifyPlayUnpublishPending = false;
@@ -1365,13 +1233,26 @@ package org.osmf.net.httpstreaming
 			if (_state != HTTPStreamingState.INIT)
 			{
 				_mediaNeedsChanging = false;
-				if (_mediaHandler.url != _mediaUrl)
+				if (_mediaHandler != null || _mediaHandler.url != _mediaUrl)
 				{
 					_mediaHasChanged = true;
-					_mediaHandler.setQualityLevelTo(_mediaUrl);
-					notifyTransition(_mediaHandler.url);						
+					if (_mediaHandler != null)
+						_mediaHandler.setQualityLevelTo(_mediaUrl);
+					
+					notifyTransition( _mediaHandler != null ? _mediaHandler.url : _mediaUrl);						
 				}
 			}
+			
+			_notifyPlayUnpublishPending = false;
+		}
+		
+		/**
+		 * Event handler for all DVR related information events.
+		 */
+		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
+		{
+			_dvrInfo = event.info as DVRInfo;
+			dispatchEvent(event.clone());
 		}
 
 		/**
@@ -1612,16 +1493,16 @@ package org.osmf.net.httpstreaming
 		private var _lastValidTimeTime:Number = 0;
 		private var _retryAfterWaitUntil:Number = 0;	// millisecond timestamp (as per date.getTime) of when we retry next
 		
-		private var _dvrInfo:DVRInfo = null;
-		
-				
 		private	var prevVideoTime:uint = 0;
 		private	var prevAudioTime:uint = 0;
 		
+		private	var _bufferRemaining:Number = 0;
+		private var _fragmentDuration:Number = -1;
 		
-		private var _indexInfoAlt:HTTPStreamingIndexInfoBase = null;
+		private	var _bufferRemainingAudio:Number = 0;
+		private var _fragmentDurationAudio:Number = -1;
+		
 		private var _seekTargetAlt:Number = -1;
-		private var _qualityLevelAlt:int = 0;
 		private var _indexIsReadyAlt:Boolean = false;
 		
 		
@@ -1635,32 +1516,21 @@ package org.osmf.net.httpstreaming
 		private var _state:String = HTTPStreamingState.INIT;
 		private var _previousState:String = null;
 		
-		private var _nextRequest:HTTPStreamRequest = null;
-		private	var _bufferRemaining:Number = 0;
-		private var _fragmentDuration:Number = -1;
-
-		private var _sourceAudio:HTTPStreamSource = null;
-		private var _sourceAudioUrl:String = null;
-		private var _endFragmentAudio:Boolean = true;
-		private var _nextRequestAudio:HTTPStreamRequest = null;
-		private	var _bufferRemainingAudio:Number = 0;
-		private var _indexHandlerAudio:HTTPStreamingIndexHandlerBase = null;
-		private var _fileHandlerAudio:HTTPStreamingFileHandlerBase = null;
-		private var _fragmentDurationAudio:Number = -1;
-		
 		private var _mediaHasChanged:Boolean = false;
 		private var _mediaNeedsChanging:Boolean = false;
 		private var _mediaUrl:String = null;
 		private var _mediaHandler:HTTPStreamSourceHandler = null;
+		private var _mediaRequest:HTTPStreamRequest = null;
 		
 		private var _audioHasChanged:Boolean = false;
 		private var _audioNeedsChanging:Boolean = false;
 		private var _audioUrl:String = null;
 		private var _audioHandler:HTTPStreamSourceHandler = null;
+		private var _audioRequest:HTTPStreamRequest = null;
 		
 		private var _mixer:HTTPStreamingMixerBase = null;
 		
-		private var pendingIndexInitializations:int = 0;
+		private var _dvrInfo:DVRInfo = null;
 		
 		CONFIG::LOGGING
 		{

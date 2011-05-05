@@ -29,6 +29,7 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase;
+	import org.osmf.net.httpstreaming.HTTPStreamingMixerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 
 	[ExcludeClass]
@@ -63,6 +64,16 @@ package org.osmf.net.httpstreaming.f4f
 		override public function createIndexHandler(resource:MediaResourceBase, fileHandler:HTTPStreamingFileHandlerBase):HTTPStreamingIndexHandlerBase
 		{
 			return new HTTPStreamingF4FIndexHandler(fileHandler);				
+		}
+		
+		/**
+		 * Creates a HTTPStreamingMixerBase class. 
+		 * 
+		 * @see org.osmf.net.httpstreaming.HTTPStreamingMixerBase
+		 */
+		override public function createMixer(resource:MediaResourceBase):HTTPStreamingMixerBase
+		{
+			return new HTTPStreamingF4FMixer();	
 		}
 		
 		/**
