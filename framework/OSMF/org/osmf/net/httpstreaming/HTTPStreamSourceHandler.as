@@ -28,6 +28,7 @@ package org.osmf.net.httpstreaming
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	
@@ -323,6 +324,17 @@ package org.osmf.net.httpstreaming
 		}
 
 		/**
+		 * Saves the internal content.
+		 */
+		public function saveContent():void
+		{
+			if (_source != null)
+			{
+				_source.saveBytes();
+			}
+		}
+		
+		/**
 		 * Indicates if the media stream is live or not.
 		 */
 		public function get isLive():Boolean
@@ -429,17 +441,20 @@ package org.osmf.net.httpstreaming
 		private function onRequestLoadIndex(event:HTTPStreamingIndexHandlerEvent):void
 		{
 			// ignore any additonal request if an loader operation is still in progress
-			if (_indexLoader != null)
-				return;
+			_pendingIndexLoadingRequests[_pendingIndexLoadingRequestsLenght] = event;
+			_pendingIndexLoadingRequestsLenght++;
 			
-			_indexLoaderContext = event.requestContext;
-			
-			_indexLoader = new URLLoader();
-			_indexLoader.dataFormat = event.binaryData ? URLLoaderDataFormat.BINARY : URLLoaderDataFormat.TEXT;  
-			_indexLoader.addEventListener(Event.COMPLETE, onIndexComplete);
-			_indexLoader.addEventListener(IOErrorEvent.IO_ERROR, onIndexError);
-			_indexLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexError);
-			_indexLoader.load(event.request);
+			if (_indexLoader == null)
+			{
+				_indexLoader = new URLLoader();
+				_indexLoader.dataFormat = event.binaryData ? URLLoaderDataFormat.BINARY : URLLoaderDataFormat.TEXT;  
+				_indexLoader.addEventListener(Event.COMPLETE, onIndexComplete);
+				_indexLoader.addEventListener(IOErrorEvent.IO_ERROR, onIndexError);
+				_indexLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexError);
+				
+				_currentIndexLoadEvent = event;
+				_indexLoader.load(_currentIndexLoadEvent.request);
+			}
 		}
 		
 		/**
@@ -450,13 +465,8 @@ package org.osmf.net.httpstreaming
 		 */ 
 		private function onIndexComplete(event:Event):void
 		{
-			_indexLoader.removeEventListener(Event.COMPLETE, onIndexComplete);
-			_indexLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexError);
-			_indexLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexError);
-			
-			_indexHandler.processIndexData(_indexLoader.data, _indexLoaderContext);
-			_indexLoader = null;
-			_indexLoaderContext = null;
+			_indexHandler.processIndexData(_indexLoader.data, _currentIndexLoadEvent.requestContext);
+			processPendingIndexLoadingRequest();
 		}
 		
 		/**
@@ -473,14 +483,34 @@ package org.osmf.net.httpstreaming
 				logger.error( "******* attempting to download the index file (bootstrap) caused error!" );
 			}
 			
-			_indexLoader.removeEventListener(Event.COMPLETE, onIndexComplete);
-			_indexLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexError);
-			_indexLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexError);
-			
-			_indexLoader = null;
-			_indexLoaderContext = null;
+			processPendingIndexLoadingRequest();
 		}
-
+		
+		/**
+		 * @private
+		 * 
+		 * Processes next request for loading an index file.
+		 */
+		private function processPendingIndexLoadingRequest():void
+		{
+			_pendingIndexLoadingRequests.shift();
+			_pendingIndexLoadingRequestsLenght--;
+			
+			if (_pendingIndexLoadingRequestsLenght == 0)
+			{
+				_indexLoader.removeEventListener(Event.COMPLETE, onIndexComplete);
+				_indexLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexError);
+				_indexLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexError);
+				
+				_indexLoader = null;
+			}
+			else
+			{
+				_currentIndexLoadEvent = _pendingIndexLoadingRequests[0];
+				_indexLoader.load(_currentIndexLoadEvent.request);
+			}	
+		}
+		
 		/**
 		 * @private
 		 * 
@@ -558,7 +588,9 @@ package org.osmf.net.httpstreaming
 		private var _bufferRemaining:Number = 0;
 		
 		private var _indexLoader:URLLoader = null;
-		private var _indexLoaderContext:Object = null;
+		private var _currentIndexLoadEvent:HTTPStreamingIndexHandlerEvent = null;
+		private var _pendingIndexLoadingRequests:Vector.<HTTPStreamingIndexHandlerEvent> = new Vector.<HTTPStreamingIndexHandlerEvent>();
+		private var _pendingIndexLoadingRequestsLenght:int = 0;
 		
 		CONFIG::LOGGING
 		{

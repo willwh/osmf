@@ -83,9 +83,8 @@ package org.osmf.net.httpstreaming
 		 */
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			var factory:HTTPStreamingFactory = new HTTPStreamingF4FFactory();
+			var factory:HTTPStreamingFactory = createHTTPStreamingFactory();
 			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, factory, resource);
-			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(resource);
 			return httpNetStream;
 		}
 		
@@ -141,6 +140,16 @@ package org.osmf.net.httpstreaming
 				loadTrait.setTrait(new HTTPStreamingDVRCastTimeTrait(loadTrait.connection, netStream, event.info as DVRInfo));
 				updateLoadTrait(loadTrait, LoadState.READY);
 			}
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Override this method to use a different factory object with HTTPNetStream objects.
+		 */
+		protected function createHTTPStreamingFactory():HTTPStreamingFactory
+		{
+			return new HTTPStreamingF4FFactory();
 		}
 		
 		//

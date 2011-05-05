@@ -170,6 +170,8 @@
 				
 				container.addMediaElement(element);
 				player.media = element;
+				
+				
 			}
 			
 			/**
@@ -357,6 +359,10 @@
 								label:"Legacy Live HDS manifest",
 								data:"http://10.131.237.107/live/videostream.f4m"
 							},
+							{ 
+								label:"Legacy Live HDS manifest with MBR",
+								data:"http://10.131.237.107/live/events/hs_mbr_live/events/_definst_/liveevent.f4m"
+							},
 							{
 								label:"Legacy live HDS manifest without DVR",
 								data:"http://10.122.233.48/live/events/livepkgr/events/_definst_/liveevent.f4m" 
@@ -380,6 +386,10 @@
 							{
 								label:"LIVE: 1 video with 1 alternate audio track",
 								data:"http://10.131.237.107/live/purelive_lba.f4m"
+							},
+							{
+								label:"LIVE: audio only",
+								data:"http://10.131.237.107/live/events/live_audio_only/events/_definst_/liveevent_audio_only.f4m"
 							}
 						];
 
@@ -434,8 +444,8 @@
 							/>
 				</s:layout>
 				<s:Button id="btnPlayPause" label="Play" click="onPlayPauseClick(event)" />
-				<s:Button id="btnSnapToLive" label="Live" click="onSnapToLiveClick(event)" />
 				<s:HSlider id="sldSeek" snapInterval="1" width="300" change="onSeekRequest()" />
+				<s:Label id="lblTime" width="100" />
 				<s:Spacer width="100%" />
 				<s:VGroup>
 					<s:DropDownList id="listStreams" width="200" dataProvider="{streams}" change="onStreamSelectionChange(event)"/>
