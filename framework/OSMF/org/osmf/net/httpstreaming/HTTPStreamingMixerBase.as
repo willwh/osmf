@@ -37,56 +37,117 @@ package org.osmf.net.httpstreaming
 		/**
 		 * Default constructor.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
 		 */
 		public function HTTPStreamingMixerBase()
 		{
 		}
-		
-		public function mixFileSegment(input:IDataInput, input1:IDataInput):ByteArray
+
+		/**
+		 * Flag indicating the mixer needs more audio.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function get needsAudio():Boolean
 		{
-			throw new IllegalOperationError("The processFileSegment() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+			throw new IllegalOperationError("The needsAudio() method must be overridden by HTTPStreamingMixerBase's derived class.");
 		}
 		
-		public function mixMDATBytes(input:IDataInput, input1:IDataInput):ByteArray
+		/**
+		 * Gets the last audio time in miliseconds.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function get audioTime():uint
 		{
-			throw new IllegalOperationError("The mixMDATBytes() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+			throw new IllegalOperationError("The audioTime() method must be overridden by HTTPStreamingMixerBase's derived class.");
+		}
+
+		/**
+		 * Flag indicating the mixer needs more video.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function get needsVideo():Boolean
+		{
+			throw new IllegalOperationError("The needsVideo() method must be overridden by HTTPStreamingMixerBase's derived class.");
+		}
+
+		/**
+		 * Gets the last video time in miliseconds.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function get videoTime():uint
+		{
+			throw new IllegalOperationError("The videoTime() method must be overridden by HTTPStreamingMixerBase's derived class.");
 		}
 		
-		public function get mixedAudioTime():uint
-		{
-			throw new IllegalOperationError("The mixedAudioTime() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		
-		public function get mixedVideoTime():uint
-		{
-			throw new IllegalOperationError("The mixedVideoTime() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		
-		public function get videoInput():ByteArray
-		{
-			throw new IllegalOperationError("The videoInput() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		
-		public function get audioInput():ByteArray
-		{
-			throw new IllegalOperationError("The audioInput() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
-		}
-		
+		/**
+		 * Flushes the internal cache of video data.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
 		public function flushVideoInput():void
 		{
+			throw new IllegalOperationError("The flushVideoInput() method must be overridden by HTTPStreamingMixerBase's derived class.");
 		}
 		
+		/**
+		 * Flushes the internal cache of audio data.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
 		public function flushAudioInput():void
 		{
+			throw new IllegalOperationError("The flushAudioInput() method must be overridden by HTTPStreamingMixerBase's derived class.");
 		}
 		
-		public function get mdatBytesPending():uint
+		/**
+		 * Returns the mixed stream.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function getMixedMDATBytes():ByteArray
 		{
-			throw new IllegalOperationError("The mdatBytesPending() method must be overridden by HttpStreamingFileHandlerBase's derived class.");
+			throw new IllegalOperationError("The getMixedMDATBytes() method must be overridden by HTTPStreamingMixerBase's derived class.");
+		}
+		
+		/**
+		 * Mixes two media streams based on their time codes.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function mixMDATBytes(videoInput:IDataInput, audioInput:IDataInput):void
+		{
+			throw new IllegalOperationError("The mixMDATBytes() method must be overridden by HTTPStreamingMixerBase's derived class.");
 		}
 	}
 }

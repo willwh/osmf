@@ -32,9 +32,9 @@ package org.osmf.net.httpstreaming
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	
+	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
-	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.media.MediaResourceBase;
 
 	CONFIG::LOGGING
@@ -208,15 +208,11 @@ package org.osmf.net.httpstreaming
 		 */
 		public function open(request:HTTPStreamRequest):void
 		{
-			_endFragment = false;
-			
 			_request = request;
 			if (_source != null && _request != null)
 			{
 				_source.open(request.urlRequest);
 			}
-			
-			updateState();
 		}
 		
 		/**
@@ -226,11 +222,8 @@ package org.osmf.net.httpstreaming
 		{
 			if (_source != null)
 			{
-				removeEventListener(Event.COMPLETE, onSourceComplete);
 				_source.close();
 			}
-			
-			updateState();
 		}
 		
 		/**
@@ -271,9 +264,8 @@ package org.osmf.net.httpstreaming
 		 */
 		public function beginProcessing(seek:Boolean, seekTime:Number):void
 		{
+			_endFragment = false;
 			_fileHandler.beginProcessFile(seek, seekTime);
-			
-			updateState();
 		}
 		
 		/**
@@ -281,6 +273,8 @@ package org.osmf.net.httpstreaming
 		 */
 		public function endProcessing():ByteArray
 		{
+			_endFragment = true;
+			
 			var bytes:ByteArray = null;
 			if (_source != null)
 			{
@@ -291,7 +285,6 @@ package org.osmf.net.httpstreaming
 				}
 			}
 			
-			updateState();
 			return bytes;
 		}
 
@@ -310,9 +303,12 @@ package org.osmf.net.httpstreaming
 				{
 					bytes = _fileHandler.processFileSegment(input);
 				}
+				else
+				{
+					_endFragment = (_source != null && _source.isOpen && _source.isComplete && !_source.hasData);
+				}
 			}
 			
-			updateState();
 			return bytes;
 		}
 		
@@ -321,16 +317,14 @@ package org.osmf.net.httpstreaming
 		 */
 		public function flushContent():ByteArray
 		{
+			_endFragment = true;
+
 			var bytes:ByteArray = null;
-			
 			if (_source != null)
 			{
 				bytes = _fileHandler.flushFileSegment(_source.getBytes()); 
 			}
 			
-			_endFragment = true;
-			
-			updateState();
 			return bytes;
 		}
 
@@ -362,11 +356,11 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/**
-		 * Indicates the remaining buffer in seconds.
+		 * Indicates the current fragment duration in miliseconds.
 		 */
-		public function get bufferRemaining():Number
+		public function get fragmentDuration():Number
 		{
-			return _bufferRemaining;
+			return _fragmentDuration;
 		}
 		
 		/**
@@ -393,17 +387,6 @@ package org.osmf.net.httpstreaming
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////
-		
-		/**
-		 * @private 
-		 * 
-		 * Updates the state of the source media handler class. Usually called after 
-		 * any processing or updating of the current source. 
-		 */
-		private function updateState():void
-		{
-			_endFragment ||=  (_source != null && _source.isOpen && _source.isComplete && !_source.hasData);
-		}
 		
 		/**
 		 * @private
@@ -435,7 +418,6 @@ package org.osmf.net.httpstreaming
 			if (_source == null)
 			{
 				_source = new HTTPStreamSource(this);
-				addEventListener(Event.COMPLETE, onSourceComplete);
 			}
 			dispatchEvent(event);
 		}
@@ -538,29 +520,12 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 * 
-		 * Event listener for completion of stream data. Now we can calculate 
-		 * the remaining duration.
-		 */
-		private function onSourceComplete(event:Event):void
-		{
-			if (_request != null && _request.urlRequest != null)
-			{
-				var url:String =  _request.urlRequest.url;
-				if (url != null)
-				{
-					_bufferRemaining +=  _indexHandler.getFragmentDurationFromUrl(url);
-				}
-			}
-		}
-
-		/**
-		 * @private
-		 * 
 		 * Event listener called when index handler of file handler obtain fragment duration.
 		 */
 		private function onFragmentDuration(event:HTTPStreamingEvent):void
 		{
 			_fragmentDuration = event.fragmentDuration;
+			dispatchEvent(event);
 		}
 
 		/**
@@ -609,7 +574,6 @@ package org.osmf.net.httpstreaming
 		private var _endFragment:Boolean = false;
 		
 		private var _fragmentDuration:Number = 0;
-		private var _bufferRemaining:Number = 0;
 		
 		private var _indexLoader:URLLoader = null;
 		private var _currentIndexLoadEvent:HTTPStreamingIndexHandlerEvent = null;

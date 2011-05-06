@@ -226,7 +226,10 @@ package org.osmf.net.httpstreaming
 			}
 			else
 			{
-				_savedBytes.length = 0; 
+				if (_savedBytes != null)
+				{	
+					_savedBytes.length = 0;
+				}
 			}
 		}
 		
@@ -262,6 +265,10 @@ package org.osmf.net.httpstreaming
 			CONFIG::LOGGING
 			{
 				logger.debug(" loading complete. It took " + _downloadDuration + " sec.");	
+			}
+			if (_dispatcher != null)
+			{
+				_dispatcher.dispatchEvent(event);
 			}
 		}
 		

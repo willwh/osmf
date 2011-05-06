@@ -413,11 +413,14 @@ package org.osmf.net.httpstreaming.f4f
 				var oldCurrentFAI:FragmentAccessInformation = currentFAI;
 				if (oldCurrentFAI == null)
 				{
-					var fragId:uint = frt.fragmentDurationPairs[frt.fragmentDurationPairs.length - 1].firstFragment;
-					currentFAI = frt.validateFragment(fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
+					currentFAI = null;
+//					var fragId:uint = frt.fragmentDurationPairs[frt.fragmentDurationPairs.length - 1].firstFragment;
+//					currentFAI = frt.validateFragment(fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
 				}
 				else
+				{
 					currentFAI = frt.validateFragment(oldCurrentFAI.fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
+				}
 				
 				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
