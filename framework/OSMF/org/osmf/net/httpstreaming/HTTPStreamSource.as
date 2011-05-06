@@ -89,6 +89,14 @@ package org.osmf.net.httpstreaming
 		}
 
 		/**
+		 * Returns the duration of the last download in seconds.
+		 */
+		public function get downloadDuration():Number
+		{
+			return _downloadDuration;
+		}
+		
+		/**
 		 * Opens the HTTP stream source and start downloading the data 
 		 * immediately. It will automatically close any previous opended
 		 * HTTP stream source.

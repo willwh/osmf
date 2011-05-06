@@ -301,7 +301,6 @@ package org.osmf.net.httpstreaming
 				{
 					_seekTarget = offset + _initialTime;
 				}
-				_seekTargetAlt = _seekTarget;
 				
 				_seekTime = -1;		// but _initialTime stays known
 				setState(HTTPStreamingState.SEEK);		
@@ -447,14 +446,14 @@ package org.osmf.net.httpstreaming
 			// probably done seeing the tags, unless we are in playForDuration mode...
 			if (_playForDuration >= 0)
 			{
-				if (_fragmentDuration >= 0 && _flvParserIsSegmentStart)
+				if (_mediaFragmentDuration >= 0 && _flvParserIsSegmentStart)
 				{
 					// if the segmentDuration has been reported, it is possible that we might be able to shortcut
 					// but we need to be careful that this is the first tag of the segment, otherwise we don't know what duration means in relation to the tag timestamp
 					
 					_flvParserIsSegmentStart = false; // also used by enhanced seek, but not generally set/cleared for everyone. be careful.
 					currentTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
-					if (currentTime + _fragmentDuration >= (_initialTime + _playForDuration))
+					if (currentTime + _mediaFragmentDuration >= (_initialTime + _playForDuration))
 					{
 						// it stops somewhere in this segment, so we need to keep seeing the tags
 						return true;
@@ -614,6 +613,8 @@ package org.osmf.net.httpstreaming
 					break;
 				
 				case HTTPStreamingState.LOAD_SEEK:
+					_seekAfterInit = false;
+
 					if (_mediaNeedsChanging)
 					{
 						changeQualityLevelTo(_mediaUrl);
@@ -629,46 +630,23 @@ package org.osmf.net.httpstreaming
 					if (_pendingIndexInitializations > 0)
 						break;
 
-					// seek always must flush per contract
-					if (!_seekAfterInit)
-					{
-//						_fileHandler.flushAudioInput();
-//						_fileHandler.flushVideoInput();
-						prevAudioTime = 0;
-						prevVideoTime = 0;
-						
-						_bufferRemaining = 0;
-						_bufferRemainingAudio = 0;
-					}
-					
 					CONFIG::FLASH_10_1
 					{
 						appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
 					}
 					
-					_seekAfterInit = false;
-					
-					
-//					if (_audioHasChanged)
-//					{
-//						flushExistingContent = true;
-//						if (_sourceAudio != null)
-//						{
-//							_fileHandlerAudio.flushFileSegment(_sourceAudio.getBytes());
-//						}
-//						
-////						_fileHandler.flushVideoInput();
-////						_fileHandler.flushAudioInput();
-//
-//						notifyTransitionComplete(_sourceAudioUrl);
-//						_audioHasChanged = false;
-//					}
-
 					_mediaHandler.flushContent();
 					if (_audioHandler != null)
 					{
 						_audioHandler.flushContent();
 					}
+					if (_mixer != null)
+					{
+						_mixer.flushAudioInput();
+						_mixer.flushVideoInput();
+					}
+					_mediaBufferRemaining = 0;
+					_audioBufferRemaining = 0;
 					
 					setState(HTTPStreamingState.LOAD);
 					break;
@@ -699,7 +677,7 @@ package org.osmf.net.httpstreaming
 					
 					var retryState:String = null;
 					
-					_fragmentDuration = -1;	// we now track whether or not this has been reported yet for this segment by the Index or File handler
+					_mediaFragmentDuration = -1;	// we now track whether or not this has been reported yet for this segment by the Index or File handler
 					switch (_previousState)
 					{
 						case HTTPStreamingState.LOAD_SEEK:
@@ -823,7 +801,7 @@ package org.osmf.net.httpstreaming
 					}
 					if (_audioHandler != null && _audioHandler.isFragmentEnd)
 					{
-						_audioHandler.beginProcessing(true, _seekTargetAlt);
+						_audioHandler.beginProcessing(true, _seekTarget);
 					}
 					
 					setState(HTTPStreamingState.PLAY_START_COMMON);
@@ -989,7 +967,11 @@ package org.osmf.net.httpstreaming
 						}
 					}
 					
-					_lastDownloadRatio = _fragmentDuration / _lastDownloadDuration;	// urlcomplete would have fired by now, otherwise we couldn't be done, and onEndSegment is the last possible chance to report duration
+					if (_mediaHandler.lastDownloadDuration != 0)
+					{
+						_lastDownloadRatio = _mediaFragmentDuration / _mediaHandler.lastDownloadDuration;
+					}
+					
 					notifyFragmentEnd();					
 					if (_state != HTTPStreamingState.STOP && _state != HTTPStreamingState.HALT)
 					{ 
@@ -1160,10 +1142,12 @@ package org.osmf.net.httpstreaming
 			if (event.target == _mediaHandler)
 			{
 				_mediaBufferRemaining += event.fragmentDuration * 1000;
+				_mediaFragmentDuration = event.fragmentDuration;
 			}
 			else if (event.target == _audioHandler)
 			{
 				_audioBufferRemaining += event.fragmentDuration * 1000;
+				_audioFragmentDuration = event.fragmentDuration;
 			}
 		}
 		
@@ -1182,7 +1166,7 @@ package org.osmf.net.httpstreaming
 				{
 					if (event.live && _dvrInfo == null && !isNaN(event.offset))
 					{
-						_seekTarget = _seekTargetAlt = event.offset;
+						_seekTarget = event.offset;
 					}
 				}
 				
@@ -1428,20 +1412,7 @@ package org.osmf.net.httpstreaming
 		private var _playForDuration:Number = -1;
 		private var _lastValidTimeTime:Number = 0;
 		private var _retryAfterWaitUntil:Number = 0;	// millisecond timestamp (as per date.getTime) of when we retry next
-		
-		private	var prevVideoTime:uint = 0;
-		private	var prevAudioTime:uint = 0;
-		
-		private	var _bufferRemaining:Number = 0;
-		private var _fragmentDuration:Number = -1;
-		
-		private	var _bufferRemainingAudio:Number = 0;
-		private var _fragmentDurationAudio:Number = -1;
-		
-		private var _seekTargetAlt:Number = -1;
-		private var _indexIsReadyAlt:Boolean = false;
-		
-		
+
 		// Internals
 		private static const MAIN_TIMER_INTERVAL:int = 25;
 
@@ -1460,6 +1431,7 @@ package org.osmf.net.httpstreaming
 		private var _mediaHandler:HTTPStreamSourceHandler = null;
 		private var _mediaRequest:HTTPStreamRequest = null;
 		private var _mediaBufferRemaining:Number = 0;
+		private var _mediaFragmentDuration:Number = 0;
 		
 		private var _audioHasChanged:Boolean = false;
 		private var _audioNeedsChanging:Boolean = false;
@@ -1467,6 +1439,7 @@ package org.osmf.net.httpstreaming
 		private var _audioHandler:HTTPStreamSourceHandler = null;
 		private var _audioRequest:HTTPStreamRequest = null;
 		private var _audioBufferRemaining:Number = 0;
+		private var _audioFragmentDuration:Number = 0;
 		
 		private var _mixer:HTTPStreamingMixerBase = null;
 		

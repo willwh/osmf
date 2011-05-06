@@ -379,9 +379,20 @@ package org.osmf.net.httpstreaming
 			return _endFragment;
 		}
 		
+		/**
+		 * Indicates the url handled by this object.
+		 */
 		public function get url():String
 		{
 			return _url;
+		}
+		
+		/**
+		 * Gets the last download ration for this object.
+		 */
+		public function get lastDownloadDuration():Number
+		{
+			return _source != null ? _source.downloadDuration : 1;
 		}
 		
 		///////////////////////////////////////////////////////////////////////
