@@ -1189,7 +1189,7 @@ package org.osmf.net.httpstreaming
 				_pendingIndexInitializations--;
 				if (_pendingIndexInitializations == 0)
 				{
-					setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
+					setState(HTTPStreamingState.LOAD_SEEK);
 				}
 			}
 		}

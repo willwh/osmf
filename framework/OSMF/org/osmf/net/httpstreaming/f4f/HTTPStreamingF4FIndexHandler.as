@@ -23,10 +23,8 @@ package org.osmf.net.httpstreaming.f4f
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
-	import flash.utils.Timer;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
@@ -38,8 +36,8 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
-	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 
 	CONFIG::LOGGING 
 	{	
@@ -76,8 +74,6 @@ package org.osmf.net.httpstreaming.f4f
 			dvrGetStreamInfoCall = false;
 			
 			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_BOOTSTRAP_BOX, onNewBootstrapBox);
-
-			addEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, initializeBootstrapUpdateTimer);
 		}
 		
 		/**
@@ -340,8 +336,6 @@ package org.osmf.net.httpstreaming.f4f
 					}
 				}
 				
-				startBootstrapUpdateTimer();
-
 				playInProgress = true;
 				var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
 				var segId:uint = abst.findSegmentId(currentFAI.fragId - fdp.firstFragment + 1);
@@ -413,14 +407,12 @@ package org.osmf.net.httpstreaming.f4f
 				var oldCurrentFAI:FragmentAccessInformation = currentFAI;
 				if (oldCurrentFAI == null)
 				{
-					currentFAI = null;
 //					var fragId:uint = frt.fragmentDurationPairs[frt.fragmentDurationPairs.length - 1].firstFragment;
 //					currentFAI = frt.validateFragment(fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
+					currentFAI = null;
 				}
 				else
-				{
 					currentFAI = frt.validateFragment(oldCurrentFAI.fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
-				}
 				
 				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
@@ -835,60 +827,6 @@ package org.osmf.net.httpstreaming.f4f
 			}
 		}
 
-		private function startBootstrapUpdateTimer():void
-		{
-			// Start the timer that updates the bootstrap
-			if ((bootstrapUpdateTimer != null) && (allowBootstrapUpdateTimer))
-			{
-				if (!bootstrapUpdateTimer.running)
-				{
-					bootstrapUpdateTimer.start();
-				}
-			}
-		}
-		
-		private function initializeBootstrapUpdateTimer(event:HTTPStreamingIndexHandlerEvent):void
-		{
-			if (event.live)
-			{
-				if (bootstrapUpdateTimer == null)
-				{
-					// This will regularly update the bootstrap information;
-					// We just initialize the timer here; we'll start it in the first call of the getFileForTime method
-					// or in the first call of getNextFile
-					// The initial delay is 4000 (recommended fragment duration)
-					bootstrapUpdateTimer = new Timer(4000);
-					bootstrapUpdateTimer.addEventListener
-						(	
-							TimerEvent.TIMER, 
-							function(event:TimerEvent):void
-							{ 
-								refreshBootstrapInfo(currentQuality);
-							}
-						);
-					
-					// Update the bootstrap update interval; we set its value to the fragment duration
-					addEventListener(
-						HTTPStreamingEvent.FRAGMENT_DURATION,
-						function(event:HTTPStreamingEvent):void
-						{
-							bootstrapUpdateTimer.delay = event.fragmentDuration * 1000;
-						}
-					);
-				}
-				
-				allowBootstrapUpdateTimer = true;
-			}
-			else
-			{
-				allowBootstrapUpdateTimer = false;
-				if (bootstrapUpdateTimer.running)
-				{
-					bootstrapUpdateTimer.stop();
-				}
-			}
-		}
-
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
 		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
@@ -907,8 +845,6 @@ package org.osmf.net.httpstreaming.f4f
 		private var delay:Number = 0.05;
 		private var pureLiveOffset:Number = NaN;
 		
-		private var bootstrapUpdateTimer:Timer;
-		private var allowBootstrapUpdateTimer:Boolean = false;
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		
 		public static const BOOTSTRAP_REFRESH_INTERVAL:uint = 2000;
