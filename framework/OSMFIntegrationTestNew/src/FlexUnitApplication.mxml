@@ -7,14 +7,17 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:flexui="flexunit.flexui.*" creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
-			import org.osmf.player.media.TestLateBindingAudio;
-			import org.osmf.player.media.OSMFTests;
+			import org.osmf.media.TestMediaPlayerWithLegacyHDSSBR;
+			import org.flexunit.runner.Request;
 			
 			public function currentRunTestSuite():Array
 			{
 				var testsToRun:Array = new Array();
-				testsToRun.push(org.osmf.player.media.OSMFTests);
-				testsToRun.push(org.osmf.player.media.TestLateBindingAudio);
+				
+				testsToRun.push(Request.methods(org.osmf.media.TestMediaPlayerWithLegacyHDSSBR,["playLegacyHDSSBRWithLive",
+					"playLegacyHDSSBRWithLiveDRM",
+					"playLegacyHDSSBRWithDVR",
+					"playLegacyHDSSBRWithVOD"]));
 				return testsToRun;
 			}
 			

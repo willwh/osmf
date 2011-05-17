@@ -147,21 +147,6 @@ package org.osmf.net.httpstreaming
 			return _lastDownloadRatio;
 		}
 		
-		public function DVRGetStreamInfo(streamName:Object):void
-		{
-			if (_pendingIndexInitializations == 0)
-			{
-				// TODO: should there be _indexHandler.DVRGetStreamInfo() to re-trigger the event?
-			}
-			else
-			{
-				// TODO: should there be a guard to protect the case where indexIsReady is not yet true BUT play has already been called, so we are in an
-				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
-				// event back, go ahead and call play()
-				_mediaHandler.dvrGetStreamInfo(streamName);
-			}
-		}
-		
 		// Overrides
 		//
 		
@@ -206,29 +191,31 @@ package org.osmf.net.httpstreaming
 			_initialTime = -1;
 			_seekTime = -1;
 			
+			_mediaIsReady = false;
 			_pendingIndexInitializations++;
 			_mediaHandler.initialize(args[0]);
 						
 			if (args.length >= 2)
 			{
-				_seekTarget = Number(args[1]);
-				if (_seekTarget < 0)
+				_mediaSeekTarget = Number(args[1]);
+				if (_mediaSeekTarget < 0)
 				{
 					if (_dvrInfo != null)
 					{
-						_seekTarget = _dvrInfo.startTime;
+						_mediaSeekTarget = _dvrInfo.startTime;
 					}
 					else
 					{
-						_seekTarget = 0;	// FMS behavior, mimic -1 or -2 being passed in
+						_mediaSeekTarget = 0;	// FMS behavior, mimic -1 or -2 being passed in
 					}
 				}
 			}
 			else
 			{
 				// This is the start of playback, so no seek.
-				_seekTarget = 0;
+				_mediaSeekTarget = 0;
 			}
+			_audioSeekTarget = _mediaSeekTarget;
 			
 			if (args.length >= 3)
 			{
@@ -295,12 +282,13 @@ package org.osmf.net.httpstreaming
 			{
 				if(_initialTime < 0)
 				{
-					_seekTarget = offset + 0;	// this covers the "don't know initial time" case, rare
+					_mediaSeekTarget = offset + 0;	// this covers the "don't know initial time" case, rare
 				}
 				else
 				{
-					_seekTarget = offset + _initialTime;
+					_mediaSeekTarget = offset + _initialTime;
 				}
+				_audioSeekTarget = _mediaSeekTarget;
 				
 				_seekTime = -1;		// but _initialTime stays known
 				setState(HTTPStreamingState.SEEK);		
@@ -569,7 +557,7 @@ package org.osmf.net.httpstreaming
 					
 					// the defaut state from load wait is play
 					nextState = HTTPStreamingState.PLAY;
-					var desiredBufferTime:Number = Math.max(4, this.bufferTime); 
+					var desiredBufferTime:Number = Math.max(8, this.bufferTime); 
 					if ( this.bufferLength < desiredBufferTime)
 					{
 						// if we are low on buffer then we should be loading our next fragments 
@@ -578,7 +566,7 @@ package org.osmf.net.httpstreaming
 						// but if we are playing video with alternate content, then
 						// we should check the content of the mixer and see if 
 						// we have enough data there
-						var missingBufferTime:Number = 2000; //(desiredBufferTime - this.bufferLength) * 1000;
+						var missingBufferTime:Number = (desiredBufferTime - this.bufferLength) * 1000;
 						
 						if (
 								(_audioHandler != null)
@@ -687,11 +675,11 @@ package org.osmf.net.httpstreaming
 							
 							if (_mediaHandler.isFragmentEnd)
 							{
-								_mediaRequest = _mediaHandler.getFileForTime(_seekTarget);
+								_mediaRequest = _mediaHandler.getFileForTime(_mediaSeekTarget);
 							}
 							if (_audioHandler != null && _audioHandler.isFragmentEnd)
 							{
-								_audioRequest = _audioHandler.getFileForTime(_seekTarget);
+								_audioRequest = _audioHandler.getFileForTime(_audioSeekTarget);
 							}
 							break;
 						
@@ -797,11 +785,11 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY_START_SEEK:
 					if (_mediaHandler.isFragmentEnd)
 					{
-						_mediaHandler.beginProcessing(true, _seekTarget);
+						_mediaHandler.beginProcessing(true, _mediaSeekTarget);
 					}
 					if (_audioHandler != null && _audioHandler.isFragmentEnd)
 					{
-						_audioHandler.beginProcessing(true, _seekTarget);
+						_audioHandler.beginProcessing(true, _audioSeekTarget);
 					}
 					
 					setState(HTTPStreamingState.PLAY_START_COMMON);
@@ -1026,7 +1014,25 @@ package org.osmf.net.httpstreaming
 		///////////////////////////////////////////////////////////////////////
 		/// Public
 		///////////////////////////////////////////////////////////////////////
-		
+
+		/**
+		 * Get stream information from the associated information.
+		 */ 
+		public function DVRGetStreamInfo(streamName:Object):void
+		{
+			if (_mediaIsReady)
+			{
+				// TODO: should we re-trigger the event?
+			}
+			else
+			{
+				// TODO: should there be a guard to protect the case where _mediaIsReady is not yet true BUT play has already been called, so we are in an
+				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
+				// event back, go ahead and call play()
+				_mediaHandler.dvrGetStreamInfo(streamName);
+			}
+		}
+
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////
@@ -1066,6 +1072,7 @@ package org.osmf.net.httpstreaming
 						_audioHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
 						_audioHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onIndexError);
 						_audioHandler.addEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
+						
 						_pendingIndexInitializations++;
 						_audioHandler.initialize(streamName);
 						
@@ -1164,9 +1171,25 @@ package org.osmf.net.httpstreaming
 				// we are using only the offset from main stream
 				if (event.target == _mediaHandler)
 				{
+					_mediaIsReady = true;
 					if (event.live && _dvrInfo == null && !isNaN(event.offset))
 					{
-						_seekTarget = event.offset;
+						_mediaSeekTarget = _audioSeekTarget = event.offset;
+					}
+				}
+				
+				// if we just initialized an audio stream
+				if (event.target == _audioHandler)
+				{
+					if (_mixer != null && _mixer.videoTime != 0 && _mixer.audioTime != 0)
+					{
+						_mediaSeekTarget = _mixer.videoTime / 1000;
+						_audioSeekTarget = _mixer.audioTime / 1000;
+					}
+					else
+					{
+						_mediaSeekTarget = _mediaBufferRemaining / 1000;
+						_audioSeekTarget = _mediaSeekTarget;
 					}
 				}
 				
@@ -1391,8 +1414,6 @@ package org.osmf.net.httpstreaming
 		}
 		
 		private var _indexInfo:HTTPStreamingIndexInfoBase = null;
-		private var mainTimer:Timer;
-		private var _seekTarget:Number = -1;
 		private var _lastDownloadDuration:Number;
 		private var _lastDownloadRatio:Number = 0;
 		private var _totalDuration:Number = -1;
@@ -1415,6 +1436,7 @@ package org.osmf.net.httpstreaming
 
 		// Internals
 		private static const MAIN_TIMER_INTERVAL:int = 25;
+		private var mainTimer:Timer;
 
 		private var resource:URLResource = null;
 		private var factory:HTTPStreamingFactory = null;
@@ -1425,6 +1447,7 @@ package org.osmf.net.httpstreaming
 		private var _state:String = HTTPStreamingState.INIT;
 		private var _previousState:String = null;
 		
+		private var _mediaSeekTarget:Number = -1;
 		private var _mediaHasChanged:Boolean = false;
 		private var _mediaNeedsChanging:Boolean = false;
 		private var _mediaUrl:String = null;
@@ -1432,7 +1455,9 @@ package org.osmf.net.httpstreaming
 		private var _mediaRequest:HTTPStreamRequest = null;
 		private var _mediaBufferRemaining:Number = 0;
 		private var _mediaFragmentDuration:Number = 0;
+		private var _mediaIsReady:Boolean = false;
 		
+		private var _audioSeekTarget:Number = -1;
 		private var _audioHasChanged:Boolean = false;
 		private var _audioNeedsChanging:Boolean = false;
 		private var _audioUrl:String = null;
@@ -1444,7 +1469,7 @@ package org.osmf.net.httpstreaming
 		private var _mixer:HTTPStreamingMixerBase = null;
 		
 		private var _dvrInfo:DVRInfo = null;
-		
+				
 		private var _pendingIndexInitializations:int = 0;
 		
 		CONFIG::LOGGING

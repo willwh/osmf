@@ -635,12 +635,20 @@ package org.osmf.elements
 		 */
 		override protected function processUnloadingState():void
 		{
+			if (stream != null)
+			{
+				stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+				if (stream.client != null)
+				{
+					NetClient(stream.client).removeHandler(NetStreamCodes.ON_META_DATA, onMetaData);
+				}
+			}
+			
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-			
-			NetClient(stream.client).removeHandler(NetStreamCodes.ON_META_DATA, onMetaData);
-			
-			stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
-			loadTrait.connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+			if (loadTrait != null)
+			{
+				loadTrait.connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+			}
 			
 	    	removeTrait(MediaTraitType.AUDIO);
 	    	removeTrait(MediaTraitType.BUFFER);
@@ -653,10 +661,14 @@ package org.osmf.elements
     		removeTrait(MediaTraitType.DVR);
     		
 	    	CONFIG::FLASH_10_1
-    		{    			
-    			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
-    			stream.removeEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
-    			stream.removeEventListener(StatusEvent.STATUS, onStatus);
+    		{
+				if (stream != null)
+				{
+	    			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
+	    			stream.removeEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
+	    			stream.removeEventListener(StatusEvent.STATUS, onStatus);
+				}
+				
     			if (drmTrait != null)
     			{       			
 	    			drmTrait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, reloadAfterAuth);	 
@@ -665,8 +677,12 @@ package org.osmf.elements
 	    		}  					
     		}
     		
-	    	// Null refs to garbage collect.	    	
-			videoSurface.attachNetStream(null);
+			if (videoSurface != null)
+			{
+				videoSurface.attachNetStream(null);
+			}
+			
+			// Null refs to garbage collect.	
 			videoSurface = null;
 			stream = null;
 			displayObjectTrait = null;

@@ -57,8 +57,15 @@ package org.osmf.net
 			this.netStream = netStream;
 			this.videoSurface = videoSurface;
 			this.loadTrait = loadTrait;
-			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
-			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			
+			if (netStream != null)
+			{
+				if (netStream.client != null)
+				{
+					NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
+				}
+				netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			}
 			
 			seekBugTimer = new Timer(10, 100);
 			seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer, false, 0, true);	

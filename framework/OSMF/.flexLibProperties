@@ -79,6 +79,7 @@
     <classEntry path="org.osmf.elements.proxyClasses.DurationTimeTrait"/>
     <classEntry path="org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait"/>
     <classEntry path="org.osmf.elements.proxyClasses.ProxyMetadata"/>
+    <classEntry path="org.osmf.events.AlternativeAudioEvent"/>
     <classEntry path="org.osmf.events.AudioEvent"/>
     <classEntry path="org.osmf.events.BeaconEvent"/>
     <classEntry path="org.osmf.events.BufferEvent"/>
@@ -88,6 +89,7 @@
     <classEntry path="org.osmf.events.DVRStreamInfoEvent"/>
     <classEntry path="org.osmf.events.DisplayObjectEvent"/>
     <classEntry path="org.osmf.events.DynamicStreamEvent"/>
+    <classEntry path="org.osmf.events.HTTPStreamingEvent"/>
     <classEntry path="org.osmf.events.HTTPStreamingFileHandlerEvent"/>
     <classEntry path="org.osmf.events.HTTPStreamingIndexHandlerEvent"/>
     <classEntry path="org.osmf.events.LoadEvent"/>
@@ -123,6 +125,7 @@
     <classEntry path="org.osmf.layout.LayoutTargetRenderers"/>
     <classEntry path="org.osmf.layout.LayoutTargetSprite"/>
     <classEntry path="org.osmf.layout.MediaElementLayoutTarget"/>
+    <classEntry path="org.osmf.layout.OverlayLayoutMetadata"/>
     <classEntry path="org.osmf.layout.PaddingLayoutMetadata"/>
     <classEntry path="org.osmf.layout.RelativeLayoutMetadata"/>
     <classEntry path="org.osmf.layout.ScaleMode"/>
@@ -159,6 +162,9 @@
     <classEntry path="org.osmf.media.pluginClasses.PluginManager"/>
     <classEntry path="org.osmf.media.pluginClasses.StaticPluginLoader"/>
     <classEntry path="org.osmf.media.pluginClasses.VersionUtils"/>
+    <classEntry path="org.osmf.media.videoClasses.VideoSurface"/>
+    <classEntry path="org.osmf.media.videoClasses.VideoSurfaceInfo"/>
+    <classEntry path="org.osmf.media.videoClasses.VideoSurfaceManager"/>
     <classEntry path="org.osmf.metadata.CuePoint"/>
     <classEntry path="org.osmf.metadata.CuePointType"/>
     <classEntry path="org.osmf.metadata.Metadata"/>
@@ -174,6 +180,8 @@
     <classEntry path="org.osmf.net.DynamicStreamingResource"/>
     <classEntry path="org.osmf.net.FMSHost"/>
     <classEntry path="org.osmf.net.FMSURL"/>
+    <classEntry path="org.osmf.net.MediaItem"/>
+    <classEntry path="org.osmf.net.MediaItemType"/>
     <classEntry path="org.osmf.net.ModifiableTimeTrait"/>
     <classEntry path="org.osmf.net.MulticastNetLoader"/>
     <classEntry path="org.osmf.net.MulticastResource"/>
@@ -183,6 +191,7 @@
     <classEntry path="org.osmf.net.NetConnectionFactoryBase"/>
     <classEntry path="org.osmf.net.NetLoader"/>
     <classEntry path="org.osmf.net.NetNegotiator"/>
+    <classEntry path="org.osmf.net.NetStreamAlternativeAudioTrait"/>
     <classEntry path="org.osmf.net.NetStreamAudioTrait"/>
     <classEntry path="org.osmf.net.NetStreamBufferTrait"/>
     <classEntry path="org.osmf.net.NetStreamCodes"/>
@@ -214,13 +223,19 @@
     <classEntry path="org.osmf.net.dvr.DVRUtils"/>
     <classEntry path="org.osmf.net.dvr.TestableResponder"/>
     <classEntry path="org.osmf.net.httpstreaming.DownloadRatioRule"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPNetStream"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStreamMetrics"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamRequest"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamSource"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamSourceHandler"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFactory"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingMixerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingNetLoader"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingState"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingSwitchManager"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingUtils"/>
     <classEntry path="org.osmf.net.httpstreaming.dvr.DVRInfo"/>
     <classEntry path="org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait"/>
@@ -237,9 +252,11 @@
     <classEntry path="org.osmf.net.httpstreaming.f4f.FragmentDurationPair"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.FullBox"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.GlobalRandomAccessEntry"/>
+    <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFactory"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo"/>
+    <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FMixer"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.LocalRandomAccessEntry"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.MediaDataBox"/>
@@ -249,6 +266,7 @@
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVParserState"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTag"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagAudio"/>
+    <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagVideo"/>
     <classEntry path="org.osmf.net.rtmpstreaming.DroppedFramesRule"/>
@@ -257,6 +275,7 @@
     <classEntry path="org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader"/>
     <classEntry path="org.osmf.net.rtmpstreaming.RTMPNetStreamMetrics"/>
     <classEntry path="org.osmf.net.rtmpstreaming.SufficientBandwidthRule"/>
+    <classEntry path="org.osmf.traits.AlternativeAudioTrait"/>
     <classEntry path="org.osmf.traits.AudioTrait"/>
     <classEntry path="org.osmf.traits.BufferTrait"/>
     <classEntry path="org.osmf.traits.DRMState"/>
@@ -281,8 +300,6 @@
     <classEntry path="org.osmf.utils.TimeUtil"/>
     <classEntry path="org.osmf.utils.URL"/>
     <classEntry path="org.osmf.utils.Version"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFactory"/>
-    <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
