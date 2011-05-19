@@ -30,7 +30,6 @@ package org.osmf.net.httpstreaming
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
-	import org.osmf.net.MediaItem;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;

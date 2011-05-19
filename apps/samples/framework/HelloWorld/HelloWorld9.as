@@ -15,7 +15,7 @@
 *   
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2011 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
@@ -54,7 +54,7 @@ package
 	import org.osmf.media.MediaPlayerState;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.net.MediaItem;
+	import org.osmf.net.StreamingItem;
 	import org.osmf.traits.AlternativeAudioTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TraitEventDispatcher;
@@ -101,8 +101,8 @@ package
 			player = new MediaPlayer();
 			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-			player.addEventListener(AlternativeAudioEvent.STREAM_CHANGE, onAlternateAudioChange);
-			player.addEventListener(AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE, onNumAlternativeAudioChange);
+			player.addEventListener(AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE, onAlternateAudioChange);
+			player.addEventListener(AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE, onNumAlternativeAudioChange);
 			
 			player.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, onAutoSwitchChange);
 			player.addEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, onNumDynamicStreamChange);
@@ -179,10 +179,10 @@ package
 		{
 			if (player.hasAlternativeAudio)
 			{
-				if(player.numAlternativeAudio>newIndex && -1<=newIndex)
+				if(player.numAlternativeAudioStreams>newIndex && -1<=newIndex)
 				{
 					trace("[LBA] scenario LBA switch " + newIndex );
-					player.changeAlternativeAudioIndexTo(newIndex);
+					player.switchAlternativeAudioIndex(newIndex);
 				}
 				else
 				{
@@ -201,7 +201,7 @@ package
 				if((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams>newIndex && 
 						-1<=newIndex)
 				{
-					(player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).changeTo(newIndex);
+					(player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).switchTo(newIndex);
 					trace("[LBA] scenario LBA switch [trait] " + newIndex );
 				}
 				else
@@ -226,10 +226,10 @@ package
 						trace("[LBA] Alternative languages", player.hasAlternativeAudio ? "available" : " not available" );
 						if (player.hasAlternativeAudio)
 						{
-							for (var index:int = 0; index < player.numAlternativeAudio; index++)
+							for (var index:int = 0; index < player.numAlternativeAudioStreams; index++)
 							{
-								var item:MediaItem = player.getMediaItemForAlternativeAudioIndex(index);
-								trace("[LBA] [", item.language, "]", item.label);
+								var item:StreamingItem = player.getAlternativeAudioItemAt(index);
+								trace("[LBA] [", item.info.language, "]", item.info.label);
 							}
 						}	
 						player.play();
@@ -264,12 +264,12 @@ package
 		private function onAlternateAudioChange(event:AlternativeAudioEvent):void
 		{
 			trace("[LBA] [Event]", event.toString());	
-			trace("[LBA] event.streamChanging = "+ event.streamChanging);
+			trace("[LBA] event.streamChanging = "+ event.switching);
 			
-			trace("[LBA] alternativeAudioStreamChanging = "+ player.alternativeAudioStreamChanging);
-			trace("[LBA] alternate "+ player.currentAlternativeAudioIndex +"/" +(player.numAlternativeAudio-1));
+			trace("[LBA] alternativeAudioStreamChanging = "+ player.alternativeAudioStreamSwitching);
+			trace("[LBA] alternate "+ player.currentAlternativeAudioStreamIndex +"/" +(player.numAlternativeAudioStreams-1));
 			
-			trace("[LBA] [trait] alternativeAudioStreamChanging ="+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).changingStream);
+			trace("[LBA] [trait] alternativeAudioStreamChanging ="+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).switching);
 			trace("[LBA] [trait] alternate"+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).currentIndex 
 					+"/" +((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams-1));
 			
@@ -278,10 +278,10 @@ package
 		private function onNumAlternativeAudioChange(event:AlternativeAudioEvent):void
 		{
 			trace("[LBA] [Event]", event.toString());	
-			trace("[LBA] alternativeAudioStreamChanging = "+ player.alternativeAudioStreamChanging);
-			trace("[LBA] alternate "+ player.currentAlternativeAudioIndex +"/" +(player.numAlternativeAudio-1));
+			trace("[LBA] alternativeAudioStreamChanging = "+ player.alternativeAudioStreamSwitching);
+			trace("[LBA] alternate "+ player.currentAlternativeAudioStreamIndex +"/" +(player.numAlternativeAudioStreams-1));
 			
-			trace("[LBA] [trait] alternativeAudioStreamChanging ="+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).changingStream);
+			trace("[LBA] [trait] alternativeAudioStreamChanging ="+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).switching);
 			trace("[LBA] [trait] alternate"+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).currentIndex 
 				+"/" +((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams-1));
 			

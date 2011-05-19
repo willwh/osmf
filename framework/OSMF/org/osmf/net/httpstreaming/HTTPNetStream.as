@@ -659,6 +659,10 @@ package org.osmf.net.httpstreaming
 					
 					if (_audioHasChanged)
 					{
+						CONFIG::LOGGING
+						{
+							logger.info("Changing audio stream completed. Current url >> {0}", _audioUrl);
+						}
 						_audioHasChanged = false;
 						notifyTransitionComplete(_audioHandler.url);
 					}
@@ -1043,6 +1047,11 @@ package org.osmf.net.httpstreaming
 		 */
 		private function changeAudioStreamTo(streamName:String):void
 		{
+			CONFIG::LOGGING
+			{
+				logger.info("We queued a command for changing the curret audio stream to >> {0}",  streamName);
+			}
+			
 			_audioNeedsChanging = true;
 			_audioUrl = streamName;
 			if (_state != HTTPStreamingState.INIT) 
@@ -1063,7 +1072,7 @@ package org.osmf.net.httpstreaming
 						_audioHandler = null;
 					}
 					
-					var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(resource, streamName);
+					var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(resource, _audioUrl);
 					if (audioResource != null)
 					{
 						_audioHandler = new HTTPStreamSourceHandler(factory, audioResource);
@@ -1074,7 +1083,7 @@ package org.osmf.net.httpstreaming
 						_audioHandler.addEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
 						
 						_pendingIndexInitializations++;
-						_audioHandler.initialize(streamName);
+						_audioHandler.initialize(_audioUrl);
 						
 						if (_mixer == null)
 						{

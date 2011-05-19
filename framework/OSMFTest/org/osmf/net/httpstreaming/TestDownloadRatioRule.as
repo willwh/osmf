@@ -38,7 +38,7 @@ package org.osmf.net.httpstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 
-			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new HTTPStreamingIndexHandlerBase(), new HTTPStreamingFileHandlerBase()));
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new MockHTTPStreamingFactory()));
 			
 			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics);
 			
@@ -100,7 +100,7 @@ package org.osmf.net.httpstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 
-			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new HTTPStreamingIndexHandlerBase(), new HTTPStreamingFileHandlerBase()));
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new MockHTTPStreamingFactory()));
 			
 			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics, false);
 			

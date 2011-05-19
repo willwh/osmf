@@ -1,4 +1,4 @@
-package org.osmf.flexunit
+package org.flexunit
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;

@@ -77,8 +77,6 @@ package org.osmf.traits
 		public static const DYNAMIC_STREAM:String = "dynamicStream";
 
 		/**
-		 * @private
-		 * 
 		 * Identifies an instance of an AlternativeAudioTrait.
 		 *  
 		 * @langversion 3.0

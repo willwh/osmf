@@ -33,11 +33,11 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
-	import org.osmf.net.MediaItem;
-	import org.osmf.net.MediaItemType;
 	import org.osmf.net.MulticastResource;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
+	import org.osmf.net.StreamingItem;
+	import org.osmf.net.StreamingItemType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.utils.OSMFStrings;
@@ -160,7 +160,7 @@ package org.osmf.elements.f4mClasses
 
 					if (newMedia.alternate) 
 					{
-						if (newMedia.type == MediaItemType.AUDIO)
+						if (newMedia.type == StreamingItemType.AUDIO)
 						{
 							manifest.alternativeMedia.push(newMedia);
 						}
@@ -278,7 +278,7 @@ package org.osmf.elements.f4mClasses
 			}
 			else
 			{
-				media.type = MediaItemType.VIDEO;
+				media.type = StreamingItemType.VIDEO;
 			}
 
 			if (value.attribute('lang').length() > 0)
@@ -771,9 +771,22 @@ package org.osmf.elements.f4mClasses
 			return theURL.absolute;
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * Checks to see if the specified type is supported by the current 
+		 * manifest parser.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
 		private function isSupportedType(type:String):Boolean
 		{
-			return (type == MediaItemType.VIDEO || type == MediaItemType.AUDIO);	
+			return (	type == StreamingItemType.VIDEO 
+					 || type == StreamingItemType.AUDIO
+				);	
 		}
 		
 		private function extractDRMMetadata(data:ByteArray):ByteArray
@@ -819,22 +832,23 @@ package org.osmf.elements.f4mClasses
 			}
 			
 			var drmMetadata:Metadata;
-			var alternativeMediaItems:Vector.<MediaItem> = new Vector.<MediaItem>();
+			var alternativeStreamItems:Vector.<StreamingItem> = new Vector.<StreamingItem>();
 			for each (var media:Media in manifest.alternativeMedia)
 			{	
-				var stream:String;
+				var streamName:String;
 				
 				if (isAbsoluteURL(media.url))
 				{
-					stream = NetStreamUtils.getStreamNameFromURL(media.url);
+					streamName = NetStreamUtils.getStreamNameFromURL(media.url);
 				}
 				else
 				{
-					stream = media.url;
+					streamName = media.url;
 				}
 				
-				var item:MediaItem = new MediaItem(media.type, stream, media.bitrate, media.label, media.language);
-				alternativeMediaItems.push(item);
+				var info:Object = { "label" : media.label, "language" : media.language};
+				var item:StreamingItem = new StreamingItem(media.type, streamName, media.bitrate, info);
+				alternativeStreamItems.push(item);
 				
 				if (media.drmAdditionalHeader != null)
 				{						
@@ -845,8 +859,8 @@ package org.osmf.elements.f4mClasses
 					}						
 					if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
 					{
-						drmMetadata.addValue(item.stream, extractDRMMetadata(media.drmAdditionalHeader.data));	
-						drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.stream, media.drmAdditionalHeader.data);
+						drmMetadata.addValue(item.streamName, extractDRMMetadata(media.drmAdditionalHeader.data));	
+						drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName, media.drmAdditionalHeader.data);
 					} 						
 				}
 				
@@ -859,21 +873,21 @@ package org.osmf.elements.f4mClasses
 						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
 						media.bootstrapInfo.url = bootstrapInfoURLString; 
 					}
-					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.stream, media.bootstrapInfo);
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName, media.bootstrapInfo);
 				}
 				
 				if (media.metadata != null)
 				{
-					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.stream, media.metadata);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName, media.metadata);					
 				}
 				
 				if (media.xmp != null)
 				{
-					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.stream, media.xmp);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);					
 				}
 			}
 			
-			resource.alternativeAudioItems = alternativeMediaItems;
+			resource.alternativeAudioStreamItems = alternativeStreamItems;
 		}
 		
 		

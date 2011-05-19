@@ -8,16 +8,15 @@
 	<fx:Script>
 		<![CDATA[
 			import org.osmf.media.TestMediaPlayerWithLegacyHDSSBR;
-			import org.flexunit.runner.Request;
+			import org.osmf.media.TestMediaPlayerWithAlternateAudioHDSSBR_InitialIndex;
+			import org.osmf.media.TestMediaPlayerWithAlternateAudioHDSSBR;
 			
 			public function currentRunTestSuite():Array
 			{
 				var testsToRun:Array = new Array();
-				
-				testsToRun.push(Request.methods(org.osmf.media.TestMediaPlayerWithLegacyHDSSBR,["playLegacyHDSSBRWithLive",
-					"playLegacyHDSSBRWithLiveDRM",
-					"playLegacyHDSSBRWithDVR",
-					"playLegacyHDSSBRWithVOD"]));
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudioHDSSBR);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudioHDSSBR_InitialIndex);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacyHDSSBR);
 				return testsToRun;
 			}
 			

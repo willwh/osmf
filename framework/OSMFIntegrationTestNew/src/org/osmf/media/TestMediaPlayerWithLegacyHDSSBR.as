@@ -1,6 +1,6 @@
 /*****************************************************
  *  
- *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+ *  Copyright 2011 Adobe Systems Incorporated.  All Rights Reserved.
  *  
  *****************************************************
  *  The contents of this file are subject to the Mozilla Public License
@@ -15,21 +15,18 @@
  *   
  *  
  *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
- *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+ *  Portions created by Adobe Systems Incorporated are Copyright (C) 2011 Adobe Systems 
  *  Incorporated. All Rights Reserved. 
  *  
  *****************************************************/
 package org.osmf.media
 {
-	import flash.events.TimerEvent;
-	
 	import flexunit.framework.Test;
 	
 	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
-	
 	import org.hamcrest.number.greaterThan;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
@@ -45,12 +42,13 @@ package org.osmf.media
 	 * - Live with DVR
 	 * - VOD
 	 */ 
+	[Ignore]
 	public class TestMediaPlayerWithLegacyHDSSBR extends TestMediaPlayerHelper
 	{
 		/**
 		 * Tests automatic playback of SBR stream with legacy LIVE.
 		 */
-		[Test(async, timeout="30000", order=1)]
+		[Test(async, timeout="60000", order=1)]
 		public function playLegacyHDSSBRWithLive():void
 		{
 			mediaPlayerExpectedStates.push(MediaPlayerState.LOADING, MediaPlayerState.READY, MediaPlayerState.PLAYING);
@@ -64,7 +62,7 @@ package org.osmf.media
 		/**
 		 * Tests automatic playback of SBR stream with legacy LIVE and DRM.
 		 */
-		[Test(async, timeout="30000", order=2)]
+		[Test(async, timeout="60000", order=2)]
 		public function playLegacyHDSSBRWithLiveDRM():void
 		{
 			mediaPlayerExpectedStates.push(MediaPlayerState.LOADING, MediaPlayerState.READY, MediaPlayerState.PLAYING);
@@ -78,7 +76,7 @@ package org.osmf.media
 		/**
 		 * Tests automatic playback of SBR stream with legacy DVR.
 		 */
-		[Test(async, timeout="30000", order=3)]
+		[Test(async, timeout="60000", order=3)]
 		public function playLegacyHDSSBRWithDVR():void
 		{
 			mediaPlayerExpectedStates.push(MediaPlayerState.LOADING, MediaPlayerState.READY, MediaPlayerState.PLAYING);
@@ -92,7 +90,7 @@ package org.osmf.media
 		/**
 		 * Tests automatic playback of SBR stream with legacy DVR.
 		 */
-		[Test(async, timeout="30000", order=4)]
+		[Test(async, timeout="60000", order=4)]
 		public function playLegacyHDSSBRWithVOD():void
 		{
 			mediaPlayerExpectedStates.push(MediaPlayerState.LOADING, MediaPlayerState.READY, MediaPlayerState.PLAYING);
@@ -109,9 +107,18 @@ package org.osmf.media
 		 * 
 		 * We verify that the player goes through our expected states.
 		 */
-		protected function onStateChange(event:MediaPlayerStateChangeEvent, passThroughData:Object):void
+		override protected function onStateChange(event:MediaPlayerStateChangeEvent, passThroughData:Object):void
 		{
 			checkPlayerState(event.state);
+			
+			// we are seting autoPlay flag to false so we need to start the playback ourselves
+			if (mediaPlayer.state == MediaPlayerState.READY)
+			{
+				if (mediaPlayer.canPlay)
+				{
+					mediaPlayer.play();
+				}
+			}
 		}
 
 		/**
@@ -133,55 +140,26 @@ package org.osmf.media
 		 * 
 		 * Check the player state.
 		 */
-		protected function checkPlayerState(state:String):void
+		override protected function checkPlayerState(state:String):void
 		{
-			var info:Object = null;
-			if (state != null)
-			{
-				assertEquals(state, mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount]);
-				mediaPlayerRecordedStatesCount++;
-			}
-				
-			// if we didn't verified all our expected states then wait for more events
-			if (mediaPlayerExpectedStates.length > mediaPlayerRecordedStatesCount)
-			{
-				info = new Object;
-				info.expectedEventType = "MediaPlayerStateChangeEvent";
-				info.expectedEvent = mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount];
-				
-				mediaPlayer.addEventListener(
-					MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE,
-					Async.asyncHandler(this, onStateChange, 1000, info, onTimeout),
-					false,
-					0,
-					true
-				);
-			}
-			else
+			super.checkPlayerState(state);
+			
+			if (mediaPlayerExpectedStates.length <= mediaPlayerRecordedStatesCount)
 			{
 				// we've checked all our expected states, let's wait for a time change event
 				// in order to see that actually the NetStream is processing data
-				info = new Object;
+				var info:Object = new Object;
 				info.expectedEventType = "TimeEvent";
 				info.expectedEvent = TimeEvent.CURRENT_TIME_CHANGE;
 				
 				mediaPlayer.addEventListener(
 					TimeEvent.CURRENT_TIME_CHANGE,
-					Async.asyncHandler(this, onTimeChange, 3000, info, onTimeout),
+					Async.asyncHandler(this, onTimeChange, 6000, info, onTimeout),
 					false,
 					0,
 					true
 				);
 				
-			}
-			
-			// we are seting autoPlay flag to false so we need to start the playback ourselves
-			if (mediaPlayer.state == MediaPlayerState.READY)
-			{
-				if (mediaPlayer.canPlay)
-				{
-					mediaPlayer.play();
-				}
 			}
 		}
 		

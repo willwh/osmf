@@ -1,6 +1,6 @@
 /*****************************************************
  *  
- *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+ *  Copyright 2011 Adobe Systems Incorporated.  All Rights Reserved.
  *  
  *****************************************************
  *  The contents of this file are subject to the Mozilla Public License
@@ -15,20 +15,25 @@
  *   
  *  
  *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
- *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+ *  Portions created by Adobe Systems Incorporated are Copyright (C) 2011 Adobe Systems 
  *  Incorporated. All Rights Reserved. 
  *  
  *****************************************************/
 package org.osmf.media
 {
+	import flash.events.EventDispatcher;
 	import flash.utils.Timer;
 	
+	import org.flexunit.assertThat;
 	import org.flexunit.asserts.fail;
+	import org.flexunit.async.Async;
+	import org.hamcrest.object.equalTo;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	
-	public class TestMediaPlayerHelper
+	public class TestMediaPlayerHelper extends EventDispatcher
 	{		
 		[Before]
 		public function setUp():void
@@ -65,7 +70,47 @@ package org.osmf.media
 		{
 		}
 		
+		// Protected API
+		/**
+		 * @private
+		 * 
+		 * Check the player state.
+		 */
+		protected function checkPlayerState(state:String):void
+		{
+			var info:Object = null;
+			if (state != null)
+			{
+				assertThat("MediaPlayer is the expected state.", state, equalTo(mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount]));
+				mediaPlayerRecordedStatesCount++;
+			}
+			
+			// if we didn't verified all our expected states then wait for more events
+			if (mediaPlayerExpectedStates.length > mediaPlayerRecordedStatesCount)
+			{
+				info = new Object;
+				info.expectedEventType = "MediaPlayerStateChangeEvent";
+				info.expectedEvent = mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount];
+				
+				mediaPlayer.addEventListener(
+					MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE,
+					Async.asyncHandler(this, onStateChange, 2000, info, onTimeout),
+					false,
+					0,
+					true
+				);
+			}
+		}
+
 		/// Protected event handlers
+		/**
+		 * @private
+		 * 
+		 * Event handler called when the state of the media player is changing.
+		 */
+		protected function onStateChange(event:MediaPlayerStateChangeEvent, passThroughData:Object):void
+		{
+		}
 		
 		/**
 		 * @private
@@ -84,7 +129,7 @@ package org.osmf.media
 		 */
 		protected function onTimeout( passThroughData:Object):void
 		{
-			if (passThroughData != null)
+			if (passThroughData != null && passThroughData.hasOwnProperty("expectedEvent") && passThroughData.hasOwnProperty("expectedEventType"))
 			{
 				fail("Expected event <" + passThroughData["expectedEvent"] + "> of type <" + passThroughData["expectedEventType"] + "> was not received.");
 			}

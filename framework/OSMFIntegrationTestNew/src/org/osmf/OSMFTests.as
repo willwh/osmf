@@ -2,7 +2,8 @@ package org.osmf
 {
 	import flexunit.framework.Test;
 	
-	//import org.osmf.player.media.OSMFTests;
+	import org.osmf.media.TestMediaPlayerWithAlternateAudioHDSSBR;
+	import org.osmf.media.TestMediaPlayerWithAlternateAudioHDSSBR_InitialIndex;
 	import org.osmf.media.TestMediaPlayerWithLegacyHDSSBR;
 	
 	[Suite]
@@ -10,8 +11,8 @@ package org.osmf
 	public class OSMFTests
 	{
 		public var testLegacyHDS:TestMediaPlayerWithLegacyHDSSBR;
-		//public var testLateBindingAudio:org.osmf.player.media.TestLateBindingAudio;
-		
+		public var testAlternateAudioHDS:TestMediaPlayerWithAlternateAudioHDSSBR;
+		public var testAlternateAudioHDS_InitialIndex:TestMediaPlayerWithAlternateAudioHDSSBR_InitialIndex;
 	}
 	
 	

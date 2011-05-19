@@ -199,29 +199,30 @@ package org.osmf.traits
 	[Event(name="autoSwitchChange",type="org.osmf.events.DynamicStreamEvent")]
 
 	/**
-	 * Dispatched when an alternative audio source change occurs.
+	 * Dispatched when an alternative audio stream switch is requested, completed,
+	 * or has failed.
 	 * 
-	 * @eventType org.osmf.events.AlternativeAudioEvent.SOURCE_CHANGE
+	 * @eventType org.osmf.events.AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE
 	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 * @langversion 3.0
+	 * @playerversion Flash 10
+	 * @playerversion AIR 1.5
+	 * @productversion OSMF 1.6
 	 */
-	[Event(name="streamChange",type="org.osmf.events.AlternativeAudioEvent")]
+	[Event(name="audioSwitchingChange",type="org.osmf.events.AlternativeAudioEvent")]
 	
 	/**
 	 * Dispatched when the number of alternative audio streams has changed.
 	 * 
-	 * @eventType org.osmf.events.AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE
+	 * @eventType org.osmf.events.AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE
 	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 * @langversion 3.0
+	 * @playerversion Flash 10
+	 * @playerversion AIR 1.5
+	 * @productversion OSMF 1.6
 	 */
-	[Event(name="numAlternativeAudioChange",type="org.osmf.events.AlternativeAudioEvent")]
-
+	[Event(name="numAlternativeAudioStreamsChange",type="org.osmf.events.AlternativeAudioEvent")]
+	
 	/**
 	 * Dispatched when the <code>buffering</code> property has changed.
 	 * 
@@ -325,30 +326,37 @@ package org.osmf.traits
 			if (eventMaps == null)
 			{
 				eventMaps = new Dictionary();
-				eventMaps[TimeEvent.DURATION_CHANGE]					= MediaTraitType.TIME;	
-				eventMaps[TimeEvent.COMPLETE]							= MediaTraitType.TIME;	
-				eventMaps[PlayEvent.PLAY_STATE_CHANGE]					= MediaTraitType.PLAY;	
-				eventMaps[PlayEvent.CAN_PAUSE_CHANGE]					= MediaTraitType.PLAY;	
-				eventMaps[AudioEvent.VOLUME_CHANGE]						= MediaTraitType.AUDIO;	
-				eventMaps[AudioEvent.MUTED_CHANGE]						= MediaTraitType.AUDIO;
-				eventMaps[AudioEvent.PAN_CHANGE]						= MediaTraitType.AUDIO;	
-				eventMaps[SeekEvent.SEEKING_CHANGE]						= MediaTraitType.SEEK;	
-				eventMaps[DynamicStreamEvent.SWITCHING_CHANGE] 			= MediaTraitType.DYNAMIC_STREAM;	
-				eventMaps[DynamicStreamEvent.AUTO_SWITCH_CHANGE] 		= MediaTraitType.DYNAMIC_STREAM;	
-				eventMaps[DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE] = MediaTraitType.DYNAMIC_STREAM;
+				eventMaps[TimeEvent.DURATION_CHANGE]							= MediaTraitType.TIME;	
+				eventMaps[TimeEvent.COMPLETE]									= MediaTraitType.TIME;	
 				
-				eventMaps[AlternativeAudioEvent.STREAM_CHANGE] 				  = MediaTraitType.ALTERNATIVE_AUDIO;	
-				eventMaps[AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE] = MediaTraitType.ALTERNATIVE_AUDIO;
+				eventMaps[PlayEvent.PLAY_STATE_CHANGE]							= MediaTraitType.PLAY;	
+				eventMaps[PlayEvent.CAN_PAUSE_CHANGE]							= MediaTraitType.PLAY;	
 				
-				eventMaps[DisplayObjectEvent.DISPLAY_OBJECT_CHANGE]		= MediaTraitType.DISPLAY_OBJECT;	
-				eventMaps[DisplayObjectEvent.MEDIA_SIZE_CHANGE] 		= MediaTraitType.DISPLAY_OBJECT;	
-				eventMaps[LoadEvent.LOAD_STATE_CHANGE]					= MediaTraitType.LOAD;	
-				eventMaps[LoadEvent.BYTES_LOADED_CHANGE]				= MediaTraitType.LOAD;	
-				eventMaps[LoadEvent.BYTES_TOTAL_CHANGE]					= MediaTraitType.LOAD;	
-				eventMaps[BufferEvent.BUFFERING_CHANGE]					= MediaTraitType.BUFFER;
-				eventMaps[BufferEvent.BUFFER_TIME_CHANGE]				= MediaTraitType.BUFFER;
-				eventMaps[DRMEvent.DRM_STATE_CHANGE]					= MediaTraitType.DRM;
-				eventMaps[DVREvent.IS_RECORDING_CHANGE]					= MediaTraitType.DVR;					
+				eventMaps[AudioEvent.VOLUME_CHANGE]								= MediaTraitType.AUDIO;	
+				eventMaps[AudioEvent.MUTED_CHANGE]								= MediaTraitType.AUDIO;
+				eventMaps[AudioEvent.PAN_CHANGE]								= MediaTraitType.AUDIO;	
+				
+				eventMaps[SeekEvent.SEEKING_CHANGE]								= MediaTraitType.SEEK;	
+				
+				eventMaps[DynamicStreamEvent.SWITCHING_CHANGE] 					= MediaTraitType.DYNAMIC_STREAM;	
+				eventMaps[DynamicStreamEvent.AUTO_SWITCH_CHANGE] 				= MediaTraitType.DYNAMIC_STREAM;	
+				eventMaps[DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE] 		= MediaTraitType.DYNAMIC_STREAM;
+				
+				eventMaps[AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE] 			  	= MediaTraitType.ALTERNATIVE_AUDIO;	
+				eventMaps[AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE] 	= MediaTraitType.ALTERNATIVE_AUDIO;
+				
+				eventMaps[DisplayObjectEvent.DISPLAY_OBJECT_CHANGE]				= MediaTraitType.DISPLAY_OBJECT;	
+				eventMaps[DisplayObjectEvent.MEDIA_SIZE_CHANGE] 				= MediaTraitType.DISPLAY_OBJECT;	
+				
+				eventMaps[LoadEvent.LOAD_STATE_CHANGE]							= MediaTraitType.LOAD;	
+				eventMaps[LoadEvent.BYTES_LOADED_CHANGE]						= MediaTraitType.LOAD;	
+				eventMaps[LoadEvent.BYTES_TOTAL_CHANGE]							= MediaTraitType.LOAD;	
+				
+				eventMaps[BufferEvent.BUFFERING_CHANGE]							= MediaTraitType.BUFFER;
+				eventMaps[BufferEvent.BUFFER_TIME_CHANGE]						= MediaTraitType.BUFFER;
+				
+				eventMaps[DRMEvent.DRM_STATE_CHANGE]							= MediaTraitType.DRM;
+				eventMaps[DVREvent.IS_RECORDING_CHANGE]							= MediaTraitType.DVR;					
 			}						
 		}
 		
@@ -460,8 +468,8 @@ package org.osmf.traits
 					changeListeners(add, traitType, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE);
 					break;
 				case MediaTraitType.ALTERNATIVE_AUDIO:	
-					changeListeners(add, traitType, AlternativeAudioEvent.STREAM_CHANGE);
-					changeListeners(add, traitType, AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE);
+					changeListeners(add, traitType, AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE);
+					changeListeners(add, traitType, AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE);
 					break;
 				case MediaTraitType.DISPLAY_OBJECT:					
 					changeListeners(add, traitType, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE);											

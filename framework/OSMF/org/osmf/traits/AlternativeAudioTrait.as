@@ -24,48 +24,41 @@ package org.osmf.traits
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.AlternativeAudioEvent;
-	import org.osmf.net.MediaItem;
+	import org.osmf.net.StreamingItem;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * @private
+	 * Dispatched when an alternative audio stream switch is requested, completed,
+	 * or has failed.
 	 * 
-	 * Dispatched when an alternative audio stream change is requested, completed, or failed.
-	 * 
-	 * @eventType org.osmf.events.AlternativeAudioEvent.SOURCE_CHANGE
+	 * @eventType org.osmf.events.AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE
 	 *  
 	 * @langversion 3.0
 	 * @playerversion Flash 10
 	 * @playerversion AIR 1.5
 	 * @productversion OSMF 1.6
 	 */
-	[Event(name="streamChange",type="org.osmf.events.AlternativeAudioEvent")]
+	[Event(name="audioSwitchingChange",type="org.osmf.events.AlternativeAudioEvent")]
 	
 	/**
-	 * @private
-	 * 
 	 * Dispatched when the number of alternative audio streams has changed.
 	 * 
-	 * @eventType org.osmf.events.AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_CHANGE
+	 * @eventType org.osmf.events.AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 *  @productversion OSMF 1.6
 	 */
-	[Event(name="numAlternativeAudioChange",type="org.osmf.events.AlternativeAudioEvent")]
-	
-	[ExcludeClass]
+	[Event(name="numAlternativeAudioStreamsChange",type="org.osmf.events.AlternativeAudioEvent")]
 	
 	/**
-	 * @private
-	 * 
 	 * AlternativeAudioTrait defines the trait interface for media supporting alternative
-	 * audio streams. It can also be used as the base class for a more specific AlternativeAudioTrait
-	 * subclass.
+	 * audio streams. It can also be used as the base class for a more specific 
+	 * AlternativeAudioTrait subclass.
 	 * 
-	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO)</code> method to query
-	 * whether a media element has a trait of this type.
+	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO)</code> 
+	 * method to query whether a media element has a trait of this type.
 	 * If <code>hasTrait(MediaTraitType.ALTERNATIVE_AUDIO)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.ALTERNATIVE_AUDIO)</code> method
 	 * to get an object of this type.</p>
@@ -75,38 +68,36 @@ package org.osmf.traits
 	 * @langversion 3.0
 	 * @playerversion Flash 10
 	 * @playerversion AIR 1.5
-	 * @productversion OSMF 1.0
+	 * @productversion OSMF 1.6
 	 */
 	public class AlternativeAudioTrait extends MediaTraitBase
 	{
 		/**
-		 * Constructor.
+		 * Default Constructor.
 		 * 
 		 * @param numAlternativeAudio The total number of alternative audio streams.
-		 * @param currentIndex The initial alternative audio stream index for the trait.  The default is -1 which means use the default audio stream.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */ 
-		public function AlternativeAudioTrait(numAlternativeAudioStreams:int, initialIndex:int=-1)
+		public function AlternativeAudioTrait(numAlternativeAudioStreams:int)
 		{
 			super(MediaTraitType.ALTERNATIVE_AUDIO);
 			
 			_numAlternativeAudioStreams = numAlternativeAudioStreams;
-			_currentIndex = initialIndex;		
 
-			_changingStream = false;
+			_switching = false;
 		}
 		
 		/**
 		 * The total number of alternative audio streams.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
 		public function get numAlternativeAudioStreams():int
 		{
@@ -114,12 +105,15 @@ package org.osmf.traits
 		}
 
 		/**
-		 * The index of the current alternative stream.  Uses a zero-based index.
+		 * The index of the current alternative audio stream. The 0-based index of 
+		 * the selected stream, or <code>-1</code> if no stream is selected. The value 
+		 * is always between <code>-1</code> and <code>(numAlternativeAudioStreams - 1)
+		 * </code>. 
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
 		public function get currentIndex():int
 		{
@@ -127,19 +121,20 @@ package org.osmf.traits
 		}
 
 		/**
-		 * Returns the associated media item for the specified index.
+		 * Returns the associated streaming item for the specified index. Returns 
+		 * <code>null</code> if the index is <code>-1</code>.
 		 * 
-		 * @throws RangeError If the specified index is less than zero or
-		 * greater or equal with <code>numAlternativeAudioStreams</code>.
+		 * @throws RangeError If the specified index is less than <code>-1</code> or 
+		 * greater than <code>(numAlternativeAudioStreams - 1)</code>.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */ 
-		public function getMediaItemForIndex(index:int):MediaItem
+		public function getItemForIndex(index:int):StreamingItem
 		{
-			if (index < 0 || index >= numAlternativeAudioStreams)
+			if (index < -1 || index >= numAlternativeAudioStreams)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.ALTERNATIVEAUDIO_INVALID_INDEX));
 			}
@@ -148,86 +143,69 @@ package org.osmf.traits
 		}
 
 		/**
-		 * Indicates whether or not an alternative audio stream changing is currently in progress.
-		 * This property will return <code>true</code> while a stream change has been 
-		 * requested and the stream change has not yet been acknowledged and no stream
-		 * change failure has occurred.  Once the stream change request has been acknowledged 
-		 * or a failure occurs, the property will return <code>false</code>.
+		 * Indicates whether or not an alternative audio stream switching is currently
+		 * in progress. 
+		 * 
+		 * This property will return <code>true</code> while an audio stream switch 
+		 * has been requested and the switch has not yet been acknowledged and no audio 
+		 * stream switch failure has occurred. Once the audio stream switch request has
+		 * been acknowledged or a failure occurs, the property will return 
+		 * <code>false</code>.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
-		public function get changingStream():Boolean
+		public function get switching():Boolean
 		{			
-			return _changingStream;
+			return _switching;
 		}
 		
 		/**
-		 * Changes audio stream to a specific alternative audio stream index. 
-    	 * Note:  If the media is paused, changin stream will not take place until after play resumes.		 
+		 * Switches audio stream to a specific alternative audio stream index. Using 
+		 * <code>-1</code> as index value, will reset the alternative audio stream to
+		 * the default one.
 		 * 
-		 * @throws RangeError If the specified index is less than zero or
-		 * greater than or equal with <code>numAlternativeAudioStreams</code>.
+    	 * Note:  If the media is paused, stream switch will not take place until 
+		 * after play resumes.		 
 		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @throws RangeError If the specified index is less than <code>-1</code> or
+		 * greater than <code>numAlternativeAudioStreams-1</code>.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
-		public function changeTo(index:int):void
+		public function switchTo(index:int):void
 		{
 			if (index != currentIndex)
 			{
-				if (index < 0 || index >= numAlternativeAudioStreams)
+				if (index < -1 || index >= numAlternativeAudioStreams)
 				{
 					throw new RangeError(OSMFStrings.getString(OSMFStrings.ALTERNATIVEAUDIO_INVALID_INDEX));
 				}
 
-				// This method sets the changing state to true.  The processing
-				// and completion of the change are up to the implementing media.
-				setChangingStream(true, index);
+				// This method sets the switching state to true.  The processing
+				// and completion of the switch are up to the implementing media,
+				// but once the switch is completed or aborted the implementing
+				// media must set the switching mode to false.
+				setSwitching(true, index);
 			}			
 		}
 				
 		// Internals
-		//
-
-//		/**
-//		 * Invoking this setter will result in the trait's numDynamicStreams
-//		 * property changing.
-//		 *  
-//		 *  @langversion 3.0
-//		 *  @playerversion Flash 10
-//		 *  @playerversion AIR 1.5
-//		 *  @productversion OSMF 1.0
-//		 */		
-//		protected final function setNumDynamicStreams(value:int):void
-//		{
-//			if (value != _numDynamicStreams)
-//			{
-//				_numDynamicStreams = value;
-//				
-//				// Only adjust our maxAllowedIndex property if the old value
-//				// is now out of range.
-//				if (maxAllowedIndex >= _numDynamicStreams)
-//				{
-//					maxAllowedIndex = Math.max(0, _numDynamicStreams - 1);
-//				}
-//				
-//				dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE));
-//			}			
-//		}
-		
 		/**
+		 * @private 
+		 * 
 		 * Invoking this setter will result in the trait's currentIndex
 		 * property changing.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */		
 		protected final function setCurrentIndex(value:int):void
 		{
@@ -235,7 +213,9 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Must be called by the implementing media on completing a change.
+		 * @private
+		 * 
+		 * Must be called by the implementing media on starting or completing a change.
 		 * 
 		 * Calls the <code>beginChangingStream</code> and <code>endChangingStream</code>
 		 * methods.
@@ -247,25 +227,26 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function setChangingStream(newChangingStream:Boolean, index:int):void
+		protected final function setSwitching(newSwitching:Boolean, index:int):void
 		{
-			if (newChangingStream != _changingStream)
+			if (newSwitching != _switching)
 			{
-				beginChangingStream(newChangingStream, index);
-				
-				_changingStream = newChangingStream;
+				beginSwitching(newSwitching, index);
 				
 				// Update the index when a change finishes.
-				if (newChangingStream == false)
+				_switching = newSwitching;
+				if (_switching == false)
 				{
 					setCurrentIndex(index);
 				}
 				
-				endChangingStream(index);
+				endSwitching(index);
 			}
 		}
 
 		/**
+		 * @private
+		 * 
 		 * Called immediately before the <code>changingSource</code> property is changed.
 		 * <p>Subclasses can override this method to communicate the change to the media.</p>
          * @param newChangingStream New value for the <code>changingStream</code> property.
@@ -276,12 +257,12 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function beginChangingStream(newChangingStream:Boolean, index:int):void
+		protected function beginSwitching(newSwitching:Boolean, index:int):void
 		{			
 		}
 		
 		/**
-		 * Called just after the <code>changingSource</code> property has changed.
+		 * Called just after the <code>switching</code> property has changed.
 		 * Dispatches the change event.
 		 * 
 		 * <p>Subclasses that override should call this method to
@@ -294,20 +275,21 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function endChangingStream(index:int):void
+		protected function endSwitching(index:int):void
 		{
 			dispatchEvent
 				( new AlternativeAudioEvent
-					( AlternativeAudioEvent.STREAM_CHANGE
+					( AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE
 					, false
 					, false
-					, changingStream
+					, switching
 					)
 				);
 		}
 		
+		/// Internals
 		private var _currentIndex:int = -1;
 		private var _numAlternativeAudioStreams:int;
-		private var _changingStream:Boolean;
+		private var _switching:Boolean;
 	}
 }

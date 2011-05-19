@@ -72,20 +72,20 @@ package org.osmf.player.media
 				assertTrue(player.canPlay);
 				assertTrue(player.hasAlternativeAudio, "No alternate audio present.");
 				
-				assertEquals(player.numAlternativeAudio, 2);
-				assertEquals(player.currentAlternativeAudioIndex, -1);
+				assertEquals(player.numAlternativeAudioStreams, 2);
+				assertEquals(player.currentAlternativeAudioStreamIndex, -1);
 				assertTrue(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
 				var trait:AlternativeAudioTrait = (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO)) as AlternativeAudioTrait;
 				
 				assertEquals(trait.currentIndex, -1);
 				assertEquals(trait.numAlternativeAudioStreams, 2);
 				
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).bitrate, "128");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).label, "label1");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).language, "language1");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).bitrate, "56");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).label, "label2");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).language, "language2");
+				assertEquals(player.getAlternativeAudioItemAt(0).bitrate, "128");
+				assertEquals(player.getAlternativeAudioItemAt(0).info["label"],    "label1");
+				assertEquals(player.getAlternativeAudioItemAt(0).info["language"], "language1");
+				assertEquals(player.getAlternativeAudioItemAt(1).bitrate, "56");
+				assertEquals(player.getAlternativeAudioItemAt(1).info["label"],    "label2");
+				assertEquals(player.getAlternativeAudioItemAt(1).info["language"], "language2");
 				
 			}
 			
@@ -122,20 +122,20 @@ package org.osmf.player.media
 				assertTrue(player.canPlay);
 				assertTrue(player.hasAlternativeAudio);
 				
-				assertEquals(player.numAlternativeAudio, 2);
-				assertEquals(player.currentAlternativeAudioIndex, -1);
+				assertEquals(player.numAlternativeAudioStreams, 2);
+				assertEquals(player.currentAlternativeAudioStreamIndex, -1);
 				assertTrue(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
 				var trait:AlternativeAudioTrait = (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO)) as AlternativeAudioTrait;
 				
 				assertEquals(trait.currentIndex, -1);
 				assertEquals(trait.numAlternativeAudioStreams, 2);
 				
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).bitrate, "128");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).label, "audio1");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).language, "language1");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).bitrate, "128");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).label, "audio2");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).language, "language2");
+				assertEquals(player.getAlternativeAudioItemAt(0).bitrate, "128");
+				assertEquals(player.getAlternativeAudioItemAt(0).info["label"],    "audio1");
+				assertEquals(player.getAlternativeAudioItemAt(0).info["language"], "language1");
+				assertEquals(player.getAlternativeAudioItemAt(1).bitrate, "128");
+				assertEquals(player.getAlternativeAudioItemAt(1).info["label"],    "audio2");
+				assertEquals(player.getAlternativeAudioItemAt(1).info["language"], "language2");
 				
 			}
 			
@@ -170,20 +170,20 @@ package org.osmf.player.media
 				assertTrue(player.canPlay);
 				assertTrue(player.hasAlternativeAudio);
 				
-				assertEquals(player.numAlternativeAudio, 2);
-				assertEquals(player.currentAlternativeAudioIndex, -1);
+				assertEquals(player.numAlternativeAudioStreams, 2);
+				assertEquals(player.currentAlternativeAudioStreamIndex, -1);
 				assertTrue(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
 				var trait:AlternativeAudioTrait = (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO)) as AlternativeAudioTrait;
 				
 				assertEquals(trait.currentIndex, -1);
 				assertEquals(trait.numAlternativeAudioStreams, 2);
 				
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).bitrate, "48");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).label, "audio1");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(0).language, "language1");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).bitrate, "128");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).label, "audio2");
-				assertEquals(player.getMediaItemForAlternativeAudioIndex(1).language, "language2");
+				assertEquals(player.getAlternativeAudioItemAt(0).bitrate, "48");
+				assertEquals(player.getAlternativeAudioItemAt(0).info["label"],    "audio1");
+				assertEquals(player.getAlternativeAudioItemAt(0).info["language"], "language1");
+				assertEquals(player.getAlternativeAudioItemAt(1).bitrate, "128");
+				assertEquals(player.getAlternativeAudioItemAt(1).info["label"],    "audio2");
+				assertEquals(player.getAlternativeAudioItemAt(1).info["language"], "language2");
 			
 				
 			}
@@ -219,7 +219,7 @@ package org.osmf.player.media
 				//assertTrue(player.canPlay);
 				assertFalse(player.hasAlternativeAudio);
 				
-				assertEquals(player.numAlternativeAudio, 0);
+				assertEquals(player.numAlternativeAudioStreams, 0);
 				assertFalse(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
 				
 			}
@@ -255,7 +255,7 @@ package org.osmf.player.media
 				//assertTrue(player.canPlay);
 				assertFalse(player.hasAlternativeAudio); 
 				
-				assertEquals(player.numAlternativeAudio, 0);
+				assertEquals(player.numAlternativeAudioStreams, 0);
 				assertFalse(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
 				
 			}
@@ -289,7 +289,7 @@ package org.osmf.player.media
 			
 			function onNumAlternativeAudioChange(event:AlternativeAudioEvent, test:*):void
 			{
-				assertEquals(player.numAlternativeAudio, 2);
+				assertEquals(player.numAlternativeAudioStreams, 2);
 				assertEquals((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams, 2);
 				
 			}
@@ -313,7 +313,7 @@ package org.osmf.player.media
 				{
 					assertTrue(player.hasAlternativeAudio, "No alternate audio present.");
 					
-					assertEquals(player.numAlternativeAudio, 2);
+					assertEquals(player.numAlternativeAudioStreams, 2);
 					assertEquals(player.currentAlternativeAudioIndex, -1);
 					assertTrue(player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO));			
 					var trait:AlternativeAudioTrait = (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO)) as AlternativeAudioTrait;
@@ -321,12 +321,12 @@ package org.osmf.player.media
 					assertEquals(trait.currentIndex, -1);
 					assertEquals(trait.numAlternativeAudioStreams, 2);
 					
-					assertEquals(player.getMediaItemForAlternativeAudioIndex(0).bitrate, "48");
-					assertEquals(player.getMediaItemForAlternativeAudioIndex(0).label, "label1");
-					assertEquals(player.getMediaItemForAlternativeAudioIndex(0).language, "language1");
-					assertEquals(player.getMediaItemForAlternativeAudioIndex(1).bitrate, "128");
-					assertEquals(player.getMediaItemForAlternativeAudioIndex(1).label, "label2");
-					assertEquals(player.getMediaItemForAlternativeAudioIndex(1).language, "language2");
+					assertEquals(player.getAlternativeAudioItemAt(0).bitrate, "48");
+					assertEquals(player.getAlternativeAudioItemAt(0).label, "label1");
+					assertEquals(player.getAlternativeAudioItemAt(0).language, "language1");
+					assertEquals(player.getAlternativeAudioItemAt(1).bitrate, "128");
+					assertEquals(player.getAlternativeAudioItemAt(1).label, "label2");
+					assertEquals(player.getAlternativeAudioItemAt(1).language, "language2");
 					
 					player.play();
 				}

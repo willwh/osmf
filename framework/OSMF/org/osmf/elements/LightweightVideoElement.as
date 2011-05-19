@@ -619,7 +619,7 @@ package org.osmf.elements
 			
 			//setup alternative audio trait
 			var sResource:StreamingURLResource = resource as StreamingURLResource;
-			if (sResource != null && sResource.alternativeAudioItems != null && sResource.alternativeAudioItems.length > 0)
+			if (sResource != null && sResource.alternativeAudioStreamItems != null && sResource.alternativeAudioStreamItems.length > 0)
 			{
 				var aaTrait:AlternativeAudioTrait = loadTrait.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait;
 				if (aaTrait == null)

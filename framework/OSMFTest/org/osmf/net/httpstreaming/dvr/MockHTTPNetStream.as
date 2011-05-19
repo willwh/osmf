@@ -27,15 +27,15 @@ package org.osmf.net.httpstreaming.dvr
 	import org.osmf.events.*;
 	import org.osmf.net.*;
 	import org.osmf.net.httpstreaming.HTTPNetStream;
-	import org.osmf.net.httpstreaming.f4f.*;
-	
+	import org.osmf.net.httpstreaming.HTTPStreamingFactory;
+	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFactory;
+		
 	public class MockHTTPNetStream extends HTTPNetStream
 	{
 		public function MockHTTPNetStream(nc:NetConnection, time:Number)
 		{
-			var fileHandler:HTTPStreamingF4FFileHandler = new HTTPStreamingF4FFileHandler();
-			var indexHandler:HTTPStreamingF4FIndexHandler = new HTTPStreamingF4FIndexHandler(fileHandler);
-			super(nc, indexHandler, fileHandler)
+			var factory:HTTPStreamingFactory = new HTTPStreamingF4FFactory();
+			super(nc, factory)
 			
 			_time = time;
 			_dvrInfo = null;

@@ -228,53 +228,28 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Vector of AlternativeAudioItems. Each item represents a
-		 * different alternative audio stream.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.6
-		 */
-		public function get alternativeAudioItems():Vector.<MediaItem>
-		{
-			if (_alternativeAudioItems == null)
-			{
-				_alternativeAudioItems = new Vector.<MediaItem>();
-			}
-			return _alternativeAudioItems;
-		}
-		public function set alternativeAudioItems(value:Vector.<MediaItem>):void
-		{
-			_alternativeAudioItems = value;
-		}
-		
-		/**
-		 * The preferred starting index.
+		 * Vector containing all alternative audio items associated with
+		 * the current streaming resource. 
 		 * 
-		 * @throws RangeError If the index is out of range.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
-		public function get initialAlternativeAudioIndex():int
+		public function get alternativeAudioStreamItems():Vector.<StreamingItem>
 		{
-			return _initialAlternativeAudioIndex;
-		}
-		
-		public function set initialAlternativeAudioIndex(value:int):void
-		{
-			if (_alternativeAudioItems == null || value >= _alternativeAudioItems.length)
+			if (_alternativeAudioStreamItems == null)
 			{
-				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));				
+				_alternativeAudioStreamItems = new Vector.<StreamingItem>();
 			}
-			
-			_initialAlternativeAudioIndex = value;
+			return _alternativeAudioStreamItems;
 		}
-
+		public function set alternativeAudioStreamItems(value:Vector.<StreamingItem>):void
+		{
+			_alternativeAudioStreamItems = value;
+		}
 		
+		/// Internals
 		private var _streamType:String; // StreamType
 		private var _clipStartTime:Number;
 		private var _clipEndTime:Number;
@@ -282,7 +257,6 @@ package org.osmf.net
 		private var _drmContentData:ByteArray;
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
 
-		private var _alternativeAudioItems:Vector.<MediaItem> = null;
-		private var _initialAlternativeAudioIndex:int = -1;
+		private var _alternativeAudioStreamItems:Vector.<StreamingItem> = null;
 	}
 }

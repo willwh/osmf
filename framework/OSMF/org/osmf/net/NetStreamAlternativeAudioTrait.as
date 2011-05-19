@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  Copyright 2011 Adobe Systems Incorporated.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -15,7 +15,7 @@
 *   
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2011 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
@@ -30,15 +30,6 @@ package org.osmf.net
 	import org.osmf.traits.AlternativeAudioTrait;
 	import org.osmf.utils.OSMFStrings;
 	
-	import spark.skins.spark.StackedFormHeadingSkin;
-	
-	CONFIG::LOGGING
-	{
-		import org.osmf.logging.Logger;
-		import org.osmf.logging.Log;
-	}
-
-
 	[ExcludeClass]
 	
 	/**
@@ -46,30 +37,46 @@ package org.osmf.net
 	 * 
 	 * The NetStreamalternativeAudioTrait class extends AlternativeAudioTrait for NetStream-based
 	 * alternative audio support.
+	 *  
+	 * @langversion 3.0
+	 * @playerversion Flash 10
+	 * @playerversion AIR 1.5
+	 * @productversion OSMF 1.6
 	 */   
 	public class NetStreamAlternativeAudioTrait extends AlternativeAudioTrait
 	{
 		/**
-		 * Constructor.
+		 * Default constructor.
 		 * 
-		 * @param netStream The NetStream object the class will work with.
-		 * @param dsResource The DynamicStreamingResource the class will use.
+		 * @param netStream The NetStream object that this class will work with.
+		 * @param streamingResource The streaming resource object that this class will work with.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
 		public function NetStreamAlternativeAudioTrait(netStream:NetStream, streamingResource:StreamingURLResource)
 		{
-			super(streamingResource.alternativeAudioItems.length, streamingResource.initialAlternativeAudioIndex);	
+			super(streamingResource.alternativeAudioStreamItems.length);	
 			
-			_netStream = netStream;
 			_streamingResource = streamingResource;
-			
-			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
+			_netStream = netStream;
+			if (_netStream != null && _netStream.client != null)
+			{
+				NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
+			}
 		}
 		
+		/**
+		 * Disposes of any resources used by this trait. Called by the framework
+		 * whenever a trait is removed from a MediaElement.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
 		override public function dispose():void
 		{
 			_netStream = null;
@@ -77,24 +84,42 @@ package org.osmf.net
 		}
 		
 		/**
-		 * @private
+		 * Returns the associated streaming item for the specified index. Returns 
+		 * <code>null</code> if the index is <code>-1</code>.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
-		override public function getMediaItemForIndex(index:int):MediaItem
+		override public function getItemForIndex(index:int):StreamingItem
 		{
-			if (index < 0 || index >= numAlternativeAudioStreams)
+			if (index < -1 || index >= numAlternativeAudioStreams)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.ALTERNATIVEAUDIO_INVALID_INDEX));
 			}
-
-			return _streamingResource.alternativeAudioItems[index];
+			
+			if (index < - 1)
+			{
+				return null;
+			}
+			
+			return _streamingResource.alternativeAudioStreamItems[index];
 		}	
 				
 		/**
 		 * @private
+		 * 
+		 * Called immediately before the <code>changingSource</code> property is changed.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
-		override protected function beginChangingStream(newChangingStream:Boolean, index:int):void
+		override protected function beginSwitching(newSwitching:Boolean, index:int):void
 		{
-			if (newChangingStream /*&& !inSetSwitching*/)
+			if (newSwitching)
 			{
 				// Keep track of the target index, we don't want to begin
 				// the switch now since our switching state won't be
@@ -105,114 +130,99 @@ package org.osmf.net
 		
 		/**
 		 * @private
+		 * 
+		 * Called just after the <code>switching</code> property has changed.
+		 * Dispatches the change event.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
-		override protected function endChangingStream(index:int):void
+		override protected function endSwitching(index:int):void
 		{
-			super.endChangingStream(index)
+			super.endSwitching(index)
 			
-			if (changingStream /*&& !inSetSwitching*/)
+			if (switching)
 			{
-				executeChangeStream(_indexToChangeTo);
+				executeSwitching(_indexToChangeTo);
 			}
 		}
 		
 		/**
 		 * @private
+		 * 
+		 * These method will actually issue the switch command. The switch is
+		 * done through <code>NetStream.play2</code> method and using the <code>
+		 * NetStreamPlayTransitions.SWAP</code> command.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
-		protected function executeChangeStream(indexToChangeTo:int):void
+		protected function executeSwitching(indexToChangeTo:int):void
 		{
-			_transitionIndex = indexToChangeTo;
-			_transitionStreamName = _streamingResource.alternativeAudioItems[indexToChangeTo].stream;
-			_transitionInProgress = true;
-			
-			CONFIG::LOGGING
-			{
-				debug("executeChange() - Changing audio to stream " + _transitionStreamName);
+			if (_lastTransitionIndex != indexToChangeTo)
+			{	
+				_activeTransitionIndex = indexToChangeTo;
+				_activeTransitionStreamName = _streamingResource.alternativeAudioStreamItems[indexToChangeTo].streamName;
+				_transitionInProgress = true;
+				
+				var playArgs:Object = NetStreamUtils.getPlayArgsForResource(_streamingResource);
+				
+				var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
+				nso.start = playArgs.start;
+				nso.len = playArgs.len;
+				nso.streamName = _activeTransitionStreamName;
+				nso.oldStreamName = prepareStreamName(_lastTransitionStreamName);
+				nso.transition = NetStreamPlayTransitions.SWAP;
+				_netStream.play2(nso);
 			}
-			
-			var playArgs:Object = NetStreamUtils.getPlayArgsForResource(_streamingResource);
-			
-			var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
-			nso.start = playArgs.start;
-			nso.len = playArgs.len;
-			nso.streamName = _transitionStreamName;
-			nso.oldStreamName = prepareStreamName(_currentStreamName);
-			nso.transition = NetStreamPlayTransitions.SWAP;
-			_netStream.play2(nso);
 		}
 		
-//		private function onNetStatus(event:NetStatusEvent):void
-//		{
-//			CONFIG::LOGGING
-//			{
-//				debug("onNetStatus() - event.info.code=" + event.info.code);
-//			}
-//			
-//			switch (event.info.code) 
-//			{
-//				case NetStreamCodes.NETSTREAM_PLAY_START:
-//					break;
-//				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
-//					switching  = false;
-//					actualIndex = getIndexForName(event.info.details);
-//					lastTransitionIndex = actualIndex;
-//					break;
-//				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
-//					switching  = false;
-//					break;
-//				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
-//					switching  = false;
-//					if (lastTransitionIndex >= 0)
-//					{
-//						_currentIndex = lastTransitionIndex;
-//					}					
-//					break;
-//				case NetStreamCodes.NETSTREAM_PLAY_STOP:
-//					CONFIG::LOGGING
-//				{
-//					debug("onNetStatus() - Stopping rules since server has stopped sending data");
-//				}
-//					break;
-//			}			
-//		}
-		
+		/**
+		 * @private
+		 * 
+		 * We listen for onPlayStatus events in order to detect when the queued
+		 * switch is completed. We assume that the alternate audio stream names
+		 * are different from the ones used in MBR.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
 		private function onPlayStatus(info:Object):void
 		{
-			CONFIG::LOGGING
-			{
-				debug("onPlayStatus() - info.code=" + info.code);
-			}
-			
 			switch (info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
-					if (_transitionInProgress && _transitionIndex > -1)
+					if (_transitionInProgress && _activeTransitionIndex > -1)
 					{
-						_currentIndex = _transitionIndex;
-						_currentStreamName = _transitionStreamName;
+						_lastTransitionIndex =_activeTransitionIndex;
+						_lastTransitionStreamName = _activeTransitionStreamName;
 						
 						_transitionInProgress = false;
-						_transitionIndex = -1;
-						_transitionStreamName = null;
+						_lastTransitionIndex = -1;
+						_lastTransitionStreamName = null;
 						
-						setChangingStream(false, _currentIndex);
-						CONFIG::LOGGING
-						{
-							debug("onPlayStatus() - Transition complete to index: " + _currentIndex + " with url " + _currentStreamName);
-						}
+						setSwitching(false, _lastTransitionIndex);
 					}
 					break;
 			}
 		}
-
-		CONFIG::LOGGING
-		{
-			private function debug(...args):void
-			{
-				logger.debug(new Date().toTimeString() + ">>> NetStreamAlternativeAudioTrait." + args);
-			}
-		}
 		
+		/**
+		 * @private
+		 * 
+		 * Remove additional parameters from stream name.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */ 
 		private function prepareStreamName(value:String):String
 		{
 			if (value != null && value.indexOf("?") >= 0)
@@ -222,21 +232,15 @@ package org.osmf.net
 			return value;
 		}
 		
-		
+		/// Internal
 		private var _netStream:NetStream;
 		private var _streamingResource:StreamingURLResource;
 		private var _indexToChangeTo:int;
 		
 		private var _transitionInProgress:Boolean = false;
-		private var _transitionIndex:int = -1;
-		private var _transitionStreamName:String = null;
-		private var _currentIndex:int = -1;
-		private var _currentStreamName:String = null;
-		
-		CONFIG::LOGGING
-		{
-			private static const logger:Logger = Log.getLogger("org.osmf.net.NetStreamAlternativeAudioTrait");
-		}
-
+		private var _activeTransitionIndex:int = -1;
+		private var _activeTransitionStreamName:String = null;
+		private var _lastTransitionIndex:int = -1;
+		private var _lastTransitionStreamName:String = null;
 	}
 }
