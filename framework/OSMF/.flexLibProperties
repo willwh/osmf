@@ -180,8 +180,6 @@
     <classEntry path="org.osmf.net.DynamicStreamingResource"/>
     <classEntry path="org.osmf.net.FMSHost"/>
     <classEntry path="org.osmf.net.FMSURL"/>
-    <classEntry path="org.osmf.net.MediaItem"/>
-    <classEntry path="org.osmf.net.MediaItemType"/>
     <classEntry path="org.osmf.net.ModifiableTimeTrait"/>
     <classEntry path="org.osmf.net.MulticastNetLoader"/>
     <classEntry path="org.osmf.net.MulticastResource"/>

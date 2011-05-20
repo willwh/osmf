@@ -180,7 +180,7 @@ package org.osmf.traits
 		 */
 		public function switchTo(index:int):void
 		{
-			if (index != currentIndex)
+			if (index != _indexToSwitchTo)
 			{
 				if (index < -1 || index >= numAlternativeAudioStreams)
 				{
@@ -229,7 +229,7 @@ package org.osmf.traits
 		 */		
 		protected final function setSwitching(newSwitching:Boolean, index:int):void
 		{
-			if (newSwitching != _switching)
+			if (newSwitching != _switching || index != _indexToSwitchTo)
 			{
 				beginSwitching(newSwitching, index);
 				
@@ -258,7 +258,14 @@ package org.osmf.traits
 		 *  @productversion OSMF 1.0
 		 */
 		protected function beginSwitching(newSwitching:Boolean, index:int):void
-		{			
+		{
+			if (newSwitching)
+			{
+				// Keep track of the target index, we don't want to begin
+				// the switch now since our switching state won't be
+				// updated until the switchingChangeEnd method is called.
+				_indexToSwitchTo = index;
+			}
 		}
 		
 		/**
@@ -291,5 +298,7 @@ package org.osmf.traits
 		private var _currentIndex:int = -1;
 		private var _numAlternativeAudioStreams:int;
 		private var _switching:Boolean;
+		
+		protected var _indexToSwitchTo:int = -1;
 	}
 }

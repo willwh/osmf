@@ -110,27 +110,6 @@ package org.osmf.net
 		/**
 		 * @private
 		 * 
-		 * Called immediately before the <code>changingSource</code> property is changed.
-		 *  
-		 * @langversion 3.0
-		 * @playerversion Flash 10
-		 * @playerversion AIR 1.5
-		 * @productversion OSMF 1.6
-		 */
-		override protected function beginSwitching(newSwitching:Boolean, index:int):void
-		{
-			if (newSwitching)
-			{
-				// Keep track of the target index, we don't want to begin
-				// the switch now since our switching state won't be
-				// updated until the switchingChangeEnd method is called.
-				_indexToChangeTo = index;
-			}
-		}
-		
-		/**
-		 * @private
-		 * 
 		 * Called just after the <code>switching</code> property has changed.
 		 * Dispatches the change event.
 		 *  
@@ -141,12 +120,12 @@ package org.osmf.net
 		 */
 		override protected function endSwitching(index:int):void
 		{
-			super.endSwitching(index)
-			
 			if (switching)
 			{
-				executeSwitching(_indexToChangeTo);
+				executeSwitching(_indexToSwitchTo);
 			}
+
+			super.endSwitching(index)
 		}
 		
 		/**
@@ -200,12 +179,12 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
 					if (_transitionInProgress && _activeTransitionIndex > -1)
 					{
-						_lastTransitionIndex =_activeTransitionIndex;
+						_lastTransitionIndex = _activeTransitionIndex;
 						_lastTransitionStreamName = _activeTransitionStreamName;
 						
 						_transitionInProgress = false;
-						_lastTransitionIndex = -1;
-						_lastTransitionStreamName = null;
+						_activeTransitionIndex = -1;
+						_activeTransitionStreamName = null;
 						
 						setSwitching(false, _lastTransitionIndex);
 					}
@@ -235,7 +214,6 @@ package org.osmf.net
 		/// Internal
 		private var _netStream:NetStream;
 		private var _streamingResource:StreamingURLResource;
-		private var _indexToChangeTo:int;
 		
 		private var _transitionInProgress:Boolean = false;
 		private var _activeTransitionIndex:int = -1;

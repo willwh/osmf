@@ -3,6 +3,7 @@
 	<name>OSMFIntegrationTestNew</name>
 	<comment></comment>
 	<projects>
+		<project>FlexUnit4</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

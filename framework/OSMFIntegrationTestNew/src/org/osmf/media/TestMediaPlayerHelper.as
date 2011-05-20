@@ -21,14 +21,16 @@
  *****************************************************/
 package org.osmf.media
 {
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
 	import org.flexunit.assertThat;
 	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
 	import org.hamcrest.object.equalTo;
-	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -38,26 +40,14 @@ package org.osmf.media
 		[Before]
 		public function setUp():void
 		{
-			mediaPlayer = createMediaPlayer();
-			mediaPlayerExpectedStates = new Vector.<String>();
-			mediaPlayerRecordedStatesCount = 0;
+			playerHelper = new MediaPlayerHelper();
 		}
 		
 		[After]
 		public function tearDown():void
 		{
-			if (mediaPlayer != null && mediaPlayer.canPlay)
-			{
-				mediaPlayer.stop();
-			}
-			
-			if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOAD))
-			{
-				(mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
-			}
-			
-			mediaElement = null;
-			mediaPlayer = null;
+			playerHelper.dispose();
+			playerHelper = null;
 		}
 		
 		[BeforeClass]
@@ -70,56 +60,101 @@ package org.osmf.media
 		{
 		}
 		
-		// Protected API
-		/**
-		 * @private
-		 * 
-		 * Check the player state.
-		 */
-		protected function checkPlayerState(state:String):void
-		{
-			var info:Object = null;
-			if (state != null)
-			{
-				assertThat("MediaPlayer is the expected state.", state, equalTo(mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount]));
-				mediaPlayerRecordedStatesCount++;
-			}
-			
-			// if we didn't verified all our expected states then wait for more events
-			if (mediaPlayerExpectedStates.length > mediaPlayerRecordedStatesCount)
-			{
-				info = new Object;
-				info.expectedEventType = "MediaPlayerStateChangeEvent";
-				info.expectedEvent = mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount];
-				
-				mediaPlayer.addEventListener(
-					MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE,
-					Async.asyncHandler(this, onStateChange, 2000, info, onTimeout),
-					false,
-					0,
-					true
-				);
-			}
-		}
-
+//		// Protected API
+//		/**
+//		 * @private
+//		 * 
+//		 * Check the player state.
+//		 */
+//		protected function checkPlayerState(state:String):void
+//		{
+//			var info:Object = null;
+//			if (state != null)
+//			{
+//				assertThat("MediaPlayer is the expected state.", state, equalTo(mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount]));
+//				mediaPlayerRecordedStatesCount++;
+//			}
+//			
+//			// if we didn't verified all our expected states then wait for more events
+//			if (mediaPlayerExpectedStates.length > mediaPlayerRecordedStatesCount)
+//			{
+//				info = new Object;
+//				info.expectedEventType = "MediaPlayerStateChangeEvent";
+//				info.expectedEvent = mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount];
+//				
+//				mediaPlayer.addEventListener(
+//					MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE,
+//					Async.asyncHandler(this, onStateChange, 2000, info, onTimeout),
+//					false,
+//					0,
+//					true
+//				);
+//			}
+//		}
+		
 		/// Protected event handlers
 		/**
 		 * @private
 		 * 
-		 * Event handler called when the state of the media player is changing.
+		 * Event handler called when an error was encountered.
 		 */
-		protected function onStateChange(event:MediaPlayerStateChangeEvent, passThroughData:Object):void
+		protected function onError(event:Event):void
 		{
+			testError(playerHelper.lastError);
 		}
+		
+		/**
+		 * @private
+		 * 
+		 * Event handler called when an error was encountered.
+		 */
+		protected function onTimeout(event:Event):void
+		{
+			testTimeout(playerHelper.info);
+		}
+
+		/// Protected methods
+		/**
+		 * @private
+		 * 
+		 * Runs a test after a specifc interval. Very usefull when we need to wait 
+		 * a specific interval before we do our assertions.
+		 */
+		protected function runAfterInterval(testClass:Object, interval:Number, passThroughData:Object, toRunOnComplete:Function, toRunOnTimeout:Function):void
+		{
+			var timer:Timer = new Timer(interval, 1);
+			
+			function onTimerComplete(event:TimerEvent, passThroughData:Object):void
+			{
+				toRunOnComplete(passThroughData);
+				cleanUp();
+			}
+			
+			function onTimerTimeout(passThroughData:Object):void
+			{
+				toRunOnTimeout(passThroughData);
+				cleanUp();
+			}
+			
+			function cleanUp():void
+			{
+				timer.stop();
+				timer = null;
+			}
+			
+			Async.handleEvent(testClass, timer, TimerEvent.TIMER_COMPLETE, onTimerComplete, timer.delay + 1000, passThroughData, onTimerTimeout);
+			timer.start();
+		}
+		
 		
 		/**
 		 * @private
 		 * 
 		 * We fail the test and provide the error message.
 		 */
-		protected function onError(event:MediaErrorEvent):void
+		protected function testError(error:MediaError):void
 		{
-			fail("MediaErrorEvent received. Error (" + event.error.errorID + ") with message (" + event.error.detail + ")");
+			fail("Media error (" + error.errorID + ") with message (" + error.detail + ")");
 		}
 		
 		/**
@@ -127,7 +162,7 @@ package org.osmf.media
 		 * 
 		 * We fail the test on timeout.
 		 */
-		protected function onTimeout( passThroughData:Object):void
+		protected function testTimeout( passThroughData:Object):void
 		{
 			if (passThroughData != null && passThroughData.hasOwnProperty("expectedEvent") && passThroughData.hasOwnProperty("expectedEventType"))
 			{
@@ -138,58 +173,10 @@ package org.osmf.media
 				fail("Expected event was not received.");	
 			}
 		}
-		
-		/// Protected methods
-		/**
-		 * @private
-		 * 
-		 * Creates a media factory object to be used when tests need to 
-		 * create media elements. Subclasses can override this method to 
-		 * provide their own classes.
-		 */
-		protected function createMediaFactory():MediaFactory
-		{
-			return new DefaultMediaFactory();
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * Creates a media player object to be used when tests need to
-		 * control the playback of media elements. Subclasses can override 
-		 * this method to provide their oen classes.
-		 */
-		protected function createMediaPlayer():MediaPlayer
-		{
-			var mediaPlayer:MediaPlayer = new MediaPlayer();
-			mediaPlayer.autoPlay = false;
-			mediaPlayer.muted = true;
-			mediaPlayer.autoDynamicStreamSwitch = false;
-			mediaPlayer.loop = false;
-			
-			return mediaPlayer;
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * Creates a media element object to be used when tests need to 
-		 * create video elements. Subclasses can override this method to 
-		 * provide their own classes.
-		 */
-		protected function createMediaElement(resource:MediaResourceBase):MediaElement
-		{
-			var factory:MediaFactory = createMediaFactory();
-			if (factory == null)
-				return null;
-			
-			return factory.createMediaElement(resource);
-		}
-		
+
 		/// Internals
-		protected var mediaElement:MediaElement = null;
-		protected var mediaPlayer:MediaPlayer = null;
-		protected var mediaPlayerExpectedStates:Vector.<String> = null;
-		protected var mediaPlayerRecordedStatesCount:uint = 0;
+		protected var playerHelper:MediaPlayerHelper = null;
+		
+		protected static const DEFAULT_TEST_LENGTH:Number = 20000; //20 sec
 	}
 }
