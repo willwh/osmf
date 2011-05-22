@@ -4,6 +4,7 @@ package org.osmf
 	
 	import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR;
 	import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches;
+	import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations;
 	import org.osmf.media.TestMediaPlayerWithLegacy_HDS_SBR;
 	
 	[Suite]
@@ -13,6 +14,7 @@ package org.osmf
 		public var testLegacy_HDS_SBR:TestMediaPlayerWithLegacy_HDS_SBR;
 		public var testAlternateAudio_HDS_SBR:TestMediaPlayerWithAlternateAudio_HDS_SBR;
 		public var testAlternateAudio_HDS_SBR_MultipleSwitches:TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches;
+		public var testAlternateAudio_HDS_SBR_Operations:TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations;
 	}
 	
 	

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="" >
+<testsuite  name="Default Test Suite" project="OSMFIntegrationTestNew">
+<testsuite name="org.osmf.media:TestMediaPlayerWithAlternateAudio_HDS_SBR" type="testcaseclass"/>
+<testsuite name="org.osmf.media:TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches" type="testcaseclass"/>
+<testsuite name="org.osmf.media:TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations" type="testcaseclass"/>
+<testsuite name="org.osmf.media:TestMediaPlayerWithLegacy_HDS_SBR" type="testcaseclass"/>
+</testsuite>
+</testrun>

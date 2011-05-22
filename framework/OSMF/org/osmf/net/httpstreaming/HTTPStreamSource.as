@@ -161,7 +161,10 @@ package org.osmf.net.httpstreaming
 			
 			if (_urlStream != null)
 			{
-				_urlStream.close();
+				if (_urlStream.connected)
+				{
+					_urlStream.close();
+				}
 				if (dispose)
 				{
 					_urlStream.removeEventListener(Event.OPEN, onOpen);

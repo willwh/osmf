@@ -25,8 +25,8 @@ package org.osmf.media
 	
 	import org.flexunit.assertThat;
 	import org.hamcrest.number.greaterThan;
+	import org.hamcrest.number.greaterThanOrEqualTo;
 	import org.hamcrest.object.equalTo;
-	
 	import org.osmf.media.URLResource;
 	
 	/**
@@ -104,7 +104,7 @@ package org.osmf.media
 			{
 				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
 				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
-				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
+				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThanOrEqualTo(0));
 			}
 		}
 
