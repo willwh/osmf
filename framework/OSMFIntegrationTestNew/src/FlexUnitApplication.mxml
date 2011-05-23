@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import org.osmf.media.TestMediaPlayerWithLegacy_HDS_SBR;
+			import org.osmf.media.TestMediaPlayerWithLegacy_HDS_MBR;
 			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations;
 			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches;
 			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR;
@@ -18,6 +19,7 @@
 				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR);
 				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches);
 				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacy_HDS_MBR);
 				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacy_HDS_SBR);
 				return testsToRun;
 			}
