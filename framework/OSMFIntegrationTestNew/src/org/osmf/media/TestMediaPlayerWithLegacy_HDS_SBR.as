@@ -22,6 +22,8 @@
 package org.osmf.media
 {
 	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import org.flexunit.assertThat;
 	import org.hamcrest.number.greaterThan;
@@ -236,6 +238,73 @@ package org.osmf.media
 				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
 				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
 				setUpEvents(playerHelper, false);
+			}
+		}
+		
+		/**
+		 * Tests seek on a LIVE SBR stream.
+		 */
+		[Test(async, timeout="60000", order=5, bugId="FM-1291")]
+		public function seekToBegin_SBR_Live():void
+		{
+			const testLenght:uint = DEFAULT_TEST_LENGTH;
+			
+			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
+			
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady); 
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
+			playerHelper.mediaResource = new URLResource(LEGACY_HDS_SBR_WITH_DVR);
+			
+			var seekTimerInterval:uint = 15000;
+			var seekTimer:Timer = new Timer(seekTimerInterval, 1);
+			seekTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onSeekTimerComplete);
+			var seekTimerStarted:Boolean = false;
+			var seekedToBegining:Boolean = false;
+			
+			function onReady(event:Event):void
+			{
+				assertThat("We should have no access to alternatve audio information", !(playerHelper.actualPlayer.hasAlternativeAudio));
+				assertThat("The number of alternative audio streams is equal with 0.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(0));
+				playerHelper.actualPlayer.play();
+			}
+			
+			function onPlaying(event:Event):void
+			{
+				if (!seekTimerStarted)
+				{
+					seekTimerStarted = true;
+					seekTimer.start();
+				}
+			}
+			
+			function onComplete(passThroughData:Object):void
+			{
+				assertThat("We performed the seek operation", seekTimerStarted && seekedToBegining);
+				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
+				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
+				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
+				setUpEvents(playerHelper, false);
+			}
+			
+			function onSeekTimerComplete():void
+			{
+				seekedToBegining = true;
+				playerHelper.actualPlayer.seek(0);
 			}
 		}
 
