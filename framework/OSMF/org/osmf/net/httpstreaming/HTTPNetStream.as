@@ -664,7 +664,7 @@ package org.osmf.net.httpstreaming
 							logger.info("Changing audio stream completed. Current url >> {0}", _audioUrl);
 						}
 						_audioHasChanged = false;
-						notifyTransitionComplete(_audioHandler.url);
+						notifyTransitionComplete(_audioUrl);
 					}
 					
 					var retryState:String = null;
@@ -1090,8 +1090,22 @@ package org.osmf.net.httpstreaming
 							_mixer = factory.createMixer(resource);
 						}
 					}
+					else
+					{
+						if (_mixer != null && _mixer.videoTime != 0 && _mixer.audioTime != 0)
+						{
+							_mediaSeekTarget = _mixer.videoTime / 1000;
+						}
+						else
+						{
+							_mediaSeekTarget = _mediaBufferRemaining / 1000;
+						}
+
+						_audioSeekTarget = _mediaSeekTarget;
+						setState(HTTPStreamingState.LOAD_SEEK);
+					}
 										
-					notifyTransition(_audioHandler != null ? _audioHandler.url : _audioUrl);
+					notifyTransition(_audioUrl);
 				}
 			}
 			
@@ -1394,7 +1408,7 @@ package org.osmf.net.httpstreaming
 			var info:Object = new Object();
 			info.code = NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE;
 			info.level = "status";
-			info.details = url;
+			//info.details = url != null ? url : "[null]";
 			
 			var sdoTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
 			sdoTag.objects = ["onPlayStatus", info];

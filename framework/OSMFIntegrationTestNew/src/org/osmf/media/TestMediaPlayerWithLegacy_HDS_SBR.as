@@ -50,9 +50,23 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(LEGACY_HDS_SBR_WITH_LIVE);
 			
 			function onReady(event:Event):void
@@ -71,6 +85,8 @@ package org.osmf.media
 				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
 				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
 				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
+				
+				setUpEvents(playerHelper, false);
 			}
 		}
 
@@ -84,9 +100,23 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(LEGACY_HDS_SBR_WITH_LIVE_DRM);
 			
 			function onReady(event:Event):void
@@ -105,6 +135,8 @@ package org.osmf.media
 				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
 				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
 				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThanOrEqualTo(0));
+				
+				setUpEvents(playerHelper, false);
 			}
 		}
 
@@ -118,9 +150,23 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(LEGACY_HDS_SBR_WITH_DVR);
 			
 			function onReady(event:Event):void
@@ -139,6 +185,8 @@ package org.osmf.media
 				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
 				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
 				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
+				
+				setUpEvents(playerHelper, false);
 			}
 		}
 		
@@ -152,9 +200,23 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(LEGACY_HDS_SBR_VOD);
 			
 			function onReady(event:Event):void
@@ -173,6 +235,7 @@ package org.osmf.media
 				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
 				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
 				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
+				setUpEvents(playerHelper, false);
 			}
 		}
 

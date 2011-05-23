@@ -134,7 +134,7 @@ package org.osmf.traits
 		 */ 
 		public function getItemForIndex(index:int):StreamingItem
 		{
-			if (index < -1 || index >= numAlternativeAudioStreams)
+			if (index <= INVALID_TRANSITION_INDEX || index >= numAlternativeAudioStreams)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.ALTERNATIVEAUDIO_INVALID_INDEX));
 			}
@@ -182,7 +182,7 @@ package org.osmf.traits
 		{
 			if (index != _indexToSwitchTo)
 			{
-				if (index < -1 || index >= numAlternativeAudioStreams)
+				if (index < INVALID_TRANSITION_INDEX || index >= numAlternativeAudioStreams)
 				{
 					throw new RangeError(OSMFStrings.getString(OSMFStrings.ALTERNATIVEAUDIO_INVALID_INDEX));
 				}
@@ -284,6 +284,12 @@ package org.osmf.traits
 		 */		
 		protected function endSwitching(index:int):void
 		{
+			if (!_switching)
+			{
+				// The switching is now over. Reset the cached value.
+				_indexToSwitchTo = INVALID_TRANSITION_INDEX;	
+			}
+
 			dispatchEvent
 				( new AlternativeAudioEvent
 					( AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE
@@ -295,10 +301,13 @@ package org.osmf.traits
 		}
 		
 		/// Internals
-		private var _currentIndex:int = -1;
+		protected static const INVALID_TRANSITION_INDEX:int = -2;
+		protected static const DEFAULT_TRANSITION_INDEX:int = -1;
+
+		private var _currentIndex:int = DEFAULT_TRANSITION_INDEX;
 		private var _numAlternativeAudioStreams:int;
 		private var _switching:Boolean;
 		
-		protected var _indexToSwitchTo:int = -1;
+		protected var _indexToSwitchTo:int = INVALID_TRANSITION_INDEX;
 	}
 }

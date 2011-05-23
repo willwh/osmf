@@ -56,12 +56,27 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, onError);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+			}
 
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_VOD);
 			
 			const seekTimerInterval:Number = 30;			
@@ -115,6 +130,8 @@ package org.osmf.media
 			function onComplete(passThroughData:Object):void
 			{
 				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
+				
+				setUpEvents(playerHelper, false);
 			}
 			
 			function onSeekTimer(event:TimerEvent):void
@@ -142,12 +159,27 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, onError);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+			}
 			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_VOD);
 			
 			const seekTimerInterval:Number = 30;			
@@ -201,6 +233,8 @@ package org.osmf.media
 			function onComplete(passThroughData:Object):void
 			{
 				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
+				
+				setUpEvents(playerHelper, false);
 			}
 			
 			function onSeekTimer(event:TimerEvent):void

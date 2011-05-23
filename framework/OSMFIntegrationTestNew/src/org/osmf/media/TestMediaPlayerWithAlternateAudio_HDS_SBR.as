@@ -30,7 +30,6 @@ package org.osmf.media
 	import org.hamcrest.number.greaterThan;
 	import org.hamcrest.number.greaterThanOrEqualTo;
 	import org.hamcrest.object.equalTo;
-	
 	import org.osmf.media.URLResource;
 	
 	/**
@@ -56,9 +55,23 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE);
 			
 			var switchInitiated:Boolean = false;
@@ -85,6 +98,7 @@ package org.osmf.media
 			function onComplete(passThroughData:Object):void
 			{
 				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
+				setUpEvents(playerHelper, false);
 			}
 		}
 
@@ -106,12 +120,27 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
-
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE);
 			
 			var switchInitiated:Boolean = false;
@@ -156,6 +185,8 @@ package org.osmf.media
 			{
 				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
 				assertThat("The playback has continued. Current time is greater than switch end time.", playerHelper.actualPlayer.currentTime, greaterThanOrEqualTo(expectedData.currentTime_onAudioSwitchEnd));
+				
+				setUpEvents(playerHelper, false);
 			}
 		}
 
@@ -177,12 +208,27 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
-
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE);
 			
 			const switchTimerInterval:Number = 2000;			
@@ -229,6 +275,8 @@ package org.osmf.media
 			{
 				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
 				assertThat("The playback has continued. Current time is greater than switch end time.", playerHelper.actualPlayer.currentTime, greaterThanOrEqualTo(expectedData.currentTime_onAudioSwitchEnd));
+				
+				setUpEvents(playerHelper, false);
 			}
 
 			function onSwitchTimerComplete(event:TimerEvent):void
@@ -261,12 +309,27 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+			}
 			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE);
 			
 			var switchInitiated:Boolean = false;
@@ -318,6 +381,8 @@ package org.osmf.media
 			{
 				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
 				assertThat("The playback has continued. Current time is greater than switch end time.", playerHelper.actualPlayer.currentTime, greaterThanOrEqualTo(expectedData.currentTime_onAudioSwitchEnd));
+				
+				setUpEvents(playerHelper, false);
 			}
 		}
 		
@@ -341,12 +406,27 @@ package org.osmf.media
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			
-			playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
-			playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
-			playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
-			playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.addEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_BEGIN, onAudioSwitchBegin);
+					playerHelper.removeEventListener(MediaPlayerHelper.AUDIO_SWITCH_END, 	onAudioSwitchEnd);
+				}
+			}
 			
+			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE);
 			
 			const switchTimerInterval:Number = 2000;			
@@ -403,6 +483,8 @@ package org.osmf.media
 			{
 				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
 				assertThat("The playback has continued. Current time is greater than switch end time.", playerHelper.actualPlayer.currentTime, greaterThanOrEqualTo(expectedData.currentTime_onAudioSwitchEnd));
+				
+				setUpEvents(playerHelper, false);
 			}
 			
 			function onSwitchTimerComplete(event:TimerEvent):void

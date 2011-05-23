@@ -94,12 +94,12 @@ package org.osmf.net
 		 */
 		override public function getItemForIndex(index:int):StreamingItem
 		{
-			if (index < -1 || index >= numAlternativeAudioStreams)
+			if (index <= INVALID_TRANSITION_INDEX || index >= numAlternativeAudioStreams)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.ALTERNATIVEAUDIO_INVALID_INDEX));
 			}
 			
-			if (index < - 1)
+			if (index == DEFAULT_TRANSITION_INDEX)
 			{
 				return null;
 			}
@@ -140,12 +140,19 @@ package org.osmf.net
 		 * @playerversion AIR 1.5
 		 * @productversion OSMF 1.6
 		 */
-		protected function executeSwitching(indexToChangeTo:int):void
+		protected function executeSwitching(indexToSwitchTo:int):void
 		{
-			if (_lastTransitionIndex != indexToChangeTo)
+			if (_lastTransitionIndex != indexToSwitchTo)
 			{	
-				_activeTransitionIndex = indexToChangeTo;
-				_activeTransitionStreamName = _streamingResource.alternativeAudioStreamItems[indexToChangeTo].streamName;
+				_activeTransitionIndex = indexToSwitchTo;
+				if (_activeTransitionIndex > DEFAULT_TRANSITION_INDEX)
+				{
+					_activeTransitionStreamName = _streamingResource.alternativeAudioStreamItems[_activeTransitionIndex].streamName;
+				}
+				else
+				{
+					_activeTransitionStreamName = null;
+				}
 				_transitionInProgress = true;
 				
 				var playArgs:Object = NetStreamUtils.getPlayArgsForResource(_streamingResource);
@@ -177,13 +184,14 @@ package org.osmf.net
 			switch (info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
-					if (_transitionInProgress && _activeTransitionIndex > -1)
+					//var updatedTransitionStreamName:String = info.details;					
+					if (_transitionInProgress && _activeTransitionIndex > INVALID_TRANSITION_INDEX)
 					{
 						_lastTransitionIndex = _activeTransitionIndex;
 						_lastTransitionStreamName = _activeTransitionStreamName;
 						
 						_transitionInProgress = false;
-						_activeTransitionIndex = -1;
+						_activeTransitionIndex = INVALID_TRANSITION_INDEX;
 						_activeTransitionStreamName = null;
 						
 						setSwitching(false, _lastTransitionIndex);
@@ -216,9 +224,10 @@ package org.osmf.net
 		private var _streamingResource:StreamingURLResource;
 		
 		private var _transitionInProgress:Boolean = false;
-		private var _activeTransitionIndex:int = -1;
+		private var _activeTransitionIndex:int = DEFAULT_TRANSITION_INDEX;
 		private var _activeTransitionStreamName:String = null;
-		private var _lastTransitionIndex:int = -1;
+		private var _lastTransitionIndex:int = INVALID_TRANSITION_INDEX;
 		private var _lastTransitionStreamName:String = null;
+		
 	}
 }

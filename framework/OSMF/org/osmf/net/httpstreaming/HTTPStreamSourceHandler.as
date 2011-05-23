@@ -212,6 +212,7 @@ package org.osmf.net.httpstreaming
 			if (_source != null && _request != null)
 			{
 				_source.open(request.urlRequest);
+				_url = request.urlRequest.url;
 			}
 		}
 		

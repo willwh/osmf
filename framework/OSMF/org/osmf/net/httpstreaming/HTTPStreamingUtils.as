@@ -95,6 +95,11 @@ package org.osmf.net.httpstreaming
 		 */ 
 		public static function createHTTPStreamingResource(resource:MediaResourceBase, streamName:String):MediaResourceBase
 		{
+			if (streamName == null)
+			{
+				return null;
+			}
+			
 			var bootstrap:BootstrapInfo = null;
 			var streamMetadata:Object;
 			var xmpMetadata:ByteArray;
