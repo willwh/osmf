@@ -21,45 +21,23 @@
 *****************************************************/
 package
 {
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.events.Event;
-	import flash.text.engine.TextElement;
-	import flash.utils.setTimeout;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.F4MElement;
-	import org.osmf.elements.ParallelElement;
-	import org.osmf.elements.SWFElement;
-	import org.osmf.elements.SerialElement;
-	import org.osmf.elements.VideoElement;
-	import org.osmf.events.AlternativeAudioEvent;
 	import org.osmf.events.DynamicStreamEvent;
-	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutMode;
-	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.ScaleMode;
 	import org.osmf.layout.VerticalAlign;
-	import org.osmf.media.DefaultMediaFactory;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaPlayerState;
-	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Metadata;
-	import org.osmf.net.MediaItem;
 	import org.osmf.net.StreamingXMLResource;
-	import org.osmf.traits.AlternativeAudioTrait;
-	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TraitEventDispatcher;
 	
 	/**
 	 * Another simple OSMF application, building on HelloWorld2.as.

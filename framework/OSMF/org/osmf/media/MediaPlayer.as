@@ -125,7 +125,7 @@ package org.osmf.media
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 *  @productversion OSMF 1.6
 	 */
 	[Event(name="hasAlternativeAudio",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 
@@ -319,13 +319,12 @@ package org.osmf.media
 		
             
         /**
-		 * Indicates whether media is returned to the beginning of playback after
-         * playback of the media completes.
-		 * <p>If <code>true</code>, the media displays the first frame.
-		 * If <code>false</code>, it displays the last frame.
-		 * The default is <code>false</code>.</p>
-		 * <p>The <code>autoRewind</code> property is ignored if the <code>loop</code> property 
-		 * is set to <code>true</code>.</p>
+		 * Indicates whether media is returned to the beginning after playback completes. 
+		 * 
+		 * If <code>true</code>, when playback completes, the player displays the first 
+		 * frame of the media. If <code>false</code>, when playback completes, the last 
+		 * frame is displayed. The default is <code>true</code>. The <code>autoRewind</code> 
+		 * property is ignored if the <code>loop</code> property is set to <code>true</code>.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -564,7 +563,6 @@ package org.osmf.media
 		{
 			return _hasAlternativeAudio;
 		}
-		
 				
 		/**
 		 *  Indicates whether the media can be loaded.
@@ -990,8 +988,8 @@ package org.osmf.media
 		}
 		
 		/**
-		 * The total number of alternative audio streams. Returns 0 if there are no
-		 * alternative audio streams present.
+		 * Returns the total number of alternative audio streams or <code>0</code>
+		 * if there are no alternative audio streams present.
 		 * 
 		 * @langversion 3.0
 		 * @playerversion Flash 10
@@ -1004,13 +1002,15 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Gets the associated alternative audio item for the specified index. Returns 
-		 * <code>null</code> if the index is <code>-1</code>.
+		 * Obtains the alternative audio stream corresponding to the specified 
+		 * (0-based) index. Returns <code>null</code> if the index is <code>-1</code>.
 		 * 
-		 * @throws RangeError If the specified alternative audio stream index is less 
-		 * than <code>-1</code> or greater than the highest alternative audio index available.
-		 * @throws IllegalOperationError If the media has not alternative audio streams.
-		 * 
+		 * @throws  RangeError if the specified alternative audio stream index is less 
+		 * 			than <code>-1</code> or greater than the highest alternative audio
+		 * 			index available.
+		 * @throws  IllegalOperationError if the currently loaded media does not have
+		 * 			any associated alternative audio streams.
+		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
 		 * @playerversion AIR 1.5
@@ -1114,16 +1114,18 @@ package org.osmf.media
 		}	    
 	
 		/**
-		 * Switches audio stream to a specific alternative audio index. Using <code>-1</code> 
-		 * as index value, will reset the alternative audio stream.
+		 * Changes the current audio stream to the alternative audio stream specified by a 
+		 * 0-based index value. Passing <code>-1</code> as the index value resets the current 
+		 * audio stream to the default audio stream.
 		 * 
-		 * Note:  If the media is paused, audio stream switching will not take place 
+		 * Note that if media playback is paused, the audio stream switch does not occur 
 		 * until after play resumes.
-		 *  
-		 * @throws RangeError If the specified alternative audio stream index is less than 
-		 * <code>-1</code> or greater than <code>numAlternativeAudioStreams - 1</code>.
-		 * @throws IllegalOperationError If the media has not alternative audio streams.
 		 * 
+		 * @throws  RangeError if the specified alternative audio stream index is less than 
+		 * 			<code>-1</code> or greater than <code>numAlternativeAudioStreams - 1</code>.
+		 * @throws  IllegalOperationError if the currently loaded media does not have
+		 * 			any associated alternative audio streams.
+		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
 		 * @playerversion AIR 1.5

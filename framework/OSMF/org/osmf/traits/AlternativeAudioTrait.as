@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import flash.errors.IllegalOperationError;
-	
 	import org.osmf.events.AlternativeAudioEvent;
 	import org.osmf.net.StreamingItem;
 	import org.osmf.utils.OSMFStrings;
@@ -41,7 +39,7 @@ package org.osmf.traits
 	[Event(name="audioSwitchingChange",type="org.osmf.events.AlternativeAudioEvent")]
 	
 	/**
-	 * Dispatched when the number of alternative audio streams has changed.
+	 * Dispatched when the total number of alternative audio streams has changed.
 	 * 
 	 * @eventType org.osmf.events.AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE
 	 *  
@@ -92,7 +90,7 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * The total number of alternative audio streams.
+		 * Obtains the total number of alternative audio streams.
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
@@ -105,10 +103,9 @@ package org.osmf.traits
 		}
 
 		/**
-		 * The index of the current alternative audio stream. The 0-based index of 
-		 * the selected stream, or <code>-1</code> if no stream is selected. The value 
-		 * is always between <code>-1</code> and <code>(numAlternativeAudioStreams - 1)
-		 * </code>. 
+		 * Obtains a 0-based index identifying the current audio stream, or 
+		 * <code>-1</code> if no stream is selected. The returned value is 
+		 * always been <code>-1</code> and <code>numAlternativeAudioStreams-1</code>. 
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
@@ -143,14 +140,12 @@ package org.osmf.traits
 		}
 
 		/**
-		 * Indicates whether or not an alternative audio stream switching is currently
-		 * in progress. 
+		 * Indicates whether an alternative audio stream switch is currently in progress. 
 		 * 
-		 * This property will return <code>true</code> while an audio stream switch 
-		 * has been requested and the switch has not yet been acknowledged and no audio 
-		 * stream switch failure has occurred. Once the audio stream switch request has
-		 * been acknowledged or a failure occurs, the property will return 
-		 * <code>false</code>.
+		 * Returns <code>true</code> while an audio stream switch has been requested but 
+		 * not yet acknowledged and no switching failure has occurred. Returns 
+		 * <code>false</code> once the switch request is acknowledged or a switching 
+		 * failure occurs.
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
@@ -163,13 +158,13 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Switches audio stream to a specific alternative audio stream index. Using 
-		 * <code>-1</code> as index value, will reset the alternative audio stream to
-		 * the default one.
+		 * Switches the current audio stream to the alternate stream specified by the 
+		 * <code>index</code> value. Passing <code>-1</code> for the <code>index</code> 
+		 * value resets the current audio stream to the default one. 
 		 * 
-    	 * Note:  If the media is paused, stream switch will not take place until 
-		 * after play resumes.		 
-		 * 
+		 * <bold>Note:</bold> If media playback is currently paused, the audio stream 
+		 * switch does not occur until after play resumes.
+    	 * 
 		 * @throws RangeError If the specified index is less than <code>-1</code> or
 		 * greater than <code>numAlternativeAudioStreams-1</code>.
 		 * 
@@ -222,10 +217,10 @@ package org.osmf.traits
 		 * @param newChangingStream New <code>changingStream</code> value for the trait.
 		 * @param index The index to which the change shall (or did) occur.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */		
 		protected final function setSwitching(newSwitching:Boolean, index:int):void
 		{
@@ -248,14 +243,15 @@ package org.osmf.traits
 		 * @private
 		 * 
 		 * Called immediately before the <code>changingSource</code> property is changed.
+		 * 
 		 * <p>Subclasses can override this method to communicate the change to the media.</p>
          * @param newChangingStream New value for the <code>changingStream</code> property.
          * @param index The index of the stream to change to.
  		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
 		protected function beginSwitching(newSwitching:Boolean, index:int):void
 		{
@@ -269,18 +265,20 @@ package org.osmf.traits
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Called just after the <code>switching</code> property has changed.
 		 * Dispatches the change event.
 		 * 
-		 * <p>Subclasses that override should call this method to
-		 * dispatch the change event.</p>
+		 * <p>Subclasses that override should call this method to dispatch the 
+		 * change event.</p>
 		 * 
 		 * @param index The index of the changed-to stream.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */		
 		protected function endSwitching(index:int):void
 		{

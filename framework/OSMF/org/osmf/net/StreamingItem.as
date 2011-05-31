@@ -22,11 +22,11 @@
 package org.osmf.net
 {
 	/**
-	 * StreamingItem represents a part for representing a piece of media
-	 * inside a StreamingURLResource.
+	 * The StreamingItem class represents a single media stream within 
+	 * a StreamingURLResource.
 	 * 
 	 * @see org.osmf.net.StreamingURLResource
-	 * @see org.osmf.net.StreamingItem
+	 * @see org.osmf.net.StreamingItemType
 	 *  
 	 * @langversion 3.0
 	 * @playerversion Flash 10
@@ -38,17 +38,21 @@ package org.osmf.net
 		/**
 		 * Default constructor
 		 * 
-		 * @param type The type of the stream. 
-		 * @param streamName The name that will be used to identify this stream.
-		 * @param bitrate The stream's encoded bitrate in kbps.
-		 * @param info  The custom information associated with this stream. Usually this object contains
-		 * 			    information about width and height of the video, but could also contain user 
-		 * 				friendly description of the stream.
+		 * @param type  The <code>StreamingItemType</code> of the stream. Allowed values 
+		 * 				are <code>VIDEO</code>, for a stream that includes video, and 
+		 * 				<code>AUDIO</code>, for a stream that contains only audio. 
+		 * @param streamName A <code>String</code> used to identify this stream.
+		 * @param bitrate A <code>Number</code> specifying the stream’s encoded bit rate 
+		 * 				  in kbps (kilobits per second).
+		 * @param info 	An <code>Object</code> containing any custom information associated
+		 * 				with the stream. Typically, this can include the width and height 
+		 * 				of the video, but it could also contain a user-friendly description 
+		 * 				of the stream.
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
 		 * @playerversion AIR 1.5
-		 * @productversion OSMF 1.0
+		 * @productversion OSMF 1.6
 		 */
 		public function StreamingItem(type:String, streamName:String, bitrate:Number = 0, info:Object = null )
 		{
@@ -60,12 +64,14 @@ package org.osmf.net
 		}
 
 		/**
-		 * The stream type.
+		 * Returns a <code>String</code> specifying the type of the stream. 
+		 * Possible values are <code>VIDEO</code>, for a stream that includes 
+		 * video, and <code>AUDIO</code>, for a stream that contains only audio.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.6
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */			
 		public function get type():String
 		{
@@ -73,12 +79,12 @@ package org.osmf.net
 		}
 
 		/**
-		 * The name which is used to identify this stream.
+		 * Returns a <code>String</code> used to identify the stream.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.6
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */			
 		public function get streamName():String
 		{
@@ -86,12 +92,13 @@ package org.osmf.net
 		}
 		
 		/**
-		 * The stream's bitrate, specified in kilobits per second (kbps).
+		 * Returns a <code>Number</code> giving the stream’s bit rate, 
+		 * specified in kilobits per second (kbps).
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
 		public function get bitrate():Number
 		{
@@ -99,9 +106,15 @@ package org.osmf.net
 		}
 
 		/**
-		 * The custom information associated with this stream. Usually this object contains
-		 * information about width and height of the video, but could also contain user 
-		 * friendly description of the stream.
+		 * Returns an <code>Object</code> containing any custom information 
+		 * associated with the stream. Typically, this can include the width 
+		 * and height of the video, but it could also contain a user-friendly 
+		 * description of the stream.
+		 *   
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
 		public function get info():Object
 		{

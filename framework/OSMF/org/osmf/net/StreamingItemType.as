@@ -35,7 +35,7 @@ package org.osmf.net
 	public final class StreamingItemType
 	{
 		/**
-		 * The VIDEO stream type represents a video only or a video-audio stream.
+		 * The <code>VIDEO</code> stream type represents a video only or a video-audio stream.
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
@@ -45,7 +45,7 @@ package org.osmf.net
 		public static const VIDEO:String = "video";
 
 		/**
-		 * The AUDIO stream type represents an audio-only stream.
+		 * The <code>AUDIO</code> stream type represents an audio-only stream.
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10

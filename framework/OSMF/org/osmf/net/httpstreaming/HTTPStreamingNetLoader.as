@@ -32,11 +32,8 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamLoadTrait;
-	import org.osmf.net.NetStreamSwitchManager;
 	import org.osmf.net.NetStreamSwitchManagerBase;
-	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.SwitchingRuleBase;
-	import org.osmf.net.httpstreaming.HTTPStreamingSwitchManager;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait;
 	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait;

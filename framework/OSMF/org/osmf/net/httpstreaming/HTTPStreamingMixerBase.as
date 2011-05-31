@@ -21,7 +21,6 @@
 package org.osmf.net.httpstreaming
 {
 	import flash.errors.IllegalOperationError;
-	import flash.events.EventDispatcher;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 

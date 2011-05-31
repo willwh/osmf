@@ -40,7 +40,7 @@ package org.osmf.events
 		 * Dispatched when the switching state of the alternative audio stream has changed.
 		 * 
 		 * Usually for any successful switching operation, two AUDIO_SWITCHING_CHANGE events 
-		 * will be triggerred. One when the switch operation starts ( the <code>switching</code>
+		 * will be triggered. One when the switch operation starts ( the <code>switching</code>
 		 * property will be set to <code>true</code> ) and one when the operation ends ( the
 		 * <code>switching</code> property will be set to <code>false</code> ).
 		 * 
@@ -71,7 +71,7 @@ package org.osmf.events
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param switching Flag signaling an alternative audio stream switching is in progress or has finished.
+		 * @param switching A <code>Boolean</code> value indicating whether an alternative audio stream switch is in progress (TRUE) or not (FALSE).
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
@@ -90,7 +90,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * The switching value.
+		 * Returns a <code>Boolean</code> value indicating whether an alternative audio stream switch is in progress (TRUE) or not (FALSE).
 		 *  
 		 * @langversion 3.0
 		 * @playerversion Flash 10
