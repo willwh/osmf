@@ -9,10 +9,21 @@ package org.osmf.elements.f4mClasses
 	import org.flexunit.Assert;
 	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertEquals;
+	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
 	import org.osmf.elements.f4mClasses.MultiLevelManifestParser;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.events.ParseEvent;
+	import org.osmf.media.DefaultMediaFactory;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaPlayer;
+	import org.osmf.media.MediaPlayerState;
+	import org.osmf.media.URLResource;
 	import org.osmf.net.StreamType;
+	import org.osmf.traits.DVRTrait;
+	import org.osmf.traits.MediaTraitType;
 	
 	public class TestMultiLevelManifestParser
 	{
@@ -214,6 +225,76 @@ package org.osmf.elements.f4mClasses
 					}
 				);
 		}
+		
+		[Test(async, description="Tests if dvrinfo duration is found in dvr trait.")]
+		public function testWindowDurationInTraitForV2():void
+		{
+			var mediaFactory:MediaFactory = new DefaultMediaFactory();
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_V2_DVR_DURATION_VOD));
+			
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			
+			function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
+			{
+				switch (event.state)
+				{
+					case MediaPlayerState.READY:
+					{	
+						trace("started");
+						assertEquals((mediaElement.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
+						player.play();
+					}
+						break;
+					case MediaPlayerState.PLAYING:
+						break;
+				}
+			}
+			
+			function onMediaError(event:MediaErrorEvent):void
+			{
+				trace("[Error]", event.toString());	
+				fail("Media Error");
+			}
+		}
+		
+		[Test(async, description="Tests if dvrinfo duration is found in dvr trait, but ignored since it's f4m v1")]
+		public function testWindowDurationInTraitForV1():void
+		{
+			var mediaFactory:MediaFactory = new DefaultMediaFactory();
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_V1_DVR_DURATION_VOD));
+			
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			
+			function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
+			{
+				switch (event.state)
+				{
+					case MediaPlayerState.READY:
+					{	
+						trace("started");
+						assertEquals((mediaElement.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 0);
+						player.play();
+					}
+						break;
+					case MediaPlayerState.PLAYING:
+						break;
+				}
+			}
+			
+			function onMediaError(event:MediaErrorEvent):void
+			{
+				trace("[Error]", event.toString());	
+				fail("Media Error");
+			}
+		}
+		
+		private static const F4M_V2_DVR_DURATION_VOD:String = "http://catherine.corp.adobe.com/osmf/rolling_window/v2.f4m";
+		private static const F4M_V1_DVR_DURATION_VOD:String = "http://catherine.corp.adobe.com/osmf/rolling_window/v1.f4m";
+
 		
 		private static const F4M_WITH_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
