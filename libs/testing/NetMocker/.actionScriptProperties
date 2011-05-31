@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties mainApplicationPath="NetMocker.as" projectUUID="8aabb58d-ceb3-4fea-ab3f-3fdeb4799d3d" version="6">
+<actionScriptProperties analytics="false" mainApplicationPath="NetMocker.as" projectUUID="8aabb58d-ceb3-4fea-ab3f-3fdeb4799d3d" version="6">
   <compiler additionalCompilerArguments="-define CONFIG::FLASH_10_1 true" autoRSLOrdering="true" copyDependentFiles="false" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin" strict="true" targetPlayerVersion="10.2.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">

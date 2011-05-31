@@ -156,14 +156,14 @@ package org.osmf.net.httpstreaming.f4f
 		
 		private function calculateSegmentId(sfp:SegmentFragmentPair, fragmentId:uint):uint
 		{
-			CONFIG::LOGGING
-			{
-				logger.debug("first segment: " + sfp.firstSegment);
-				logger.debug("fragId: " + fragmentId);
-				logger.debug("fragmentsAccrued: " + sfp.fragmentsAccrued);
-				logger.debug("fragmentsPerSegment: " + sfp.fragmentsPerSegment);
-				logger.debug("segId: " + (sfp.firstSegment +  int((fragmentId-1 - sfp.fragmentsAccrued) / sfp.fragmentsPerSegment)));
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug("first segment: " + sfp.firstSegment);
+//				logger.debug("fragId: " + fragmentId);
+//				logger.debug("fragmentsAccrued: " + sfp.fragmentsAccrued);
+//				logger.debug("fragmentsPerSegment: " + sfp.fragmentsPerSegment);
+//				logger.debug("segId: " + (sfp.firstSegment +  int((fragmentId-1 - sfp.fragmentsAccrued) / sfp.fragmentsPerSegment)));
+//			}
 			
 			return sfp.firstSegment +  int((fragmentId - sfp.fragmentsAccrued - 1) / sfp.fragmentsPerSegment);
 		}	

@@ -497,7 +497,90 @@ package org.osmf.media
 			}
 		}
 		
+		/**
+		 * Tests automatic playback os SBR stream with  a shorter alternative audio track.  
+		 * Before the playback has started switch the alternative audio track to 
+		 * the specified one. Check that the entire main media is played.
+		 */
+		[Test(async, timeout="150000", order=1)]
+		public function playVOD_ShorterAudio_SwitchBeforePlay():void
+		{
+			const testLenght:uint = 130000;
+			
+			var expectedData:Object = new Object();
+			expectedData["numAlternativeAudioStreams"] = 2;
+			expectedData["selectedIndex_onReady"] = -1;
+			expectedData["selectedIndex_onComplete"] = 0;
+			
+			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
+			
+			function setUpEvents(playerHelper:MediaPlayerHelper, add:Boolean):void
+			{
+				if (add)
+				{
+					playerHelper.addEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.addEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.addEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+				else
+				{
+					playerHelper.removeEventListener(MediaPlayerHelper.READY, 		onReady);
+					playerHelper.removeEventListener(MediaPlayerHelper.PLAYING, 	onPlaying);
+					playerHelper.removeEventListener(MediaPlayerHelper.ERROR, 		onError);
+				}
+			}
+			
+			setUpEvents(playerHelper, true);
+			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_SHORTER_AUDIO);
+			
+			var stepTimerInterval:uint = 10000;
+			var stepTimer:Timer = new Timer(stepTimerInterval, 11);
+			stepTimer.addEventListener(TimerEvent.TIMER, onStepTimer);
+
+			var switchInitiated:Boolean = false;
+			var stepTimerInitiated:Boolean = false;
+			
+			function onReady(event:Event):void
+			{
+				assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
+				assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));
+				assertThat("No alternate audio stream switch is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
+				assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
+				
+				if (!switchInitiated)
+				{
+					switchInitiated = true;
+					playerHelper.actualPlayer.switchAlternativeAudioIndex(expectedData.selectedIndex_onComplete);
+				}
+				playerHelper.actualPlayer.play();
+			}
+			
+			function onPlaying(event:Event):void
+			{
+				expectedData["currentTime_stepTimer"] = playerHelper.actualPlayer.currentTime;
+				if (!stepTimerInitiated)
+				{
+					stepTimerInitiated = true;
+					stepTimer.start();
+				}
+			}
+			
+			function onComplete(passThroughData:Object):void
+			{
+				assertThat("Specified alternate audio stream is currently selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onComplete));
+				setUpEvents(playerHelper, false);
+			}
+			
+			function onStepTimer(event:TimerEvent):void
+			{
+				assertThat("Media is still playing.", playerHelper.actualPlayer.currentTime, greaterThan(expectedData.currentTime_stepTimer));
+				expectedData["currentTime_stepTimer"] = playerHelper.actualPlayer.currentTime;
+			}
+		}
+
 		/// Internals
 		protected static const ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
+		protected static const ALTERNATE_AUDIO_HDS_SBR_WITH_SHORTER_AUDIO:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_shorter_alternate_a/1_media_av_2_shorter_alternate_a.f4m";
+		
 	}
 }

@@ -26,6 +26,7 @@ package org.osmf.elements
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.net.StreamingXMLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -99,6 +100,12 @@ package org.osmf.elements
 			if (_resource != value && value != null)
 			{
 				_resource = value;
+				
+				if (value is StreamingXMLResource)
+				{
+					loader = new XMLLoader();
+				}
+				
 				loadTrait = new LoadFromDocumentLoadTrait(loader, resource);
 				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, int.MAX_VALUE);
 				

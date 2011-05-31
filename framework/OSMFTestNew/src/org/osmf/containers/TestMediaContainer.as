@@ -25,7 +25,8 @@ package org.osmf.containers
 	import flash.errors.IllegalOperationError;
 	
 	import org.flexunit.asserts.*;
-	import org.osmf.flexunit.BaseTestClass;
+	import org.flexunit.BaseTestClass;
+	
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutRenderer;

@@ -20,8 +20,8 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import flash.events.EventDispatcher;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	
 	import flexunit.framework.TestCase;
 	
@@ -61,7 +61,13 @@ package org.osmf.net.httpstreaming
 			assertEquals(loader.canHandleResource(new URLResource("http://example.com")), false);	
 			assertEquals(loader.canHandleResource(new URLResource("http://example.com/movie.f4m")), false);	
 
-			var manifest:Manifest = createSingleStreamVODManifest();
+			createSingleStreamVODManifest(verifyCanHandleResource);
+		}
+		
+		private function verifyCanHandleResource(event:ParseEvent):void
+		{
+			var manifest:Manifest = event.data as Manifest;
+			
 			assertTrue(manifest != null);
 			
 			var resource:URLResource = new URLResource(SINGLE_STREAM_VOD_F4M_URL);
@@ -72,12 +78,24 @@ package org.osmf.net.httpstreaming
 		
 		public function testLoadVOD():void
 		{
-			testLoad(createSingleStreamVODManifest(), SINGLE_STREAM_VOD_F4M_URL);
+			createSingleStreamVODManifest(verifyLoadVOD);
+		}
+		
+		private function verifyLoadVOD(event:ParseEvent):void
+		{
+			var manifest:Manifest = event.data as Manifest;
+			testLoad(manifest, SINGLE_STREAM_VOD_F4M_URL);
 		}
 		
 		public function testLoadDVRMBR():void
 		{
-			testLoad(createDVRMBRManifest(), DVR_MBR_F4M_URL);
+			createDVRMBRManifest(verifyLoadDVRMBR);
+		}
+		
+		private function verifyLoadDVRMBR(event:ParseEvent):void
+		{
+			var manifest:Manifest = event.data as Manifest;
+			testLoad(manifest, DVR_MBR_F4M_URL);
 		}
 		
 		private function testLoad(manifest:Manifest, url:String):void
@@ -91,21 +109,21 @@ package org.osmf.net.httpstreaming
 			assertTrue(urlResource != null);
 			
 			var loadTrait:LoadTrait = new NetStreamLoadTrait(loader, urlResource);
-			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoad);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, verifyLoad);
 			loadTrait.load();
-
-			function onLoad(event:LoadEvent):void
+		}
+		
+		private function verifyLoad(event:LoadEvent):void
+		{
+			assertEquals(event.type, LoadEvent.LOAD_STATE_CHANGE);
+			
+			if (event.loadState == LoadState.READY)
 			{
-				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
-					
-				if (event.loadState == LoadState.READY)
-				{
-					eventDispatcher.dispatchEvent(new Event("testComplete"));
-				}
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
 		
-		private function createSingleStreamVODManifest():Manifest
+		private function createSingleStreamVODManifest(callback:Function):void
 		{
 			var xml:XML = 
 			<manifest xmlns="http://ns.adobe.com/f4m/1.0">
@@ -135,10 +153,11 @@ package org.osmf.net.httpstreaming
 				</media>
 			</manifest>;
 			
-			return parser.parse(xml.toXMLString(), SINGLE_STREAM_VOD_F4M_URL);
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, callback);
+			parser.parse(xml.toXMLString(), SINGLE_STREAM_VOD_F4M_URL);
 		}
 		
-		private function createDVRMBRManifest():Manifest
+		private function createDVRMBRManifest(callback:Function):void
 		{
 			var xml:XML = 
 			<manifest xmlns="http://ns.adobe.com/f4m/1.0">
@@ -210,7 +229,8 @@ package org.osmf.net.httpstreaming
 				</bootstrapInfo>
 			</manifest>;
 
-			return parser.parse(xml.toXMLString(), DVR_MBR_F4M_URL);
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, callback);
+			parser.parse(xml.toXMLString(), DVR_MBR_F4M_URL);
 		}
 
 		private function mustReceiveEvent(event:Event):void

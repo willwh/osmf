@@ -21,54 +21,33 @@
  *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import __AS3__.vec.Vector;
-	
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
-	import flash.events.ProgressEvent;
-	import flash.events.SecurityErrorEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.net.NetStreamPlayOptions;
 	import flash.net.NetStreamPlayTransitions;
-	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
-	import flash.net.URLStream;
 	import flash.utils.ByteArray;
-	import flash.utils.IDataInput;
 	import flash.utils.Timer;
 	
-	import mx.utils.NameUtil;
-	
-	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingEvent;
-	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
-	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
-	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
-	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
-	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
-	import org.osmf.traits.AudioTrait;
 	
 	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
 	
 	CONFIG::LOGGING 
 	{	
+		import org.osmf.logging.Log;
 		import org.osmf.logging.Logger;
 	}
 	
@@ -116,68 +95,46 @@ package org.osmf.net.httpstreaming
 		public function HTTPNetStream( connection:NetConnection, factory:HTTPStreamingFactory, resource:URLResource = null)
 		{
 			super(connection);
-			this.resource = resource;
-			this.factory = factory;
+			_resource = resource;
+			_factory = factory;
 			
-			_mediaHandler = new HTTPStreamSourceHandler(factory, resource);
-			_mediaHandler.addEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
-			_mediaHandler.addEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, onFragmentDuration);
-			_mediaHandler.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
-			_mediaHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
-			_mediaHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onIndexError);
-			_mediaHandler.addEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
+			addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
+			addEventListener(HTTPStreamingEvent.BEGIN_FRAGMENT, onBeginFragment);
+			addEventListener(HTTPStreamingEvent.END_FRAGMENT, onEndFragment);
+			addEventListener(HTTPStreamingEvent.TRANSITION, onTransition);
+			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, onTransitionComplete);
+			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+
+			this.bufferTime = MINIMUM_VOD_BUFFER_TIME;
+			this.bufferTimeMax = 0;
 			
-			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
-			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
-			mainTimer.start();
+			setState(HTTPStreamingState.INIT);
+
+			_provider = new HTTPStreamProvider(_factory, _resource, this);
 			
-			this.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			_mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
+			_mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
 		}
 		
-		/**
-		 * Getters/(setters if applicable) of a bunch of properties related to the quality of service.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get downloadRatio():Number
-		{
-			return _lastDownloadRatio;
-		}
-		
-		// Overrides
-		//
+		///////////////////////////////////////////////////////////////////////
+		/// Public API overrides
+		///////////////////////////////////////////////////////////////////////
 		
 		/**
-		 * The arguments to this method can mirror the arguments to the
-		 * superclass's method:
-		 * 1) media file
-		 * 2) URL
-		 * 3) name/start/len/reset
-		 *		a) Subclips
-		 *		b) Live
-		 *		c) Resetting playlist
+		 * @private
 		 * 
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * Plays the specified stream with respect to provided arguments.
 		 */
 		override public function play(...args):void 
 		{
-			if (args.length < 1)
+			processPlayParameters(args);
+			CONFIG::LOGGING
 			{
-				throw new Error("HTTPStream.play() requires at least one argument");
+				logger.debug("Play initiated for [" + _playStreamName +"] with parameters ( start = " + _playStart.toString() + ", duration = " + _playForDuration.toString() +" ).");
 			}
 			
 			// Signal to the base class that we're entering Data Generation Mode.
 			super.play(null);
-			
-			_notifyPlayStartPending = true;
 			
 			// Before we feed any TCMessages to the Flash Player, we must feed
 			// an FLV header first.
@@ -186,168 +143,483 @@ package org.osmf.net.httpstreaming
 			header.write(headerBytes);
 			attemptAppendBytes(headerBytes);
 			
-			// Initialize ourselves and the index handler.
-			setState(HTTPStreamingState.INIT);
+			// Initialize ourselves.
+			_mainTimer.start();
 			_initialTime = -1;
 			_seekTime = -1;
 			
-			_mediaIsReady = false;
-			_pendingIndexInitializations++;
-			_mediaHandler.initialize(args[0]);
-						
-			if (args.length >= 2)
-			{
-				_mediaSeekTarget = Number(args[1]);
-				if (_mediaSeekTarget < 0)
-				{
-					if (_dvrInfo != null)
-					{
-						_mediaSeekTarget = _dvrInfo.startTime;
-					}
-					else
-					{
-						_mediaSeekTarget = 0;	// FMS behavior, mimic -1 or -2 being passed in
-					}
-				}
-			}
-			else
-			{
-				// This is the start of playback, so no seek.
-				_mediaSeekTarget = 0;
-			}
-			_audioSeekTarget = _mediaSeekTarget;
-			
-			if (args.length >= 3)
-			{
-				_playForDuration = Number(args[2]);
-			}
-			else
-			{
-				_playForDuration = -1;
-			}
-			
+			_notifyPlayStartPending = true;
 			_notifyPlayUnpublishPending = false;
+			
+			changeSourceTo(_playStreamName, _playStart);
 		}
-		
-		/**
-		 * @private
-		 */
-		override public function play2(param:NetStreamPlayOptions):void
-		{
-			if (param.transition == NetStreamPlayTransitions.RESET)
-			{
-				// XXX Need to reset playback if we're already playing.
-				// Is this done via seek?
-				
-				// The only difference between play and play2 for the RESET
-				// case is that play2 might start at a specific quality level.
-				// commented out due the fact that _streamNames array is initialized
-				// after the play has been called - until play this array is null
-				// from now on, the setQualityLevelForStreamName is called inside play method
-				// setQualityLevelForStreamName(param.streamName);
-				
-				play(param.streamName, param.start, param.len);
-			}
-			else if (param.transition == NetStreamPlayTransitions.SWITCH)
-			{
-				changeQualityLevelTo(param.streamName);
-			}
-			else if (param.transition == NetStreamPlayTransitions.SWAP)
-			{
-				changeAudioStreamTo(param.streamName);
-			}
-			else
-			{
-				// Not sure which other modes we should add support for.
-				super.play2(param);
-			}
-		} 
-		
 
 		/**
 		 * @private
+		 * 
+		 * Plays the specified stream and supports dynamic switching and alternate audio streams. 
+		 */
+		override public function play2(param:NetStreamPlayOptions):void
+		{
+			switch(param.transition)
+			{
+				case NetStreamPlayTransitions.RESET:
+					play(param.streamName, param.start, param.len);
+					break;
+				
+				case NetStreamPlayTransitions.SWITCH:
+					changeQualityLevelTo(param.streamName);
+					break;
+			
+				case NetStreamPlayTransitions.SWAP:
+					changeAudioStreamTo(param.streamName);
+					break;
+				
+				default:
+					// Not sure which other modes we should add support for.
+					super.play2(param);
+			}
+		} 
+		
+		/**
+		 * @private
+		 * 
+		 * Seeks into the media stream for the specified offset in seconds.
 		 */
 		override public function seek(offset:Number):void
 		{
-			// (change to override seek rather than do this based on seek notify event)
-			//  can't do this unless you're already playing (for instance, you can't leave INIT to go to SEEK)! 
-			// XXX need to double-check to see if there's more guards needed here
-			
 			if(offset < 0)
 			{
 				offset = 0;		// FMS rule. Seek to <0 is same as seeking to zero.
 			}
 			
-			if (_state != HTTPStreamingState.INIT)    // can't seek before playback starts
+			// we can't seek before the playback starts 
+			if (_state != HTTPStreamingState.INIT)    
 			{
 				if(_initialTime < 0)
 				{
-					_mediaSeekTarget = offset + 0;	// this covers the "don't know initial time" case, rare
+					_seekTarget = offset + 0;	// this covers the "don't know initial time" case, rare
 				}
 				else
 				{
-					_mediaSeekTarget = offset + _initialTime;
+					_seekTarget = offset + _initialTime;
 				}
-				_audioSeekTarget = _mediaSeekTarget;
 				
-				_seekTime = -1;		// but _initialTime stays known
 				setState(HTTPStreamingState.SEEK);		
 				super.seek(offset);
 			}
 			
 			_notifyPlayUnpublishPending = false;
 		}
-		
+
 		/**
 		 * @private
+		 * 
+		 * Closes the NetStream object.
 		 */
 		override public function close():void
 		{
-			_pendingIndexInitializations = 0;
-			
-			_mediaHandler.close();
-			if (_audioHandler != null)
+			if (_provider != null)
 			{
-				_audioHandler.close();
+				_provider.close();
 			}
+			
+			_mainTimer.stop();
+			notifyPlayStop();
 			
 			setState(HTTPStreamingState.HALT);
 			
-			mainTimer.stop();
-			
-			notifyPlayStop();
-			
-			// XXX might need to do other things here
 			super.close();
 		}
 		
 		/**
-		 * @private
+		 * @inheritDoc
 		 */
-		override public function get time():Number
+		override public function set bufferTime(value:Number):void
 		{
-			if(_seekTime >= 0 && _initialTime >= 0)
-			{
-				_lastValidTimeTime = (super.time + _seekTime) - _initialTime; 
-				//  we remember what we say when time is valid, and just spit that back out any time we don't have valid data. This is probably the right answer.
-				//  the only thing we could do better is also run a timer to ask ourselves what it is whenever it might be valid and save that, just in case the
-				//  user doesn't ask... but it turns out most consumers poll this all the time in order to update playback position displays
-			}
-			return _lastValidTimeTime;
+			super.bufferTime = value;
+			_desiredBufferTime = Math.max(MINIMUM_VOD_BUFFER_TIME, value);
 		}
 		
-		/// Internal
+		///////////////////////////////////////////////////////////////////////
+		/// Custom public API - specific to HTTPNetStream 
+		///////////////////////////////////////////////////////////////////////
+		/**
+		 * Get stream information from the associated information.
+		 */ 
+		public function DVRGetStreamInfo(streamName:Object):void
+		{
+			if (_provider.isReady)
+			{
+				// TODO: should we re-trigger the event?
+			}
+			else
+			{
+				// TODO: should there be a guard to protect the case where isReady is not yet true BUT play has already been called, so we are in an
+				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
+				// event back, go ahead and call play()
+				_provider.getDVRInfo(streamName);
+			}
+		}
 		
+		/**
+		 * Gets the last recorded download ratio. This value is used by the HTTPStreamingSwitchManager
+		 * when deciding if there is need for an up-switch or down-switch.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		public function get downloadRatio():Number
+		{
+			if (_provider.qosInfo != null)
+			{
+				return _provider.qosInfo.downloadRatio;
+			}
+			return 0;
+		}
+
+		///////////////////////////////////////////////////////////////////////
+		/// Internals
+		///////////////////////////////////////////////////////////////////////
 		/**
 		 * @private
 		 * Saves the current state of the object and sets it to the value specified.
 		 **/ 
 		private function setState(value:String):void
 		{
-			_previousState = _state;
 			_state = value;
+			
+			CONFIG::LOGGING
+			{
+				if (_state != previouslyLoggedState)
+				{
+					logger.debug("State = " + _state);
+					previouslyLoggedState = _state;
+				}
+			}
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Processes provided arguments to obtain the actual
+		 * play parameters.
+		 */
+		private function processPlayParameters(args:Array):void
+		{
+			if (args.length < 1)
+			{
+				throw new Error("HTTPNetStream.play() requires at least one argument");
+			}
+
+			_playStreamName = args[0];
+
+			_playStart = 0;
+			if (args.length >= 2)
+			{
+				_playStart = Number(args[1]);
+			}
+			
+			_playForDuration = -1;
+			if (args.length >= 3)
+			{
+				_playForDuration = Number(args[2]);
+			}
 		}
 		
+		
+		/**
+		 * @private
+		 * 
+		 * Changes the main media source to specified stream name.
+		 */
+		private function changeSourceTo(streamName:String, seekTarget:Number):void
+		{
+			_initializeFLVParser = true;
+			_seekTarget = seekTarget;
+			_provider.open(streamName);
+			setState(HTTPStreamingState.SEEK);
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Changes the quality of the main stream.
+		 */
+		private function changeQualityLevelTo(streamName:String):void
+		{
+			_qualityLevelNeedsChanging = true;
+			_desiredQualityStreamName = streamName;
+			
+			if (_provider.isReady && _provider.streamName != _desiredQualityStreamName)
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("Stream provider is ready so we can initiate change quality to [" + _desiredQualityStreamName + "]");
+				}
+				_provider.changeQualityLevel(_desiredQualityStreamName);
+				_qualityLevelNeedsChanging = false;
+				_desiredQualityStreamName = null;
+			}
+			
+			_notifyPlayUnpublishPending = false;
+		}
+
+		/**
+		 * @private
+		 * 
+		 * We cycle through HTTPNetStream states and do chunk
+		 * processing. 
+		 */  
+		private function onMainTimer(timerEvent:TimerEvent):void
+		{	
+			switch(_state)
+			{
+				case HTTPStreamingState.INIT:
+					// do nothing
+					break;
+				
+				case HTTPStreamingState.WAIT:
+					// if we are getting dry then go back into
+					// active play mode and get more bytes 
+					// from the stream provider
+					if ( this.bufferLength < _desiredBufferTime)
+					{
+						setState(HTTPStreamingState.PLAY);
+					}
+					break;
+				
+				case HTTPStreamingState.SEEK:
+					// In seek mode we just forward the seek offset to 
+					// the stream provider. The only problem is that
+					// we may call seek before our stream provider is
+					// able to fulfill our request - so we'll stay in seek
+					// mode until the provider is ready.
+					if (_provider.isReady)
+					{
+						CONFIG::FLASH_10_1
+						{
+							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+						}
+						
+						_seekTime = -1;
+						_provider.seek(_seekTarget);
+						setState(HTTPStreamingState.PLAY);
+					}
+					break;
+				
+				case HTTPStreamingState.PLAY:
+					if (_notifyPlayStartPending)
+					{
+						_notifyPlayStartPending = false;
+						notifyPlayStart();
+					}
+					
+					// check if we need to change quality
+					if (_qualityLevelNeedsChanging)
+					{
+						changeQualityLevelTo(_desiredQualityStreamName);
+					}
+					
+					var processed:int = 0;
+					var processedLimit:int = 40000;//65000 * 4;
+					var keepProcessing:Boolean = true;
+					
+					while(keepProcessing)
+					{
+						var bytes:ByteArray = _provider.getBytes();
+						
+						if (bytes != null)
+						{
+							processed += processAndAppend(bytes);	
+						}
+						
+						if (
+							(_state != HTTPStreamingState.PLAY) || // we are no longer in play mode
+							(bytes == null) || // we don't have any additional data
+							(processedLimit > 0 && processed >= processedLimit) // we have processed enough data  
+						)
+						{
+							keepProcessing = false;
+						}
+					}
+					
+					if (_state == HTTPStreamingState.PLAY)
+					{
+						if (processed > 0)
+						{
+							CONFIG::LOGGING
+							{
+								logger.debug("Processed " + processed + " bytes ( buffer = " + this.bufferLength + " )" ); 
+							}
+							
+							// if our buffer has grown big enough then go into wait
+							// mode where we let the NetStream consume the buffered 
+							// data
+							if (this.bufferLength > _desiredBufferTime)
+							{
+								setState(HTTPStreamingState.WAIT);
+							}
+						}
+						else
+						{
+							// if we reached the end of stream then we need stop and
+							// dispatch this event to all our clients.						
+							if (_provider.endOfStream)
+							{
+								super.bufferTime = 0.1;
+								CONFIG::LOGGING
+								{
+									logger.debug("End of stream reached. Stopping."); 
+								}
+								setState(HTTPStreamingState.STOP);
+							}
+						}
+					}
+					break;
+				
+				case HTTPStreamingState.STOP:
+					CONFIG::FLASH_10_1
+					{
+						appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
+						appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+					}
+					
+					var playCompleteInfo:Object = new Object();
+					playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
+					playCompleteInfo.level = "status";
+					
+					var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+					playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
+					
+					var tagBytes:ByteArray = new ByteArray();
+					playCompleteInfoSDOTag.write(tagBytes);
+					attemptAppendBytes(tagBytes);
+					setState(HTTPStreamingState.HALT);
+					break;
+				
+				case HTTPStreamingState.HALT:
+					// do nothing
+					break;
+			}
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Event handler for all DVR related information events.
+		 */
+		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
+		{
+			_dvrInfo = event.info as DVRInfo;
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Also on fragment boundaries we usually start our own FLV parser
+		 * object which is used to process script objects, to update our
+		 * play head and to detect if we need to stop the playback.
+		 */
+		private function onBeginFragment(event:HTTPStreamingEvent):void
+		{
+			if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags ||  _playForDuration >= 0)
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("Initialize the FLV Parser ( seekTime = " + _seekTime + ", initialTime = " + _initialTime + ", playForDuration = " + _playForDuration + " ).");
+					if (_insertScriptDataTags != null)
+					{
+						logger.debug("Script tags available (" + _insertScriptDataTags.length + ") for processing." );	
+					}
+				}
+				
+				if (_playForDuration >= 0)
+				{
+					_flvParserIsSegmentStart = true;	
+				}
+				_flvParser = new FLVParser(false);
+				_flvParserDone = false;
+			}
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Usually the end of fragment is processed by the associated switch
+		 * manager as is a good place to decide if we need to switch up or down.
+		 */
+		private function onEndFragment(event:HTTPStreamingEvent):void
+		{
+			
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * We notify the starting of the switch so that the associated switch manager
+		 * correctly update its state. We do that by dispatching a NETSTREAM_PLAY_TRANSITION
+		 * event.
+		 */
+		private function onTransition(event:HTTPStreamingEvent):void
+		{
+			dispatchEvent( 
+				new NetStatusEvent( 
+					NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION, level:"status", details:event.url}
+				)
+			); 
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * We notify the switch completition so that switch manager to correctly update 
+		 * its state and dispatch any related event. We do that by inserting an 
+		 * onPlayStatus data packet into the stream.
+		 */
+		private function onTransitionComplete(event:HTTPStreamingEvent):void
+		{
+			var info:Object = new Object();
+			info.code = NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE;
+			info.level = "status";
+			info.details = event.url;
+			
+			var sdoTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+			sdoTag.objects = ["onPlayStatus", info];
+			
+			insertScriptDataTag(sdoTag);
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * We notify that the playback started only when we start loading the 
+		 * actual bytes and not when the play command was issued. We do that by
+		 * dispatching a NETSTREAM_PLAY_START NetStatusEvent.
+		 */
+		private function notifyPlayStart():void
+		{
+			dispatchEvent( 
+				new NetStatusEvent( 
+					NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_START, level:"status"}
+				)
+			); 
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Inserts a script data object in a queue which will be processed 
+		 * by the NetStream next time it will play.
+		 */
 		private function insertScriptDataTag(tag:FLVTagScriptDataObject, first:Boolean = false):void
 		{
 			if (!_insertScriptDataTags)
@@ -357,7 +629,7 @@ package org.osmf.net.httpstreaming
 			
 			if (first)
 			{
-				_insertScriptDataTags.unshift(tag);	// push front
+				_insertScriptDataTags.unshift(tag);	
 			}
 			else
 			{
@@ -365,27 +637,106 @@ package org.osmf.net.httpstreaming
 			}
 		}
 		
-		private function flvTagHandler(tag:FLVTag):Boolean
+		/**
+		 * @private
+		 * 
+		 * Consumes all script data tags from the queue. Returns the number of bytes
+		 * 
+		 */
+		private function consumeAllScriptDataTags(timestamp:Number):int
 		{
-			// this is the new common FLVTag Parser's tag handler
+			var processed:int = 0;
+			var index:int = 0;
+			var bytes:ByteArray = null;
+			var tag:FLVTagScriptDataObject = null;
+			
+			for (index = 0; index < _insertScriptDataTags.length; index++)
+			{
+				bytes = new ByteArray();
+				tag = _insertScriptDataTags[index];
+				
+				if (tag != null)
+				{
+					tag.timestamp = timestamp;
+					tag.write(bytes);
+					attemptAppendBytes(bytes);
+					processed += bytes.length;
+				}
+			}
+			_insertScriptDataTags.length = 0;
+			_insertScriptDataTags = null;			
+			
+			return processed;
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Processes and appends the provided bytes.
+		 */
+		private function processAndAppend(inBytes:ByteArray):uint
+		{
+			if (!inBytes || inBytes.length == 0)
+			{
+				return 0;
+			}
+
+			var bytes:ByteArray;
+			var processed:uint = 0;
+			
+			if (_flvParser == null)
+			{
+				// pass through the initial bytes 
+				bytes = inBytes;
+			}
+			else
+			{
+				// we need to parse the initial bytes
+				_flvParserProcessed = 0;
+				inBytes.position = 0;	
+				_flvParser.parse(inBytes, true, onTag);	
+				processed += _flvParserProcessed;
+				if(!_flvParserDone)
+				{
+					// the common parser has more work to do in-path
+					return processed;
+				}
+				else
+				{
+					// the common parser is done, so flush whatever is left 
+					// and then pass through the rest of the segment
+					bytes = new ByteArray();
+					_flvParser.flush(bytes);
+					_flvParser = null;	
+				}
+			}
+			
+			processed += bytes.length;
+			if (_state != HTTPStreamingState.STOP)
+			{
+				attemptAppendBytes(bytes);
+			}
+			
+			return processed;
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Method called by FLV parser object every time it detects another
+		 * FLV tag inside the buffer it tries to parse.
+		 */
+		private function onTag(tag:FLVTag):Boolean
+		{
 			var i:int;
 			
-			if (_insertScriptDataTags)
+			if (_insertScriptDataTags != null)
 			{
-				for (i = 0; i < _insertScriptDataTags.length; i++)
+				CONFIG::LOGGING
 				{
-					var t:FLVTagScriptDataObject;
-					var bytes:ByteArray;
-					
-					t = _insertScriptDataTags[i];
-					t.timestamp = tag.timestamp;
-					
-					bytes = new ByteArray();
-					t.write(bytes);
-					_flvParserProcessed += bytes.length;
-					attemptAppendBytes(bytes);
+					logger.debug("Consume all queued script data tags ( use timestamp = " + tag.timestamp + " ).");
 				}
-				_insertScriptDataTags = null;			
+				_flvParserProcessed += consumeAllScriptDataTags(tag.timestamp);
 			}
 			
 			if (_playForDuration >= 0)
@@ -426,10 +777,10 @@ package org.osmf.net.httpstreaming
 			}
 			
 			// finally, pass this one on to appendBytes...
-			bytes = new ByteArray();
+			var bytes:ByteArray = new ByteArray();
 			tag.write(bytes);
-			_flvParserProcessed += bytes.length;
 			attemptAppendBytes(bytes);
+			_flvParserProcessed += bytes.length;
 			
 			// probably done seeing the tags, unless we are in playForDuration mode...
 			if (_playForDuration >= 0)
@@ -462,546 +813,28 @@ package org.osmf.net.httpstreaming
 			_flvParserDone = true;
 			return false;
 		}
+
+
+		///////////////////////////////////////////////////////////////////////////////////
 		
-		private function processAndAppend(inBytes:ByteArray):uint
+		/**
+		 * @private
+		 */
+		override public function get time():Number
 		{
-			var bytes:ByteArray;
-			var processed:uint = 0;
-			
-			if (!inBytes || inBytes.length == 0)
+			if(_seekTime >= 0 && _initialTime >= 0)
 			{
-				return 0;
+				_lastValidTimeTime = (super.time + _seekTime) - _initialTime; 
+				//  we remember what we say when time is valid, and just spit that back out any time we don't have valid data. This is probably the right answer.
+				//  the only thing we could do better is also run a timer to ask ourselves what it is whenever it might be valid and save that, just in case the
+				//  user doesn't ask... but it turns out most consumers poll this all the time in order to update playback position displays
 			}
-			
-			if (_flvParser)
-			{
-				inBytes.position = 0;	// rewind
-				_flvParserProcessed = 0;
-				_flvParser.parse(inBytes, true, flvTagHandler);	// common handler for FLVTags, parser consumes everything each time just as appendBytes does when in pass-through
-				processed += _flvParserProcessed;
-				if(!_flvParserDone)
-				{
-					// the common parser has more work to do in-path
-					return processed;
-				}
-				else
-				{
-					// the common parser is done, so flush whatever is left and then pass through the rest of the segment
-					bytes = new ByteArray();
-					_flvParser.flush(bytes);
-					_flvParser = null;	// and now we're done with it
-				}
-			}
-			else
-			{
-				bytes = inBytes;
-			}
-			
-			// now, 'bytes' is either what came in or what we massaged above 
-			
-			// (ES is now part of unified parser)
-			
-			processed += bytes.length;
-			
-			if (_state != HTTPStreamingState.STOP)	// we might exit this state
-			{
-				attemptAppendBytes(bytes);
-			}
-			
-			return processed;
+			return _lastValidTimeTime;
 		}
 		
-		private function onMainTimer(timerEvent:TimerEvent):void
-		{	
-			var flushExistingContent:Boolean = false;
-			
-			var bytes:ByteArray;
-			var d:Date = new Date();
-			var info:Object = null;
-			var sdoTag:FLVTagScriptDataObject = null;
-			
-			var nextState:String = null;
-
-			CONFIG::LOGGING
-			{
-				if (_state != previouslyLoggedState)
-				{
-					logger.debug("State = " + _state);
-					previouslyLoggedState = _state;
-				}
-			}
-			
-			switch (_state)
-			{
-				// INIT case
-				case HTTPStreamingState.INIT:
-					_seekAfterInit = true;
-					break;
-				
-				// SEEK case
-				case HTTPStreamingState.SEEK:
-					_mediaHandler.close();
-					if (_audioHandler != null)
-					{
-						_audioHandler.close();
-					}
-					setState(HTTPStreamingState.LOAD_SEEK);
-					break;
-				
-				
-				// LOAD cases
-				case HTTPStreamingState.LOAD_WAIT:
-					// XXX this delay needs to shrink proportionate to the last download ratio... when we're close to or under 1, it needs to be no delay at all
-					// XXX unless the bufferLength is longer (this ties into how fast switching can happen vs. timeliness of dispatch to cover jitter in loading)
-					// XXX for now, we have a simplistic dynamic handler, in that if downloads are going poorly, we are a bit more aggressive about prefetching
-					
-					// the defaut state from load wait is play
-					nextState = HTTPStreamingState.PLAY;
-					var desiredBufferTime:Number = Math.max(8, this.bufferTime); 
-					if ( this.bufferLength < desiredBufferTime)
-					{
-						// if we are low on buffer then we should be loading our next fragments 
-						nextState = HTTPStreamingState.LOAD_NEXT;
-							
-						// but if we are playing video with alternate content, then
-						// we should check the content of the mixer and see if 
-						// we have enough data there
-						var missingBufferTime:Number = (desiredBufferTime - this.bufferLength) * 1000;
-						
-						if (
-								(_audioHandler != null)
-							&&	(_mediaBufferRemaining > missingBufferTime || _mediaRequest == null) 
-							&&  (_audioBufferRemaining > missingBufferTime || _audioRequest == null)
-						)
-						{
-							nextState = HTTPStreamingState.PLAY;								
-						}
-					}
-					
-					setState(nextState);
-					break;
-				
-				case HTTPStreamingState.LOAD_NEXT:
-					if (_mediaNeedsChanging)
-					{
-						changeQualityLevelTo(_mediaUrl);
-					}
-					if (_audioNeedsChanging)
-					{
-						changeAudioStreamTo(_audioUrl);
-					}
-
-					// if we have pending initializations ( for ex we just changed 
-					// the audio source), then we need to wait for that to complete
-					// in some way
-					if (_pendingIndexInitializations > 0)
-						break;
-
-					setState(HTTPStreamingState.LOAD);
-					break;
-				
-				case HTTPStreamingState.LOAD_SEEK:
-					_seekAfterInit = false;
-
-					if (_mediaNeedsChanging)
-					{
-						changeQualityLevelTo(_mediaUrl);
-					}
-					if (_audioNeedsChanging)
-					{
-						changeAudioStreamTo(_audioUrl);
-					}
-
-					// if we have pending initializations ( for ex we just changed 
-					// the audio source), then we need to wait for that to complete
-					// in some way
-					if (_pendingIndexInitializations > 0)
-						break;
-
-					CONFIG::FLASH_10_1
-					{
-						appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-					}
-					
-					_mediaHandler.flushContent();
-					if (_audioHandler != null)
-					{
-						_audioHandler.flushContent();
-					}
-					if (_mixer != null)
-					{
-						_mixer.flushAudioInput();
-						_mixer.flushVideoInput();
-					}
-					_mediaBufferRemaining = 0;
-					_audioBufferRemaining = 0;
-					
-					setState(HTTPStreamingState.LOAD);
-					break;
-				
-				case HTTPStreamingState.LOAD:
-					
-					if (_notifyPlayStartPending)
-					{
-						notifyPlayStart();
-						_notifyPlayStartPending = false;
-					}
-
-					if (_mediaHasChanged)
-					{
-						// process remaining bytes
-						//bytes = _mediaHandler.flushContent();
-						//processAndAppend(bytes);
-						
-						_mediaHasChanged = false;
-						notifyTransitionComplete(_mediaHandler.url);
-					}
-					
-					if (_audioHasChanged)
-					{
-						CONFIG::LOGGING
-						{
-							logger.info("Changing audio stream completed. Current url >> {0}", _audioUrl);
-						}
-						_audioHasChanged = false;
-						notifyTransitionComplete(_audioUrl);
-					}
-					
-					var retryState:String = null;
-					
-					_mediaFragmentDuration = -1;	// we now track whether or not this has been reported yet for this segment by the Index or File handler
-					switch (_previousState)
-					{
-						case HTTPStreamingState.LOAD_SEEK:
-						case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
-							nextState = HTTPStreamingState.PLAY_START_SEEK;
-							retryState = HTTPStreamingState.LOAD_SEEK_RETRY_WAIT;
-							
-							if (_mediaHandler.isFragmentEnd)
-							{
-								_mediaRequest = _mediaHandler.getFileForTime(_mediaSeekTarget);
-							}
-							if (_audioHandler != null && _audioHandler.isFragmentEnd)
-							{
-								_audioRequest = _audioHandler.getFileForTime(_audioSeekTarget);
-							}
-							break;
-						
-						case HTTPStreamingState.LOAD_NEXT:
-						case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
-							nextState = HTTPStreamingState.PLAY_START_NEXT;
-							retryState = HTTPStreamingState.LOAD_NEXT_RETRY_WAIT;
-
-							if (_mediaHandler.isFragmentEnd)
-							{
-								_mediaRequest = _mediaHandler.getNextFile();
-							}
-							if (_audioHandler != null && _audioHandler.isFragmentEnd)
-							{
-								_audioRequest = _audioHandler.getNextFile();
-							}
-							break;
-						default:
-							throw new Error("in HTTPStreamState.LOAD with unknown previous state " + _previousState);
-							break;
-					}
-					
-					if (
-							(_mediaHandler.isFragmentEnd && _mediaRequest == null)
-						&& 	(_audioHandler != null && _audioHandler.isFragmentEnd && _audioRequest == null)
-					)
-					{
-						// if we finished processing current fragments and we know for sure 
-						// that we don't have any additional data, we halt
-						setState(HTTPStreamingState.HALT);
-					}
-					else if (
-							(_mediaRequest != null && _mediaRequest.urlRequest != null)
-						||  (_audioRequest != null && _audioRequest.urlRequest != null)
-					)
-					{
-						// if we finished processing current fragments and we have additional data
-						// we start loading the additional data
-						if (_mediaHandler.isFragmentEnd && (_mediaRequest != null) && (_mediaRequest.urlRequest != null))
-						{
-							_mediaHandler.open(_mediaRequest);
-						}
-						if (_audioHandler != null && _audioHandler.isFragmentEnd && (_audioRequest != null) && (_audioRequest.urlRequest != null))
-						{
-							_audioHandler.open(_audioRequest);
-						}
-						
-						setState(nextState);
-					}
-					else if (
-							(_mediaRequest != null && _mediaRequest.retryAfter >= 0)
-						||  (_audioRequest != null && _audioRequest.retryAfter >= 0)
-						)
-					{
-						// if we finished processing current fragments and we don't know if we have any additional
-						// data, we are waiting a little for things to update
-						var waitInterval:Number = 0; 
-						if (_mediaRequest != null)
-							waitInterval = _mediaRequest.retryAfter;
-						if (_audioRequest != null && waitInterval < _audioRequest.retryAfter)
-							waitInterval = _audioRequest.retryAfter;
-						
-						date = new Date();
-						_retryAfterWaitUntil = date.getTime() + (1000.0 * waitInterval);
-						setState(retryState);
-					}
-					else
-					{
-						// WHY ONLY VIDEO? IT SHOULD ALSO SUPPORT AUDIO
-						//bytes = _mediaHandler.flushContent();
-						//processAndAppend(bytes);
-						
-						setState(HTTPStreamingState.STOP);
-						if (_mediaRequest != null && _mediaRequest.unpublishNotify)
-						{
-							_notifyPlayUnpublishPending = true;								
-						}
-					}
-					break;
-				
-				case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:								
-				case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
-					var date:Date = new Date();
-					if (date.getTime() > _retryAfterWaitUntil)
-					{
-						setState(HTTPStreamingState.LOAD);			
-					}
-					break;					
-				
-				case HTTPStreamingState.PLAY_START_NEXT:
-					if (_mediaHandler.isFragmentEnd)
-					{
-						_mediaHandler.beginProcessing(false, 0);
-					}
-					if (_audioHandler != null && _audioHandler.isFragmentEnd)
-					{
-						_audioHandler.beginProcessing(false, 0); 
-					}
-					
-					setState(HTTPStreamingState.PLAY_START_COMMON);
-					break;
-				
-				case HTTPStreamingState.PLAY_START_SEEK:
-					if (_mediaHandler.isFragmentEnd)
-					{
-						_mediaHandler.beginProcessing(true, _mediaSeekTarget);
-					}
-					if (_audioHandler != null && _audioHandler.isFragmentEnd)
-					{
-						_audioHandler.beginProcessing(true, _audioSeekTarget);
-					}
-					
-					setState(HTTPStreamingState.PLAY_START_COMMON);
-					break;		
-				
-				case HTTPStreamingState.PLAY_START_COMMON:
-					// need to run the common FLVParser?
-					if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags ||  _playForDuration >= 0)
-					{
-						if (_playForDuration >= 0)
-						{
-							_flvParserIsSegmentStart = true;	// warning, this isn't generally set/cleared, just used by these two cooperating things
-						}
-						_flvParser = new FLVParser(false);
-						_flvParserDone = false;
-					}
-					
-					setState(HTTPStreamingState.PLAY);
-					break;
-				
-				case HTTPStreamingState.PLAY:
-					
-					if (
-							_mediaHandler.hasData || 
-							(_audioHandler != null && _audioHandler.hasData)
-					)
-					{
-						var processLimit:int = 65000*4;	// XXX needs to be settable
-						var processed:int = 0;
-						var keepProcessing:Boolean = true;
-						
-						while (	_state == HTTPStreamingState.PLAY && keepProcessing)
-						{
-							if (_audioHandler == null)
-							{
-								bytes = _mediaHandler.processContent();
-								if (bytes == null)
-								{
-									keepProcessing = false;
-								}
-							}
-							else
-							{
-								var previousAudioTime:Number = _mixer.audioTime;
-								var previousVideoTime:Number = _mixer.videoTime;
-
-								bytes = _mixer.getMixedMDATBytes();
-
-								// update remaining buffer values
-								if (_mixer.audioTime > previousAudioTime)
-								{
-									_audioBufferRemaining -= (_mixer.audioTime - previousAudioTime);
-								}
-								if (_mixer.videoTime > previousVideoTime)
-								{
-									_mediaBufferRemaining -= (_mixer.videoTime - previousVideoTime);
-								}
-
-								// check if we need more data to parse the actual tags
-								var needsMoreAudio:Boolean = _mixer.needsAudio;
-								var needsMoreMedia:Boolean = _mixer.needsVideo;
-								
-								// if we need additional data then go and fetch it from 
-								// handlers and provide that to mixer
-								if (needsMoreAudio || needsMoreMedia)
-								{
-									var audioBytes:ByteArray = null;
-									if (needsMoreAudio)
-									{
-										audioBytes = _audioHandler.processContent();
-									}	
-									var mediaBytes:ByteArray = null;
-									if (needsMoreMedia)
-									{
-										mediaBytes = _mediaHandler.processContent();	
-									}
-									if (mediaBytes != null || audioBytes != null)
-									{
-										_mixer.mixMDATBytes(mediaBytes, audioBytes);
-									}
-									else
-									{
-										// we did't add any new data to the mixer
-										// we need to if we need to load another
-										// chunk of data
-										keepProcessing = false;
-									}
-								}
-								else
-								{
-									// we don't need any new data but we didn't
-									// create a mixed stream; let's wait a little 
-									// for other things to update
-									if (bytes == null)
-									{
-										keepProcessing = false;
-									}
-								}
-							}
-							
-							if (bytes != null)		
-							{
-								processed += processAndAppend(bytes);
-							}
-							
-							if ( processLimit > 0 && processed >= processLimit)
-							{
-								keepProcessing = false;
-							}
-						}
-					}
-					if (_state != HTTPStreamingState.PLAY)
-						break;
-					
-					var isFragmentEnd:Boolean = _mediaHandler.isFragmentEnd;
-					if (_audioHandler != null)
-						isFragmentEnd ||= _audioHandler.isFragmentEnd;
-					
-					if (_mediaHandler.isFragmentEnd)
-					{
-						_mediaHandler.saveContent();
-					}
-					if (_audioHandler != null && _audioHandler.isFragmentEnd)
-					{
-						_audioHandler.saveContent();
-					}
-					
-					if (isFragmentEnd)
-					{
-						setState(HTTPStreamingState.END_FRAGMENT);
-					}
-					break;
-			
-				// END_FRAGMENT case
-				case HTTPStreamingState.END_FRAGMENT:
- 					// we let the handler to finish processing data
-					if (	_mediaHandler.hasData 
-						||  (_audioHandler != null && _audioHandler.hasData)
-					)
-					{
-						if (_audioHandler == null)
-						{
-							bytes = _mediaHandler.endProcessing();
-							if (bytes != null)
-							{
-								processAndAppend(bytes);
-							}
-						}
-						else
-						{
-							var mediaEndBytes:ByteArray = null;
-							var audioEndBytes:ByteArray = null;
-							
-							if (_mediaHandler.isFragmentEnd)
-							{
-								mediaEndBytes = _mediaHandler.endProcessing();
-							} 
-							if (_audioHandler != null && _audioHandler.isFragmentEnd)
-							{
-								audioEndBytes = _audioHandler.endProcessing();
-							}
-							_mixer.mixMDATBytes(mediaEndBytes, audioEndBytes);
-						}
-					}
-					
-					if (_mediaHandler.lastDownloadDuration != 0)
-					{
-						_lastDownloadRatio = _mediaFragmentDuration / _mediaHandler.lastDownloadDuration;
-					}
-					
-					notifyFragmentEnd();					
-					if (_state != HTTPStreamingState.STOP && _state != HTTPStreamingState.HALT)
-					{ 
-						setState(HTTPStreamingState.LOAD_WAIT);
-					}
-					break;
-				
-				case HTTPStreamingState.STOP:
-					var playCompleteInfo:Object = new Object();
-					playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
-					playCompleteInfo.level = "status";
-					
-					var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-					playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
-					
-					var tagBytes:ByteArray = new ByteArray();
-					playCompleteInfoSDOTag.write(tagBytes);
-					
-					CONFIG::FLASH_10_1
-				{
-					appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
-					appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-				}
-					
-					attemptAppendBytes(tagBytes);
-					setState(HTTPStreamingState.HALT);
-					
-					break;
-				
-				case HTTPStreamingState.HALT:
-					// do nothing. timer could run slower in this state.
-					break;
-				
-				default:
-					throw new Error("HTTPStream cannot run undefined _state "+_state);
-					break;
-			}
-		}
+		/// Internal
+		
+		
 		
 		private function onNetStatus(event:NetStatusEvent):void
 		{
@@ -1015,27 +848,7 @@ package org.osmf.net.httpstreaming
 			}
 		}
 		
-		///////////////////////////////////////////////////////////////////////
-		/// Public
-		///////////////////////////////////////////////////////////////////////
 
-		/**
-		 * Get stream information from the associated information.
-		 */ 
-		public function DVRGetStreamInfo(streamName:Object):void
-		{
-			if (_mediaIsReady)
-			{
-				// TODO: should we re-trigger the event?
-			}
-			else
-			{
-				// TODO: should there be a guard to protect the case where _mediaIsReady is not yet true BUT play has already been called, so we are in an
-				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
-				// event back, go ahead and call play()
-				_mediaHandler.dvrGetStreamInfo(streamName);
-			}
-		}
 
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
@@ -1072,10 +885,10 @@ package org.osmf.net.httpstreaming
 						_audioHandler = null;
 					}
 					
-					var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(resource, _audioUrl);
+					var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(_resource, _audioUrl);
 					if (audioResource != null)
 					{
-						_audioHandler = new HTTPStreamSourceHandler(factory, audioResource);
+						_audioHandler = new HTTPStreamSourceHandler(_factory, audioResource);
 						_audioHandler.addEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
 						_audioHandler.addEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, onFragmentDuration);
 						_audioHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
@@ -1087,7 +900,7 @@ package org.osmf.net.httpstreaming
 						
 						if (_mixer == null)
 						{
-							_mixer = factory.createMixer(resource);
+							_mixer = _factory.createMixer(_resource);
 						}
 					}
 					else
@@ -1102,10 +915,10 @@ package org.osmf.net.httpstreaming
 						}
 
 						_audioSeekTarget = _mediaSeekTarget;
-						setState(HTTPStreamingState.LOAD_SEEK);
+//						setState(HTTPStreamingState.LOAD_SEEK);
 					}
 										
-					notifyTransition(_audioUrl);
+					//notifyTransition(_audioUrl);
 				}
 			}
 			
@@ -1113,30 +926,6 @@ package org.osmf.net.httpstreaming
 		}
 
 		
-		/**
-		 * @private
-		 * 
-		 * Changes the quality of the main stream.
-		 */
-		private function changeQualityLevelTo(streamName:String):void
-		{
-			_mediaNeedsChanging = true;
-			_mediaUrl = streamName;
-			if (_state != HTTPStreamingState.INIT)
-			{
-				_mediaNeedsChanging = false;
-				if (_mediaHandler != null || _mediaHandler.url != _mediaUrl)
-				{
-					_mediaHasChanged = true;
-					if (_mediaHandler != null)
-						_mediaHandler.setQualityLevelTo(_mediaUrl);
-					
-					notifyTransition( _mediaHandler != null ? _mediaHandler.url : _mediaUrl);						
-				}
-			}
-			
-			_notifyPlayUnpublishPending = false;
-		}
 		
 		/**
 		 * @private
@@ -1152,17 +941,6 @@ package org.osmf.net.httpstreaming
 			}
 		}
 
-		/**
-		 * @private
-		 * 
-		 * Event handler for all DVR related information events.
-		 */
-		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
-		{
-			_dvrInfo = event.info as DVRInfo;
-			dispatchEvent(event.clone());
-		}
-		
 		/**
 		 * Event handler for FRAGMENT_DURATION updates. We use this
 		 * event to update our buffer estimates.
@@ -1219,7 +997,7 @@ package org.osmf.net.httpstreaming
 				_pendingIndexInitializations--;
 				if (_pendingIndexInitializations == 0)
 				{
-					setState(HTTPStreamingState.LOAD_SEEK);
+//					setState(HTTPStreamingState.LOAD_SEEK);
 				}
 			}
 		}
@@ -1289,22 +1067,6 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 * 
-		 * We notify the end of current fragment so that switching manager or any 
-		 * other monitor object to have a chance to change the current quality level 
-		 * or to change the state of the HTTPNetStream object. 
-		 */
-		private function notifyFragmentEnd():void
-		{
-			this.dispatchEvent(
-				new HTTPStreamingEvent(
-					HTTPStreamingEvent.FRAGMENT_END
-				)
-			);
-		}
-
-		/**
-		 * @private
-		 * 
 		 * We notify that some error occured when processing the specified file.
 		 * We actually map all URL errors to NETSTREAM_PLAY_STREAMNOTFOUND NetStatusEvent.
 		 * You can check the details property to see the url which triggered 
@@ -1322,24 +1084,6 @@ package org.osmf.net.httpstreaming
 			);
 		}
 
-		/**
-		 * @private
-		 * 
-		 * We notify that the playback started only when we start loading the 
-		 * actual bytes and not when the play command was issued. We do that by
-		 * dispatching a NETSTREAM_PLAY_START NetStatusEvent.
-		 */
-		private function notifyPlayStart():void
-		{
-			dispatchEvent( 
-				new NetStatusEvent( 
-					NetStatusEvent.NET_STATUS
-					, false
-					, false
-					, {code:NetStreamCodes.NETSTREAM_PLAY_START, level:"status"}
-				)
-			); 
-		}
 		
 		/**
 		 * @private
@@ -1377,44 +1121,6 @@ package org.osmf.net.httpstreaming
 			);
 		}
 
-		/**
-		 * @private
-		 * 
-		 * We notify the starting of the switch so that the associated switch manager
-		 * correctly update its state. We do that by dispatching a NETSTREAM_PLAY_TRANSITION
-		 * event.
-		 */
-		private function notifyTransition(url:String):void
-		{
-			dispatchEvent( 
-				new NetStatusEvent( 
-					NetStatusEvent.NET_STATUS
-					, false
-					, false
-					, {code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION, level:"status", details:url}
-				)
-			); 
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * We notify the switch completition so that switch manager to correctly update 
-		 * its state and dispatch any related event. We do that by inserting an 
-		 * onPlayStatus data packet into the stream.
-		 */
-		private function notifyTransitionComplete(url:String):void
-		{
-			var info:Object = new Object();
-			info.code = NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE;
-			info.level = "status";
-			//info.details = url != null ? url : "[null]";
-			
-			var sdoTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-			sdoTag.objects = ["onPlayStatus", info];
-			
-			insertScriptDataTag(sdoTag);
-		}
 		
 		/**
 		 * @private
@@ -1436,39 +1142,49 @@ package org.osmf.net.httpstreaming
 			);
 		}
 		
-		private var _indexInfo:HTTPStreamingIndexInfoBase = null;
-		private var _lastDownloadDuration:Number;
-		private var _lastDownloadRatio:Number = 0;
-		private var _totalDuration:Number = -1;
-		
-		private var _flvParserIsSegmentStart:Boolean = false;
-		private var _seekAfterInit:Boolean;
-		private var _insertScriptDataTags:Vector.<FLVTagScriptDataObject> = null;
-		private var _flvParser:FLVParser = null;	// this is the new common FLVTag Parser
-		private var _flvParserDone:Boolean = true;	// signals that common parser has done everything and can be removed from path
-		private var _flvParserProcessed:uint;
-		
-		private var _initialTime:Number = -1;	// this is the timestamp derived at start-of-play (offset or not)... what FMS would call "0"
-		private var _seekTime:Number = -1;		// this is the timestamp derived at end-of-seek (enhanced or not)... what we need to add to super.time (assuming play started at zero)
-		private var _fileTimeAdjustment:Number = 0;	// this is what must be added (IN SECONDS) to the timestamps that come in FLVTags from the file handler to get to the index handler timescale
-		// XXX an event to set the _fileTimestampAdjustment is needed
-		
-		private var _playForDuration:Number = -1;
-		private var _lastValidTimeTime:Number = 0;
-		private var _retryAfterWaitUntil:Number = 0;	// millisecond timestamp (as per date.getTime) of when we retry next
-
-		// Internals
+		/// Internals
+		private static const MINIMUM_VOD_BUFFER_TIME:Number = 4;
+		private var _desiredBufferTime:Number = 0;
+				
 		private static const MAIN_TIMER_INTERVAL:int = 25;
-		private var mainTimer:Timer;
-
-		private var resource:URLResource = null;
-		private var factory:HTTPStreamingFactory = null;
+		private var _mainTimer:Timer = null;
+		private var _state:String = HTTPStreamingState.INIT;
 		
+		private var _playStreamName:String = null;
+		private var _playStart:Number = -1;
+		private var _playForDuration:Number = -1; 
+
+		private var _resource:URLResource = null;
+		private var _factory:HTTPStreamingFactory = null;
+		
+		private var _provider:HTTPStreamProvider = null;
+		private var _qualityLevelNeedsChanging:Boolean = false;
+		private var _desiredQualityStreamName:String = null;
+		
+		private var _seekTarget:Number = -1;
+
 		private var _notifyPlayStartPending:Boolean = false;
 		private var _notifyPlayUnpublishPending:Boolean = false;
 		
-		private var _state:String = HTTPStreamingState.INIT;
-		private var _previousState:String = null;
+		private var _initialTime:Number = -1;	// this is the timestamp derived at start-of-play (offset or not)... what FMS would call "0"
+		private var _seekTime:Number = -1;		// this is the timestamp derived at end-of-seek (enhanced or not)... what we need to add to super.time (assuming play started at zero)
+		private var _lastValidTimeTime:Number = 0; // this is the last known timestamp
+		
+		private var _initializeFLVParser:Boolean = false;
+		private var _flvParser:FLVParser = null;	// this is the new common FLVTag Parser
+		private var _flvParserDone:Boolean = true;	// signals that common parser has done everything and can be removed from path
+		private var _flvParserProcessed:uint;
+		private var _flvParserIsSegmentStart:Boolean = false;
+
+		private var _insertScriptDataTags:Vector.<FLVTagScriptDataObject> = null;
+		
+		private var _fileTimeAdjustment:Number = 0;	// this is what must be added (IN SECONDS) to the timestamps that come in FLVTags from the file handler to get to the index handler timescale
+		// XXX an event to set the _fileTimestampAdjustment is needed
+
+		
+		
+		
+		
 		
 		private var _mediaSeekTarget:Number = -1;
 		private var _mediaHasChanged:Boolean = false;
@@ -1497,7 +1213,7 @@ package org.osmf.net.httpstreaming
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");
+			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");
 			private var previouslyLoggedState:String = null;
 		}
 	}

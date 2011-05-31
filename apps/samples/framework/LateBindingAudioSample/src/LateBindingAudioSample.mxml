@@ -173,8 +173,6 @@
 				
 				container.addMediaElement(element);
 				player.media = element;
-				
-				
 			}
 			
 			/**
@@ -292,6 +290,7 @@
 			{
 				if (!player.playing)
 				{
+					player.bufferTime = 0.1;
 					if (player.canPlay)
 						player.play();
 				}
@@ -368,6 +367,10 @@
 			protected var urls:ArrayCollection = null;
 			private static const URLS:Array = 
 						[
+							{
+								label:"Seek outside buffer", 
+								data:"http://10.131.237.107/vod/hs/vod/ex.f4m"
+							},
 							{
 								label:"Legacy HDS manifest", 
 								data:"http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m"	

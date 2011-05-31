@@ -24,9 +24,10 @@ package org.osmf.containers
 	import flash.external.ExternalInterface;
 	
 	import org.flexunit.asserts.*;
+	import org.flexunit.BaseTestClass;
+
 	import org.osmf.elements.HTMLElement;
 	import org.osmf.elements.ProxyElement;
-	import org.osmf.flexunit.BaseTestClass;
 	import org.osmf.media.MediaElement;
 	
 	public class TestHTMLMediaContainer extends BaseTestClass

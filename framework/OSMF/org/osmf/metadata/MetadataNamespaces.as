@@ -163,6 +163,11 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 **/
+		public static const HTTP_STREAMING_DVR_WINDOW_DURATION_KEY:String 		= "windowDuration";
+
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_DVR_OFFLINE_KEY:String 			= "dvrOffline";
 
 		/**

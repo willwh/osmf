@@ -738,7 +738,7 @@ package org.osmf.net.httpstreaming.f4f
 
 			if (!dvrGetStreamInfoCall)
 			{
-				if (abst.live && f4fIndexInfo.dvrInfo == null && isNaN(pureLiveOffset))
+				if (abst.live /*&& f4fIndexInfo.dvrInfo == null*/ && isNaN(pureLiveOffset))
 				{
 					pureLiveOffset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
 				}

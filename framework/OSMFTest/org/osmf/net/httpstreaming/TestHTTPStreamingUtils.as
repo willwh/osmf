@@ -27,6 +27,7 @@ package org.osmf.net.httpstreaming
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.elements.f4mClasses.*;
+	import org.osmf.events.ParseEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.*;
 	import org.osmf.net.*;
@@ -82,11 +83,17 @@ package org.osmf.net.httpstreaming
 		
 		public function testCreateF4FIndexInfoForSingleStreamVOD():void
 		{
+			createSingleStreamVODManifest(verifyCreateF4FIndexInfoForSingleStreamVOD);
+		}
+		
+		private function verifyCreateF4FIndexInfoForSingleStreamVOD(event:ParseEvent):void
+		{
+			var manifest:Manifest = event.data as Manifest;
+			
 			var urlResource:URLResource = new URLResource(SINGLE_STREAM_VOD_F4M_URL);
 			var info:HTTPStreamingF4FIndexInfo = HTTPStreamingUtils.createF4FIndexInfo(urlResource);
 			assertEquals(info, null);
 			
-			var manifest:Manifest = createSingleStreamVODManifest();
 			assertTrue(manifest != null);
 			
 			var resource:URLResource = parser.createResource(manifest, urlResource) as URLResource;
@@ -101,11 +108,16 @@ package org.osmf.net.httpstreaming
 		
 		public function testCreateF4FIndexInfoForDVRMBR():void
 		{
+			createDVRMBRManifest(verifyCreateF4FIndexInfoForDVRMBR);
+		}
+		
+		public function verifyCreateF4FIndexInfoForDVRMBR(event:ParseEvent):void
+		{
 			var urlResource:URLResource = new URLResource(DVR_MBR_F4M_URL);
 			var info:HTTPStreamingF4FIndexInfo = HTTPStreamingUtils.createF4FIndexInfo(urlResource);
 			assertEquals(info, null);
 
-			var manifest:Manifest = createDVRMBRManifest();
+			var manifest:Manifest = event.data as Manifest;
 			assertTrue(manifest != null);
 			
 			var resource:DynamicStreamingResource = parser.createResource(manifest, urlResource) as DynamicStreamingResource;
@@ -116,13 +128,24 @@ package org.osmf.net.httpstreaming
 			assertTrue(info.dvrInfo != null);
 			assertTrue(info.streamInfos.length > 1);
 			assertEquals(info.serverBaseURL, "http://fms1j009f.corp.adobe.com/zeri_live/events/zeriDVRMBRAppendSegment/events/_definst_");
-
-			manifest = createDVRMBRManifest2();
+		}
+		public function testCreateF4FIndexInfoForDVRMBR2():void
+		{
+			createDVRMBRManifest2(verifyCreateF4FIndexInfoForDVRMBR2);
+		}
+		
+		public function verifyCreateF4FIndexInfoForDVRMBR2(event:ParseEvent):void
+		{
+			var urlResource:URLResource = new URLResource(DVR_MBR_F4M_URL);
+			var info:HTTPStreamingF4FIndexInfo = HTTPStreamingUtils.createF4FIndexInfo(urlResource);
+			assertEquals(info, null);
+			
+			var manifest:Manifest = event.data as Manifest;
 			assertTrue(manifest != null);
 			
-			resource = parser.createResource(manifest, urlResource) as DynamicStreamingResource;
+			var resource:DynamicStreamingResource = parser.createResource(manifest, urlResource) as DynamicStreamingResource;
 			assertTrue(resource != null);
-
+			
 			info = HTTPStreamingUtils.createF4FIndexInfo(resource);
 			assertTrue(info != null);
 			assertTrue(info.dvrInfo != null);
@@ -137,7 +160,7 @@ package org.osmf.net.httpstreaming
 			assertEquals(HTTPStreamingUtils.normalizeURL("http://path1/../path3/../path4/path5/path6"), "http://path4/path5/path6");
 		}
 		
-		private function createSingleStreamVODManifest():Manifest
+		private function createSingleStreamVODManifest(callback:Function):void
 		{
 			var xml:XML = 
 			<manifest xmlns="http://ns.adobe.com/f4m/1.0">
@@ -167,10 +190,12 @@ package org.osmf.net.httpstreaming
 				</media>
 			</manifest>;
 			
-			return parser.parse(xml.toXMLString(), SINGLE_STREAM_VOD_F4M_URL);
+			parser = new ManifestParser();
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, addAsync(callback, 1000));
+			parser.parse(xml.toXMLString(), SINGLE_STREAM_VOD_F4M_URL);
 		}
 		
-		private function createDVRMBRManifest():Manifest
+		private function createDVRMBRManifest(callback:Function):void
 		{
 			var xml:XML = 
 			<manifest xmlns="http://ns.adobe.com/f4m/1.0">
@@ -242,10 +267,12 @@ package org.osmf.net.httpstreaming
 				</bootstrapInfo>
 			</manifest>;
 
-			return parser.parse(xml.toXMLString(), DVR_MBR_F4M_URL);
+			parser = new ManifestParser();
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, addAsync(callback, 1000));
+			parser.parse(xml.toXMLString(), DVR_MBR_F4M_URL);
 		}
 		
-		private function createDVRMBRManifest2():Manifest
+		private function createDVRMBRManifest2(callback:Function):void
 		{
 			var xml:XML = 
 			<manifest xmlns="http://ns.adobe.com/f4m/1.0">
@@ -312,10 +339,12 @@ package org.osmf.net.httpstreaming
 				</bootstrapInfo>
 			</manifest>;
 
-			return parser.parse(xml.toXMLString(), DVR_MBR_F4M_URL);
+			parser = new ManifestParser();
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, addAsync(callback, 1000));
+			parser.parse(xml.toXMLString(), DVR_MBR_F4M_URL);
 		}
 
-		private static var parser:ManifestParser = new ManifestParser();
+		private static var parser:ManifestParser;
 		
 		private static const SINGLE_STREAM_VOD_F4M_URL:String = "http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Unprotected/215/avatar_4000.f4m";
 		private static const DVR_MBR_F4M_URL:String = "http://fms1j009f.corp.adobe.com/zeri_live/events/zeriDVRMBRAppendSegment/events/_definst_/live_dvr_mbr_event.f4m";

@@ -58,11 +58,11 @@ package org.osmf.net.httpstreaming
 			this.httpStreamingSwitchManagerAutoSwitch = value;
 			if (value)
 			{
-				netStream.addEventListener(HTTPStreamingEvent.FRAGMENT_END, onFragmentEnd);
+				netStream.addEventListener(HTTPStreamingEvent.END_FRAGMENT, onEndFragment);
 			}
 			else
 			{
-				netStream.removeEventListener(HTTPStreamingEvent.FRAGMENT_END, onFragmentEnd);
+				netStream.removeEventListener(HTTPStreamingEvent.END_FRAGMENT, onEndFragment);
 			}
 		}	
 		
@@ -77,7 +77,7 @@ package org.osmf.net.httpstreaming
 		 * When a fragment download has been complete, we need to call checkRules of the base
 		 * class to update critical ratios such as DownloadRatio.
 		 */
-		private function onFragmentEnd(event:HTTPStreamingEvent):void
+		private function onEndFragment(event:HTTPStreamingEvent):void
 		{
 			doCheckRules();
 		}

@@ -25,6 +25,8 @@ package org.osmf.media
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
+	import mx.accessibility.AccConst;
+	
 	import org.flexunit.assertThat;
 	import org.hamcrest.number.greaterThan;
 	import org.hamcrest.number.greaterThanOrEqualTo;
@@ -244,8 +246,8 @@ package org.osmf.media
 		/**
 		 * Tests seek on a LIVE SBR stream.
 		 */
-		[Test(async, timeout="60000", order=5, bugId="FM-1291")]
-		public function seekToBegin_SBR_Live():void
+		[Test(async, timeout="60000", order=5, bugId="FM-1287")]
+		public function seekOutsideBuffer_SBR_VOD():void
 		{
 			const testLenght:uint = DEFAULT_TEST_LENGTH;
 			
@@ -268,43 +270,56 @@ package org.osmf.media
 			}
 			
 			setUpEvents(playerHelper, true);
-			playerHelper.mediaResource = new URLResource(LEGACY_HDS_SBR_WITH_DVR);
 			
-			var seekTimerInterval:uint = 15000;
-			var seekTimer:Timer = new Timer(seekTimerInterval, 1);
-			seekTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onSeekTimerComplete);
-			var seekTimerStarted:Boolean = false;
-			var seekedToBegining:Boolean = false;
+			playerHelper.mediaResource = new URLResource(LEGACY_HDS_SBR_VOD_LARGE);
+			
+			var seekTimerInterval:uint = 1000;
+			var seekTimer:Timer = null;
+			var seekInitiated:Boolean = false;
+			var bufferTime:uint = 40;
+			var seekPosition:uint = 90;
 			
 			function onReady(event:Event):void
 			{
 				assertThat("We should have no access to alternatve audio information", !(playerHelper.actualPlayer.hasAlternativeAudio));
 				assertThat("The number of alternative audio streams is equal with 0.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(0));
+				playerHelper.actualPlayer.bufferTime = bufferTime;
 				playerHelper.actualPlayer.play();
 			}
 			
 			function onPlaying(event:Event):void
 			{
-				if (!seekTimerStarted)
+				if (seekTimer == null)
 				{
-					seekTimerStarted = true;
+					seekTimer = new Timer(seekTimerInterval);
+					seekTimer.addEventListener(TimerEvent.TIMER, onSeekTimer);
 					seekTimer.start();
 				}
 			}
 			
 			function onComplete(passThroughData:Object):void
 			{
-				assertThat("We performed the seek operation", seekTimerStarted && seekedToBegining);
+				assertThat("We performed the seek operation", seekInitiated);
 				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
 				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
 				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
+				assertThat("Player current time greater than seeked position.", playerHelper.actualPlayer.currentTime, greaterThan(seekPosition));
 				setUpEvents(playerHelper, false);
 			}
 			
-			function onSeekTimerComplete():void
+			function onSeekTimer():void
 			{
-				seekedToBegining = true;
-				playerHelper.actualPlayer.seek(0);
+				if (playerHelper.actualPlayer.temporal 
+					&& !isNaN(playerHelper.actualPlayer.currentTime) 
+					&& (playerHelper.actualPlayer.currentTime > 0)
+					)
+				{
+					seekTimer.removeEventListener(TimerEvent.TIMER, onSeekTimer);
+					seekTimer.stop();
+
+					seekInitiated = true;
+					playerHelper.actualPlayer.seek(seekPosition);
+				}
 			}
 		}
 
@@ -313,8 +328,6 @@ package org.osmf.media
 		private static const LEGACY_HDS_SBR_WITH_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live/events/_definst_/liveevent.f4m";
 		private static const LEGACY_HDS_SBR_WITH_LIVE_DRM:String = "http://10.131.237.107/live/events/hs_sbr_live_drm/events/_definst_/liveevent.f4m";
 		private static const LEGACY_HDS_SBR_VOD:String = "http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m";	
-		
-//		private static const LEGACY_HDS_MBR_WITH_DVR:String = "http://10.131.237.107/live/events/hs_mbr_dvr/events/_definst_/liveevent.f4m";
-//		private static const LEGACY_HDS_MBR_WITH_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live/events/_definst_/liveevent.f4m";
+		private static const LEGACY_HDS_SBR_VOD_LARGE:String = "http://10.131.237.107/vod/hs/vod/ex.f4m"; 
 	}
 }

@@ -22,9 +22,9 @@
 package org.osmf.events
 {
 	import flash.events.Event;
-
-	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	
 	[ExcludeClass]
 	
@@ -38,9 +38,24 @@ package org.osmf.events
 	public class HTTPStreamingEvent extends Event
 	{
 		/**
+		 * Dispatched when a transition operation has been initiated.
+		 */
+		public static const TRANSITION:String = "transition";
+		
+		/**
+		 * Dispatched when a transition operation has been completed.
+		 */
+		public static const TRANSITION_COMPLETE:String = "transitionComplete";
+		
+		/**
 		 * Dispatched when the end of a fragment/chunk has been reached.
 		 */
-		public static const FRAGMENT_END:String = "fragmentEnd";
+		public static const BEGIN_FRAGMENT:String = "beginFragment";
+
+		/**
+		 * Dispatched when the end of a fragment/chunk has been reached.
+		 */
+		public static const END_FRAGMENT:String = "endFragment";
 		
 		/**
 		 * Dispatched when the duration of the current fragment/chunk has been calculated.
@@ -71,7 +86,8 @@ package org.osmf.events
 				cancelable:Boolean = false,
 				fragmentDuration:Number = 0,
 				scriptDataObject:FLVTagScriptDataObject = null,
-				scriptDataMode:String = FLVTagScriptDataMode.NORMAL
+				scriptDataMode:String = FLVTagScriptDataMode.NORMAL,
+				url:String = null
 				)
 		{
 			super(type, bubbles, cancelable);
@@ -79,6 +95,7 @@ package org.osmf.events
 			_fragmentDuration = fragmentDuration;
 			_scriptDataObject = scriptDataObject;
 			_scriptDataMode   = scriptDataMode;
+			_url = url;
 		}
 		
 		/**
@@ -106,6 +123,14 @@ package org.osmf.events
 		}
 
 		/**
+		 * Associated url.
+		 */
+		public function get url():String
+		{
+			return _url;
+		}
+		
+		/**
 		 * Clones the event.
 		 */
 		override public function clone():Event
@@ -124,5 +149,6 @@ package org.osmf.events
 		private var _fragmentDuration:Number;
 		private var _scriptDataObject:FLVTagScriptDataObject;
 		private var _scriptDataMode:String;
+		private var _url:String;
 	}
 }

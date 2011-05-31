@@ -1,31 +1,32 @@
 /*****************************************************
-*  
+*
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
-*  
+*
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
 *  Version 1.1 (the "License"); you may not use this file except in
 *  compliance with the License. You may obtain a copy of the License at
 *  http://www.mozilla.org/MPL/
-*   
+*
 *  Software distributed under the License is distributed on an "AS IS"
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*   
-*  
+*
+*
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
-*  Incorporated. All Rights Reserved. 
-*  
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems
+*  Incorporated. All Rights Reserved.
+*
 *****************************************************/
 package org.osmf.elements.f4mClasses
 {
-	import __AS3__.vec.Vector;
-	
-	import flash.events.DRMAuthenticateEvent;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.net.URLLoader;
 	import flash.utils.ByteArray;
 	
+	import org.osmf.events.ParseEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaType;
 	import org.osmf.media.URLResource;
@@ -39,478 +40,176 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.net.StreamingItem;
 	import org.osmf.net.StreamingItemType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.net.StreamingXMLResource;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
-	
+
 	[ExcludeClass]
-	
+
+	[Event(name="parseComplete", type="org.osmf.events.ParseEvent")]
+	[Event(name="parseError", type="org.osmf.events.ParseEvent")]
+
 	/**
 	 * @private
 	 **/
-	public class ManifestParser
+	public class ManifestParser extends EventDispatcher
 	{
-		namespace xmlns = "http://ns.adobe.com/f4m/1.0";
-		
 		/**
-		 * Parses a Manifest Object from a XML string.
-		 * 
-		 * @throws Error if the parse fails.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function parse(value:String, rootUrl:String=null):Manifest
+		 * Constructor.
+		 */
+		public function ManifestParser()
 		{
-			var manifest:Manifest = new Manifest();
-			var isMulticast:Boolean = false;
-			
+			mediaParser = buildMediaParser();
+			mediaParser.addEventListener(ParseEvent.PARSE_COMPLETE, onMediaLoadComplete, false, 0, true);
+			mediaParser.addEventListener(ParseEvent.PARSE_ERROR, onAdditionalLoadError, false, 0, true);
+
+			dvrInfoParser = buildDVRInfoParser();
+			dvrInfoParser.addEventListener(ParseEvent.PARSE_COMPLETE, onDVRInfoLoadComplete, false, 0, true);
+			dvrInfoParser.addEventListener(ParseEvent.PARSE_ERROR, onAdditionalLoadError, false, 0, true);
+
+			drmAdditionalHeaderParser = buildDRMAdditionalHeaderParser();
+			drmAdditionalHeaderParser.addEventListener(ParseEvent.PARSE_COMPLETE, onDRMAdditionalHeaderLoadComplete, false, 0, true);
+			drmAdditionalHeaderParser.addEventListener(ParseEvent.PARSE_ERROR, onAdditionalLoadError, false, 0, true);
+
+			bootstrapInfoParser = buildBootstrapInfoParser();
+			bootstrapInfoParser.addEventListener(ParseEvent.PARSE_COMPLETE, onBootstrapInfoLoadComplete, false, 0, true);
+			bootstrapInfoParser.addEventListener(ParseEvent.PARSE_ERROR, onAdditionalLoadError, false, 0, true);
+		}
+
+		/**
+		 * Parses an F4M file.
+		 *
+		 * @param value The string xml of the F4M file.
+		 * @param rootUrl The rootUrl of the resource.
+		 * @param manifest The existing <code>Manifest</code> object to append to.
+		 * 				   If not specified, a new <code>Manifest</code> is created.
+		 */
+		public function parse(value:String, rootUrl:String=null, manifest:Manifest=null):void
+		{
+			if (!value)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_VALUE_MISSING));
+			}
+
+			parsing = true;
+
+			// If we weren't passed a manifest we need to build one.
+			// Otherwise we'll use the one that was passed in and add to it.
+			if (!manifest)
+			{
+				manifest = new Manifest();
+			}
+
+			// Now use whatever manifest we end up with.
+			this.manifest = manifest;
+
+			unfinishedLoads = 0;
+			isMulticast = false;
+			bitrateMissing = false;
+
 			var root:XML = new XML(value);
-						
-			if (root.xmlns::id.length() > 0)
+			var nmsp:Namespace = root.namespace();
+
+			if (root.nmsp::id.length() > 0)
 			{
-				manifest.id = root.xmlns::id.text();
+				manifest.id = root.nmsp::id.text();
 			}
-			
-			if (root.xmlns::label.length() > 0)
+
+			if (root.nmsp::label.length() > 0)
 			{
-				manifest.label = root.xmlns::label.text();
+				manifest.label = root.nmsp::label.text();
 			}
-			
-			if (root.xmlns::lang.length() > 0)
+
+			if (root.nmsp::lang.length() > 0)
 			{
-				manifest.lang = root.xmlns::lang.text();
+				manifest.lang = root.nmsp::lang.text();
 			}
-			
-			if (root.xmlns::duration.length() > 0)
-			{			
-				manifest.duration = root.xmlns::duration.text();
-			}	
-			
-			if (root.xmlns::startTime.length() > 0)
-			{			
-				manifest.startTime = DateUtil.parseW3CDTF(root.xmlns::startTime.text());
-			}	
-			
-			if (root.xmlns::mimeType.length() > 0)
-			{			
-				manifest.mimeType = root.xmlns::mimeType.text();
-			}	
-			
-			if (root.xmlns::streamType.length() > 0)
-			{			
-				manifest.streamType = root.xmlns::streamType.text();
-			}
-			
-			if (root.xmlns::deliveryType.length() > 0)
-			{			
-				manifest.deliveryType = root.xmlns::deliveryType.text();
-			}
-			
-			if (root.xmlns::baseURL.length() > 0)
-			{			
-				manifest.baseURL = root.xmlns::baseURL.text();
-			}
-			
-			if (root.xmlns::urlIncludesFMSApplicationInstance.length() > 0)
+
+			if (root.nmsp::duration.length() > 0)
 			{
-				manifest.urlIncludesFMSApplicationInstance = (root.xmlns::urlIncludesFMSApplicationInstance.text() == "true");
+				manifest.duration = root.nmsp::duration.text();
 			}
-			
-			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL :  rootUrl;
-			
+
+			if (root.nmsp::startTime.length() > 0)
+			{
+				manifest.startTime = DateUtil.parseW3CDTF(root.nmsp::startTime.text());
+			}
+
+			if (root.nmsp::mimeType.length() > 0)
+			{
+				manifest.mimeType = root.nmsp::mimeType.text();
+			}
+
+			if (root.nmsp::streamType.length() > 0)
+			{
+				manifest.streamType = root.nmsp::streamType.text();
+			}
+
+			if (root.nmsp::deliveryType.length() > 0)
+			{
+				manifest.deliveryType = root.nmsp::deliveryType.text();
+			}
+
+			if (root.nmsp::baseURL.length() > 0)
+			{
+				manifest.baseURL = root.nmsp::baseURL.text();
+			}
+
+			if (root.nmsp::urlIncludesFMSApplicationInstance.length() > 0)
+			{
+				manifest.urlIncludesFMSApplicationInstance = (root.nmsp::urlIncludesFMSApplicationInstance.text() == "true");
+			}
+
+			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL : rootUrl;
+
 			// DVRInfo
-			for each (var dvrInfo:XML in root.xmlns::dvrInfo)
+			for each (var dvrInfo:XML in root.nmsp::dvrInfo)
 			{
-				parseDVRInfo(dvrInfo, baseUrl, manifest);	
-				break;		
-			}	
-			
+				unfinishedLoads++;
+				parseDVRInfo(dvrInfo, baseUrl);
+				break;
+			}
+
 			// Media	
-			
-			var bitrateMissing:Boolean = false;
-			var multicastParameterInvalid:Boolean = false;
-			
-			for each (var media:XML in root.xmlns::media)
+			for each (var media:XML in root.nmsp::media)
 			{
-				var newMedia:Media = parseMedia(media, baseUrl);
-				if ((newMedia.multicastGroupspec != null 
-					&& newMedia.multicastGroupspec.length > 0 
-					&& (newMedia.multicastStreamName == null || newMedia.multicastStreamName.length <= 0)) 
-					|| (newMedia.multicastStreamName != null 
-						&& newMedia.multicastStreamName.length > 0 
-						&& (newMedia.multicastGroupspec == null || newMedia.multicastGroupspec.length <= 0)))
-				{
-					multicastParameterInvalid = true;
-				}
-				
-				if (newMedia.multicastGroupspec != null && newMedia.multicastGroupspec.length > 0)
-				{
-					isMulticast = true;
-				}
+				unfinishedLoads++;
+				parseMedia(media, baseUrl);
+			}
 
-				if (isSupportedType(newMedia.type))
-				{
-					if (newMedia.label == null)
-						newMedia.label = manifest.label;
-					if (newMedia.language == null)
-						newMedia.language = manifest.lang;
-
-					if (newMedia.alternate) 
-					{
-						if (newMedia.type == StreamingItemType.AUDIO)
-						{
-							manifest.alternativeMedia.push(newMedia);
-						}
-					}
-					else
-					{
-						manifest.media.push(newMedia);
-					}
-				}
-				
-				bitrateMissing ||= isNaN(newMedia.bitrate);
-			}	
-			
-			if (multicastParameterInvalid)
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.MULTICAST_PARAMETER_INVALID));
-			}
-			
-			if (manifest.media.length > 1 && isMulticast)
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.MULTICAST_NOT_SUPPORT_MBR));
-			} 
-			
-			if (isMulticast)
-			{
-				manifest.streamType = StreamType.LIVE;
-			}
-			
-			if ( (manifest.media.length+manifest.alternativeMedia.length ) > 1 && bitrateMissing)
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_BITRATE_MISSING));
-			}
-							
-			var allMedia:Vector.<Media> = manifest.media.concat(manifest.alternativeMedia);
-			
 			// DRM Metadata	
-			
-			for each (var data:XML in root.xmlns::drmAdditionalHeader)
+			for each (var data:XML in root.nmsp::drmAdditionalHeader)
 			{
-				parseDRMAdditionalHeader(data, allMedia, baseUrl, manifest);
-			}	
-			
-			// Bootstrap	
-			
-			for each (var info:XML in root.xmlns::bootstrapInfo)
+				unfinishedLoads++;
+				parseDRMAdditionalHeader(data, baseUrl);
+			}
+
+			// Bootstrap
+			bootstraps = new Vector.<BootstrapInfo>();
+			for each (var info:XML in root.nmsp::bootstrapInfo)
 			{
-				parseBootstrapInfo(info, allMedia, baseUrl, manifest);
-			}	
-			
+				unfinishedLoads++;
+				parseBootstrapInfo(info, baseUrl);
+			}
+
 			// Required if base URL is omitted from Manifest
 			generateRTMPBaseURL(manifest);
-									
-			return manifest;
-		}
-		
-		private function parseMedia(value:XML, baseUrl:String):Media
-		{
-			var decoder:Base64Decoder;
-			var media:Media = new Media();
-			
-			if (value.attribute('url').length() > 0)
-			{
-				media.url = value.@url;
-			}
-			else  // Raise parse error
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));
-			}
-			
-			if (value.attribute('bitrate').length() > 0)
-			{
-				media.bitrate = value.@bitrate;
-			}
-				
-			if (value.attribute('drmAdditionalHeaderId').length() > 0)
-			{
-				media.drmAdditionalHeader = new DRMAdditionalHeader();
-				media.drmAdditionalHeader.id = value.@drmAdditionalHeaderId;
-			}
-			
-			if (value.attribute('bootstrapInfoId').length() > 0)
-			{
-				media.bootstrapInfo = new BootstrapInfo();
-				media.bootstrapInfo.id = value.@bootstrapInfoId;
-			}
-			
-			if (value.attribute('height').length() > 0)
-			{
-				media.height = value.@height;
-			}
-			
-			if (value.attribute('width').length() > 0)
-			{
-				media.width = value.@width;
-			}
-			
-			if (value.attribute('groupspec').length() > 0)
-			{
-				media.multicastGroupspec = value.@groupspec;
-			}
-			
-			if (value.attribute('multicastStreamName').length() > 0)
-			{
-				media.multicastStreamName = value.@multicastStreamName;
-			}
-			
-			if (value.attribute('label').length() > 0)
-			{
-				media.label = value.@label;
-			}
-			
-			if (value.attribute('type').length() > 0)
-			{
-				media.type = value.@type;
-			}
-			else
-			{
-				media.type = StreamingItemType.VIDEO;
-			}
 
-			if (value.attribute('lang').length() > 0)
-			{
-				media.language = value.@lang;
-			}
-			
-			if (value.hasOwnProperty("@alternate") || value.attribute('alternate').length() > 0)
-			{
-				media.alternate = true;
-			}
-			
-			if (value.xmlns::moov.length() > 0)
-			{		
-				decoder = new Base64Decoder();
-				decoder.decode(value.xmlns::moov.text());
-				media.moov = decoder.drain();	
-			}
-			
-			if (value.xmlns::metadata.length() > 0)
-			{
-				decoder = new Base64Decoder();
-				decoder.decode(value.xmlns::metadata.text());
-				
-				var data:ByteArray = decoder.drain();
-				data.position = 0;
-				data.objectEncoding = 0;
-				
-				try
-				{
-					var header:String = data.readObject() as String;
-					var metaInfo:Object = data.readObject();
-					media.metadata = metaInfo;
-					
-					// if width and height are not already set by the media
-					// attributes and they are already present in metadata 
-					// object, then copy their values to the media properties
-					if (
-							(isNaN(media.width) || media.width == 0) &&
-							media.metadata.hasOwnProperty("width")
-						)
-					{
-						media.width = media.metadata["width"];	
-					}
-					if (
-						(isNaN(media.height) || media.height == 0) &&
-						media.metadata.hasOwnProperty("height")
-					)
-					{
-						media.height = media.metadata["height"];	
-					}
-				}
-				catch (e:Error)
-				{
-				}			
-			}
-			
-			if (value.xmlns::xmpMetadata.length() > 0)
-			{
-				decoder = new Base64Decoder();
-				decoder.decode(value.xmlns::xmpMetadata.text());
-				media.xmp = decoder.drain();	
-			}
+			parsing = false;
 
-			return media;
+			finishLoad(manifest);
 		}
-		
-		private function parseDVRInfo(value:XML, baseUrl:String, manifest:Manifest):void
-		{
-			var dvrInfo:DVRInfo = new DVRInfo();
-			if (value.attribute("id").length() > 0)
-			{
-				dvrInfo.id = value.@id;
-			}
-			if (value.attribute("url").length() > 0)
-			{
-				var url:String = value.@url;
-				if (!isAbsoluteURL(url))
-				{
-					url = baseUrl + "/" + url;
-				}
-				dvrInfo.url = url;
-			}
-			if (value.attribute("beginOffset").length() > 0)
-			{
-				dvrInfo.beginOffset = Math.max(0, parseInt(value.@beginOffset));
-			}
-			if (value.attribute("endOffset").length() > 0)
-			{
-				var v:Number = new Number(value.@endOffset);
-				if (v > 0 && v < 1.0)
-				{
-					dvrInfo.endOffset = 1;
-				}
-				else
-				{
-					dvrInfo.endOffset =  Math.max(0, v);
-				}
-			}
-			if (value.attribute("offline").length() > 0)
-			{
-				var s:String = value.@offline;
-				dvrInfo.offline = (s.toLowerCase() == "true");
-			}
-			
-			manifest.dvrInfo = dvrInfo;
-		}
-		
-		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>, baseUrl:String, manifest:Manifest):void
-		{
-			var url:String = null;
-			var media:Media;
-			
-			var drmAdditionalHeader:DRMAdditionalHeader = new DRMAdditionalHeader();	
-			
-			if (value.attribute("id").length() > 0)
-			{
-				drmAdditionalHeader.id = value.@id; 
-			}
-			
-			if (value.attribute("url").length() > 0)
-			{
-				url = value.@url;
-				if (!isAbsoluteURL(url))
-				{
-					url = baseUrl + "/" + url;
-				}
-				drmAdditionalHeader.url = url;
-			}
-			else
-			{			
-				var metadata:String = value.text();
-				var decoder:Base64Decoder = new Base64Decoder();
-				decoder.decode(metadata);
-				drmAdditionalHeader.data = decoder.drain();
-			}
-			
-			manifest.drmAdditionalHeaders.push(drmAdditionalHeader);
-								
-			for each (media in allMedia)
-			{
-				if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.id == drmAdditionalHeader.id)
-				{
-					media.drmAdditionalHeader = drmAdditionalHeader;					
-				}
-			}
-		}		
-		
-		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>, baseUrl:String, manifest:Manifest):void
-		{			
-			var media:Media;	
-			
-			var url:String = null;
-			var bootstrapInfo:BootstrapInfo = new BootstrapInfo();
-			
-			if (value.attribute('profile').length() > 0)
-			{
-				bootstrapInfo.profile = value.@profile;
-			}
-			else  // Raise parse error
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_PROFILE_MISSING));
-			}
-			
-			if (value.attribute("id").length() > 0)
-			{
-				bootstrapInfo.id = value.@id; 
-			}
-				
-			if (value.attribute("url").length() > 0)
-			{
-				url = value.@url;
-				if (!isAbsoluteURL(url) && baseUrl != null)
-				{
-					url = baseUrl + "/" + url;
-				}
-				bootstrapInfo.url = url;
-			}
-			else
-			{			
-				var metadata:String = value.text();
-				var decoder:Base64Decoder = new Base64Decoder();
-				decoder.decode(metadata);
-				bootstrapInfo.data = decoder.drain();
-			}
-								
-			for each (media in allMedia)
-			{
-				if (media.bootstrapInfo == null) //No per media bootstrap. Apply it to all items.
-				{
-					media.bootstrapInfo = bootstrapInfo;
-				}
-				else if (media.bootstrapInfo.id == bootstrapInfo.id)
-				{
-					media.bootstrapInfo = bootstrapInfo;
-				}						
-			}			
-			
-			
-		}		
-		
+
 		/**
-		 * @private
-		 * Ensures that an RTMP based Manifest has the same server for all
-		 * streaming items, and extracts the base URL from the streaming items
-		 * if not specified. 
-		 */ 
-		private function generateRTMPBaseURL(manifest:Manifest):void
+		 * Creates a <code>MediaResourceBase</code>.
+		 *
+		 * @param value
+		 * @param manifestResource
+		 * @return
+		 */
+		public function createResource(value:Manifest, manifestResource:MediaResourceBase):MediaResourceBase
 		{
-			if (manifest.baseURL == null)
-			{						
-				for each(var media:Media in manifest.media)
-				{
-					 if (NetStreamUtils.isRTMPStream(media.url))
-					 {					 	
-					 	manifest.baseURL = media.url;
-					 	break; 
-					 }
-				}
-			}
-		}
-		
-		/**
-		 * Generates a MediaResourceBase for the given manifest. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 		
-		public function createResource(value:Manifest, manifestResource:URLResource):MediaResourceBase
-		{			
 			var drmMetadata:Metadata = null;
 			var httpMetadata:Metadata = null;
 			var resource:StreamingURLResource;
@@ -518,19 +217,31 @@ package org.osmf.elements.f4mClasses
 			var serverBaseURLs:Vector.<String>;
 			var url:String;
 			var bootstrapInfoURLString:String;
-			
-			var manifestURL:URL = new URL(manifestResource.url); 
+
+			var manifestURL:URL;
+			if (manifestResource is URLResource)
+			{
+				manifestURL = new URL((manifestResource as URLResource).url);
+			}
+			else
+			{
+				if (manifestResource is StreamingXMLResource)
+				{
+					manifestURL = new URL((manifestResource as StreamingXMLResource).url);
+				}
+			}
 			var cleanedPath:String = "/" + manifestURL.path;
 			cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/"));
-			var manifestFolder:String = manifestURL.protocol + "://" +  manifestURL.host + (manifestURL.port != "" ? ":" + manifestURL.port : "") + cleanedPath;
-			
-			if (value.media.length == 1)  // Single Stream/Progressive Resource
+			var manifestFolder:String = manifestURL.protocol + "://" + manifestURL.host + (manifestURL.port != "" ? ":" + manifestURL.port : "") + cleanedPath;
+
+			// Single Stream/Progressive Resource
+			if (value.media.length == 1)
 			{
 				media = value.media[0] as Media;
 				url = media.url;
-				
+
 				var baseURLString:String = null;
-				if (isAbsoluteURL(url))
+				if (URL.isAbsoluteURL(url))
 				{
 					// The server base URL needs to be extracted from the media's
 					// URL.  Note that we assume it's the same for all media.
@@ -544,50 +255,50 @@ package org.osmf.elements.f4mClasses
 				{
 					baseURLString = manifestFolder;
 				}
-				
-				if (media.multicastGroupspec != null && 
-					media.multicastGroupspec.length > 0 &&
-					media.multicastStreamName != null &&
-					media.multicastStreamName.length > 0)
+
+				if (media.multicastGroupspec != null && media.multicastGroupspec.length > 0 && media.multicastStreamName != null && media.multicastStreamName.length > 0)
 				{
-					if (isAbsoluteURL(url))
+					if (URL.isAbsoluteURL(url))
 					{
 						resource = new MulticastResource(url, value.streamType);
-					}				
-					else if (value.baseURL != null)	// Relative to Base URL					
+					}
+					// Relative to Base URL
+					else if (value.baseURL != null)
 					{
 						resource = new MulticastResource(value.baseURL + "/" + url, streamType(value));
 					}
-					else // Relative to F4M file  (no absolute or base urls or rtmp urls).
+					// Relative to F4M file  (no absolute or base urls or rtmp urls).
+					else
 					{
 						resource = new MulticastResource(manifestFolder + "/" + url, streamType(value));
 					}
 					MulticastResource(resource).groupspec = media.multicastGroupspec;
 					MulticastResource(resource).streamName = media.multicastStreamName;
 				}
-				else if (isAbsoluteURL(url))
+				else if (URL.isAbsoluteURL(url))
 				{
 					resource = new StreamingURLResource(url, value.streamType);
-				}				
-				else if (value.baseURL != null)	// Relative to Base URL					
+				}
+				// Relative to Base URL
+				else if (value.baseURL != null)
 				{
 					resource = new StreamingURLResource(value.baseURL + "/" + url, streamType(value));
 				}
-				else // Relative to F4M file  (no absolute or base urls or rtmp urls).
+				// Relative to F4M file  (no absolute or base urls or rtmp urls).
+				else
 				{
 					resource = new StreamingURLResource(manifestFolder + "/" + url, streamType(value));
 				}
-				
+
 				resource.urlIncludesFMSApplicationInstance = value.urlIncludesFMSApplicationInstance;
-				
-				if (media.bootstrapInfo	!= null)
+
+				if (media.bootstrapInfo != null)
 				{
 					serverBaseURLs = new Vector.<String>();
 					serverBaseURLs.push(baseURLString);
-					
+
 					bootstrapInfoURLString = media.bootstrapInfo.url;
-					if (media.bootstrapInfo.url != null &&
-						isAbsoluteURL(media.bootstrapInfo.url) == false)
+					if (media.bootstrapInfo.url != null && URL.isAbsoluteURL(media.bootstrapInfo.url) == false)
 					{
 						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
 						media.bootstrapInfo.url = bootstrapInfoURLString;
@@ -599,36 +310,36 @@ package org.osmf.elements.f4mClasses
 						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY, serverBaseURLs);
 					}
 				}
-				
+
 				if (media.metadata != null)
 				{
 					if (httpMetadata == null)
 					{
 						httpMetadata = new Metadata();
 					}
-					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY, media.metadata);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY, media.metadata);
 				}
-				
+
 				if (media.xmp != null)
 				{
 					if (httpMetadata == null)
 					{
 						httpMetadata = new Metadata();
 					}
-					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY, media.xmp);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY, media.xmp);
 				}
 
 				if (media.drmAdditionalHeader != null)
-				{					
+				{
 					drmMetadata = new Metadata();
 					if (Media(value.media[0]).drmAdditionalHeader != null && Media(value.media[0]).drmAdditionalHeader.data != null)
 					{
 						drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY, Media(value.media[0]).drmAdditionalHeader.data);
-						
+
 						resource.drmContentData = extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader.data);
 					}
 				}
-				
+
 				if (httpMetadata != null)
 				{
 					resource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, httpMetadata);
@@ -636,23 +347,24 @@ package org.osmf.elements.f4mClasses
 				if (drmMetadata != null)
 				{
 					resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
-				}								
+				}
 			}
-			else if (value.media.length > 1) // Dynamic Streaming
+			// Dynamic Streaming
+			else if (value.media.length > 1)
 			{
 				var baseURL:String = value.baseURL != null ? value.baseURL : manifestFolder;
 				serverBaseURLs = new Vector.<String>();
 				serverBaseURLs.push(baseURL);
-				
+
 				// TODO: MBR streams can be absolute (with no baseURL) or relative (with a baseURL).
 				// But we need to map them into the DynamicStreamingResource object model, which
 				// assumes the latter.  For now, we only support the latter input, but we should
 				// add support for the former (absolute URLs with no base URL).
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, streamType(value));
 				dynResource.urlIncludesFMSApplicationInstance = value.urlIncludesFMSApplicationInstance;
-				
+
 				var streamItems:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();
-				
+
 				// Only put this on HTTPStreaming, not RTMPStreaming resources.   RTMP resources always get a generated base url.
 				if (NetStreamUtils.isRTMPStream(baseURL) == false)
 				{
@@ -660,50 +372,49 @@ package org.osmf.elements.f4mClasses
 					dynResource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, httpMetadata);
 					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY, serverBaseURLs);
 				}
-				
+
 				for each (media in value.media)
-				{	
+				{
 					var stream:String;
-					
-					if (isAbsoluteURL(media.url))
+
+					if (URL.isAbsoluteURL(media.url))
 					{
 						stream = NetStreamUtils.getStreamNameFromURL(media.url);
 					}
 					else
 					{
 						stream = media.url;
-					}					
+					}
 					var item:DynamicStreamingItem = new DynamicStreamingItem(stream, media.bitrate, media.width, media.height);
 					streamItems.push(item);
 					if (media.drmAdditionalHeader != null)
-					{						
+					{
 						if (dynResource.getMetadataValue(MetadataNamespaces.DRM_METADATA) == null)
 						{
 							drmMetadata = new Metadata();
 							dynResource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
-						}						
+						}
 						if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
 						{
-							drmMetadata.addValue(item.streamName, extractDRMMetadata(media.drmAdditionalHeader.data));	
+							drmMetadata.addValue(item.streamName, extractDRMMetadata(media.drmAdditionalHeader.data));
 							drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName, media.drmAdditionalHeader.data);
-						} 						
+						}
 					}
-					
-					if (media.bootstrapInfo	!= null)
+
+					if (media.bootstrapInfo != null)
 					{
 						bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url : null;
-						if (media.bootstrapInfo.url != null &&
-							isAbsoluteURL(media.bootstrapInfo.url) == false)
+						if (media.bootstrapInfo.url != null && URL.isAbsoluteURL(media.bootstrapInfo.url) == false)
 						{
 							bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
-							media.bootstrapInfo.url = bootstrapInfoURLString; 
+							media.bootstrapInfo.url = bootstrapInfoURLString;
 						}
 						if (httpMetadata != null)
 						{
 							httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName, media.bootstrapInfo);
 						}
 					}
-			
+
 					if (media.metadata != null)
 					{
 						if (httpMetadata != null)
@@ -711,91 +422,232 @@ package org.osmf.elements.f4mClasses
 							httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName, media.metadata);
 						}
 					}
-					
+
 					if (media.xmp != null)
 					{
-						if (httpMetadata != null) 
+						if (httpMetadata != null)
 						{
 							httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);
 						}
 					}
 				}
-				
+
 				dynResource.streamItems = streamItems;
-				
+
 				resource = dynResource;
 			}
 			else if (value.baseURL == null)
-			{	
+			{
 				// This is a parse error, we need an rtmp url
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));					
-			}	
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));
+			}
 			else if (value.media.length == 0)
 			{
 				// This is a parse error, we need at least one media tag
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_MEDIA_MISSING));					
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_MEDIA_MISSING));
 			}
-			
+
 			if (value.mimeType != null)
 			{
 				resource.mediaType = MediaType.VIDEO;
-				resource.mimeType = value.mimeType;			
+				resource.mimeType = value.mimeType;
 			}
-			
-			// Add subclip info from original resource
-			var streamingManifestResource:StreamingURLResource = manifestResource as StreamingURLResource;
-			if (streamingManifestResource != null)
+
+			if (manifestResource is URLResource)
 			{
-				resource.clipStartTime = streamingManifestResource.clipStartTime;
-				resource.clipEndTime = streamingManifestResource.clipEndTime;
+				// Add subclip info from original resource
+				var streamingManifestResource:StreamingURLResource = manifestResource as StreamingURLResource;
+				if (streamingManifestResource != null)
+				{
+					resource.clipStartTime = streamingManifestResource.clipStartTime;
+					resource.clipEndTime = streamingManifestResource.clipEndTime;
+				}
 			}
-			
+			else
+			{
+				if (manifestResource is StreamingXMLResource)
+				{
+					var streamingXMLManifestResource:StreamingXMLResource = manifestResource as StreamingXMLResource;
+					resource.clipStartTime = streamingXMLManifestResource.clipStartTime;
+					resource.clipEndTime = streamingXMLManifestResource.clipEndTime;
+				}
+			}
+
 			// Add metadata to the created resource specifying the resource from
 			// which it was derived.  This allows interested clients to determine
 			// the origins of the resource.
 			resource.addMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA, manifestResource);
-			
+
 			addDVRInfo(value, resource);
-			
+
 			// we add alternative media only for HTTP Streaming
 			if (NetStreamUtils.isRTMPStream(baseURL) == false)
 			{
 				addAlternativeMedia(value, resource, manifestFolder);
 			}
+
+			// Clear out any bootstraps we've been holding onto since we don't need them anymore.
+			bootstraps = null;
+
 			return resource;
 		}
-		
-		private function isAbsoluteURL(url:String):Boolean
+
+		/**
+		 * Builds a parser to use for media nodes.
+		 *
+		 * @return
+		 *
+		 * @private
+		 * In protected scope so that subclasses can change the parser.
+		 */
+		protected function buildMediaParser():BaseParser
 		{
-			var theURL:URL = new URL(url);
-			return theURL.absolute;
+			return new MediaParser();
 		}
-		
+
+		/**
+		 * Builds a parser to use for DVR info nodes.
+		 *
+		 * @return
+		 *
+		 * @private
+		 * In protected scope so that subclasses can change the parser.
+		 */
+		protected function buildDVRInfoParser():BaseParser
+		{
+			return new DVRInfoParser();
+		}
+
+		/**
+		 * Builds a parser to use for DRM header nodes.
+		 *
+		 * @return
+		 *
+		 * @private
+		 * In protected scope so that subclasses can change the parser.
+		 */
+		protected function buildDRMAdditionalHeaderParser():BaseParser
+		{
+			return new DRMAdditionalHeaderParser();
+		}
+
+		/**
+		 * Builds a parser to use for bootstrap info nodes.
+		 *
+		 * @return
+		 *
+		 * @private
+		 * In protected scope so that subclasses can change the parser.
+		 */
+		protected function buildBootstrapInfoParser():BaseParser
+		{
+			return new BootstrapInfoParser();
+		}
+
+		/**
+		 * Checks a manifest to be sure that it is valid.
+		 *
+		 * @param manifest
+		 * @param isMulticast
+		 * @param bitrateMissing
+		 */
+		protected function validateManifest(manifest:Manifest, isMulticast:Boolean, bitrateMissing:Boolean):void
+		{
+			if (manifest.media.length > 1 && isMulticast)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.MULTICAST_NOT_SUPPORT_MBR));
+			}
+
+			if ((manifest.media.length + manifest.alternativeMedia.length) > 1 && bitrateMissing)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_BITRATE_MISSING));
+			}
+
+			if (isMulticast)
+			{
+				manifest.streamType = StreamType.LIVE;
+			}
+		}
+
+		/**
+		 * Completes the loading process.
+		 *
+		 * @param manifest
+		 */
+		protected function finishLoad(manifest:Manifest):void
+		{
+			if (parsing)
+			{
+				return;
+			}
+
+			if (unfinishedLoads > 0)
+			{
+				return;
+			}
+
+			if (!manifest)
+			{
+				return;
+			}
+
+			validateManifest(manifest, isMulticast, bitrateMissing);
+			dispatchEvent(new ParseEvent(ParseEvent.PARSE_COMPLETE, false, false, manifest));
+		}
+
+		private function parseMedia(value:XML, baseUrl:String):void
+		{
+			mediaParser.parse(value.toXMLString(), baseUrl);
+		}
+
+		private function parseDVRInfo(value:XML, baseUrl:String):void
+		{
+			dvrInfoParser.parse(value.toXMLString(), baseUrl);
+		}
+
+		private function parseDRMAdditionalHeader(value:XML, baseUrl:String):void
+		{
+			drmAdditionalHeaderParser.parse(value.toXMLString(), baseUrl);
+		}
+
+		private function parseBootstrapInfo(value:XML, baseUrl:String):void
+		{
+			bootstrapInfoParser.parse(value.toXMLString(), baseUrl);
+		}
+
 		/**
 		 * @private
-		 * 
-		 * Checks to see if the specified type is supported by the current 
-		 * manifest parser.
-		 * 
-		 * @langversion 3.0
-		 * @playerversion Flash 10
-		 * @playerversion AIR 1.5
-		 * @productversion OSMF 1.0
+		 * Ensures that an RTMP based Manifest has the same server for all
+		 * streaming items, and extracts the base URL from the streaming items
+		 * if not specified.
 		 */
+		private function generateRTMPBaseURL(manifest:Manifest):void
+		{
+			if (manifest.baseURL == null)
+			{
+				for each (var media:Media in manifest.media)
+				{
+					if (NetStreamUtils.isRTMPStream(media.url))
+					{
+						manifest.baseURL = media.url;
+						break;
+					}
+				}
+			}
+		}
+
 		private function isSupportedType(type:String):Boolean
 		{
-			return (	type == StreamingItemType.VIDEO 
-					 || type == StreamingItemType.AUDIO
-				);	
+			return (type == StreamingItemType.VIDEO || type == StreamingItemType.AUDIO);
 		}
-		
+
 		private function extractDRMMetadata(data:ByteArray):ByteArray
 		{
 			var metadata:ByteArray = null;
-			
+
 			data.position = 0;
 			data.objectEncoding = 0;
-			
+
 			try
 			{
 				var header:Object = data.readObject();
@@ -812,104 +664,253 @@ package org.osmf.elements.f4mClasses
 			}
 			catch (e:Error)
 			{
-				metadata = null;	
+				metadata = null;
 			}
-			
+
 			return metadata;
 		}
 
 		private function addAlternativeMedia(manifest:Manifest, resource:StreamingURLResource, manifestFolder:String):void
 		{
 			if (manifest.alternativeMedia.length == 0)
+			{
 				return;
-			
+			}
+
 			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
 			if (httpMetadata == null)
 			{
 				httpMetadata = new Metadata();
 				resource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, httpMetadata);
-					
 			}
-			
+
 			var drmMetadata:Metadata;
-			var alternativeStreamItems:Vector.<StreamingItem> = new Vector.<StreamingItem>();
+			var alternativeMediaItems:Vector.<StreamingItem> = new Vector.<StreamingItem>();
 			for each (var media:Media in manifest.alternativeMedia)
-			{	
-				var streamName:String;
-				
-				if (isAbsoluteURL(media.url))
+			{
+				var stream:String;
+
+				if (URL.isAbsoluteURL(media.url))
 				{
-					streamName = NetStreamUtils.getStreamNameFromURL(media.url);
+					stream = NetStreamUtils.getStreamNameFromURL(media.url);
 				}
 				else
 				{
-					streamName = media.url;
+					stream = media.url;
 				}
-				
-				var info:Object = { "label" : media.label, "language" : media.language};
-				var item:StreamingItem = new StreamingItem(media.type, streamName, media.bitrate, info);
-				alternativeStreamItems.push(item);
-				
+
+				var info:Object = new Object();
+				info.label = media.label;
+				info.language = media.language;
+				var item:StreamingItem = new StreamingItem(media.type, stream, media.bitrate, info);
+				alternativeMediaItems.push(item);
+
 				if (media.drmAdditionalHeader != null)
-				{						
+				{
 					if (resource.getMetadataValue(MetadataNamespaces.DRM_METADATA) == null)
 					{
 						drmMetadata = new Metadata();
 						resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
-					}						
+					}
 					if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
 					{
-						drmMetadata.addValue(item.streamName, extractDRMMetadata(media.drmAdditionalHeader.data));	
+						drmMetadata.addValue(item.streamName, extractDRMMetadata(media.drmAdditionalHeader.data));
 						drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName, media.drmAdditionalHeader.data);
-					} 						
+					}
 				}
-				
-				if (media.bootstrapInfo	!= null)
+
+				if (media.bootstrapInfo != null)
 				{
 					var bootstrapInfoURLString:String = media.bootstrapInfo.url ? media.bootstrapInfo.url : null;
-					if (media.bootstrapInfo.url != null &&
-						isAbsoluteURL(media.bootstrapInfo.url) == false)
+					if (media.bootstrapInfo.url != null && URL.isAbsoluteURL(media.bootstrapInfo.url) == false)
 					{
 						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
-						media.bootstrapInfo.url = bootstrapInfoURLString; 
+						media.bootstrapInfo.url = bootstrapInfoURLString;
 					}
 					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName, media.bootstrapInfo);
 				}
-				
+
 				if (media.metadata != null)
 				{
-					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName, media.metadata);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName, media.metadata);
 				}
-				
+
 				if (media.xmp != null)
 				{
-					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);
 				}
 			}
-			
-			resource.alternativeAudioStreamItems = alternativeStreamItems;
+
+			resource.alternativeAudioStreamItems = alternativeMediaItems;
 		}
-		
-		
+
 		private function addDVRInfo(manifest:Manifest, resource:StreamingURLResource):void
 		{
 			if (manifest.dvrInfo == null)
 			{
 				return;
 			}
-			
+
 			var metadata:Metadata = new Metadata();
 			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_BEGIN_OFFSET_KEY, manifest.dvrInfo.beginOffset);
 			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_END_OFFSET_KEY, manifest.dvrInfo.endOffset);
+			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_WINDOW_DURATION_KEY, manifest.dvrInfo.windowDuration);
 			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_OFFLINE_KEY, manifest.dvrInfo.offline);
 			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_ID_KEY, manifest.dvrInfo.id);
-			
+
 			resource.addMetadataValue(MetadataNamespaces.DVR_METADATA, metadata);
 		}
-		
+
 		private function streamType(value:Manifest):String
 		{
-			return (value.streamType == StreamType.LIVE && value.dvrInfo != null)? StreamType.DVR : value.streamType; 
+			return (value.streamType == StreamType.LIVE && value.dvrInfo != null) ? StreamType.DVR : value.streamType;
 		}
+
+		private function onMediaLoadComplete(event:ParseEvent):void
+		{
+			var newMedia:Media = event.data as Media;
+
+			if (newMedia)
+			{
+				if (newMedia.multicastGroupspec != null && newMedia.multicastGroupspec.length > 0)
+				{
+					isMulticast = true;
+				}
+
+				if (isSupportedType(newMedia.type))
+				{
+					if (newMedia.label == null)
+					{
+						newMedia.label = manifest.label;
+					}
+					if (newMedia.language == null)
+					{
+						newMedia.language = manifest.lang;
+					}
+
+					if (newMedia.alternate)
+					{
+						if (newMedia.type == StreamingItemType.AUDIO)
+						{
+							manifest.alternativeMedia.push(newMedia);
+						}
+					}
+					else
+					{
+						manifest.media.push(newMedia);
+					}
+				}
+
+				// Apply bootstrap if any exist.
+				// This needs to be done just in case the media loads after the bootstraps.
+				if (bootstraps && bootstraps.length > 0)
+				{
+					for each (var b:BootstrapInfo in bootstraps)
+					{
+						if (newMedia.bootstrapInfo == null)
+						{
+							newMedia.bootstrapInfo = b;
+							break;
+						}
+						else if (newMedia.bootstrapInfo.id == b.id)
+						{
+							newMedia.bootstrapInfo = b;
+							break;
+						}
+					}
+				}
+
+				bitrateMissing ||= isNaN(newMedia.bitrate);
+			}
+
+			onAdditionalLoadComplete(event);
+		}
+
+		private function onDVRInfoLoadComplete(event:ParseEvent):void
+		{
+			manifest.dvrInfo = event.data as DVRInfo;
+
+			onAdditionalLoadComplete(event);
+		}
+
+		private function onDRMAdditionalHeaderLoadComplete(event:ParseEvent):void
+		{
+			var drmAdditionalHeader:DRMAdditionalHeader = event.data as DRMAdditionalHeader;
+
+			manifest.drmAdditionalHeaders.push(drmAdditionalHeader);
+
+			var allMedia:Vector.<Media> = manifest.media.concat(manifest.alternativeMedia);
+			var m:Media;
+			for each (m in allMedia)
+			{
+				if (m.drmAdditionalHeader != null && m.drmAdditionalHeader.id == drmAdditionalHeader.id)
+				{
+					m.drmAdditionalHeader = drmAdditionalHeader;
+				}
+			}
+
+			onAdditionalLoadComplete(event);
+		}
+
+		private function onBootstrapInfoLoadComplete(event:ParseEvent):void
+		{
+			var bootstrapInfo:BootstrapInfo = event.data as BootstrapInfo;
+
+			// Store off the bootstraps just in case the media loads later.
+			bootstraps.push(bootstrapInfo);
+
+			// Apply the bootstraps to any media that currently exists.
+			var allMedia:Vector.<Media> = manifest.media.concat(manifest.alternativeMedia);
+			var m:Media;
+			for each (m in allMedia)
+			{
+				//No per media bootstrap. Apply it to all items.
+				if (m.bootstrapInfo == null)
+				{
+					m.bootstrapInfo = bootstrapInfo;
+				}
+				else if (m.bootstrapInfo.id == bootstrapInfo.id)
+				{
+					m.bootstrapInfo = bootstrapInfo;
+				}
+			}
+
+			onAdditionalLoadComplete(event);
+		}
+
+		private function onAdditionalLoadComplete(event:Event):void
+		{
+			unfinishedLoads--;
+
+			if (unfinishedLoads == 0 && !parsing)
+			{
+				finishLoad(manifest);
+			}
+		}
+
+		private function onAdditionalLoadError(event:Event):void
+		{
+			dispatchEvent(new ParseEvent(ParseEvent.PARSE_ERROR));
+		}
+
+		private var parsing:Boolean = false;
+
+		private var unfinishedLoads:Number;
+
+		private var isMulticast:Boolean;
+
+		private var bitrateMissing:Boolean;
+
+		private var mediaParser:BaseParser;
+
+		private var dvrInfoParser:BaseParser;
+
+		private var drmAdditionalHeaderParser:BaseParser;
+
+		private var bootstrapInfoParser:BaseParser;
+
+		private var bootstraps:Vector.<BootstrapInfo>;
+
+		private var manifest:Manifest;
 	}
 }

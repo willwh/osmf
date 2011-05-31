@@ -20,8 +20,9 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.net.StreamingURLResource;
 	import org.osmf.elements.f4mClasses.*;
+	import org.osmf.events.ParseEvent;
+	import org.osmf.net.StreamingURLResource;
 	
 	public class TestMediaPlayerWithHTTPStreamingVideoElementSubclip extends TestMediaPlayerWithHTTPStreamingVideoElement
 	{
@@ -81,7 +82,21 @@ package org.osmf.media
 					</media>
 				</manifest>;
 			
-			return parser.parse(xml.toXMLString(), SINGLE_STREAM_VOD_F4M_URL);
+			var manifest:Manifest;
+			
+			function onParserComplete(event:ParseEvent):void
+			{
+				manifest = event.data as Manifest;
+			}
+			
+			// We know this will be synchronous since it's a version 1.0 F4M.
+			// TODO : This should be asynchrous anyway, but with the way the tests are built
+			//		  that would require a bigger refactor.
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, onParserComplete);
+			
+			parser.parse(xml.toXMLString(), SINGLE_STREAM_VOD_F4M_URL);
+			
+			return manifest;
 		}
 
 		private static const SINGLE_STREAM_VOD_F4M_URL:String = "http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Unprotected/235/testVideoElementSubClip/barsandtone.f4m";

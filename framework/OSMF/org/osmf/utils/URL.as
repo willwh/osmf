@@ -430,6 +430,19 @@ package org.osmf.utils
 			}
 		}
 		
+		public static function isAbsoluteURL(url:String):Boolean
+		{
+			var theURL:URL = new URL(url);
+			return theURL.absolute;
+		}
+		
+		public static function getRootUrl(url:String):String
+		{
+			var path:String = url.substr(0, url.lastIndexOf("/"));
+			
+			return path;
+		}
+		
 		private var _rawUrl:String;		// The raw URL string as it was supplied
 		private var _protocol:String;	// The scheme or protocol, i.e., "http", "ftp", etc.
 		private var _userInfo:String;	// User name : password. For example "http://user:password@host.com:80/foo.php"

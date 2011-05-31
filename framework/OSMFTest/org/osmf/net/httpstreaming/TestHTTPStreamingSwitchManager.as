@@ -101,7 +101,7 @@ package org.osmf.net.httpstreaming
 			
 			assertEquals(0, switchManager.currentIndex);
 			
-			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END));
+			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.END_FRAGMENT));
 			
 			switchManager.autoSwitch = true;
 			assertEquals(0, switchManager.currentIndex);
@@ -116,7 +116,7 @@ package org.osmf.net.httpstreaming
 				});
 			
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUp);
-			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END));
+			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.END_FRAGMENT));
 		}	
 		
 		public function testAutoSwitchFalse():void
@@ -133,7 +133,7 @@ package org.osmf.net.httpstreaming
 					fail();				
 				});
 			
-			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END));
+			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.END_FRAGMENT));
 			
 			assertEquals(0, switchManager.currentIndex);
 			
@@ -141,7 +141,7 @@ package org.osmf.net.httpstreaming
 			expectedIndex = 0;
 			eventDispatcher.addEventListener("testComplete", addAsync(doNotExpectEvent, 5000, null, expectEvent));
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUp);
-			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.FRAGMENT_END))
+			stream.dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.END_FRAGMENT))
 		}
 		
 		private function onTestAutoSwitchWithSwitchUp(info:Object):void

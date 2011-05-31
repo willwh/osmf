@@ -81,6 +81,17 @@ package org.osmf.net.httpstreaming.dvr
 		public var endOffset:uint = 0;
 
 		/**
+		 * The window length on the server, in seconds: represents the maximum 
+		 * length of the content.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var windowDuration:uint = 0;
+		
+		/**
 		 * Indicates whether the stream is offline, or available for playback. It is optional, and defaults to false. 
 		 *  
 		 *  @langversion 3.0

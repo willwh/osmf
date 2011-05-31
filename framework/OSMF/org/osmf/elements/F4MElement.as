@@ -22,6 +22,7 @@
 package org.osmf.elements
 {
 	import org.osmf.media.DefaultMediaFactory;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 
 	/**
@@ -64,9 +65,9 @@ package org.osmf.elements
 		/**
 		 * Constructor.
 		 * 
-		 * @param resource URLResource that points to the F4M file that this
+		 * @param resource MediaResourceBase that points to the F4M file that this
 		 * F4MElement will use.
-		 * @param loader F4MLoader used to load the F4M file.  If null, a
+		 * @param loader F4MLoader used to load the F4M file.  If null, an
 		 * F4MLoader will be created by the F4MElement.
 		 *  
 		 *  @langversion 3.0
@@ -74,7 +75,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function F4MElement(resource:URLResource = null, loader:F4MLoader = null)
+		public function F4MElement(resource:MediaResourceBase = null, loader:F4MLoader = null)
 		{
 			if (loader == null)
 			{

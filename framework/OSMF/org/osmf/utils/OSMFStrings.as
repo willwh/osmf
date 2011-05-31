@@ -261,6 +261,16 @@ package org.osmf.utils
 		 **/
 		public static const F4M_PARSE_BITRATE_MISSING:String			= "f4mBitrateMissing";
 		
+		/**
+		 * @private
+		 **/
+		public static const F4M_PARSE_VALUE_MISSING:String				= "f4mValueMissing";
+		
+		/**
+		 * @private
+		 **/
+		public static const F4M_PARSE_ERROR:String						= "f4mParseError";
+		
 		// MediaErrorCodes
 		
 		/**
@@ -437,6 +447,8 @@ package org.osmf.utils
 			resourceDict[F4M_PARSE_PROFILE_MISSING]					= "Profile missing from Bootstrap info tag";
 			resourceDict[F4M_PARSE_MEDIA_URL_MISSING]				= "URL missing from Media tag";
 			resourceDict[F4M_PARSE_BITRATE_MISSING]					= "Bitrate missing from Media tag";
+			resourceDict[F4M_PARSE_VALUE_MISSING]					= "Value must be non-null";
+			resourceDict[F4M_PARSE_ERROR]							= "Error parsing f4m file";
 
 			resourceDict[IO_ERROR]									= "I/O error when loading media";
 			resourceDict[SECURITY_ERROR]							= "Security error when loading media";

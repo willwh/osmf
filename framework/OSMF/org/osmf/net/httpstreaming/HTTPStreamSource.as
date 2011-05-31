@@ -97,6 +97,14 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/**
+		 * Returns the bytes count for the last download.
+		 */
+		public function get downloadBytesCount():Number
+		{
+			return _downloadBytesCount;
+		}
+		
+		/**
 		 * Opens the HTTP stream source and start downloading the data 
 		 * immediately. It will automatically close any previous opended
 		 * HTTP stream source.
@@ -132,6 +140,7 @@ package org.osmf.net.httpstreaming
 				}
 
 				_downloadBeginDate = new Date();
+				_downloadBytesCount = 0;
 				_urlStream.load(request);
 			}
 		}
@@ -271,15 +280,13 @@ package org.osmf.net.httpstreaming
 		{
 			_downloadEndDate = new Date();
 			_downloadDuration = (_downloadEndDate.valueOf() - _downloadBeginDate.valueOf())/1000.0;
+			_downloadBytesCount = _urlStream.bytesAvailable;
+			
 			_isComplete = true;
 			
 			CONFIG::LOGGING
 			{
 				logger.debug(" loading complete. It took " + _downloadDuration + " sec.");	
-			}
-			if (_dispatcher != null)
-			{
-				_dispatcher.dispatchEvent(event);
 			}
 		}
 		
@@ -330,6 +337,7 @@ package org.osmf.net.httpstreaming
 		private var _downloadBeginDate:Date = null;
 		private var _downloadEndDate:Date = null;
 		private var _downloadDuration:Number = 0;
+		private var _downloadBytesCount:Number = 0;
 		
 		CONFIG::LOGGING
 		{

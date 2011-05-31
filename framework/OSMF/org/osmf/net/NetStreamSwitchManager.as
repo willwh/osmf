@@ -113,14 +113,14 @@ package org.osmf.net
 			
 			CONFIG::LOGGING
 			{
-				debug("autoSwitch() - setting to " + value);
+				logger.debug("autoSwitch() - setting to " + value);
 			}
 			
 			if (_autoSwitch)
 			{
 				CONFIG::LOGGING
 				{
-					debug("autoSwitch() - starting check rules timer.");
+					logger.debug("autoSwitch() - starting check rules timer.");
 				}
 				checkRulesTimer.start();
 			}
@@ -128,7 +128,7 @@ package org.osmf.net
 			{
 				CONFIG::LOGGING
 				{
-					debug("autoSwitch() - stopping check rules timer.");
+					logger.debug("autoSwitch() - stopping check rules timer.");
 				}
 				checkRulesTimer.stop();
 			}
@@ -179,7 +179,7 @@ package org.osmf.net
 				{
 					CONFIG::LOGGING
 					{
-						debug("switchTo() - manually switching to index: " + index);
+						logger.debug("switchTo() - manually switching to index: " + index);
 					}
 					
 					if (actualIndex == -1)
@@ -228,7 +228,7 @@ package org.osmf.net
 				{
 					CONFIG::LOGGING
 					{
-						debug("canAutoSwitchNow() - ignoring switch request because index has " + dsiFailedCounts[newIndex]+" failure(s) and only "+ (current - failedDSI[newIndex])/1000 + " seconds have passed since the last failure.");
+						logger.debug("canAutoSwitchNow() - ignoring switch request because index has " + dsiFailedCounts[newIndex]+" failure(s) and only "+ (current - failedDSI[newIndex])/1000 + " seconds have passed since the last failure.");
 					}
 					return false;
 				}
@@ -305,7 +305,7 @@ package org.osmf.net
 			
 			CONFIG::LOGGING
 			{
-				debug("executeSwitch() - Switching to index " + (targetIndex) + " at " + Math.round(dsResource.streamItems[targetIndex].bitrate) + " kbps");
+				logger.debug("executeSwitch() - Switching to index " + (targetIndex) + " at " + Math.round(dsResource.streamItems[targetIndex].bitrate) + " kbps");
 			}
 						
 			switching = true;
@@ -379,7 +379,7 @@ package org.osmf.net
 				{				
 					CONFIG::LOGGING
 					{
-						debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
+						logger.debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
 					}
 					executeSwitch(newIndex);
 				}
@@ -390,7 +390,7 @@ package org.osmf.net
 		{
 			CONFIG::LOGGING
 			{
-				debug("onNetStatus() - event.info.code=" + event.info.code);
+				logger.debug("onNetStatus() - event.info.code=" + event.info.code);
 			}
 			
 			switch (event.info.code) 
@@ -425,7 +425,7 @@ package org.osmf.net
 					checkRulesTimer.stop();
 					CONFIG::LOGGING
 					{
-						debug("onNetStatus() - Stopping rules since server has stopped sending data");
+					logger.debug("onNetStatus() - Stopping rules since server has stopped sending data");
 					}
 					break;
 			}			
@@ -435,7 +435,7 @@ package org.osmf.net
 		{
 			CONFIG::LOGGING
 			{
-				debug("onPlayStatus() - info.code=" + info.code);
+				logger.debug("onPlayStatus() - info.code=" + info.code);
 			}
 			
 			switch (info.code)
@@ -449,7 +449,7 @@ package org.osmf.net
 					
 					CONFIG::LOGGING
 					{
-						debug("onPlayStatus() - Transition complete to index: " + currentIndex + " at " + Math.round(dsResource.streamItems[currentIndex].bitrate) + " kbps");
+					logger.debug("onPlayStatus() - Transition complete to index: " + currentIndex + " at " + Math.round(dsResource.streamItems[currentIndex].bitrate) + " kbps");
 					}
 
 					break;
@@ -482,7 +482,7 @@ package org.osmf.net
 			setThrottleLimits(dsResource.streamItems.length - 1);
 			CONFIG::LOGGING
 			{
-				debug("prepareForSwitching() - Starting with stream index " + actualIndex + " at " + Math.round(dsResource.streamItems[actualIndex].bitrate) + " kbps");
+				logger.debug("prepareForSwitching() - Starting with stream index " + actualIndex + " at " + Math.round(dsResource.streamItems[actualIndex].bitrate) + " kbps");
 			}
 			metrics.currentIndex = actualIndex;
 		}
@@ -532,14 +532,6 @@ package org.osmf.net
 			connection.call("setBandwidthLimit", null, _bandwidthLimit, _bandwidthLimit);
 		}
 
-		CONFIG::LOGGING
-		{
-		private function debug(...args):void
-		{
-			logger.debug(new Date().toTimeString() + ">>> NetStreamSwitchManager." + args);
-		}
-		}
-				
 		private var netStream:NetStream;
 		private var dsResource:DynamicStreamingResource;
 		private var switchingRules:Vector.<SwitchingRuleBase>;

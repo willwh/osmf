@@ -128,7 +128,10 @@ package org.osmf.elements
 			var finished:Function = addAsync(function():void{}, 5000);
 			
 			var loader:F4MLoader = new F4MLoader();			
-			var res1:URLResource = new URLResource('http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Protected/215/production/external/avatar_4000.f4m');
+			//var res1:URLResource = new URLResource('http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Protected/215/production/external/avatar_4000.f4m');
+			//does not work any more. possible replacement:
+			var res1:URLResource = new URLResource('http://10.131.237.107/vod/hs/vod_drm/ex.f4m');
+
 			var proxy:F4MElement = new F4MElement(null, loader);
 			proxy.resource = res1;
 			var player:MediaPlayer = new MediaPlayer();
@@ -159,7 +162,10 @@ package org.osmf.elements
 			var finished:Function = addAsync(function():void{}, 5000);
 			
 			var loader:F4MLoader = new F4MLoader();			
-			var res1:URLResource = new URLResource('http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Protected/12%20LEGEND.f4m');
+			//var res1:URLResource = new URLResource('http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Protected/12%20LEGEND.f4m');
+			//does not work any more. possible replacement:
+			var res1:URLResource = new URLResource('http://10.131.237.107/vod/hs/vod_drm/ex.f4m');
+
 			var proxy:F4MElement = new F4MElement(null, loader);
 			proxy.resource = res1;
 			var player:MediaPlayer = new MediaPlayer();

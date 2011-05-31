@@ -8,9 +8,13 @@ Please click on the "Refresh" icon in "FlexUnit Results" view to regenerate this
 			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
 	<fx:Script>
 		<![CDATA[
+			import org.osmf.elements.f4mClasses.TestManifestParser;
 			import org.osmf.media.TestMediaPlayerHelper;
 			import org.osmf.OSMFTests;
 			import org.osmf.player.media.TestLateBindingAudio;
+			
+			private var org_osmf_elements_f4mClasses_TestManifestParser_obj:org.osmf.elements.f4mClasses.TestManifestParser;
+			
 			
 			private var org_osmf_media_TestMediaPlayerHelper_obj:org.osmf.media.TestMediaPlayerHelper;
 			
