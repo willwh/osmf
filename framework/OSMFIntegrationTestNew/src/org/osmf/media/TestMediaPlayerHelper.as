@@ -154,7 +154,14 @@ package org.osmf.media
 		 */
 		protected function testError(error:MediaError):void
 		{
-			fail("Media error (" + error.errorID + ") with message (" + error.detail + ")");
+			if (error != null)
+			{
+				fail("Media error (" + error.errorID + ") with message (" + error.detail + ")");
+			}
+			else
+			{
+				fail("Unknown media error.");
+			}
 		}
 		
 		/**

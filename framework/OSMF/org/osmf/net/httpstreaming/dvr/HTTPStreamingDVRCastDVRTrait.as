@@ -44,7 +44,7 @@ package org.osmf.net.httpstreaming.dvr
 			_dvrInfo = dvrInfo;
 			_stream.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
 			
-			super(dvrInfo.isRecording);			
+			super(dvrInfo.isRecording, dvrInfo.windowDuration);			
 		}
 		
 		//

@@ -60,11 +60,25 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */				
-		public function DVRTrait(isRecording:Boolean = false)
+		public function DVRTrait(isRecording:Boolean = false, windowDuration:Number = 0)
 		{
 			_isRecording = isRecording;
+			_windowDuration = windowDuration;
 			
 			super(MediaTraitType.DVR);
+		}
+		
+		/**
+		 * Defines the window length on the server.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		public final function get windowDuration():Number
+		{
+			return _windowDuration;
 		}
 		
 		/**
@@ -149,5 +163,6 @@ package org.osmf.traits
 		//
 		
 		private var _isRecording:Boolean;
+		private var _windowDuration:Number;
 	}
 }

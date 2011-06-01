@@ -23,8 +23,11 @@ package org.osmf.net.httpstreaming.f4f
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.TimerEvent;
+	import flash.external.ExternalInterface;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
+	import flash.utils.Timer;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
@@ -36,8 +39,8 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
-	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 
 	CONFIG::LOGGING 
 	{	
@@ -301,6 +304,7 @@ package org.osmf.net.httpstreaming.f4f
 
 			if (!playInProgress && stopPlaying(abst))
 			{
+				destroyBootstrapUpdateTimer();
 				return null;
 			}
 							
@@ -393,6 +397,7 @@ package org.osmf.net.httpstreaming.f4f
 */			
 			if (!playInProgress && stopPlaying(abst))
 			{
+				destroyBootstrapUpdateTimer();
 				return null;
 			}
 
@@ -622,6 +627,7 @@ package org.osmf.net.httpstreaming.f4f
 			}
 			catch (e:Error)
 			{
+				ExternalInterface.call("console.log", e);
 				boxes = null;
 			}
 			
@@ -717,6 +723,13 @@ package org.osmf.net.httpstreaming.f4f
 		
 		private function notifyFragmentDuration(duration:Number):void
 		{
+			// Update the bootstrap update interval; we set its value to the fragment duration
+			bootstrapUpdateInterval = duration * 1000;
+			if (bootstrapUpdateInterval < BOOTSTRAP_REFRESH_INTERVAL)
+			{
+				bootstrapUpdateInterval = BOOTSTRAP_REFRESH_INTERVAL;
+			}
+			
 			dispatchEvent
 				(	new HTTPStreamingEvent
 						( HTTPStreamingEvent.FRAGMENT_DURATION 
@@ -738,10 +751,23 @@ package org.osmf.net.httpstreaming.f4f
 
 			if (!dvrGetStreamInfoCall)
 			{
-				if (abst.live /*&& f4fIndexInfo.dvrInfo == null*/ && isNaN(pureLiveOffset))
+				if (abst.live && f4fIndexInfo.dvrInfo == null && isNaN(pureLiveOffset))
 				{
 					pureLiveOffset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
 				}
+				
+				// If the stream is live, initialize the bootstrap update timer
+				if (abst.live)
+				{
+					initializeBootstrapUpdateTimer();
+				}
+				
+				// Destroy the timer if the stream is no longer recording
+				if (frt.tableComplete())
+				{
+					destroyBootstrapUpdateTimer();
+				}
+				
 
 				dispatchEvent
 					( new HTTPStreamingIndexHandlerEvent
@@ -795,14 +821,24 @@ package org.osmf.net.httpstreaming.f4f
 							abst.totalDuration/abst.timeScale);
 					f4fIndexInfo.dvrInfo.startTime += (frt.fragmentDurationPairs)[0].durationAccrued/abst.timeScale;
 							
-					if (f4fIndexInfo.dvrInfo.startTime > abst.currentMediaTime)
+					if (f4fIndexInfo.dvrInfo.startTime > abst.currentMediaTime / abst.timeScale)
 					{
-						f4fIndexInfo.dvrInfo.startTime = abst.currentMediaTime;
+						f4fIndexInfo.dvrInfo.startTime = abst.currentMediaTime / abst.timeScale;
 					}
 				}
 				
 				f4fIndexInfo.dvrInfo.curLength = abst.currentMediaTime/abst.timeScale - f4fIndexInfo.dvrInfo.startTime;
-
+				
+				if 
+					(
+						(f4fIndexInfo.dvrInfo.windowDuration > 0) && 
+						(f4fIndexInfo.dvrInfo.curLength > f4fIndexInfo.dvrInfo.windowDuration)
+					)
+				{
+					f4fIndexInfo.dvrInfo.startTime += f4fIndexInfo.dvrInfo.curLength - f4fIndexInfo.dvrInfo.windowDuration;
+					f4fIndexInfo.dvrInfo.curLength = f4fIndexInfo.dvrInfo.windowDuration;
+				}
+				
 				dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
 			}	
 		}
@@ -826,6 +862,38 @@ package org.osmf.net.httpstreaming.f4f
 				} 
 			}
 		}
+		
+		
+		private function initializeBootstrapUpdateTimer():void
+		{
+			if (bootstrapUpdateTimer == null)
+			{
+				// This will regularly update the bootstrap information;
+				// We just initialize the timer here; we'll start it in the first call of the getFileForTime method
+				// or in the first call of getNextFile
+				// The initial delay is 4000 (recommended fragment duration)
+				bootstrapUpdateTimer = new Timer(bootstrapUpdateInterval);
+				bootstrapUpdateTimer.addEventListener(TimerEvent.TIMER, onBootstrapUpdateTimer);
+				bootstrapUpdateTimer.start();
+			}
+		}
+		
+		private function destroyBootstrapUpdateTimer():void
+		{
+			if (bootstrapUpdateTimer != null)
+			{
+				bootstrapUpdateTimer.removeEventListener(TimerEvent.TIMER, onBootstrapUpdateTimer);
+				bootstrapUpdateTimer = null;
+			}
+		}
+		
+		private function onBootstrapUpdateTimer(event:TimerEvent):void
+		{ 
+			refreshBootstrapInfo(currentQuality);
+			bootstrapUpdateTimer.delay = bootstrapUpdateInterval;
+		}
+		
+		
 
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
@@ -844,6 +912,9 @@ package org.osmf.net.httpstreaming.f4f
 		private var offsetFromCurrent:Number = 5;
 		private var delay:Number = 0.05;
 		private var pureLiveOffset:Number = NaN;
+		
+		private var bootstrapUpdateTimer:Timer;
+		private var bootstrapUpdateInterval:Number = 4000;
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		

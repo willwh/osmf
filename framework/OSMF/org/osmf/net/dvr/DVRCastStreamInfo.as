@@ -38,6 +38,7 @@ package org.osmf.net.dvr
 		public var offline:Boolean;
 		public var beginOffset:Number;
 		public var endOffset:Number;
+		public var windowDuration:Number;
 		public var recordingStart:Date;
 		public var recordingEnd:Date;
 		public var isRecording:Boolean;
@@ -59,6 +60,7 @@ package org.osmf.net.dvr
 				offline = value.offline;
 				beginOffset = value.begOffset;
 				endOffset = value.endOffset;
+				windowDuration = value.windowDuration;
 				recordingStart = value.startRec;
 				recordingEnd = value.stopRec;
 				isRecording = value.isRec;
@@ -81,6 +83,7 @@ package org.osmf.net.dvr
 				offline = value.offline;
 				beginOffset = value.beginOffset;
 				endOffset = value.endOffset;
+				windowDuration = value.windowDuration;
 				recordingStart = value.recordingStart;
 				recordingEnd = value.recordingEnd;
 				isRecording = value.isRecording;
@@ -101,6 +104,7 @@ package org.osmf.net.dvr
 				 + "\noffline: " + offline
 				 + "\nbeginOffset: " + beginOffset
 				 + "\nendOffset: " + endOffset
+				 + "\nwindowDuration: " + windowDuration
 				 + "\nrecordingStart: " + recordingStart
 				 + "\nrecordingEnd: " + recordingEnd
 				 + "\nisRecording: " + isRecording
