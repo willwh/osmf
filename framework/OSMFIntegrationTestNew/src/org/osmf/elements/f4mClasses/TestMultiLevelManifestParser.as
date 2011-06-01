@@ -226,6 +226,70 @@ package org.osmf.elements.f4mClasses
 				);
 		}
 		
+		[Test(description="Tests a v1.0 manifest with windowDuration")]
+		public function testV1WithWindowDuration():void
+		{
+			parser2.parse(F4M_V1_WITH_WINDOW_DURATION);
+			parser.addEventListener
+				( ParseEvent.PARSE_COMPLETE 
+					, function(event:ParseEvent):void
+					{
+						var manifest:Manifest = event.data as Manifest;
+						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.endOffset, 100);
+						assertEquals(manifest.dvrInfo.beginOffset, 900);
+					}
+				);
+		}
+		
+		[Test(description="Tests a v2.0 manifest with beginOffset and endOffset")]
+		public function testV2WithBeginOffsetAndEndOffset():void
+		{
+			parser2.parse(F4M_V2_WITHOUT_WINDOW_DURATION_WITH_BEGINOFFSET_ENDOFFSET);
+			parser.addEventListener
+				( ParseEvent.PARSE_COMPLETE 
+					, function(event:ParseEvent):void
+					{
+						var manifest:Manifest = event.data as Manifest;
+						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.endOffset, 0);
+						assertEquals(manifest.dvrInfo.beginOffset, 0);
+					}
+				);
+		}
+		
+		[Test(description="Tests a v2.0 manifest with windowDuration, beginOffset and endOffset")]
+		public function testV2WithWindowDurationBeginOffsetAndEndOffset():void
+		{
+			parser2.parse(F4M_V2_WITH_WINDOW_DURATION_BEGINOFFSET_ENDOFFSET);
+			parser.addEventListener
+				( ParseEvent.PARSE_COMPLETE 
+					, function(event:ParseEvent):void
+					{
+						var manifest:Manifest = event.data as Manifest;
+						assertEquals(manifest.dvrInfo.windowDuration, 180);
+						assertEquals(manifest.dvrInfo.endOffset, 0);
+						assertEquals(manifest.dvrInfo.beginOffset, 0);
+					}
+				);
+		}
+		
+		[Test(description="Tests a v2.0 manifest with no dvrInfo tag")]
+		public function testV2WithoutDVRInfo():void
+		{
+			parser2.parse(F4M_V2_WITHOUT_DVRINFO);
+			parser.addEventListener
+				( ParseEvent.PARSE_COMPLETE 
+					, function(event:ParseEvent):void
+					{
+						var manifest:Manifest = event.data as Manifest;
+						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.endOffset, 0);
+						assertEquals(manifest.dvrInfo.beginOffset, 0);
+					}
+				);
+		}
+		
 		[Test(async, description="Tests if dvrinfo duration is found in dvr trait.")]
 		public function testWindowDurationInTraitForV2():void
 		{
@@ -298,7 +362,7 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_WITH_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
@@ -313,7 +377,7 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_WITH_NEGATIVE_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
@@ -325,7 +389,7 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_WITH_NULL_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
@@ -337,7 +401,7 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_WITH_ZERO_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
@@ -349,7 +413,7 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_WITH_FLOAT_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
@@ -361,7 +425,7 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_WITH_ALPHA_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
@@ -373,7 +437,7 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_WITH_NO_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
@@ -382,6 +446,55 @@ package org.osmf.elements.f4mClasses
 			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
 			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
 			"</manifest>";
+		
+		
+		private static const F4M_V1_WITH_WINDOW_DURATION:String = 
+			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\">" +
+			"<id>1_rps9u31c</id>" +
+			"<mimeType>video/x-flv</mimeType>" +
+			"<streamType>recorded</streamType>" +
+			"<dvrInfo windowDuration=\"180\" beginOffset=\"90\" endOffset=\"100\" offline=\"false\" />" +
+			"<duration>2824</duration>" +
+			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
+			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
+			"</manifest>";
+		
+		private static const F4M_V2_WITHOUT_WINDOW_DURATION_WITH_BEGINOFFSET_ENDOFFSET:String = 
+			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
+			"<id>1_rps9u31c</id>" +
+			"<mimeType>video/x-flv</mimeType>" +
+			"<streamType>recorded</streamType>" +
+			"<dvrInfo beginOffset=\"90\" endOffset=\"100\" offline=\"false\" />" +
+			"<duration>2824</duration>" +
+			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
+			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
+			"</manifest>";
+		
+		private static const F4M_V2_WITH_WINDOW_DURATION_BEGINOFFSET_ENDOFFSET:String = 
+			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
+			"<id>1_rps9u31c</id>" +
+			"<mimeType>video/x-flv</mimeType>" +
+			"<streamType>recorded</streamType>" +
+			"<dvrInfo windowDuration=\"180\" beginOffset=\"90\" endOffset=\"100\" offline=\"false\" />" +
+			"<duration>2824</duration>" +
+			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
+			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
+			"</manifest>";
+		
+		private static const F4M_V2_WITHOUT_DVRINFO:String = 
+			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
+			"<id>1_rps9u31c</id>" +
+			"<mimeType>video/x-flv</mimeType>" +
+			"<streamType>recorded</streamType>" +
+			"<duration>2824</duration>" +
+			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
+			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
+			"</manifest>";
+		
 		
 		private static const F4M_SOURCE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/original.f4m";
 		private static const MLM_SOURCE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/mlm.f4m";

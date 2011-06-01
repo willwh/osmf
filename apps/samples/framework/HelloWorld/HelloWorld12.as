@@ -39,6 +39,7 @@ package
 	import org.osmf.media.MediaPlayerState;
 	import org.osmf.net.StreamingXMLResource;
 	
+	
 	/**
 	 * Another simple OSMF application, building on HelloWorld2.as.
 	 * 

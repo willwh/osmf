@@ -34,6 +34,7 @@ package
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaPlayerState;
+
 	import org.osmf.media.URLResource;
 	
 	/**
