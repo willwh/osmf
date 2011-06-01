@@ -109,8 +109,10 @@ package org.osmf.net.httpstreaming
 			this.bufferTimeMax = 0;
 			
 			setState(HTTPStreamingState.INIT);
-
-			_provider = new HTTPStreamProvider(_factory, _resource, this);
+			
+			_source = new HTTPStreamMixer(this);
+			_source.video = new HTTPStreamSource(_factory, _resource, this);
+			_source.audio = null;
 			
 			_mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			_mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -219,9 +221,9 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function close():void
 		{
-			if (_provider != null)
+			if (_source != null)
 			{
-				_provider.close();
+				_source.close();
 			}
 			
 			_mainTimer.stop();
@@ -249,7 +251,7 @@ package org.osmf.net.httpstreaming
 		 */ 
 		public function DVRGetStreamInfo(streamName:Object):void
 		{
-			if (_provider.isReady)
+			if (_source.isReady)
 			{
 				// TODO: should we re-trigger the event?
 			}
@@ -258,7 +260,7 @@ package org.osmf.net.httpstreaming
 				// TODO: should there be a guard to protect the case where isReady is not yet true BUT play has already been called, so we are in an
 				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
 				// event back, go ahead and call play()
-				_provider.getDVRInfo(streamName);
+				_source.video.getDVRInfo(streamName);
 			}
 		}
 		
@@ -273,9 +275,9 @@ package org.osmf.net.httpstreaming
 		 */
 		public function get downloadRatio():Number
 		{
-			if (_provider.qosInfo != null)
+			if (_source.video != null && _source.video.qosInfo != null)
 			{
-				return _provider.qosInfo.downloadRatio;
+				return _source.video.qosInfo.downloadRatio;
 			}
 			return 0;
 		}
@@ -339,7 +341,10 @@ package org.osmf.net.httpstreaming
 		{
 			_initializeFLVParser = true;
 			_seekTarget = seekTarget;
-			_provider.open(streamName);
+			if (_source.video != null)
+			{
+				_source.video.open(streamName);
+			}
 			setState(HTTPStreamingState.SEEK);
 		}
 		
@@ -353,15 +358,58 @@ package org.osmf.net.httpstreaming
 			_qualityLevelNeedsChanging = true;
 			_desiredQualityStreamName = streamName;
 			
-			if (_provider.isReady && _provider.streamName != _desiredQualityStreamName)
+			if (
+					_source.isReady 
+				&& (_source.video != null && _source.video.streamName != _desiredQualityStreamName)
+			)
 			{
 				CONFIG::LOGGING
 				{
-					logger.debug("Stream provider is ready so we can initiate change quality to [" + _desiredQualityStreamName + "]");
+					logger.debug("Stream source is ready so we can initiate change quality to [" + _desiredQualityStreamName + "]");
 				}
-				_provider.changeQualityLevel(_desiredQualityStreamName);
+				_source.video.changeQualityLevel(_desiredQualityStreamName);
 				_qualityLevelNeedsChanging = false;
 				_desiredQualityStreamName = null;
+			}
+			
+			_notifyPlayUnpublishPending = false;
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Changes audio track to load from an alternate track.
+		 */
+		private function changeAudioStreamTo(streamName:String):void
+		{
+			_audioStreamNeedsChanging = true;
+			_desiredAudioStreamName = streamName;
+			
+			if (
+					_source.isReady 
+				&& (_source.audio == null || (_source.audio != null && _source.audio.streamName != _desiredAudioStreamName))
+			)
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("Stream source is ready so we can initiate change audio stream to [" + _desiredAudioStreamName + "]");
+				}
+				
+				if (_source.audio != null)
+				{
+					_source.audio.close();
+					_source.audio = null;
+				}
+				
+				var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(_resource, _desiredAudioStreamName);
+				if (audioResource != null)
+				{
+					_source.audio = new HTTPStreamSource(_factory, audioResource, this);
+					_source.audio.open(_desiredAudioStreamName);
+				}
+				
+				_audioStreamNeedsChanging = false;
+				_desiredAudioStreamName = null;
 			}
 			
 			_notifyPlayUnpublishPending = false;
@@ -397,7 +445,7 @@ package org.osmf.net.httpstreaming
 					// we may call seek before our stream provider is
 					// able to fulfill our request - so we'll stay in seek
 					// mode until the provider is ready.
-					if (_provider.isReady)
+					if (_source.isReady)
 					{
 						CONFIG::FLASH_10_1
 						{
@@ -405,7 +453,7 @@ package org.osmf.net.httpstreaming
 						}
 						
 						_seekTime = -1;
-						_provider.seek(_seekTarget);
+						_source.seek(_seekTarget);
 						setState(HTTPStreamingState.PLAY);
 					}
 					break;
@@ -417,10 +465,13 @@ package org.osmf.net.httpstreaming
 						notifyPlayStart();
 					}
 					
-					// check if we need to change quality
 					if (_qualityLevelNeedsChanging)
 					{
 						changeQualityLevelTo(_desiredQualityStreamName);
+					}
+					if (_audioStreamNeedsChanging)
+					{
+						changeAudioStreamTo(_desiredAudioStreamName);
 					}
 					
 					var processed:int = 0;
@@ -429,7 +480,7 @@ package org.osmf.net.httpstreaming
 					
 					while(keepProcessing)
 					{
-						var bytes:ByteArray = _provider.getBytes();
+						var bytes:ByteArray = _source.getBytes();
 						
 						if (bytes != null)
 						{
@@ -467,7 +518,7 @@ package org.osmf.net.httpstreaming
 						{
 							// if we reached the end of stream then we need stop and
 							// dispatch this event to all our clients.						
-							if (_provider.endOfStream)
+							if (_source.endOfStream)
 							{
 								super.bufferTime = 0.1;
 								CONFIG::LOGGING
@@ -814,6 +865,19 @@ package org.osmf.net.httpstreaming
 			return false;
 		}
 
+		/**
+		 * @private
+		 * 
+		 * Attempts to use the appendsBytes method. Do noting if this is not compiled
+		 * for an Argo player or newer.
+		 */
+		private function attemptAppendBytes(bytes:ByteArray):void
+		{
+			CONFIG::FLASH_10_1
+			{
+				appendBytes(bytes);
+			}
+		}
 
 		///////////////////////////////////////////////////////////////////////////////////
 		
@@ -853,154 +917,70 @@ package org.osmf.net.httpstreaming
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////
-		/**
-		 * @private
-		 * 
-		 * Changes audio track to load from an alternate track.
-		 */
-		private function changeAudioStreamTo(streamName:String):void
-		{
-			CONFIG::LOGGING
-			{
-				logger.info("We queued a command for changing the curret audio stream to >> {0}",  streamName);
-			}
-			
-			_audioNeedsChanging = true;
-			_audioUrl = streamName;
-			if (_state != HTTPStreamingState.INIT) 
-			{
-				_audioNeedsChanging = false;
-				if (_audioHandler == null || _audioHandler.url != _audioUrl)
-				{
-					_audioHasChanged = true;
-
-					if (_audioHandler != null)
-					{
-						_audioHandler.close();
-						_audioHandler.removeEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
-						_audioHandler.removeEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, onFragmentDuration);
-						_audioHandler.removeEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
-						_audioHandler.removeEventListener(HTTPStreamingEvent.INDEX_ERROR, onIndexError);
-						_audioHandler.removeEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
-						_audioHandler = null;
-					}
-					
-					var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(_resource, _audioUrl);
-					if (audioResource != null)
-					{
-						_audioHandler = new HTTPStreamSourceHandler(_factory, audioResource);
-						_audioHandler.addEventListener(HTTPStreamingIndexHandlerEvent.INDEX_READY, onIndexReady);
-						_audioHandler.addEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, onFragmentDuration);
-						_audioHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
-						_audioHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onIndexError);
-						_audioHandler.addEventListener(HTTPStreamingEvent.FILE_ERROR, onFileError);
-						
-						_pendingIndexInitializations++;
-						_audioHandler.initialize(_audioUrl);
-						
-						if (_mixer == null)
-						{
-							_mixer = _factory.createMixer(_resource);
-						}
-					}
-					else
-					{
-						if (_mixer != null && _mixer.videoTime != 0 && _mixer.audioTime != 0)
-						{
-							_mediaSeekTarget = _mixer.videoTime / 1000;
-						}
-						else
-						{
-							_mediaSeekTarget = _mediaBufferRemaining / 1000;
-						}
-
-						_audioSeekTarget = _mediaSeekTarget;
-//						setState(HTTPStreamingState.LOAD_SEEK);
-					}
-										
-					//notifyTransition(_audioUrl);
-				}
-			}
-			
-			_notifyPlayUnpublishPending = false;
-		}
 
 		
 		
-		/**
-		 * @private
-		 * 
-		 * Attempts to use the appendsBytes method. Do noting if this is not compiled
-		 * for an Argo player or newer.
-		 */
-		private function attemptAppendBytes(bytes:ByteArray):void
-		{
-			CONFIG::FLASH_10_1
-			{
-				appendBytes(bytes);
-			}
-		}
 
-		/**
-		 * Event handler for FRAGMENT_DURATION updates. We use this
-		 * event to update our buffer estimates.
-		 */
-		private function onFragmentDuration(event:HTTPStreamingEvent):void
-		{
-			if (event.target == _mediaHandler)
-			{
-				_mediaBufferRemaining += event.fragmentDuration * 1000;
-				_mediaFragmentDuration = event.fragmentDuration;
-			}
-			else if (event.target == _audioHandler)
-			{
-				_audioBufferRemaining += event.fragmentDuration * 1000;
-				_audioFragmentDuration = event.fragmentDuration;
-			}
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * Event handler called when the index handler has successfully parse
-		 * the index information. We are ready to start the playback after this.
-		 */
-		private function onIndexReady(event:HTTPStreamingIndexHandlerEvent):void
-		{
-			if (_pendingIndexInitializations > 0)
-			{
-				// we are using only the offset from main stream
-				if (event.target == _mediaHandler)
-				{
-					_mediaIsReady = true;
-					if (event.live && _dvrInfo == null && !isNaN(event.offset))
-					{
-						_mediaSeekTarget = _audioSeekTarget = event.offset;
-					}
-				}
-				
-				// if we just initialized an audio stream
-				if (event.target == _audioHandler)
-				{
-					if (_mixer != null && _mixer.videoTime != 0 && _mixer.audioTime != 0)
-					{
-						_mediaSeekTarget = _mixer.videoTime / 1000;
-						_audioSeekTarget = _mixer.audioTime / 1000;
-					}
-					else
-					{
-						_mediaSeekTarget = _mediaBufferRemaining / 1000;
-						_audioSeekTarget = _mediaSeekTarget;
-					}
-				}
-				
-				_pendingIndexInitializations--;
-				if (_pendingIndexInitializations == 0)
-				{
-//					setState(HTTPStreamingState.LOAD_SEEK);
-				}
-			}
-		}
+//		/**
+//		 * Event handler for FRAGMENT_DURATION updates. We use this
+//		 * event to update our buffer estimates.
+//		 */
+//		private function onFragmentDuration(event:HTTPStreamingEvent):void
+//		{
+//			if (event.target == _mediaHandler)
+//			{
+//				_mediaBufferRemaining += event.fragmentDuration * 1000;
+//				_mediaFragmentDuration = event.fragmentDuration;
+//			}
+//			else if (event.target == _audioHandler)
+//			{
+//				_audioBufferRemaining += event.fragmentDuration * 1000;
+//				_audioFragmentDuration = event.fragmentDuration;
+//			}
+//		}
+//		
+//		/**
+//		 * @private
+//		 * 
+//		 * Event handler called when the index handler has successfully parse
+//		 * the index information. We are ready to start the playback after this.
+//		 */
+//		private function onIndexReady(event:HTTPStreamingIndexHandlerEvent):void
+//		{
+//			if (_pendingIndexInitializations > 0)
+//			{
+//				// we are using only the offset from main stream
+//				if (event.target == _mediaHandler)
+//				{
+//					_mediaIsReady = true;
+//					if (event.live && _dvrInfo == null && !isNaN(event.offset))
+//					{
+//						_mediaSeekTarget = _audioSeekTarget = event.offset;
+//					}
+//				}
+//				
+//				// if we just initialized an audio stream
+//				if (event.target == _audioHandler)
+//				{
+//					if (_mixer != null && _mixer.videoTime != 0 && _mixer.audioTime != 0)
+//					{
+//						_mediaSeekTarget = _mixer.videoTime / 1000;
+//						_audioSeekTarget = _mixer.audioTime / 1000;
+//					}
+//					else
+//					{
+//						_mediaSeekTarget = _mediaBufferRemaining / 1000;
+//						_audioSeekTarget = _mediaSeekTarget;
+//					}
+//				}
+//				
+//				_pendingIndexInitializations--;
+//				if (_pendingIndexInitializations == 0)
+//				{
+////					setState(HTTPStreamingState.LOAD_SEEK);
+//				}
+//			}
+//		}
 
 		/**
 		 * @private
@@ -1157,9 +1137,11 @@ package org.osmf.net.httpstreaming
 		private var _resource:URLResource = null;
 		private var _factory:HTTPStreamingFactory = null;
 		
-		private var _provider:HTTPStreamProvider = null;
+		private var _source:HTTPStreamMixer = null;
 		private var _qualityLevelNeedsChanging:Boolean = false;
 		private var _desiredQualityStreamName:String = null;
+		private var _audioStreamNeedsChanging:Boolean = false;
+		private var _desiredAudioStreamName:String = null;
 		
 		private var _seekTarget:Number = -1;
 
@@ -1184,33 +1166,31 @@ package org.osmf.net.httpstreaming
 		
 		
 		
-		
-		
-		private var _mediaSeekTarget:Number = -1;
-		private var _mediaHasChanged:Boolean = false;
-		private var _mediaNeedsChanging:Boolean = false;
-		private var _mediaUrl:String = null;
-		private var _mediaHandler:HTTPStreamSourceHandler = null;
-		private var _mediaRequest:HTTPStreamRequest = null;
-		private var _mediaBufferRemaining:Number = 0;
 		private var _mediaFragmentDuration:Number = 0;
-		private var _mediaIsReady:Boolean = false;
 		
-		private var _audioSeekTarget:Number = -1;
-		private var _audioHasChanged:Boolean = false;
-		private var _audioNeedsChanging:Boolean = false;
-		private var _audioUrl:String = null;
-		private var _audioHandler:HTTPStreamSourceHandler = null;
-		private var _audioRequest:HTTPStreamRequest = null;
-		private var _audioBufferRemaining:Number = 0;
-		private var _audioFragmentDuration:Number = 0;
 		
-		private var _mixer:HTTPStreamingMixerBase = null;
+//		private var _mediaSeekTarget:Number = -1;
+//		private var _mediaHasChanged:Boolean = false;
+//		private var _mediaNeedsChanging:Boolean = false;
+//		private var _mediaUrl:String = null;
+//		private var _mediaHandler:HTTPStreamSourceHandler = null;
+//		private var _mediaRequest:HTTPStreamRequest = null;
+//		private var _mediaBufferRemaining:Number = 0;
+//		private var _mediaFragmentDuration:Number = 0;
+//		private var _mediaIsReady:Boolean = false;
+//		
+//		private var _audioSeekTarget:Number = -1;
+//		private var _audioHasChanged:Boolean = false;
+//		private var _audioNeedsChanging:Boolean = false;
+//		private var _audioUrl:String = null;
+//		private var _audioHandler:HTTPStreamSourceHandler = null;
+//		private var _audioRequest:HTTPStreamRequest = null;
+//		private var _audioBufferRemaining:Number = 0;
+//		private var _audioFragmentDuration:Number = 0;
+		
 		
 		private var _dvrInfo:DVRInfo = null;
 				
-		private var _pendingIndexInitializations:int = 0;
-		
 		CONFIG::LOGGING
 		{
 			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");

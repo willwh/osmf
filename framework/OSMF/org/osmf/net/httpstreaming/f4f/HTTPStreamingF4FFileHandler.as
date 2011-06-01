@@ -337,7 +337,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var _mdatBytesOffset:Number;
 		private var _processRequestWasSeek:Boolean = false;
 		
-		private static const MAX_BYTES_PER_MDAT_READ:uint = 5*1024;
+		private static const MAX_BYTES_PER_MDAT_READ:uint = 10*1024;
 		
 		private var _ba1:ByteArray;
 		private var _boxInfoPending1:Boolean;

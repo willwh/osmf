@@ -21,22 +21,18 @@
  *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	[ExcludeClass]
-	
-	/**
-	 * @private
-	 * 
-	 * Enumeration os states an HTTPStreamProvider cycles through.
-	 */ 
-	public class HTTPStreamProviderState
+	public interface IHTTPStreamHandler
 	{
-		public static const INIT:String = "init";
-		public static const SEEK:String = "seek";
-		public static const LOAD:String = "load";
-		public static const WAIT:String = "wait";
-		public static const READ:String = "read";
-		public static const BEGIN_FRAGMENT:String = "beginFragment";
-		public static const END_FRAGMENT:String = "endFragment";
-		public static const STOP:String = "stop";
+		function get source():IHTTPStreamSource;
+		
+		function get streamName():String;
+		function get qosInfo():HTTPStreamQoSInfo;
+		
+		function open(streamName:String):void
+		function close():void;
+		
+		function getDVRInfo(streamName:Object):void;
+		function changeQualityLevel(streamName:String):void;
+		
 	}
 }

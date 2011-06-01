@@ -889,8 +889,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		private function onBootstrapUpdateTimer(event:TimerEvent):void
 		{ 
-			refreshBootstrapInfo(currentQuality);
-			bootstrapUpdateTimer.delay = bootstrapUpdateInterval;
+			if (currentQuality != -1)
+			{
+				refreshBootstrapInfo(currentQuality);
+				bootstrapUpdateTimer.delay = bootstrapUpdateInterval;
+			}
 		}
 		
 		

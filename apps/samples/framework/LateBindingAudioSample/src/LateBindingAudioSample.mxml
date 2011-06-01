@@ -368,6 +368,14 @@
 			private static const URLS:Array = 
 						[
 							{
+								label:"Rolling window",
+								data:"http://10.131.165.62/live/events/livehds/events/_definst_/liveevent.f4m"
+							},
+							{
+								label:"VOD: 1 video with 2 alternative audio tracks", 
+								data:"http://10.131.165.85/vod/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m"	
+							},
+							{
 								label:"Seek outside buffer", 
 								data:"http://10.131.237.107/vod/hs/vod/ex.f4m"
 							},
@@ -390,10 +398,6 @@
 							{
 								label:"Legacy live HDS manifest without DVR",
 								data:"http://10.122.233.48/live/events/livepkgr/events/_definst_/liveevent.f4m" 
-							},
-							{
-								label:"VOD: 1 video with 2 alternative audio tracks", 
-								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m"	
 							},
 							{
 								label:"VOD: 1 audio-video with 2 alternative audio tracks",

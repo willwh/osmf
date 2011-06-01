@@ -240,12 +240,7 @@
     <classEntry path="org.osmf.net.httpstreaming.DownloadRatioRule"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStream"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStreamMetrics"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamProvider"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamProviderQoSInfo"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamProviderState"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamRequest"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamSource"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamSourceHandler"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFactory"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase"/>
@@ -318,6 +313,9 @@
     <classEntry path="org.osmf.utils.TimeUtil"/>
     <classEntry path="org.osmf.utils.URL"/>
     <classEntry path="org.osmf.utils.Version"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamMixer"/>
+    <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamSource"/>
+    <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamHandler"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

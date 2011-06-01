@@ -26,35 +26,17 @@ package org.osmf.net.httpstreaming
 	/**
 	 * @private
 	 * 
-	 * This class holds Quality of Service information for a specified stream provider.
-	 * 
-	 * @langversion 3.0
-	 * @playerversion Flash 10
-	 * @playerversion AIR 1.5
-	 * @productversion OSMF 1.6
-	 */
-	public class HTTPStreamProviderQoSInfo
+	 * Enumeration of the states an HTTPStreamSource cycles through.
+	 */ 
+	public class HTTPStreamSourceState
 	{
-		/**
-		 * Default constructor.
-		 */
-		public function HTTPStreamProviderQoSInfo(fragmentDuration:Number, fragmentSize:Number, downloadDuration:Number)
-		{
-			if (!isNaN(fragmentDuration) && !isNaN(downloadDuration) && downloadDuration > 0)
-			{
-				_downloadRatio = fragmentDuration / downloadDuration;
-			}
-		}
-		
-		/**
-		 * Gets the download ratio.
-		 */
-		public function get downloadRatio():Number
-		{
-			return _downloadRatio;
-		}
-		
-		/// Internals
-		private var _downloadRatio:Number = 0;
+		public static const INIT:String = "init";
+		public static const SEEK:String = "seek";
+		public static const LOAD:String = "load";
+		public static const WAIT:String = "wait";
+		public static const READ:String = "read";
+		public static const BEGIN_FRAGMENT:String = "beginFragment";
+		public static const END_FRAGMENT:String = "endFragment";
+		public static const STOP:String = "stop";
 	}
 }

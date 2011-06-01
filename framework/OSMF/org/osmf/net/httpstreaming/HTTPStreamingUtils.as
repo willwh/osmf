@@ -95,11 +95,6 @@ package org.osmf.net.httpstreaming
 		 */ 
 		public static function createHTTPStreamingResource(resource:MediaResourceBase, streamName:String):MediaResourceBase
 		{
-			if (streamName == null)
-			{
-				return null;
-			}
-			
 			var bootstrap:BootstrapInfo = null;
 			var streamMetadata:Object;
 			var xmpMetadata:ByteArray;
@@ -235,6 +230,7 @@ package org.osmf.net.httpstreaming
 			dvrInfo.id = "";
 			dvrInfo.beginOffset = NaN;
 			dvrInfo.endOffset = NaN;
+			dvrInfo.windowDuration = NaN;
 			dvrInfo.offline = false;
 			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_ID_KEY) != null)
 			{
@@ -247,6 +243,10 @@ package org.osmf.net.httpstreaming
 			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_END_OFFSET_KEY) != null)
 			{
 				dvrInfo.endOffset = metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_END_OFFSET_KEY) as uint;
+			}
+			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_WINDOW_DURATION_KEY) != null)
+			{
+				dvrInfo.windowDuration = metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_WINDOW_DURATION_KEY) as uint;
 			}
 			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_OFFLINE_KEY) != null)
 			{
