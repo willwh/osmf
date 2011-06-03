@@ -23,16 +23,20 @@
 package org.osmf.net
 {
 	import org.osmf.media.MediaResourceBase;
+
+	[ExcludeClass]
 	
 	/**
-	 * URLResource is a media resource that has a Flash Media Manifest. 
-	 * It serves as an input object for MediaElements that can process 
-	 * and present media represented by an F4M.	 
+	 * @private
+	 * 
+	 * StreamingXMLResource is a media resource that has a xml representation of 
+	 * a Flash Media Manifest. It serves as an input object for MediaElements that 
+	 * can process and present media represented by an F4M.	 
 	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.6
+	 * @langversion 3.0
+	 * @playerversion Flash 10
+	 * @playerversion AIR 1.5
+	 * @productversion OSMF 1.6
 	 */
 	public class StreamingXMLResource extends MediaResourceBase
 	{

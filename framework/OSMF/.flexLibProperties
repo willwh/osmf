@@ -316,6 +316,7 @@
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamMixer"/>
     <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamSource"/>
     <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamHandler"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamMixerState"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

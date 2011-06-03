@@ -111,8 +111,7 @@ package org.osmf.net.httpstreaming
 			setState(HTTPStreamingState.INIT);
 			
 			_source = new HTTPStreamMixer(this);
-			_source.video = new HTTPStreamSource(_factory, _resource, this);
-			_source.audio = null;
+			_source.video = new HTTPStreamSource(_factory, _resource, _source);
 			
 			_mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			_mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -331,7 +330,6 @@ package org.osmf.net.httpstreaming
 			}
 		}
 		
-		
 		/**
 		 * @private
 		 * 
@@ -404,7 +402,8 @@ package org.osmf.net.httpstreaming
 				var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(_resource, _desiredAudioStreamName);
 				if (audioResource != null)
 				{
-					_source.audio = new HTTPStreamSource(_factory, audioResource, this);
+					// audio handler is not dispatching events on the NetStream
+					_source.audio = new HTTPStreamSource(_factory, audioResource, _source);
 					_source.audio.open(_desiredAudioStreamName);
 				}
 				
@@ -576,22 +575,30 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onBeginFragment(event:HTTPStreamingEvent):void
 		{
+			CONFIG::LOGGING
+			{
+				logger.debug("Detected begin fragment for stream [" + event.url + "].");
+			}			
+			
 			if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags ||  _playForDuration >= 0)
 			{
-				CONFIG::LOGGING
+				if (_flvParser == null)
 				{
-					logger.debug("Initialize the FLV Parser ( seekTime = " + _seekTime + ", initialTime = " + _initialTime + ", playForDuration = " + _playForDuration + " ).");
-					if (_insertScriptDataTags != null)
+					CONFIG::LOGGING
 					{
-						logger.debug("Script tags available (" + _insertScriptDataTags.length + ") for processing." );	
+						logger.debug("Initialize the FLV Parser ( seekTime = " + _seekTime + ", initialTime = " + _initialTime + ", playForDuration = " + _playForDuration + " ).");
+						if (_insertScriptDataTags != null)
+						{
+							logger.debug("Script tags available (" + _insertScriptDataTags.length + ") for processing." );	
+						}
 					}
+					
+					if (_playForDuration >= 0)
+					{
+						_flvParserIsSegmentStart = true;	
+					}
+					_flvParser = new FLVParser(false);
 				}
-				
-				if (_playForDuration >= 0)
-				{
-					_flvParserIsSegmentStart = true;	
-				}
-				_flvParser = new FLVParser(false);
 				_flvParserDone = false;
 			}
 		}
@@ -604,7 +611,10 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onEndFragment(event:HTTPStreamingEvent):void
 		{
-			
+			CONFIG::LOGGING
+			{
+				logger.debug("Reached end fragment for stream [" + event.url + "].");
+			}			
 		}
 		
 		/**

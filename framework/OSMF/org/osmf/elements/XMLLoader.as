@@ -48,7 +48,11 @@ package org.osmf.elements
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * XMLLoader is a loader that is capable of loading F4M Strings. F4M files are
 	 * XML documents that adhere to the Flash Media Manifest format, and which
 	 * represent all of the information needed to load and play a media file.

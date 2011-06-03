@@ -213,6 +213,10 @@ package org.osmf.net.httpstreaming
 					{
 						_seekTarget = _offset;
 					}
+					else
+					{
+						_seekTarget = 0;
+					}
 				}
 			}
 
@@ -396,7 +400,13 @@ package org.osmf.net.httpstreaming
 					
 					_dispatcher.dispatchEvent( 
 						new HTTPStreamingEvent(
-							HTTPStreamingEvent.BEGIN_FRAGMENT
+							HTTPStreamingEvent.BEGIN_FRAGMENT, 
+							false,
+							true,
+							NaN,
+							null,
+							null,
+							_streamName
 						)
 					);
 
@@ -444,7 +454,13 @@ package org.osmf.net.httpstreaming
 					
 					_dispatcher.dispatchEvent( 
 							new HTTPStreamingEvent(
-									HTTPStreamingEvent.END_FRAGMENT
+									HTTPStreamingEvent.END_FRAGMENT,
+									false,
+									true,
+									NaN,
+									null,
+									null,
+									_streamName
 								)
 							);
 					

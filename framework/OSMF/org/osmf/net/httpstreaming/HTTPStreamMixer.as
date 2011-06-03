@@ -21,14 +21,24 @@
  *****************************************************/
 package org.osmf.net.httpstreaming
 {
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	
+	import org.osmf.events.DVRStreamInfoEvent;
+	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
 	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
+	import org.osmf.utils.OSMFStrings;
+
+	CONFIG::LOGGING 
+	{	
+		import org.osmf.logging.Log;
+		import org.osmf.logging.Logger;
+	}
 
 	[ExcludeClass]
 	
@@ -43,14 +53,30 @@ package org.osmf.net.httpstreaming
 	 * @playerversion AIR 1.5
 	 * @productversion OSMF 1.6
 	 */
-	public class HTTPStreamMixer implements IHTTPStreamSource
+	public class HTTPStreamMixer extends EventDispatcher implements IHTTPStreamSource
 	{
 		/**
 		 * Default constructor.
 		 */
 		public function HTTPStreamMixer(dispatcher:IEventDispatcher)
 		{
+			if (dispatcher == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+			}
+			
 			_dispatcher = dispatcher;
+			
+			// we setup additional high priority event listeners in order to block
+			// DVRInfo, BEGIN_FRAGMENT and END_FRAGMENT events dispatched by the audio 
+			// source - events which may confuse the listening clients
+			addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, 			onDVRStreamInfo, 		false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.BEGIN_FRAGMENT, 		onBeginFragment, 		false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.END_FRAGMENT, 			onEndFragment, 			false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.TRANSITION, 			onTransition,			false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, 	onTransitionComplete,	false, HIGH_PRIORITY, true);
+
+			setState(HTTPStreamMixerState.INIT);
 		}
 	
 		/**
@@ -59,10 +85,8 @@ package org.osmf.net.httpstreaming
 		 */
 		public function get isReady():Boolean
 		{
-			return (
-					 	(_videoHandler != null && _videoHandler.source != null && _videoHandler.source.isReady)
-					|| 	(_audioHandler != null && _audioHandler.source != null && _audioHandler.source.isReady)
-				);	
+			// we are interested only by the video track which is the one which dictates the timeline
+			return (_videoHandler != null && _videoHandler.source.isReady);
 		}
 
 		/**
@@ -73,7 +97,7 @@ package org.osmf.net.httpstreaming
 		public function get endOfStream():Boolean
 		{
 			// we are interested only by the video track which is the one which dictates the timeline
-			return (_videoHandler != null && _videoHandler.source != null && _videoHandler.source.endOfStream);
+			return (_videoHandler != null && _videoHandler.source.endOfStream);
 		}
 
 		/**
@@ -81,6 +105,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public function close():void
 		{
+			clearInternalBuffers();
 			if (_audioHandler != null)
 			{
 				_audioHandler.close();
@@ -100,18 +125,10 @@ package org.osmf.net.httpstreaming
 			// any of the already downloaded data - a good place to 
 			// think about some "fake" in buffer seeking.
 			// XXX Here we need to implement enhanced seeking
-			_currentTime = 0;
 			
-			_videoTime = 0;
-			_videoTag = null;
-			_videoTagDataLoaded = false;
-			_videoInput.clear();
-
-			_audioTime = 0;
-			_audioTag = null;
-			_audioTagDataLoaded = false;
-			_audioInput.clear();
-
+			setState(HTTPStreamMixerState.SEEK);
+			
+			clearInternalBuffers();
 			if (_videoHandler != null)
 			{
 				_videoHandler.source.seek(offset);
@@ -129,19 +146,11 @@ package org.osmf.net.httpstreaming
 		 */
 		public function getBytes():ByteArray
 		{
-			// if we don't have any audio source then
-			// shortcut the entire process and return 
-			// main video source bytes
-			if (_audioHandler == null)
-			{
-				return _videoHandler.source.getBytes();
-			}
-			
 			return doSomeProcessingAndGetBytes();
 		}
 		
 		/**
-		 * Source for audio packets.
+		 * Handler for audio source.
 		 */
 		public function get audio():IHTTPStreamHandler
 		{
@@ -151,13 +160,17 @@ package org.osmf.net.httpstreaming
 		{
 			if (_audioHandler != value)
 			{
+				CONFIG::LOGGING
+				{
+					logger.debug(value == null ? "No specific audio source. Use default." : "Specific audio source selected.");
+				}
 				_audioHandler = value;
 				_audioNeedsInitialization = true;
 			}
 		}
 		
 		/**
-		 * Source for video packets.
+		 * Handler for video source.
 		 */
 		public function get video():IHTTPStreamHandler
 		{
@@ -165,7 +178,15 @@ package org.osmf.net.httpstreaming
 		}
 		public function set video(value:IHTTPStreamHandler):void
 		{
-			_videoHandler = value;
+			if (_videoHandler != value)
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug(value == null ? "No video source." : "Specific video source selected.");
+				}
+				_videoHandler = value;
+				_videoNeedsInitialization = true;
+			}
 		}
 
 		///////////////////////////////////////////////////////////////////////
@@ -178,49 +199,96 @@ package org.osmf.net.httpstreaming
 		 */
 		protected function doSomeProcessingAndGetBytes():ByteArray
 		{
-			var bytes:ByteArray  = null;
+			var bytes:ByteArray = null;
 			
-			// audio needs to keep up with the video time
-			if (_audioNeedsInitialization && _videoTime > 0)
+			switch(_state)
 			{
-				_audioNeedsInitialization = false;
-				_audioHandler.source.seek(_videoTime);
-				return bytes;
-			}
-			
-			bytes = internalMixMDATBytes();
-			if (bytes.length == 0)
-			{
-				bytes = null;
-				var needsMoreMedia:Boolean =  !_videoTagDataLoaded 
-											||  (_videoInput.bytesAvailable == 0)
-											||  (_videoInput.bytesAvailable != 0 && _videoTag == null);	
-					
-				var needsMoreAudio:Boolean = !_audioTagDataLoaded 
-											||  (_audioInput.bytesAvailable == 0)
-											||  (_audioInput.bytesAvailable != 0 && _audioTag == null);
+				case HTTPStreamMixerState.INIT:
+					// do nothing.
+					break;
 				
-				if (needsMoreAudio || needsMoreMedia)
-				{
-					var audioBytes:ByteArray = null;
-					if (needsMoreAudio && _audioHandler.source.isReady)
+				case HTTPStreamMixerState.SEEK:
+					setState(_audioHandler != null ? HTTPStreamMixerState.CONSUME_MIXED : HTTPStreamMixerState.CONSUME_DEFAULT );
+					break;
+			
+				case HTTPStreamMixerState.CONSUME_BUFFERED:
+					if (_videoInput != null && _videoInput.bytesAvailable > 0)
 					{
-						audioBytes = _audioHandler.source.getBytes();
-					}	
-					var mediaBytes:ByteArray = null;
-					if (needsMoreMedia && _videoHandler.source.isReady)
-					{
-						mediaBytes = _videoHandler.source.getBytes();	
+						// if we have any left overs from previous mixing
+						bytes = new ByteArray();
+						_videoInput.readBytes(bytes, 0, _videoInput.bytesAvailable);
+						
+						_videoInput.length = 0;
+						_videoInput = null;
 					}
-					if (mediaBytes != null || audioBytes != null)
+					setState(HTTPStreamMixerState.CONSUME_DEFAULT);
+					break;
+				
+				case HTTPStreamMixerState.CONSUME_DEFAULT:
+					// if we are in video only mode then we shortcut
+					// the entire mixing process and return directly
+					// the bytes from the specified video source.
+					if (_videoHandler != null)
 					{
-						mixMDATBytes(mediaBytes, audioBytes);
+						bytes = _videoHandler.source.getBytes();
 					}
-				}
-			}
-			else
-			{
-				bytes.position = 0;
+					break;
+				
+				case HTTPStreamMixerState.CONSUME_MIXED:
+					bytes = internalMixMDATBytes();
+					if (bytes.length == 0)
+					{
+						bytes = null;
+					}
+					else
+					{
+						bytes.position = 0;
+					}
+					
+					if (_audioNeedsInitialization && _audioHandler != null && _videoTime > 0)
+					{
+						_dispatcher.dispatchEvent(
+							new HTTPStreamingEvent(
+								HTTPStreamingEvent.TRANSITION_COMPLETE,
+								false,
+								false,
+								NaN,
+								null,
+								null,
+								_audioHandler.streamName
+							)
+						);
+
+						_audioNeedsInitialization = false;
+						_audioHandler.source.seek(_videoTime/1000);
+					}
+					
+					var needsMoreMedia:Boolean =  !_videoTagDataLoaded 
+						||  (_videoInput.bytesAvailable == 0)
+						||  (_videoInput.bytesAvailable != 0 && _videoTag == null);	
+					
+					var needsMoreAudio:Boolean = !_audioTagDataLoaded 
+						||  (_audioInput.bytesAvailable == 0)
+						||  (_audioInput.bytesAvailable != 0 && _audioTag == null);
+					
+					if (needsMoreAudio || needsMoreMedia)
+					{
+						var audioBytes:ByteArray = null;
+						if (!_audioNeedsInitialization && needsMoreAudio && _audioHandler != null && _audioHandler.source.isReady)
+						{
+							audioBytes = _audioHandler.source.getBytes();
+						}	
+						var mediaBytes:ByteArray = null;
+						if (needsMoreMedia && _videoHandler.source.isReady)
+						{
+							mediaBytes = _videoHandler.source.getBytes();	
+						}
+						if (mediaBytes != null || audioBytes != null)
+						{
+							mixMDATBytes(mediaBytes, audioBytes);
+						}
+					}
+					break;
 			}
 			
 			return bytes;
@@ -237,7 +305,7 @@ package org.osmf.net.httpstreaming
 			
 			// we are parsing each tag from the input buffers and mixed them to output buffer
 			// based on their timecode
-			while (_videoInput.bytesAvailable && _audioInput.bytesAvailable)
+			while (_videoInput.bytesAvailable)
 			{
 				
 				// process video input and get the next video tag
@@ -288,53 +356,57 @@ package org.osmf.net.httpstreaming
 					}
 				} while ( _videoTag == null); 
 				
-				// process audio input and get the next audio tag
-				do
+				if (_audioInput.bytesAvailable > 0)
 				{
-					// if we don't have enough data to read the tag header then return
-					// any mixed tags and wait for addional data to be added to audio buffer
-					if ((_audioTag == null) && (_audioInput.bytesAvailable < FLVTag.TAG_HEADER_BYTE_COUNT) )
+					// process audio input and get the next audio tag
+					do
 					{
-						return mixedBytes;
-					}
-					
-					// if we have enough data to read header, read the header and detect tag type
-					if (_audioTag == null)
-					{
-						_audioTag = createTag( _audioInput.readByte());
-						_audioTag.readRemainingHeader(_audioInput);
-						_audioTagDataLoaded = false;
-						
-						_audioTime = _audioTag.timestamp;
-					}
-					
-					if (!_audioTagDataLoaded)
-					{
-						// if we don't have enough data to read the tag data then return
+						// if we don't have enough data to read the tag header then return
 						// any mixed tags and wait for addional data to be added to audio buffer
-						if (_audioInput.bytesAvailable < (_audioTag.dataSize + FLVTag.PREV_TAG_BYTE_COUNT))
+						if ((_audioTag == null) && (_audioInput.bytesAvailable < FLVTag.TAG_HEADER_BYTE_COUNT) )
 						{
 							return mixedBytes;
 						}
 						
-						// skip any video tags which may be present in the audio buffer or any
-						// tags whose timestamp are smaller than the latest audio mixing time
-						if (
-							(_audioTag is FLVTagVideo)
-							||  (_audioTag.timestamp < _audioTime)
-						)
+						// if we have enough data to read header, read the header and detect tag type
+						if (_audioTag == null)
 						{
-							_audioInput.position += _audioTag.dataSize + FLVTag.PREV_TAG_BYTE_COUNT;
-							_audioTag = null;
+							_audioTag = createTag( _audioInput.readByte());
+							_audioTag.readRemainingHeader(_audioInput);
+							_audioTagDataLoaded = false;
+							
+							_audioTime = _audioTag.timestamp;
 						}
-						else					
+						
+						if (!_audioTagDataLoaded)
 						{
-							_audioTag.readData(_audioInput);
-							_audioTag.readPrevTag(_audioInput);
-							_audioTagDataLoaded = true;
+							// if we don't have enough data to read the tag data then return
+							// any mixed tags and wait for addional data to be added to audio buffer
+							if (_audioInput.bytesAvailable < (_audioTag.dataSize + FLVTag.PREV_TAG_BYTE_COUNT))
+							{
+								return mixedBytes;
+							}
+							
+							// skip any video tags which may be present in the audio buffer or any
+							// tags whose timestamp are smaller than the latest audio mixing time
+							if (
+								(_audioTag is FLVTagVideo)
+								|| (_audioTag.timestamp < _audioTime)
+								|| (_audioTag.timestamp < _currentTime)
+							)
+							{
+								_audioInput.position += _audioTag.dataSize + FLVTag.PREV_TAG_BYTE_COUNT;
+								_audioTag = null;
+							}
+							else					
+							{
+								_audioTag.readData(_audioInput);
+								_audioTag.readPrevTag(_audioInput);
+								_audioTagDataLoaded = true;
+							}
 						}
-					}
-				} while ( _audioTag == null); 
+					} while ( _audioTag == null); 
+				}
 				
 				if (
 					(_audioTag != null) 
@@ -348,7 +420,7 @@ package org.osmf.net.httpstreaming
 				else if (
 					(_videoTag != null) 
 					&& (_videoTag.timestamp >= _currentTime) 
-					&& ( _videoTag.timestamp <= _audioTime))
+					&& (_audioInput.bytesAvailable < 1 || _videoTag.timestamp <= _audioTime ))
 				{
 					_currentTime = _videoTag.timestamp;
 					_videoTag.write(mixedBytes);
@@ -435,24 +507,138 @@ package org.osmf.net.httpstreaming
 			
 			return tag;
 		}
+		
+		/**
+		 * @private
+		 * Saves the current state of the object and sets it to the value specified.
+		 **/ 
+		private function setState(value:String):void
+		{
+			_state = value;
+			
+			CONFIG::LOGGING
+			{
+				if (_state != previouslyLoggedState)
+				{
+					logger.debug("State = " + _state);
+					previouslyLoggedState = _state;
+				}
+			}
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Clears the internal buffers when seeking or closing the mixer. It is important
+		 * to do this due the fact that in order for the mix to work, the buffers should 
+		 * be aligned at tag boundry.
+		 */ 
+		private function clearInternalBuffers():void
+		{
+			_currentTime = 0;
+			
+			_videoTime = 0;
+			_videoTag = null;
+			_videoTagDataLoaded = false;
+			_videoInput.clear();
+			
+			_audioTime = 0;
+			_audioTag = null;
+			_audioTagDataLoaded = false;
+			_audioInput.clear();
+		}
+		
+		/**
+		 * Event handler for DVRStreamInfo event. We just want to block the event dispatched
+		 * by the audio handler as the video handler is the only owner of the timeline.
+		 */ 
+		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
+		{
+			_dispatcher.dispatchEvent(event);
+		}
+		
+		private function onBeginFragment(event:HTTPStreamingEvent):void
+		{
+			if (_audioNeedsInitialization)
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("We are at a fragment boundry [state = " + _state + "]. We should switch alternative audio.");
+				}
+				
+				_dispatcher.dispatchEvent(
+					new HTTPStreamingEvent(
+						HTTPStreamingEvent.TRANSITION,
+						false,
+						false,
+						NaN,
+						null,
+						null,
+						(_audioHandler != null ? _audioHandler.streamName : null)
+					)
+				);
 
+				if (_audioHandler != null && _state == HTTPStreamMixerState.CONSUME_DEFAULT)
+				{
+					setState(HTTPStreamMixerState.CONSUME_MIXED);
+				}
+				if (_audioHandler == null && _state == HTTPStreamMixerState.CONSUME_MIXED)
+				{
+					setState(HTTPStreamMixerState.CONSUME_BUFFERED);
+				}
+			}
+			
+			if (_videoHandler != null && _videoHandler.streamName == event.url)
+			{
+				_dispatcher.dispatchEvent(event);
+			}
+		}
+
+		private function onEndFragment(event:HTTPStreamingEvent):void
+		{
+			if (_videoHandler != null && _videoHandler.streamName == event.url)
+			{
+				_dispatcher.dispatchEvent(event);
+			}
+		}
+		
+		private function onTransition(event:HTTPStreamingEvent):void
+		{
+			_dispatcher.dispatchEvent(event);
+		}
+		
+		private function onTransitionComplete(event:HTTPStreamingEvent):void
+		{
+			_dispatcher.dispatchEvent(event);
+		}
 		/// Internals
-		private var _audioHandler:IHTTPStreamHandler = null;
-		private var _videoHandler:IHTTPStreamHandler = null;
+		private static const HIGH_PRIORITY:int = 10000;
 		private var _dispatcher:IEventDispatcher = null;
 		
 		private var _videoTime:uint = 0;
 		private var _videoTag:FLVTag = null;
 		private var _videoTagDataLoaded:Boolean = true;
 		private	var _videoInput:ByteArray = new ByteArray();
+		private var _videoNeedsInitialization:Boolean = false;
 		
 		private var _audioTime:uint = 0;
 		private var _audioTag:FLVTag = null;
 		private var _audioTagDataLoaded:Boolean = true;
 		private	var _audioInput:ByteArray = new ByteArray();
+		private var _audioNeedsInitialization:Boolean = false;
 		
 		private	var _currentTime:uint = 0;
 		
-		private var _audioNeedsInitialization:Boolean = false;
+		private var _audioHandler:IHTTPStreamHandler = null;
+		private var _videoHandler:IHTTPStreamHandler = null;
+		
+		private var _state:String = null;
+		
+		CONFIG::LOGGING
+		{
+			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.HTTPStreamMixer");
+			private var previouslyLoggedState:String = null;
+		}
+
 	}
 }

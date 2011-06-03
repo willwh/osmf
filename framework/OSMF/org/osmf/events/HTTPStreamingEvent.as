@@ -141,7 +141,8 @@ package org.osmf.events
 							cancelable, 
 							fragmentDuration, 
 							scriptDataObject, 
-							scriptDataMode
+							scriptDataMode,
+							_url
 					);
 		}
 		

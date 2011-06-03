@@ -7,6 +7,11 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:flexui="flexunit.flexui.*" creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
+			import org.osmf.media.TestMediaPlayerWithLegacy_HDS_SBR;
+			import org.osmf.media.TestMediaPlayerWithLegacy_HDS_MBR;
+			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations;
+			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches;
+			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR;
 			import org.osmf.elements.f4mClasses.TestMultiLevelManifestParser;
 			import org.osmf.elements.f4mClasses.TestManifestParser;
 			
@@ -15,6 +20,11 @@
 				var testsToRun:Array = new Array();
 				testsToRun.push(org.osmf.elements.f4mClasses.TestManifestParser);
 				testsToRun.push(org.osmf.elements.f4mClasses.TestMultiLevelManifestParser);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacy_HDS_MBR);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacy_HDS_SBR);
 				return testsToRun;
 			}
 			
