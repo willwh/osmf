@@ -400,6 +400,10 @@ package org.osmf.net.httpstreaming
 					_source.audio = new HTTPStreamSource(_factory, audioResource, _source);
 					_source.audio.open(_desiredAudioStreamName);
 				}
+				else
+				{
+					_source.audio = null;
+				}
 				
 				_audioStreamNeedsChanging = false;
 				_desiredAudioStreamName = null;
@@ -639,6 +643,11 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onTransitionComplete(event:HTTPStreamingEvent):void
 		{
+			if (event.url != _source.video.streamName)
+			{
+				appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);	
+			}
+			
 			var info:Object = new Object();
 			info.code = NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE;
 			info.level = "status";

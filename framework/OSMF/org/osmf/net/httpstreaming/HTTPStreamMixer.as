@@ -158,7 +158,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public function get audio():IHTTPStreamHandler
 		{
-			return _desiredAudioHandler != null ? _desiredAudioHandler : _audioHandler;
+			return _desiredAudioHandler;
 		}
 		public function set audio(value:IHTTPStreamHandler):void
 		{
@@ -234,11 +234,8 @@ package org.osmf.net.httpstreaming
 					// default stream or both default and alternate streams )
 					if (_audioNeedsInitialization)
 					{
-						if (_desiredAudioHandler != null)
-						{
-							_audioHandler = _desiredAudioHandler;
-							_desiredAudioHandler = null;
-						}
+						_audioHandler = _desiredAudioHandler;
+						_audioNeedsInitialization = false;
 						
 						_dispatcher.dispatchEvent(
 							new HTTPStreamingEvent(
@@ -251,12 +248,11 @@ package org.osmf.net.httpstreaming
 								(_audioHandler != null ? _audioHandler.streamName : null)
 							)
 						);
-
-						_audioNeedsInitialization = false;
 					}
 						
 					if (_audioHandler == null)
 					{
+						clearInternalBuffers();
 						setState(HTTPStreamMixerState.CONSUME_DEFAULT);
 					}
 					else
@@ -289,7 +285,7 @@ package org.osmf.net.httpstreaming
 					if (!_audioSyncedWithVideoTime && _videoTime > -1)
 					{
 						_audioSyncedWithVideoTime = true;
-						_audioHandler.source.seek( _audioTime != -1 ? _audioTime/1000 : _videoTime/1000);
+						_audioHandler.source.seek( _videoTime/1000);
 					}
 					
 					var needsMoreMedia:Boolean =  !_videoTagDataLoaded 
@@ -624,11 +620,9 @@ package org.osmf.net.httpstreaming
 					_audioHandler.close();
 					_audioHandler = null;
 				}
-				_audioHandler = _desiredAudioHandler;
-				_desiredAudioHandler = null;
 
-				_audioSyncedWithVideoTime = false;
 				clearAudioBuffers();
+				_audioSyncedWithVideoTime = false;
 
 				setState(HTTPStreamMixerState.CONSUME_UNDECIDED);
 			}
