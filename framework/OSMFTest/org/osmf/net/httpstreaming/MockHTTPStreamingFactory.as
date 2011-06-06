@@ -24,15 +24,6 @@ package org.osmf.net.httpstreaming
 			return new HTTPStreamingIndexHandlerBase();
 		}
 		
-		/**
-		 * Creates a HTTPStreamingMixerBase class. 
-		 * 
-		 * @see org.osmf.net.httpstreaming.HTTPStreamingMixerBase
-		 */
-		override public function createMixer(resource:MediaResourceBase):HTTPStreamingMixerBase
-		{
-			return new HTTPStreamingMixerBase();
-		}
 		
 		/**
 		 * Creates a HTTPStreamingIndexInfoBase instance.
