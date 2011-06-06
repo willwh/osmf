@@ -31,10 +31,8 @@ package org.osmf.net.httpstreaming
 	public class HTTPStreamMixerState
 	{
 		public static const INIT:String = "init";
-		public static const INIT_DEFAULT:String = "initDefault";
-		public static const INIT_AUDIO:String = "initAudio";
 		public static const SEEK:String = "seek";
-		public static const CONSUME_BUFFERED:String = "consumeBuffered";
+		public static const CONSUME_UNDECIDED:String = "consumeUndecided";
 		public static const CONSUME_DEFAULT:String = "consumeDefault";
 		public static const CONSUME_MIXED:String = "consumeMixed";
 	}

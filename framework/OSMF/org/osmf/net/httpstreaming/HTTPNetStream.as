@@ -206,8 +206,8 @@ package org.osmf.net.httpstreaming
 					_seekTarget = offset + _initialTime;
 				}
 				
-				setState(HTTPStreamingState.SEEK);		
 				super.seek(offset);
+				setState(HTTPStreamingState.SEEK);		
 			}
 			
 			_notifyPlayUnpublishPending = false;
@@ -393,12 +393,6 @@ package org.osmf.net.httpstreaming
 					logger.debug("Stream source is ready so we can initiate change audio stream to [" + _desiredAudioStreamName + "]");
 				}
 				
-				if (_source.audio != null)
-				{
-					_source.audio.close();
-					_source.audio = null;
-				}
-				
 				var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(_resource, _desiredAudioStreamName);
 				if (audioResource != null)
 				{
@@ -432,7 +426,7 @@ package org.osmf.net.httpstreaming
 					// if we are getting dry then go back into
 					// active play mode and get more bytes 
 					// from the stream provider
-					if ( this.bufferLength < _desiredBufferTime)
+					if ( this.bufferLength < (_desiredBufferTime + 2))
 					{
 						setState(HTTPStreamingState.PLAY);
 					}
@@ -444,16 +438,16 @@ package org.osmf.net.httpstreaming
 					// we may call seek before our stream provider is
 					// able to fulfill our request - so we'll stay in seek
 					// mode until the provider is ready.
+					CONFIG::FLASH_10_1
+					{
+						appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+					}
+					
 					if (_source.isReady)
 					{
-						CONFIG::FLASH_10_1
-						{
-							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-						}
-						
 						_seekTime = -1;
 						_source.seek(_seekTarget);
-						setState(HTTPStreamingState.PLAY);
+						setState(HTTPStreamingState.WAIT);
 					}
 					break;
 				

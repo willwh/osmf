@@ -245,7 +245,6 @@
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingMixerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingNetLoader"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingState"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingSwitchManager"/>
@@ -269,7 +268,6 @@
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo"/>
-    <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FMixer"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.LocalRandomAccessEntry"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.MediaDataBox"/>

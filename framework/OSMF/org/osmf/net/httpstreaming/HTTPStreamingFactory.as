@@ -60,16 +60,6 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/**
-		 * Creates a HTTPStreamingMixerBase class. 
-		 * 
-		 * @see org.osmf.net.httpstreaming.HTTPStreamingMixerBase
-		 */
-		public function createMixer(resource:MediaResourceBase):HTTPStreamingMixerBase
-		{
-			throw new IllegalOperationError("The createMixer() method must be overriden by derived class.");	
-		}
-		
-		/**
 		 * Creates a HTTPStreamingIndexInfoBase instance.
 		 * 
 		 * @see org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase
