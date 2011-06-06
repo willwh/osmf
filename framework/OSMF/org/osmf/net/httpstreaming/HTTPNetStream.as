@@ -645,7 +645,10 @@ package org.osmf.net.httpstreaming
 		{
 			if (event.url != _source.video.streamName)
 			{
-				appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);	
+				CONFIG::FLASH_10_1
+				{
+					appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+				}
 			}
 			
 			var info:Object = new Object();
