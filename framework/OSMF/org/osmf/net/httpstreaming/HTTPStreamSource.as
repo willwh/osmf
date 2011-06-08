@@ -205,13 +205,13 @@ package org.osmf.net.httpstreaming
 			{
 				if (_dvrInfo != null)
 				{
-					_seekTarget = _dvrInfo.startTime + _dvrInfo.curLength - DVR_LIVE_OFFSET;
+					_seekTarget = Math.floor(_dvrInfo.startTime + _dvrInfo.curLength - DVR_LIVE_OFFSET);
 				}
 				else
 				{
 					if (_isLive)
 					{
-						_seekTarget = _offset;
+						_seekTarget = Math.floor(_offset);
 					}
 					else
 					{

@@ -356,12 +356,25 @@ package org.osmf.net
 				} 
 			}
 			
+			// if the rules recommended a new bitrate index
+			// then make sure we respect the maximum allowed index
 			if (	newIndex != -1
 				&& 	newIndex != int.MAX_VALUE
 				&&	newIndex != actualIndex
 			   )
 			{
 				newIndex = Math.min(newIndex, maxAllowedIndex);
+			}
+			
+			// if no change was recommended then make sure that
+			// the current index is still respecting the maximum 
+			// allowed index
+			if (
+				(newIndex == -1	||  newIndex == int.MAX_VALUE)
+				&& actualIndex > maxAllowedIndex
+				)
+			{
+				newIndex = maxAllowedIndex;	
 			}
 			
 			if (	newIndex != -1
