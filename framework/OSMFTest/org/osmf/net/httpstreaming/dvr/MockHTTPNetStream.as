@@ -35,7 +35,8 @@ package org.osmf.net.httpstreaming.dvr
 		public function MockHTTPNetStream(nc:NetConnection, time:Number)
 		{
 			var factory:HTTPStreamingFactory = new HTTPStreamingF4FFactory();
-			super(nc, factory)
+			var resource:StreamingURLResource = new StreamingURLResource("http://www.example.com");
+			super(nc, factory, resource)
 			
 			_time = time;
 			_dvrInfo = null;

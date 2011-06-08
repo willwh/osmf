@@ -38,15 +38,15 @@ package org.osmf.net.httpstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 
-			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new MockHTTPStreamingFactory()));
-			
-			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics);
-			
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(null);
 			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream2_500kbps", 500));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
+			
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new MockHTTPStreamingFactory(), dsResource));
+			
+			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics);
 			
 			metrics.resource = dsResource;
 
@@ -100,15 +100,15 @@ package org.osmf.net.httpstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 
-			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new MockHTTPStreamingFactory()));
-			
-			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics, false);
-			
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(null);
 			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream2_500kbps", 500));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
+			
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new MockHTTPStreamingFactory(), dsResource));
+			
+			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics, false);
 			
 			metrics.resource = dsResource;
 
