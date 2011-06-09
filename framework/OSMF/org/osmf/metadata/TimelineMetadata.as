@@ -50,7 +50,7 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event (name="markerAdd", type="org.osmf.metadata.TimelineMetadataEvent")]
+	[Event (name="markerAdd", type="org.osmf.events.TimelineMetadataEvent")]
 
 	/**
 	 * Dispatched when a TimelineMarker is removed from this object.
@@ -62,7 +62,7 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event (name="markerRemove", type="org.osmf.metadata.TimelineMetadataEvent")]
+	[Event (name="markerRemove", type="org.osmf.events.TimelineMetadataEvent")]
 
 	/**
 	 * Dispatched when the currentTime property of the MediaElement associated
