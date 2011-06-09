@@ -41,9 +41,15 @@ package org.osmf.layout
 	}
 
 	/**
-	 * LayoutRendererBase is the base class for custom layout renderers
+	 * LayoutRendererBase is the base class for custom layout renderers.
 	 *
-	 * @private The rest of the class comment consists of implementation details.
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
+	/*
+	 * Implementation details:
 	 *  
 	 * The class provides a number of facilities:
 	 * 
@@ -71,13 +77,7 @@ package org.osmf.layout
 	 *    container's displayObjectContainer.
 	 *  * processUnstagedTarget, invoked when a target is removed from the stage
 	 *    of the container's displayObjectContainer.  
-	 * 
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
+	 */
 	public class LayoutRendererBase extends EventDispatcher
 	{
 		// LayoutRenderer
