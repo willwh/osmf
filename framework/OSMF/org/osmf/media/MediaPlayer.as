@@ -824,7 +824,6 @@ package org.osmf.media
 		 *  
 		 * @param time Time to seek to in seconds.
 		 * @return Returns <code>true</code> if the media can seek to the specified time.
-		 * @throws IllegalOperationError if the media cannot be seeked.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -833,7 +832,7 @@ package org.osmf.media
 		 */	
 	    public function canSeekTo(time:Number):Boolean
 	    {
-	    	return (getTraitOrThrow(MediaTraitType.SEEK) as SeekTrait).canSeekTo(time);
+	    	return canSeek ? (getTraitOrThrow(MediaTraitType.SEEK) as SeekTrait).canSeekTo(time) : false;
 	    }
 	    
 	    /**

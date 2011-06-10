@@ -79,6 +79,7 @@ package org.osmf.media
 			
 			function onPlaying(event:Event):void
 			{
+				assertThat("We can't seek in this live scenario", !(playerHelper.actualPlayer.canSeekTo(0)));
 			}
 			
 			function onComplete(passThroughData:Object):void
@@ -129,6 +130,7 @@ package org.osmf.media
 			
 			function onPlaying(event:Event):void
 			{
+				assertThat("We can't seek in this live scenario", !(playerHelper.actualPlayer.canSeekTo(0)));
 			}
 			
 			function onComplete(passThroughData:Object):void
@@ -229,6 +231,7 @@ package org.osmf.media
 			
 			function onPlaying(event:Event):void
 			{
+				assertThat("We can seek in this VOD scenario", playerHelper.actualPlayer.canSeekTo(0));
 			}
 			
 			function onComplete(passThroughData:Object):void
