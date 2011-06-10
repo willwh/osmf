@@ -23,6 +23,7 @@ package org.osmf.net.httpstreaming
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.events.NetStatusEvent;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	
@@ -77,6 +78,8 @@ package org.osmf.net.httpstreaming
 			addEventListener(HTTPStreamingEvent.TRANSITION, 			onTransition,			false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, 	onTransitionComplete,	false, HIGH_PRIORITY, true);
 
+			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			
 			setState(HTTPStreamMixerState.INIT);
 		}
 	
@@ -661,6 +664,19 @@ package org.osmf.net.httpstreaming
 		{
 			_dispatcher.dispatchEvent(event);
 		}
+		
+		/**
+		 * @private
+		 * 
+		 * NetStatusEvent handler. The net status events are dispatched by sources
+		 * when there are download errors. We forward this to the actual HTTPNetStream.
+		 */
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			_dispatcher.dispatchEvent(event);
+		}
+		
+		
 		/// Internals
 		private static const HIGH_PRIORITY:int = 10000;
 		private var _dispatcher:IEventDispatcher = null;
