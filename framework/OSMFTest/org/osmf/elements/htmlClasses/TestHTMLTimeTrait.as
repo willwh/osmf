@@ -22,7 +22,7 @@
 package org.osmf.elements.htmlClasses
 {
 	import org.osmf.elements.HTMLElement;
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 
 	public class TestHTMLTimeTrait extends TestCaseEx
 	{

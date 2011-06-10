@@ -24,10 +24,10 @@ package org.osmf.traits
 	import flash.events.Event;
 	import flash.utils.ByteArray;
 	
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.utils.DynamicDRMTrait;
-	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestDRMTrait extends InterfaceTestCase
 	{

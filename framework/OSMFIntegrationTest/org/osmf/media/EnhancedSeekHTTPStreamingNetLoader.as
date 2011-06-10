@@ -35,7 +35,8 @@ package org.osmf.media
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
 			var httpNetStream:HTTPNetStream = super.createNetStream(connection, resource) as HTTPNetStream;
-			httpNetStream.enhancedSeek = true;
+			// [cdobre] XXX TO renable the enhanced functionality
+			// httpNetStream.enhancedSeek = true;
 			return httpNetStream;
 		}
 	}

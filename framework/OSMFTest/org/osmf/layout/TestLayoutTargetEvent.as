@@ -24,7 +24,7 @@ package org.osmf.layout
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 
 	public class TestLayoutTargetEvent extends TestCaseEx
 	{

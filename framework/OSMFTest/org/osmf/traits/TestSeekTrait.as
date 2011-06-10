@@ -24,8 +24,8 @@ package org.osmf.traits
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.SeekEvent;
-	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestSeekTrait extends InterfaceTestCase
 	{

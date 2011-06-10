@@ -24,7 +24,7 @@ package org.osmf.traits
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import org.osmf.utils.InterfaceTestCase;
+	import org.flexunit.InterfaceTestCase;
 
 	public class TestDisplayObjectTrait extends InterfaceTestCase
 	{

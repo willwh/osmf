@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;

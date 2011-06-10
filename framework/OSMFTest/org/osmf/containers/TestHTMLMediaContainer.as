@@ -23,9 +23,9 @@ package org.osmf.containers
 {
 	import flash.external.ExternalInterface;
 	
+	import org.flexunit.TestCaseEx;
 	import org.osmf.elements.HTMLElement;
 	import org.osmf.elements.ProxyElement;
-	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.media.MediaElement;
 	
 	public class TestHTMLMediaContainer extends TestCaseEx

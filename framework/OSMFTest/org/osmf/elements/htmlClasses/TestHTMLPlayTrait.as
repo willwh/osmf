@@ -22,7 +22,7 @@
 package org.osmf.elements.htmlClasses
 {
 	import org.osmf.elements.HTMLElement;
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.traits.PlayState;
 
 	public class TestHTMLPlayTrait extends TestCaseEx

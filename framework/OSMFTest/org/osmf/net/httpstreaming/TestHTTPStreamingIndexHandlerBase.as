@@ -20,7 +20,7 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 
 	public class TestHTTPStreamingIndexHandlerBase extends TestCaseEx
 	{

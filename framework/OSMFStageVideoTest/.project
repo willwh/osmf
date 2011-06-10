@@ -18,7 +18,7 @@
 		<link>
 			<name>[source path] OSMF</name>
 			<type>2</type>
-			<location>C:/work/osmf/trunk-osmf/framework/OSMF</location>
+			<location>/Work/osmf/trunk-osmf/framework/OSMF</location>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -22,19 +22,17 @@
 package org.osmf.net.drm
 {
 	import flash.events.Event;
-	import flash.net.drm.AuthenticationMethod;
+	import flash.net.drm.DRMContentData;
 	import flash.utils.ByteArray;
 	
 	import flexunit.framework.Assert;
 	
 	import mx.utils.Base64Decoder;
 	
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.traits.DRMState;
-	import org.osmf.traits.DRMTrait;
-	import flash.net.drm.DRMContentData
-	import org.osmf.utils.InterfaceTestCase;
-
+	
 	public class TestNetStreamDRMTrait extends InterfaceTestCase
 	{
 		public function TestNetStreamDRMTrait()

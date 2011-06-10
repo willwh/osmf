@@ -23,19 +23,16 @@
 *****************************************************/
 -->
 <mx:Application
-	xmlns:mx		="http://www.adobe.com/2006/mxml"
-	xmlns:flexunit	="flexunit.flexui.*"
-	layout		="absolute"
-	creationComplete	="runTests()"
+	xmlns:mx		 = "http://www.adobe.com/2006/mxml"
+	xmlns:flexunit	 = "flexunit.flexui.*"
+	layout			 = "absolute"
+	creationComplete = "runTests()"
 	>
 	
 	<mx:Script>
 		<![CDATA[
 
-			import org.osmf.*;
-			import org.osmf.utils.TestConstants;
-			import flexunit.framework.TestSuite;
-			
+			import org.osmf.OSMFIntegrationTests;
 			import org.osmf.utils.IntegrationTestUtils;
 			
 			private function runTests():void
@@ -60,5 +57,4 @@
 	</mx:Script>
 	
 	<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%"/>
-
 </mx:Application>

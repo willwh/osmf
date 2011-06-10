@@ -22,7 +22,7 @@
 package org.osmf.net.dvr
 {
 	import org.osmf.events.DVREvent;
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.StreamType;

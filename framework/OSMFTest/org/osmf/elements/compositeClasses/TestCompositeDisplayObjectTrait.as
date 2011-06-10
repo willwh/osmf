@@ -22,7 +22,7 @@
 package org.osmf.elements.compositeClasses
 {
 	import org.osmf.elements.SerialElement;
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.layout.*;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.*;

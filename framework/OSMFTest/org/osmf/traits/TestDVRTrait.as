@@ -19,11 +19,10 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.traits
 {
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.DVREvent;
-	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestDVRTrait extends InterfaceTestCase
 	{

@@ -23,7 +23,7 @@
 package org.osmf.layout
 {
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.metadata.NullMetadataSynthesizer;
 
 	public class TestBoxAttributesMetadata extends TestCaseEx

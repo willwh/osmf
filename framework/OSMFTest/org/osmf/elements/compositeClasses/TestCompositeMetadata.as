@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataGroup;
 	import org.osmf.metadata.MetadataSynthesizer;

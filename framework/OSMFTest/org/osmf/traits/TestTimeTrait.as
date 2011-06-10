@@ -23,10 +23,10 @@ package org.osmf.traits
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.utils.InterfaceTestCase;
-	
 	import flash.events.Event;
-
+	
+	import org.flexunit.InterfaceTestCase;
+	
 	public class TestTimeTrait extends InterfaceTestCase
 	{
 		/**

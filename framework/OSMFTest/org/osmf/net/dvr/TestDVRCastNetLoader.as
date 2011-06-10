@@ -21,7 +21,7 @@
 
 package org.osmf.net.dvr
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.net.StreamingURLResource;
 
 	public class TestDVRCastNetLoader extends TestCaseEx

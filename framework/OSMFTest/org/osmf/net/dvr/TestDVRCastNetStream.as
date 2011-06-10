@@ -24,7 +24,7 @@ package org.osmf.net.dvr
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStreamPlayOptions;
 	
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.net.StreamingURLResource;
 
 

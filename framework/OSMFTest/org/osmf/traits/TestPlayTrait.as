@@ -22,11 +22,11 @@
 package org.osmf.traits
 {
 	import __AS3__.vec.Vector;
-	
-	import org.osmf.events.PlayEvent;
-	import org.osmf.utils.InterfaceTestCase;
-	
+
 	import flash.events.Event;
+
+	import org.flexunit.InterfaceTestCase;
+	import org.osmf.events.PlayEvent;
 
 	public class TestPlayTrait extends InterfaceTestCase
 	{

@@ -23,7 +23,7 @@ package org.osmf.metadata
 {
 	import flash.events.Event;
 	
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 
 	public class TestMetadataGroup extends TestCaseEx
 	{

@@ -22,7 +22,7 @@
 
 package org.osmf.elements
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicDVRTrait;

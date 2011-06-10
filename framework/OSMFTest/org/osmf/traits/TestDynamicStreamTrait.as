@@ -24,8 +24,8 @@ package org.osmf.traits
 	import flash.errors.*;
 	import flash.events.*;
 	
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.DynamicStreamEvent;
-	import org.osmf.utils.InterfaceTestCase;
 	
 	public class TestDynamicStreamTrait extends InterfaceTestCase
 	{

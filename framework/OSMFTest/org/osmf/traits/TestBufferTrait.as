@@ -25,8 +25,8 @@ package org.osmf.traits
 	
 	import flash.events.Event;
 	
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.BufferEvent;
-	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestBufferTrait extends InterfaceTestCase
 	{

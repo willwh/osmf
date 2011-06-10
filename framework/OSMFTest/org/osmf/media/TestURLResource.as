@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.utils.InterfaceTestCase;
+	import org.flexunit.InterfaceTestCase;
 	
 	public class TestURLResource extends InterfaceTestCase
 	{

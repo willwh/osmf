@@ -24,7 +24,7 @@ package org.osmf.net.dvr
 {
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;

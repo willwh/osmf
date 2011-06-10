@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.elements.audioClasses
 {
-	import flash.net.URLRequest;
 	import flash.media.Sound;
+	import flash.net.URLRequest;
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.TestAudioTrait;

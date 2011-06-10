@@ -2,38 +2,22 @@
 
 <!-- This is an auto generated file and is not intended for modification. -->
 
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:flexui="flexunit.flexui.*" creationComplete="onCreationComplete()">
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:flexui="flexunit.flexui.*"
+					   creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
-			import org.osmf.containers.TestMediaContainer;
-			import org.osmf.utils.TestURL;
-			import org.osmf.elements.f4mClasses.TestExternalMediaParser;
-			import org.osmf.utils.TestVersion;
-			import org.osmf.elements.f4mClasses.builders.TestMultiLevelManifestBuilder;
 			import org.osmf.media.TestMediaType;
-			import org.osmf.utils.TestOSMFStrings;
-			import org.osmf.utils.TestOSMFSettings;
-			import org.osmf.elements.f4mClasses.builders.TestManifestBuilder;
+			import org.osmf.containers.TestMediaContainer;
 			import org.osmf.containers.TestHTMLMediaContainer;
-			import org.osmf.utils.TestTimeUtil;
 			
 			public function currentRunTestSuite():Array
 			{
 				var testsToRun:Array = new Array();
-				testsToRun.push(OSMFTests);
-				testsToRun.push(org.osmf.utils.TestTimeUtil);
 				testsToRun.push(org.osmf.containers.TestHTMLMediaContainer);
-				testsToRun.push(org.osmf.elements.f4mClasses.builders.TestManifestBuilder);
-				testsToRun.push(org.osmf.utils.TestOSMFSettings);
-				testsToRun.push(org.osmf.utils.TestOSMFStrings);
-				testsToRun.push(org.osmf.media.TestMediaType);
-				testsToRun.push(org.osmf.elements.f4mClasses.builders.TestMultiLevelManifestBuilder);
-				testsToRun.push(org.osmf.utils.TestVersion);
-				testsToRun.push(org.osmf.elements.f4mClasses.TestExternalMediaParser);
-				testsToRun.push(org.osmf.utils.TestURL);
 				testsToRun.push(org.osmf.containers.TestMediaContainer);
+				testsToRun.push(org.osmf.media.TestMediaType);
 				return testsToRun;
 			}
 			

@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 
 	public class TestLayoutMetadata extends TestCaseEx
 	{

@@ -22,7 +22,7 @@
 package org.osmf.net.dvr
 {
 	import org.osmf.events.TimeEvent;
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.net.StreamingURLResource;
 
 	public class TestDVRCastTimeTrait extends TestCaseEx

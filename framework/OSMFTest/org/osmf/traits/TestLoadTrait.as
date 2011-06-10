@@ -25,9 +25,9 @@ package org.osmf.traits
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.utils.InterfaceTestCase;
 	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.SimpleResource;
 	

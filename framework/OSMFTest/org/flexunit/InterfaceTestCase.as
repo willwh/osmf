@@ -19,9 +19,9 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.utils
+package org.flexunit
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	
 	/**
 	 * A subclass of TestCase which is specific to testing implementations of

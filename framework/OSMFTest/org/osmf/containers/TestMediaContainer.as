@@ -24,7 +24,7 @@ package org.osmf.containers
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.flexunit.TestCaseEx;
+	import org.flexunit.TestCaseEx;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutRenderer;

@@ -25,8 +25,8 @@ package org.osmf.traits
 	
 	import flash.events.Event;
 	
+	import org.flexunit.InterfaceTestCase;
 	import org.osmf.events.AudioEvent;
-	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestAudioTrait extends InterfaceTestCase
 	{
