@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>FlexUnit4</project>
+		<project>FlexUnit4UIListener</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

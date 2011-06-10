@@ -71,6 +71,7 @@ package org.osmf.net.httpstreaming
 			// DVRInfo, BEGIN_FRAGMENT and END_FRAGMENT events dispatched by the audio 
 			// source - events which may confuse the listening clients
 			addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, 			onDVRStreamInfo, 		false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.SCRIPT_DATA, 			onScriptData, 			false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.BEGIN_FRAGMENT, 		onBeginFragment, 		false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.END_FRAGMENT, 			onEndFragment, 			false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.TRANSITION, 			onTransition,			false, HIGH_PRIORITY, true);
@@ -595,6 +596,16 @@ package org.osmf.net.httpstreaming
 			_videoInput.clear();
 			
 			clearAudioBuffers();
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Event handler for SCRIPT_DATA event. We forward this  event for further processing.
+		 */ 
+		private function onScriptData(event:HTTPStreamingEvent):void
+		{
+			_dispatcher.dispatchEvent(event);
 		}
 		
 		/**

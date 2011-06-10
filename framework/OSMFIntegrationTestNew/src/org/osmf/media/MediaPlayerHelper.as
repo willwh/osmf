@@ -23,12 +23,7 @@ package org.osmf.media
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.utils.Timer;
 	
-	import org.flexunit.assertThat;
-	import org.flexunit.asserts.fail;
-	import org.flexunit.async.Async;
-	import org.hamcrest.object.equalTo;
 	import org.osmf.events.AlternativeAudioEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;

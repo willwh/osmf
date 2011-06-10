@@ -25,13 +25,10 @@ package org.osmf.media
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import mx.accessibility.AccConst;
-	
 	import org.flexunit.assertThat;
 	import org.hamcrest.number.greaterThan;
 	import org.hamcrest.number.greaterThanOrEqualTo;
 	import org.hamcrest.object.equalTo;
-	import org.osmf.media.URLResource;
 	
 	/**
 	 * @private

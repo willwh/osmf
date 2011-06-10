@@ -26,14 +26,9 @@ package org.osmf.media
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import org.flexunit.assertThat;
 	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
-	import org.hamcrest.object.equalTo;
 	import org.osmf.events.MediaError;
-	import org.osmf.events.MediaPlayerStateChangeEvent;
-	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.MediaTraitType;
 	
 	public class TestMediaPlayerHelper extends EventDispatcher
 	{		

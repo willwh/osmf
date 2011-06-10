@@ -26,11 +26,8 @@ package org.osmf.media
 	import flash.utils.Timer;
 	
 	import org.flexunit.assertThat;
-	import org.flexunit.asserts.assertEquals;
-	import org.hamcrest.number.greaterThan;
 	import org.hamcrest.number.greaterThanOrEqualTo;
 	import org.hamcrest.object.equalTo;
-	import org.osmf.media.URLResource;
 
 	/**
 	 * Class tests late binding audio behavior when different operations are

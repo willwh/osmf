@@ -47,20 +47,19 @@ package org.osmf.elements.f4mClasses
 		{
 		}
 		
-		private static const TIMEOUT:Number = 4000;
-		private static const XML_F4M:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " +
-			"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\"> <id>myvideo</id> " +
-			"<streamType>recorded</streamType> " +
-			"<baseURL>http://catherine.corp.adobe.com/osmf/mlm_tests</baseURL> " +
-			"<base href=\"http://catherine.corp.adobe.com/osmf/mlm_tests\" /> " +
-			"<media url=\"rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/spacealonehd_sounas_640_700.mp4\" bitrate=\"700\"/> " +
-			"</manifest>";
-		
-		private static const XML_PATH:String = "http://catherine.corp.adobe.com/osmf";
-			
 		[Test(async, timeout="10000", description="Tests Conviva xml use case")]
 		public function testXMLParser():void
 		{
+			const XML_PATH:String = "http://catherine.corp.adobe.com/osmf";
+			
+			const XML_F4M:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " +
+				"<manifest xmlns=\"http://ns.adobe.com/f4m/1.0\"> <id>myvideo</id> " +
+				"<streamType>recorded</streamType> " +
+				"<baseURL>http://catherine.corp.adobe.com/osmf/mlm_tests</baseURL> " +
+				"<base href=\"http://catherine.corp.adobe.com/osmf/mlm_tests\" /> " +
+				"<media url=\"rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/spacealonehd_sounas_640_700.mp4\" bitrate=\"700\"/> " +
+				"</manifest>";
+
 			var streamingXMLResource:StreamingXMLResource = new StreamingXMLResource(XML_F4M, XML_PATH);
 			var f4MElement1:F4MElement = new F4MElement(streamingXMLResource);			
 			var player:MediaPlayer = new MediaPlayer();
@@ -80,19 +79,12 @@ package org.osmf.elements.f4mClasses
 
 			function onStateChange(event:MediaPlayerStateChangeEvent, test:*):void
 			{
-				assertTrue(true);
 				//media was loaded, no media error
+				assertTrue(true);
 			}
-			
-			/*Async.failOnEvent(this, player,
-				MediaErrorEvent.MEDIA_ERROR, 10000, onError);
-			
-			function onError(event:MediaErrorEvent, test:*):void
-			{
-				fail(event.error.message + event.error.detail);
-			}
-			*/
 		}
-		
+
+		/// Internals
+		private static const TIMEOUT:Number = 4000;
 	}
 }

@@ -99,6 +99,7 @@ package org.osmf.net.httpstreaming
 			_factory = factory;
 			
 			addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
+			addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
 			addEventListener(HTTPStreamingEvent.BEGIN_FRAGMENT, onBeginFragment);
 			addEventListener(HTTPStreamingEvent.END_FRAGMENT, onEndFragment);
 			addEventListener(HTTPStreamingEvent.TRANSITION, onTransition);
@@ -884,6 +885,48 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 * 
+		 * Event handler invoked when we need to handle script data objects.
+		 */
+		private function onScriptData(event:HTTPStreamingEvent):void
+		{
+			CONFIG::LOGGING
+			{
+				logger.debug("onScriptData called with mode ", event.scriptDataMode);
+			}
+			if (event.scriptDataMode == null || event.scriptDataObject == null)
+			{
+				return;
+			}
+			
+			switch (event.scriptDataMode)
+			{
+				case FLVTagScriptDataMode.NORMAL:
+					insertScriptDataTag(event.scriptDataObject, false);
+					break;
+				
+				case FLVTagScriptDataMode.FIRST:
+					insertScriptDataTag(event.scriptDataObject, true);
+					break;
+				
+				case FLVTagScriptDataMode.IMMEDIATE:
+					if (client)
+					{
+						var methodName:* = event.scriptDataObject.objects[0];
+						var methodParameters:* = event.scriptDataObject.objects[1];
+						
+						if (client.hasOwnProperty(methodName))
+						{
+							// XXX note that we can only support a single argument for immediate dispatch
+							client[methodName](methodParameters);	
+						}
+					}
+					break;
+			}
+		}
+
+		/**
+		 * @private
+		 * 
 		 * Attempts to use the appendsBytes method. Do noting if this is not compiled
 		 * for an Argo player or newer.
 		 */
@@ -1018,47 +1061,6 @@ package org.osmf.net.httpstreaming
 			notifyFileError(null);
 		}
 
-		/**
-		 * @private
-		 * 
-		 * Event handler invoked when we need to handle script data objects.
-		 */
-		private function onScriptData(event:HTTPStreamingEvent):void
-		{
-			CONFIG::LOGGING
-			{
-				logger.debug("onScriptData called with mode ", event.scriptDataMode);
-			}
-			if (event.scriptDataMode == null || event.scriptDataObject == null)
-			{
-				return;
-			}
-			
-			switch (event.scriptDataMode)
-			{
-				case FLVTagScriptDataMode.NORMAL:
-					insertScriptDataTag(event.scriptDataObject, false);
-					break;
-				
-				case FLVTagScriptDataMode.FIRST:
-					insertScriptDataTag(event.scriptDataObject, true);
-					break;
-				
-				case FLVTagScriptDataMode.IMMEDIATE:
-					if (client)
-					{
-						var methodName:* = event.scriptDataObject.objects[0];
-						var methodParameters:* = event.scriptDataObject.objects[1];
-						
-						if (client.hasOwnProperty(methodName))
-						{
-							// XXX note that we can only support a single argument for immediate dispatch
-							client[methodName](methodParameters);	
-						}
-					}
-					break;
-			}
-		}
 
 		/**
 		 * @private

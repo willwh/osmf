@@ -2,29 +2,19 @@
 
 <!-- This is an auto generated file and is not intended for modification. -->
 
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:flexui="flexunit.flexui.*" creationComplete="onCreationComplete()">
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:flexui="flexunit.flexui.*"
+			   minWidth="955" minHeight="600" creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
-			import org.osmf.media.TestMediaPlayerWithLegacy_HDS_SBR;
-			import org.osmf.media.TestMediaPlayerWithLegacy_HDS_MBR;
-			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations;
-			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches;
-			import org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR;
-			import org.osmf.elements.f4mClasses.TestMultiLevelManifestParser;
-			import org.osmf.elements.f4mClasses.TestManifestParser;
+			import org.osmf.media.TestMediaPlayerWithLegacy_Events;
 			
 			public function currentRunTestSuite():Array
 			{
 				var testsToRun:Array = new Array();
-				testsToRun.push(org.osmf.elements.f4mClasses.TestManifestParser);
-				testsToRun.push(org.osmf.elements.f4mClasses.TestMultiLevelManifestParser);
-				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR);
-				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_MultipleSwitches);
-				testsToRun.push(org.osmf.media.TestMediaPlayerWithAlternateAudio_HDS_SBR_Operations);
-				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacy_HDS_MBR);
-				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacy_HDS_SBR);
+				testsToRun.push(org.osmf.media.TestMediaPlayerWithLegacy_Events);
 				return testsToRun;
 			}
 			
