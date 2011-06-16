@@ -162,7 +162,9 @@ package org.osmf.elements.f4mClasses
 			}
 
 			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL : rootUrl;
-
+			baseUrl = URL.normalizeRootURL(baseUrl);
+			
+			
 			// DVRInfo
 			for each (var dvrInfo:XML in root.nmsp::dvrInfo)
 			{
@@ -255,6 +257,7 @@ package org.osmf.elements.f4mClasses
 				{
 					baseURLString = manifestFolder;
 				}
+				baseURLString = URL.normalizeRootURL(baseURLString);
 
 				if (media.multicastGroupspec != null && media.multicastGroupspec.length > 0 && media.multicastStreamName != null && media.multicastStreamName.length > 0)
 				{
@@ -265,12 +268,12 @@ package org.osmf.elements.f4mClasses
 					// Relative to Base URL
 					else if (value.baseURL != null)
 					{
-						resource = new MulticastResource(value.baseURL + "/" + url, streamType(value));
+						resource = new MulticastResource(URL.normalizeRootURL(value.baseURL) + URL.normalizeRelativeURL(url), streamType(value));
 					}
 					// Relative to F4M file  (no absolute or base urls or rtmp urls).
 					else
 					{
-						resource = new MulticastResource(manifestFolder + "/" + url, streamType(value));
+						resource = new MulticastResource(URL.normalizeRootURL(manifestFolder) + URL.normalizeRelativeURL(url), streamType(value));
 					}
 					MulticastResource(resource).groupspec = media.multicastGroupspec;
 					MulticastResource(resource).streamName = media.multicastStreamName;
@@ -282,12 +285,12 @@ package org.osmf.elements.f4mClasses
 				// Relative to Base URL
 				else if (value.baseURL != null)
 				{
-					resource = new StreamingURLResource(value.baseURL + "/" + url, streamType(value));
+					resource = new StreamingURLResource(URL.normalizeRootURL(value.baseURL) + URL.normalizeRelativeURL(url), streamType(value));
 				}
 				// Relative to F4M file  (no absolute or base urls or rtmp urls).
 				else
 				{
-					resource = new StreamingURLResource(manifestFolder + "/" + url, streamType(value));
+					resource = new StreamingURLResource(URL.normalizeRootURL(manifestFolder) + URL.normalizeRelativeURL(url), streamType(value));
 				}
 
 				resource.urlIncludesFMSApplicationInstance = value.urlIncludesFMSApplicationInstance;
@@ -300,7 +303,7 @@ package org.osmf.elements.f4mClasses
 					bootstrapInfoURLString = media.bootstrapInfo.url;
 					if (media.bootstrapInfo.url != null && URL.isAbsoluteURL(media.bootstrapInfo.url) == false)
 					{
-						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
+						bootstrapInfoURLString = URL.normalizeRootURL(manifestFolder) + URL.normalizeRelativeURL(bootstrapInfoURLString);
 						media.bootstrapInfo.url = bootstrapInfoURLString;
 					}
 					httpMetadata = new Metadata();
@@ -353,6 +356,7 @@ package org.osmf.elements.f4mClasses
 			else if (value.media.length > 1)
 			{
 				var baseURL:String = value.baseURL != null ? value.baseURL : manifestFolder;
+				baseURL = URL.normalizeRootURL(baseURL);
 				serverBaseURLs = new Vector.<String>();
 				serverBaseURLs.push(baseURL);
 
@@ -406,7 +410,7 @@ package org.osmf.elements.f4mClasses
 						bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url : null;
 						if (media.bootstrapInfo.url != null && URL.isAbsoluteURL(media.bootstrapInfo.url) == false)
 						{
-							bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
+							bootstrapInfoURLString = URL.normalizeRootURL(manifestFolder) + URL.normalizeRelativeURL(bootstrapInfoURLString);
 							media.bootstrapInfo.url = bootstrapInfoURLString;
 						}
 						if (httpMetadata != null)
@@ -724,7 +728,7 @@ package org.osmf.elements.f4mClasses
 					var bootstrapInfoURLString:String = media.bootstrapInfo.url ? media.bootstrapInfo.url : null;
 					if (media.bootstrapInfo.url != null && URL.isAbsoluteURL(media.bootstrapInfo.url) == false)
 					{
-						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
+						bootstrapInfoURLString = URL.normalizeRootURL(manifestFolder) + URL.normalizeRelativeURL(bootstrapInfoURLString);
 						media.bootstrapInfo.url = bootstrapInfoURLString;
 					}
 					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName, media.bootstrapInfo);

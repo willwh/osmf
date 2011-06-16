@@ -72,7 +72,7 @@ package org.osmf.elements.f4mClasses
 				var url:String = root.@url;
 				if (!URL.isAbsoluteURL(url))
 				{
-					url = baseUrl + "/" + url;
+					url = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(url);
 				}
 				dvrInfo.url = url;
 			}

@@ -81,6 +81,7 @@ package org.osmf.elements.f4mClasses
 			}
 			
 			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL : rootUrl;
+			baseUrl = URL.normalizeRootURL(baseUrl);
 			baseUrls[root] = baseUrl;
 
 			// Check to see if we need to load any other manifests.
@@ -93,6 +94,10 @@ package org.osmf.elements.f4mClasses
 
 					// Get the link.
 					var href:String = media.@href;
+					if (!URL.isAbsoluteURL(href))
+					{
+						href = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(href);
+					}
 
 					// Get ready to load.
 					var loader:URLLoader = new URLLoader();
@@ -108,7 +113,7 @@ package org.osmf.elements.f4mClasses
 
 					var info:Info = new Info();
 
-					info.baseUrl = URL.getRootUrl(href);
+					info.baseUrl = URL.normalizeRootURL(URL.getRootUrl(href));
 
 					if (media.attribute('bitrate').length() > 0)
 					{
@@ -209,10 +214,14 @@ package org.osmf.elements.f4mClasses
 				// The streams could have come from anywhere, so we need to
 				// be sure we specify where they came from.
 				var url:String = media.@url;
-				if (url.indexOf("http") != 0)
+				if (!URL.isAbsoluteURL(url))
 				{
-					media.@url = info.baseUrl + '/' + url;
+					media.@url = URL.normalizeRootURL(info.baseUrl) + URL.normalizeRelativeURL(url);
 				}
+//				if (url.indexOf("http") != 0)
+//				{
+//					media.@url = info.baseUrl + '/' + url;
+//				}
 			}
 
 			// Save off any information we need.
@@ -221,7 +230,7 @@ package org.osmf.elements.f4mClasses
 				baseUrls = new Dictionary(true);
 			}
 
-			baseUrls[root] = info.baseUrl;
+			baseUrls[root] = URL.normalizeRootURL(info.baseUrl);
 
 			queue.push(root);
 

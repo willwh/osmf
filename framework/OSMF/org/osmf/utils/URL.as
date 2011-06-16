@@ -443,6 +443,42 @@ package org.osmf.utils
 			return path;
 		}
 		
+		
+		/**
+		 * Normalizes a root URL. It adds a trailing slash (/) if not present.
+		 * It is assumed that the passed url is an absolute root url. No checks will be performed to validate this.
+		 * 
+		 * @param url The root URL to be normalized
+		 * 
+		 */
+		public static function normalizeRootURL(url:String):String
+		{
+			if (url.charAt(url.length - 1) != "/")
+			{
+				return url + "/";
+			}
+			else
+			{
+				return url;
+			}
+		}
+		
+		/**
+		 * Normalizes a relative URL. It removes the leading slash (/) if present.
+		 * It is assumed that the passed url is a relative one. No checks will be performed to validate this.
+		 */
+		public static function normalizeRelativeURL(url:String):String
+		{
+			if (url.charAt(0) == "/")
+			{
+				return url.substr(1);
+			}
+			else
+			{
+				return url;
+			}
+		}
+		
 		private var _rawUrl:String;		// The raw URL string as it was supplied
 		private var _protocol:String;	// The scheme or protocol, i.e., "http", "ftp", etc.
 		private var _userInfo:String;	// User name : password. For example "http://user:password@host.com:80/foo.php"

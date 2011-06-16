@@ -80,7 +80,7 @@ package org.osmf.elements.f4mClasses
 				url = root.@url;
 				if (!URL.isAbsoluteURL(url))
 				{
-					url = baseUrl + "/" + url;
+					url = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(url);
 				}
 				drmAdditionalHeader.url = url;
 			}

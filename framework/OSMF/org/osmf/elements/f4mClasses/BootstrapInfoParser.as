@@ -79,9 +79,9 @@ package org.osmf.elements.f4mClasses
 			if (root.attribute("url").length() > 0)
 			{
 				url = root.@url;
-				if (!URL.isAbsoluteURL(url) && baseUrl != null)
+				if (!URL.isAbsoluteURL(url))
 				{
-					url = baseUrl + "/" + url;
+					url = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(url);
 				}
 				bootstrapInfo.url = url;
 			}

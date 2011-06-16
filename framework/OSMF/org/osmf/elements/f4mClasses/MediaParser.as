@@ -26,6 +26,7 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.events.ParseEvent;
 	import org.osmf.net.StreamingItemType;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.utils.URL;
 
 	[ExcludeClass]
 
@@ -66,7 +67,12 @@ package org.osmf.elements.f4mClasses
 
 			if (root.attribute('url').length() > 0)
 			{
-				media.url = root.@url;
+				var url:String = root.@url;
+				if (!URL.isAbsoluteURL(url))
+				{
+					url = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(url);
+				}
+				media.url = url;
 			}
 			// Raise parse error
 			else
