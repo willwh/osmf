@@ -263,7 +263,7 @@ package org.osmf.elements.f4mClasses
 				{
 					if (URL.isAbsoluteURL(url))
 					{
-						resource = new MulticastResource(url, value.streamType);
+						resource = new MulticastResource(url, streamType(value));
 					}
 					// Relative to Base URL
 					else if (value.baseURL != null)
@@ -280,7 +280,7 @@ package org.osmf.elements.f4mClasses
 				}
 				else if (URL.isAbsoluteURL(url))
 				{
-					resource = new StreamingURLResource(url, value.streamType);
+					resource = new StreamingURLResource(url, streamType(value));
 				}
 				// Relative to Base URL
 				else if (value.baseURL != null)
