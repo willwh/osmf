@@ -210,6 +210,8 @@ package org.osmf.elements.f4mClasses
 					media.@bitrate = info.bitrate;
 				}
 
+				/* [Mihai] No longer make the URL absolute. It will be made at a later point.
+				
 				// Make the url absolute.
 				// The streams could have come from anywhere, so we need to
 				// be sure we specify where they came from.
@@ -222,6 +224,8 @@ package org.osmf.elements.f4mClasses
 //				{
 //					media.@url = info.baseUrl + '/' + url;
 //				}
+				
+				*/
 			}
 
 			// Save off any information we need.
