@@ -5,12 +5,18 @@ package org.osmf.elements.f4mClasses
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.utils.Proxy;
 	
 	import org.flexunit.Assert;
 	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertEquals;
+	import org.flexunit.asserts.assertFalse;
+	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
+	import org.osmf.elements.F4MElement;
+	import org.osmf.elements.ManifestLoaderBase;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.f4mClasses.MultiLevelManifestParser;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
@@ -21,9 +27,12 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaPlayerState;
 	import org.osmf.media.URLResource;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.StreamType;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.URL;
+	
 	
 	public class TestMultiLevelManifestParser
 	{
@@ -61,7 +70,7 @@ package org.osmf.elements.f4mClasses
 			
 			var asyncHandler:Function = Async.asyncHandler(this, handleParseF4MComplete, TIMEOUT, null, handleTimeout);
 			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler, false, 0, true);
-			parser.parse(resourceData);	
+			parser.parse(resourceData, MLM_PATH);	
 		}
 		
 		private function handleTestParseF4MError(event:Event):void
@@ -129,7 +138,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests that the windowDuration parameter is parsed.")]
 		public function testWindowDuration():void
 		{
-			parser2.parse(F4M_WITH_WINDOW_DURATION);
+			parser2.parse(F4M_WITH_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -143,7 +152,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests that a negative windowDuration parameter is parsed.")]
 		public function testWindowNegativeDuration():void
 		{
-			parser2.parse(F4M_WITH_NEGATIVE_WINDOW_DURATION);
+			parser2.parse(F4M_WITH_NEGATIVE_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -157,7 +166,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests that a null/empty windowDuration parameter is parsed.")]
 		public function testWindowNullDuration():void
 		{
-			parser2.parse(F4M_WITH_NULL_WINDOW_DURATION);
+			parser2.parse(F4M_WITH_NULL_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -171,7 +180,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests when zero windowDuration parameter is parsed.")]
 		public function testWindowZeroDuration():void
 		{
-			parser2.parse(F4M_WITH_ZERO_WINDOW_DURATION);
+			parser2.parse(F4M_WITH_ZERO_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -185,7 +194,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests when float windowDuration parameter is parsed.")]
 		public function testWindowFloatDuration():void
 		{
-			parser2.parse(F4M_WITH_FLOAT_WINDOW_DURATION);
+			parser2.parse(F4M_WITH_FLOAT_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -199,7 +208,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests when alpha windowDuration parameter is parsed.")]
 		public function testWindowAlphaDuration():void
 		{
-			parser2.parse(F4M_WITH_ALPHA_WINDOW_DURATION);
+			parser2.parse(F4M_WITH_ALPHA_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -213,7 +222,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests when no windowDuration parameter is parsed.")]
 		public function testWindowNoDuration():void
 		{
-			parser2.parse(F4M_WITH_NO_WINDOW_DURATION);
+			parser2.parse(F4M_WITH_NO_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -229,7 +238,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests a v1.0 manifest with windowDuration")]
 		public function testV1WithWindowDuration():void
 		{
-			parser2.parse(F4M_V1_WITH_WINDOW_DURATION);
+			parser2.parse(F4M_V1_WITH_WINDOW_DURATION, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -245,7 +254,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests a v2.0 manifest with beginOffset and endOffset")]
 		public function testV2WithBeginOffsetAndEndOffset():void
 		{
-			parser2.parse(F4M_V2_WITHOUT_WINDOW_DURATION_WITH_BEGINOFFSET_ENDOFFSET);
+			parser2.parse(F4M_V2_WITHOUT_WINDOW_DURATION_WITH_BEGINOFFSET_ENDOFFSET, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -261,7 +270,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests a v2.0 manifest with windowDuration, beginOffset and endOffset")]
 		public function testV2WithWindowDurationBeginOffsetAndEndOffset():void
 		{
-			parser2.parse(F4M_V2_WITH_WINDOW_DURATION_BEGINOFFSET_ENDOFFSET);
+			parser2.parse(F4M_V2_WITH_WINDOW_DURATION_BEGINOFFSET_ENDOFFSET, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -277,7 +286,7 @@ package org.osmf.elements.f4mClasses
 		[Test(description="Tests a v2.0 manifest with no dvrInfo tag")]
 		public function testV2WithoutDVRInfo():void
 		{
-			parser2.parse(F4M_V2_WITHOUT_DVRINFO);
+			parser2.parse(F4M_V2_WITHOUT_DVRINFO, MLM_PATH);
 			parser.addEventListener
 				( ParseEvent.PARSE_COMPLETE 
 					, function(event:ParseEvent):void
@@ -296,9 +305,16 @@ package org.osmf.elements.f4mClasses
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_V2_DVR_DURATION_VOD));
 			
+			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
+
 			var player:MediaPlayer = new MediaPlayer();
 			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			player.addEventListener("TestEnd", asyncHandler);
+			
+			
+			player.autoPlay = false;
+			player.media = mediaElement;
 			
 			function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
 			{
@@ -306,12 +322,11 @@ package org.osmf.elements.f4mClasses
 				{
 					case MediaPlayerState.READY:
 					{	
-						trace("started");
-						assertEquals((mediaElement.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
-						player.play();
+						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
+						player.dispatchEvent(new Event("TestEnd"));
 					}
 						break;
-					case MediaPlayerState.PLAYING:
+					case MediaPlayerState.LOADING:
 						break;
 				}
 			}
@@ -320,6 +335,13 @@ package org.osmf.elements.f4mClasses
 			{
 				trace("[Error]", event.toString());	
 				fail("Media Error");
+			}
+			function handleTimeout( passThroughData:Object ):void {
+				Assert.fail( "Timeout reached before event." );
+			}
+			function onTestEnd(event:Event, passThroughData:Object ):void
+			{
+				assertTrue(true);	
 			}
 		}
 		
@@ -329,9 +351,16 @@ package org.osmf.elements.f4mClasses
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_V1_DVR_DURATION_VOD));
 			
+			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
+			
 			var player:MediaPlayer = new MediaPlayer();
 			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			player.addEventListener("TestEnd", asyncHandler);
+			
+			
+			player.autoPlay = false;
+			player.media = mediaElement;
 			
 			function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
 			{
@@ -339,12 +368,73 @@ package org.osmf.elements.f4mClasses
 				{
 					case MediaPlayerState.READY:
 					{	
-						trace("started");
-						assertEquals((mediaElement.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 0);
-						player.play();
+						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 0);
+						player.dispatchEvent(new Event("TestEnd"));
 					}
 						break;
-					case MediaPlayerState.PLAYING:
+					case MediaPlayerState.LOADING:
+						break;
+				}
+			}
+			
+			function onTestEnd(event:Event, passThroughData:Object ):void
+			{
+				assertTrue(true);
+
+			}
+			
+			function onMediaError(event:MediaErrorEvent):void
+			{
+				trace("[Error]", event.toString());	
+				fail("Media Error");
+			}
+			function handleTimeout( passThroughData:Object ):void {
+				Assert.fail( "Timeout reached before event." );
+			}
+		}
+		
+		
+		[Test(async, description="Tests a 2.0 F4M relative urls with base URL.")]
+		public function testParseMultiLevelF4MWithBaseUrl():void
+		{			
+			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
+			
+			var resource:URLResource =  new URLResource(F4M_V2_WITHOUT_BASEURL);
+			
+			var mediaFactory:MediaFactory = new DefaultMediaFactory();
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
+			
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			
+			player.addEventListener("TestEnd", asyncHandler);
+
+			
+			player.autoPlay = false;
+			player.media = mediaElement;
+			
+			function onTestEnd(event:Event, passThroughData:Object ):void
+			{
+				assertTrue(true);
+			}
+			
+			function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
+			{
+				switch (event.state)
+				{
+					case MediaPlayerState.READY:
+					{	
+						var dsResource:DynamicStreamingResource = (player.media as ProxyElement).proxiedElement.resource as DynamicStreamingResource;
+						assertEquals(dsResource.streamItems.length, 4);
+						assertEquals(dsResource.streamItems[0].bitrate, 600);
+						assertEquals(dsResource.streamItems[1].bitrate, 1200);
+						assertEquals(dsResource.streamItems[2].bitrate, 1800);
+						assertEquals(dsResource.streamItems[3].bitrate, 2400);
+						player.dispatchEvent(new Event("TestEnd"));
+					}
+						break;
+					case MediaPlayerState.LOADING:
 						break;
 				}
 			}
@@ -354,7 +444,13 @@ package org.osmf.elements.f4mClasses
 				trace("[Error]", event.toString());	
 				fail("Media Error");
 			}
+			
+			function handleTimeout( passThroughData:Object ):void {
+				Assert.fail( "Timeout reached before event." );
+			}
+		
 		}
+		
 		
 		private static const F4M_V2_DVR_DURATION_VOD:String = "http://catherine.corp.adobe.com/osmf/rolling_window/v2.f4m";
 		private static const F4M_V1_DVR_DURATION_VOD:String = "http://catherine.corp.adobe.com/osmf/rolling_window/v1.f4m";
@@ -498,8 +594,15 @@ package org.osmf.elements.f4mClasses
 		
 		private static const F4M_SOURCE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/original.f4m";
 		private static const MLM_SOURCE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/mlm.f4m";
+		
+		private static const F4M_V2_WITH_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/baseurl.f4m";
+		private static const F4M_V2_WITHOUT_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/nobaseurl.f4m";
+		private static const F4M_V2_WITH_EMPTY_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/nobaseurl.f4m";
+
+
+		
 		private static const MLM_PATH:String = "http://catherine.corp.adobe.com/osmf/mlm_tests";
-		private static const TIMEOUT:Number = 4000;
+		private static const TIMEOUT:Number = 10000;
 		
 		private var parser:MultiLevelManifestParser;
 		private var parser2:MultiLevelManifestParser;
