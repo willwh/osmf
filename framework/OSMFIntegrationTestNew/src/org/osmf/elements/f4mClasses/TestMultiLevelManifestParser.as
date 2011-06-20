@@ -322,11 +322,16 @@ package org.osmf.elements.f4mClasses
 				{
 					case MediaPlayerState.READY:
 					{	
-						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
-						player.dispatchEvent(new Event("TestEnd"));
+						player.play();
 					}
 						break;
 					case MediaPlayerState.LOADING:
+						break;
+					
+					case MediaPlayerState.PLAYING:
+						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
+						player.stop();
+						player.dispatchEvent(new Event("TestEnd"));
 						break;
 				}
 			}
@@ -399,7 +404,7 @@ package org.osmf.elements.f4mClasses
 		{			
 			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
 			
-			var resource:URLResource =  new URLResource(F4M_V2_WITHOUT_BASEURL);
+			var resource:URLResource =  new URLResource(F4M_V2_WITH_BASEURL);
 			
 			var mediaFactory:MediaFactory = new DefaultMediaFactory();
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
@@ -449,6 +454,130 @@ package org.osmf.elements.f4mClasses
 				Assert.fail( "Timeout reached before event." );
 			}
 		
+		}
+		
+		
+		[Test(async, description="Tests a 2.0 F4M relative urls without base URL.")]
+		public function testParseMultiLevelF4MWithoutBaseUrl():void
+		{			
+			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
+			
+			var resource:URLResource =  new URLResource(F4M_V2_WITHOUT_BASEURL);
+			
+			var mediaFactory:MediaFactory = new DefaultMediaFactory();
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
+			
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			
+			player.addEventListener("TestEnd", asyncHandler);
+			
+			
+			player.autoPlay = false;
+			player.media = mediaElement;
+			
+			function onTestEnd(event:Event, passThroughData:Object ):void
+			{
+				assertTrue(true);
+			}
+			
+			function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
+			{
+				switch (event.state)
+				{
+					case MediaPlayerState.READY:
+					{	
+						var dsResource:DynamicStreamingResource = (player.media as ProxyElement).proxiedElement.resource as DynamicStreamingResource;
+						assertEquals(dsResource.streamItems.length, 4);
+						assertEquals(dsResource.streamItems[0].bitrate, 600);
+						assertEquals(dsResource.streamItems[1].bitrate, 1200);
+						assertEquals(dsResource.streamItems[2].bitrate, 1800);
+						assertEquals(dsResource.streamItems[3].bitrate, 2400);
+						player.dispatchEvent(new Event("TestEnd"));
+					}
+						break;
+					case MediaPlayerState.LOADING:
+						break;
+				}
+			}
+			
+			function onMediaError(event:MediaErrorEvent):void
+			{
+				trace("[Error]", event.toString());	
+				fail("Media Error");
+			}
+			
+			function handleTimeout( passThroughData:Object ):void {
+				Assert.fail( "Timeout reached before event." );
+			}
+			
+		}
+		
+		
+		[Test(async, description="Tests a 2.0 F4M with bitrates and alternative audio in top level manifest")]
+		public function testParseMultiLevelF4MWithAlternate():void
+		{			
+			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
+			
+			var resource:URLResource =  new URLResource(F4M_V2_WITH_ALTERNATE);
+			
+			var mediaFactory:MediaFactory = new DefaultMediaFactory();
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
+			
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			
+			player.addEventListener("TestEnd", asyncHandler);
+			
+			
+			player.autoPlay = false;
+			player.media = mediaElement;
+			
+			function onTestEnd(event:Event, passThroughData:Object ):void
+			{
+				assertTrue(true);
+			}
+			
+			function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
+			{
+				switch (event.state)
+				{
+					case MediaPlayerState.READY:
+					{	
+						
+						var dsResource:DynamicStreamingResource = (player.media as ProxyElement).proxiedElement.resource as DynamicStreamingResource;
+						assertEquals(dsResource.streamItems.length, 4);
+						assertEquals(dsResource.streamItems[0].bitrate, 600);
+						assertEquals(dsResource.streamItems[1].bitrate, 1200);
+						assertEquals(dsResource.streamItems[2].bitrate, 1800);
+						assertEquals(dsResource.streamItems[3].bitrate, 2400);
+						assertEquals(player.numAlternativeAudioStreams, 2);
+						
+						assertEquals(player.getAlternativeAudioItemAt(0).bitrate, 127);
+						assertEquals(player.getAlternativeAudioItemAt(1).bitrate, 129);
+						
+						
+						assertEquals(player.numDynamicStreams, 4);
+						player.dispatchEvent(new Event("TestEnd"));
+					}
+						break;
+					case MediaPlayerState.LOADING:
+						break;
+				}
+			}
+			
+			function onMediaError(event:MediaErrorEvent):void
+			{
+				trace("[Error]", event.toString());	
+				fail("Media Error");
+			}
+			
+			function handleTimeout( passThroughData:Object ):void {
+				Assert.fail( "Timeout reached before event." );
+			}
+			
 		}
 		
 		
@@ -598,6 +727,7 @@ package org.osmf.elements.f4mClasses
 		private static const F4M_V2_WITH_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/baseurl.f4m";
 		private static const F4M_V2_WITHOUT_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/nobaseurl.f4m";
 		private static const F4M_V2_WITH_EMPTY_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/nobaseurl.f4m";
+		private static const F4M_V2_WITH_ALTERNATE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/alternate.f4m";
 
 
 		
