@@ -34,6 +34,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
+	import org.osmf.utils.URL;
 	
 	[ExcludeClass]
 	
@@ -143,7 +144,14 @@ package org.osmf.net.httpstreaming
 				baseUrl = serverBaseURLs[0].toString();
 			}
 			
-			var httpResource:MediaResourceBase = new StreamingURLResource(baseUrl + "/" + streamName);
+			var streamWholeURL:String = streamName;
+			
+			if (!URL.isAbsoluteURL(streamWholeURL))
+			{
+				streamWholeURL = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(streamWholeURL);
+			}
+			
+			var httpResource:MediaResourceBase = new StreamingURLResource(streamWholeURL);
 			httpResource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, resourceMetadata);
 			return httpResource;
 		}
