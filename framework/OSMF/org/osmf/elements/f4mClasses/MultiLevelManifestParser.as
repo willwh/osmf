@@ -27,6 +27,7 @@ package org.osmf.elements.f4mClasses
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
+	import flash.utils.describeType;
 	
 	import org.osmf.events.ParseEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
@@ -119,6 +120,36 @@ package org.osmf.elements.f4mClasses
 					{
 						info.bitrate = media.@bitrate;
 					}
+					
+					if (media.attribute('width').length() > 0)
+					{
+						info.width = media.@width;
+					}
+					
+					if (media.attribute('height').length() > 0)
+					{
+						info.height = media.@height;
+					}
+					
+					if (media.attribute('type').length() > 0)
+					{
+						info.type = media.@type;
+					}
+					
+					if (media.hasOwnProperty("@alternate") || media.attribute('alternate').length() > 0)
+					{
+						info.alternate = "true";
+					}
+					
+					if (media.attribute('label').length() > 0)
+					{
+						info.label = media.@label;
+					}
+					
+					if (media.attribute('lang').length() > 0)
+					{
+						info.lang = media.@lang;
+					}
 
 					loadingInfo[loader] = info;
 
@@ -202,12 +233,38 @@ package org.osmf.elements.f4mClasses
 
 			for each (var media:XML in root.nmsp::media)
 			{
+				/*
 				// Put the bitrate into the media node(s).
 				// Note: There *should* only be one media node, but we'll
 				// dump the bitrate in a for...each just in case.
 				if (info.bitrate != null && info.bitrate.length > 0)
 				{
 					media.@bitrate = info.bitrate;
+				}
+				
+				// put the width
+				if (info.width != null && info.width.length > 0)
+				{
+					media.@width = info.width;
+				}
+				
+				// put the height
+				if (info.height != null && info.width.length > 0)
+				{
+					media.@height = info.height;
+				}
+				*/
+				
+				var infoList:XMLList = flash.utils.describeType(info)..variable;
+				
+				var key:String;
+				for (var i:int; i < infoList.length(); i++)
+				{
+					key = infoList[i].@name;
+					if (info[key] != null && info[key].length > 0)
+					{
+						media.@[key] = info[key];
+					}
 				}
 
 				/* [Mihai] No longer make the URL absolute. It will be made at a later point.
@@ -269,6 +326,18 @@ package org.osmf.elements.f4mClasses
 class Info
 {
 	public var bitrate:String;
+	
+	public var width:String;
+	
+	public var height:String;
+	
+	public var type:String;
+	
+	public var alternate:String;
+	
+	public var label:String;
+	
+	public var lang:String;
 
 	public var baseUrl:String;
 }
