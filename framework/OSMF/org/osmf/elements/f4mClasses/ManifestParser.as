@@ -716,6 +716,10 @@ package org.osmf.elements.f4mClasses
 						drmMetadata = new Metadata();
 						resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
 					}
+					else
+					{
+						drmMetadata = resource.getMetadataValue(MetadataNamespaces.DRM_METADATA) as Metadata;
+					}
 					if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
 					{
 						drmMetadata.addValue(item.streamName, extractDRMMetadata(media.drmAdditionalHeader.data));
