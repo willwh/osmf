@@ -118,37 +118,37 @@ package org.osmf.elements.f4mClasses
 
 					if (media.attribute('bitrate').length() > 0)
 					{
-						info.bitrate = media.@bitrate;
+						info.attributes.bitrate = media.@bitrate;
 					}
 					
 					if (media.attribute('width').length() > 0)
 					{
-						info.width = media.@width;
+						info.attributes.width = media.@width;
 					}
 					
 					if (media.attribute('height').length() > 0)
 					{
-						info.height = media.@height;
+						info.attributes.height = media.@height;
 					}
 					
 					if (media.attribute('type').length() > 0)
 					{
-						info.type = media.@type;
+						info.attributes.type = media.@type;
 					}
 					
 					if (media.hasOwnProperty("@alternate") || media.attribute('alternate').length() > 0)
 					{
-						info.alternate = "true";
+						info.attributes.alternate = "true";
 					}
 					
 					if (media.attribute('label').length() > 0)
 					{
-						info.label = media.@label;
+						info.attributes.label = media.@label;
 					}
 					
 					if (media.attribute('lang').length() > 0)
 					{
-						info.lang = media.@lang;
+						info.attributes.lang = media.@lang;
 					}
 
 					loadingInfo[loader] = info;
@@ -255,15 +255,19 @@ package org.osmf.elements.f4mClasses
 				}
 				*/
 				
-				var infoList:XMLList = flash.utils.describeType(info)..variable;
+				var infoList:XMLList = flash.utils.describeType(info.attributes)..variable;
 				
 				var key:String;
 				for (var i:int; i < infoList.length(); i++)
 				{
 					key = infoList[i].@name;
-					if (info[key] != null && info[key].length > 0)
+					if (info.attributes[key] != null && info.attributes[key].length > 0)
 					{
-						media.@[key] = info[key];
+						media.@[key] = info.attributes[key];
+					}
+					else
+					{
+						delete media.@[key];
 					}
 				}
 
@@ -325,6 +329,18 @@ package org.osmf.elements.f4mClasses
 
 class Info
 {
+	public var baseUrl:String;
+	public var attributes:Attributes;
+	
+	
+	public function Info()
+	{
+		attributes = new Attributes();
+	}
+}
+
+class Attributes
+{
 	public var bitrate:String;
 	
 	public var width:String;
@@ -338,6 +354,4 @@ class Info
 	public var label:String;
 	
 	public var lang:String;
-
-	public var baseUrl:String;
 }
