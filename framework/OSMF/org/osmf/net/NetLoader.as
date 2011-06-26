@@ -329,19 +329,30 @@ package org.osmf.net
 		**/
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;			
+			updateLoadTrait(loadTrait, LoadState.UNLOADING); 
 			
-			updateLoadTrait(loadTrait, LoadState.UNLOADING); 			
-			netLoadTrait.netStream.close();
-			if (netLoadTrait.netConnectionFactory != null)
+			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;			
+			if (netLoadTrait != null)
 			{
-				netLoadTrait.netConnectionFactory.closeNetConnection(netLoadTrait.connection);
+				if (netLoadTrait.netStream != null)
+				{
+					netLoadTrait.netStream.close();
+				}
+				
+				if (netLoadTrait.netConnectionFactory != null)
+				{
+					netLoadTrait.netConnectionFactory.closeNetConnection(netLoadTrait.connection);
+				}
+				else if (netLoadTrait.connection != null)
+				{
+					netLoadTrait.connection.close();
+				}
 			}
-			else
+			
+			if (oldConnectionURLs != null)
 			{
-				netLoadTrait.connection.close();
+				delete oldConnectionURLs[loadTrait.resource];
 			}
-			delete oldConnectionURLs[loadTrait.resource];
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED); 				
 		}
 		

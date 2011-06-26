@@ -645,7 +645,7 @@ package org.osmf.elements
 			}
 			
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-			if (loadTrait != null)
+			if (loadTrait != null && loadTrait.connection != null)
 			{
 				loadTrait.connection.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 			}

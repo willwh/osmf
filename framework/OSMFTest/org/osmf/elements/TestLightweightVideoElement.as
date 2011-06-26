@@ -22,9 +22,6 @@
 package org.osmf.elements
 {
 	import flash.events.Event;
-	import flash.events.TimerEvent;
-	import flash.media.Video;
-	import flash.utils.Timer;
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.LoadEvent;
@@ -82,6 +79,31 @@ package org.osmf.elements
 		//	Tests
 		//
 		////////////////////////////////////////////////////////
+		public function testUnloadWhileLoading():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
+			
+			var element:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
+			assertNotNull(element);
+			element.resource = resourceForMediaElement;
+			
+			var loadTrait:LoadTrait = element.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertNotNull(loadTrait);
+			if (loadTrait != null)
+			{
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			}
+			loadTrait.load();
+			
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.LOADING)
+				{
+					loadTrait.unload();
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
 		
 		public function testDefaultDuration():void
 		{
