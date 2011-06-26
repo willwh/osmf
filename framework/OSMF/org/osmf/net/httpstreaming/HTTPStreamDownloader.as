@@ -280,13 +280,12 @@ package org.osmf.net.httpstreaming
 		{
 			_downloadEndDate = new Date();
 			_downloadDuration = (_downloadEndDate.valueOf() - _downloadBeginDate.valueOf())/1000.0;
-			_downloadBytesCount = _urlStream.bytesAvailable;
 			
 			_isComplete = true;
 			
 			CONFIG::LOGGING
 			{
-				logger.debug(" loading complete. It took " + _downloadDuration + " sec.");	
+				logger.debug(" loading complete. It took " + _downloadDuration + " sec to download " + _downloadBytesCount + " bytes.");	
 			}
 		}
 		
@@ -294,8 +293,17 @@ package org.osmf.net.httpstreaming
 		 * @private
 		 * Called when additional data has been received.
 		 **/
-		private function onProgress(event:Event):void
+		private function onProgress(event:ProgressEvent):void
 		{
+			if (_downloadBytesCount == 0)
+			{
+				_downloadBytesCount = event.bytesTotal;
+				CONFIG::LOGGING
+				{
+					logger.debug(" loaded " + event.bytesLoaded + " bytes from " + _downloadBytesCount + " bytes.");
+				}
+			}
+			
 			_hasData = true;			
 		}	
 		
