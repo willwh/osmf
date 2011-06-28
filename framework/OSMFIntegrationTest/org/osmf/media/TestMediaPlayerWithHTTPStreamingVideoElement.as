@@ -75,7 +75,7 @@ package org.osmf.media
 				if (loader is MockNetLoader)
 				{
 					// Give our mock loader an arbitrary duration and size to ensure
-					// we get metadata.
+					// we get the metadata.
 					MockNetLoader(loader).netStreamExpectedDuration = 1;//TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_DURATION;
 					MockNetLoader(loader).netStreamExpectedWidth = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH;
 					MockNetLoader(loader).netStreamExpectedHeight = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT;				
