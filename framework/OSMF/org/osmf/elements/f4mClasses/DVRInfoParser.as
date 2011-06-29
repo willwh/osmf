@@ -102,17 +102,20 @@ package org.osmf.elements.f4mClasses
 				}
 				dvrInfo.windowDuration = -1;
 			}
-			else
+			else // F4M 2.0
 			{
 				if (root.attribute("windowDuration").length() > 0)
 				{
-					v = new Number(root.@windowDuration);
+					v = parseInt(root.@windowDuration);
 					if (isNaN(v) || v < 0)
 					{
 						dvrInfo.windowDuration = -1;
 					}
 				}
-				dvrInfo.windowDuration = v;
+				else
+				{
+					dvrInfo.windowDuration = -1;
+				}
 			}
 			
 			if (root.attribute("offline").length() > 0)
