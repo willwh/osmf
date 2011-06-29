@@ -60,7 +60,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */				
-		public function DVRTrait(isRecording:Boolean = false, windowDuration:Number = 0)
+		public function DVRTrait(isRecording:Boolean = false, windowDuration:Number = -1)
 		{
 			_isRecording = isRecording;
 			_windowDuration = windowDuration;

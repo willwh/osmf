@@ -831,7 +831,7 @@ package org.osmf.net.httpstreaming.f4f
 				
 				if 
 					(
-						(f4fIndexInfo.dvrInfo.windowDuration > 0) && 
+						(f4fIndexInfo.dvrInfo.windowDuration != -1) && 
 						(f4fIndexInfo.dvrInfo.curLength > f4fIndexInfo.dvrInfo.windowDuration)
 					)
 				{

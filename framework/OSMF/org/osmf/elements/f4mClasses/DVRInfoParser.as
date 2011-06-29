@@ -80,6 +80,8 @@ package org.osmf.elements.f4mClasses
 			// If the manifest is version 1 or less, look for beginOffset and endOffset
 			// Otherwise, look for windowDuration
 			
+			var v:Number; 
+			
 			if (majorVersion <= 1)
 			{
 				if (root.attribute("beginOffset").length() > 0)
@@ -88,7 +90,7 @@ package org.osmf.elements.f4mClasses
 				}
 				if (root.attribute("endOffset").length() > 0)
 				{
-					var v:Number = new Number(root.@endOffset);
+					v = new Number(root.@endOffset);
 					if (v > 0 && v < 1.0)
 					{
 						dvrInfo.endOffset = 1;
@@ -98,13 +100,19 @@ package org.osmf.elements.f4mClasses
 						dvrInfo.endOffset = Math.max(0, v);
 					}
 				}
+				dvrInfo.windowDuration = -1;
 			}
 			else
 			{
 				if (root.attribute("windowDuration").length() > 0)
 				{
-					dvrInfo.windowDuration = Math.max(0, parseInt(root.@windowDuration));
+					v = new Number(root.@windowDuration);
+					if (isNaN(v) || v < 0)
+					{
+						dvrInfo.windowDuration = -1;
+					}
 				}
+				dvrInfo.windowDuration = v;
 			}
 			
 			if (root.attribute("offline").length() > 0)

@@ -89,7 +89,7 @@ package org.osmf.net.httpstreaming.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var windowDuration:uint = 0;
+		public var windowDuration:int = -1;
 		
 		/**
 		 * Indicates whether the stream is offline, or available for playback. It is optional, and defaults to false. 
