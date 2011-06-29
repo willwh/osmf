@@ -40,6 +40,9 @@ package org.osmf.net.httpstreaming
 		 */
 		public function HTTPStreamQoSInfo(fragmentDuration:Number, fragmentSize:Number, downloadDuration:Number)
 		{
+			_fragmentDuration = fragmentDuration;
+			_fragmentSize = fragmentSize;
+			
 			if (!isNaN(fragmentDuration) && !isNaN(downloadDuration) && downloadDuration > 0)
 			{
 				_downloadRatio = fragmentDuration / downloadDuration;
@@ -54,7 +57,25 @@ package org.osmf.net.httpstreaming
 			return _downloadRatio;
 		}
 		
+		/**
+		 * Gets the fragment duration.
+		 */ 
+		public function get fragmentDuration():Number
+		{
+			return _fragmentDuration;
+		}
+		
+		/**
+		 * Gets the fragment size.
+		 */
+		public function get fragmentSize():Number
+		{
+			return _fragmentSize;
+		}
+		
 		/// Internals
 		private var _downloadRatio:Number = 0;
+		private var _fragmentDuration:Number = 0;
+		private var _fragmentSize:Number = 0;
 	}
 }
