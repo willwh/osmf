@@ -20,15 +20,12 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.net.NetConnection;
 	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
-	import org.osmf.net.httpstreaming.dvr.MockHTTPNetStream;
 
 	public class TestHTTPNetStreamMetrics extends TestCase
 	{
@@ -43,7 +40,7 @@ package org.osmf.net.httpstreaming
 			nc.connect(null);
 			
 			var ns:MockHTTPNetStream = new MockHTTPNetStream(nc, 200.25);
-			ns.downloadRatio = _downloadRatio;
+			ns.qosInfo = new MockHTTPStreamQoSInfo(_downloadRatio);
 			
 			var metrics:HTTPNetStreamMetrics = new HTTPNetStreamMetrics(ns);
 			assertEquals(metrics.downloadRatio, _downloadRatio);

@@ -89,19 +89,21 @@ package org.osmf.net
 			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, addAsync(onTestVideoSizeDetection, 5000));
 			
 			var app:Application = FlexGlobals.topLevelApplication as Application;
-			
-			if (!app.stage)
+			if (app != null)
 			{
-				app.addEventListener(Event.ADDED_TO_STAGE, onStage);
-				function onStage(event:Event):void
-				{					
+				if (!app.stage)
+				{
+					app.addEventListener(Event.ADDED_TO_STAGE, onStage);
+					function onStage(event:Event):void
+					{					
+						app.stage.addChild(sprite);	
+					}
+				}
+				else
+				{
 					app.stage.addChild(sprite);	
 				}
 			}
-			else
-			{
-				app.stage.addChild(sprite);	
-			}			
 		}	
 		
 					

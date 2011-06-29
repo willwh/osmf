@@ -26,6 +26,7 @@ package org.osmf.net.httpstreaming.dvr
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.*;
+	import org.osmf.net.httpstreaming.MockHTTPNetStream;
 
 	public class TestHTTPStreamingDVRCastTimeTrait extends TestCase
 	{

@@ -56,6 +56,7 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="FlexUnitApplication.mxml"/>
     <application path="OSMFTest.mxml"/>
     <application path="OSMFTestHeadless.mxml"/>
   </applications>

@@ -49,7 +49,12 @@ package org.osmf.net.httpstreaming
 		 **/
 		public function get downloadRatio():Number
 		{
-			return httpNetStream.downloadRatio;
+			if (httpNetStream.qosInfo != null)
+			{
+				return httpNetStream.qosInfo.downloadRatio;
+			}
+			
+			return 0;
 		}
 		
 		/**

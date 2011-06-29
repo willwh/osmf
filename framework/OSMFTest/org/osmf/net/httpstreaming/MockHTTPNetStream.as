@@ -19,15 +19,15 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.httpstreaming.dvr
+package org.osmf.net.httpstreaming
 {
 	import flash.events.NetStatusEvent;
 	import flash.net.NetConnection;
 	
 	import org.osmf.events.*;
 	import org.osmf.net.*;
-	import org.osmf.net.httpstreaming.HTTPNetStream;
-	import org.osmf.net.httpstreaming.HTTPStreamingFactory;
+	
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFactory;
 		
 	public class MockHTTPNetStream extends HTTPNetStream
@@ -52,14 +52,14 @@ package org.osmf.net.httpstreaming.dvr
 			_dvrInfo = info;
 		}
 		
-		public function set downloadRatio(value:Number):void
+		public function set qosInfo(value:HTTPStreamQoSInfo):void
 		{
-			_downloadRatio = value;
+			_qosInfo = value;
 		}
 		
-		override public function get downloadRatio():Number
+		override public function get qosInfo():HTTPStreamQoSInfo
 		{
-			return _downloadRatio;
+			return _qosInfo;
 		} 
 		
 		override public function DVRGetStreamInfo(streamName:Object):void
@@ -81,6 +81,6 @@ package org.osmf.net.httpstreaming.dvr
 		
 		private var _time:Number;
 		private var _dvrInfo:DVRInfo;
-		private var _downloadRatio:Number;
+		private var _qosInfo:HTTPStreamQoSInfo;
 	}
 }

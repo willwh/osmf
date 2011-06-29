@@ -824,16 +824,7 @@ package org.osmf.media
 					// Swallow.
 				}
 
-				try
-				{
-					mediaPlayer.canSeekTo(1);
-					
-					fail();
-				}
-				catch (e:IllegalOperationError)
-				{
-					// Swallow.
-				}
+				assertFalse(mediaPlayer.canSeekTo(1));
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}

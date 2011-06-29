@@ -453,7 +453,7 @@ package org.osmf.utils
 		 */
 		public static function normalizeRootURL(url:String):String
 		{
-			if (url.charAt(url.length - 1) != "/")
+			if (url != null && url.charAt(url.length - 1) != "/")
 			{
 				return url + "/";
 			}

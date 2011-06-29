@@ -32,7 +32,6 @@ package org.osmf.net.httpstreaming
 	
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingEvent;
-	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetStreamCodes;
@@ -42,8 +41,6 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVTag;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
-	
-	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
 	
 	CONFIG::LOGGING 
 	{	
@@ -57,7 +54,9 @@ package org.osmf.net.httpstreaming
 	}
 	
 	[ExcludeClass]
-	
+
+	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
+
 	/**
 	 * 
 	 * @private
@@ -265,7 +264,7 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/**
-		 * Gets the last recorded download ratio. This value is used by the HTTPStreamingSwitchManager
+		 * Gets the last QoS information. This information is used by the HTTPStreamingSwitchManager
 		 * when deciding if there is need for an up-switch or down-switch.
 		 *  
 		 * @langversion 3.0
@@ -273,13 +272,13 @@ package org.osmf.net.httpstreaming
 		 * @playerversion AIR 1.5
 		 * @productversion OSMF 1.0
 		 */
-		public function get downloadRatio():Number
+		public function get qosInfo():HTTPStreamQoSInfo
 		{
-			if (_source.video != null && _source.video.qosInfo != null)
+			if (_source.video != null)
 			{
-				return _source.video.qosInfo.downloadRatio;
+				return _source.video.qosInfo;
 			}
-			return 0;
+			return null;
 		}
 
 		///////////////////////////////////////////////////////////////////////
@@ -891,7 +890,7 @@ package org.osmf.net.httpstreaming
 		{
 			CONFIG::LOGGING
 			{
-				logger.debug("onScriptData called with mode ", event.scriptDataMode);
+				logger.debug("onScriptData called with mode [" + event.scriptDataMode + "]");
 			}
 			if (event.scriptDataMode == null || event.scriptDataObject == null)
 			{
@@ -921,6 +920,23 @@ package org.osmf.net.httpstreaming
 						}
 					}
 					break;
+			}
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Event handler for net status events. 
+		 */
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.HALT) 
+			{
+				if (_notifyPlayUnpublishPending)
+				{
+					notifyPlayUnpublish();
+					_notifyPlayUnpublishPending = false; 
+				}
 			}
 		}
 
@@ -959,19 +975,6 @@ package org.osmf.net.httpstreaming
 		
 		
 		
-		private function onNetStatus(event:NetStatusEvent):void
-		{
-			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.HALT) 
-			{
-				if (_notifyPlayUnpublishPending)
-				{
-					notifyPlayUnpublish();
-					_notifyPlayUnpublishPending = false; 
-				}
-			}
-		}
-		
-
 
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
