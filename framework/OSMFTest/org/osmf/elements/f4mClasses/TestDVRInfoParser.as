@@ -55,7 +55,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(false, dvrInfo.offline);
 		}
 		
-		public function testDVRInfoFailure():void
+		public function ignore_testDVRInfoFailure():void
 		{
 			var test:XML = <dvrInfo url="GarbageURL"
 									id="testInfo"

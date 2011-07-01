@@ -90,9 +90,9 @@ package org.osmf.utils
 					  );
 		}
 		
-		override public function testCanHandleResource():void
+		override public function ignore_testCanHandleResource():void
 		{
-			super.testCanHandleResource();
+			super.ignore_testCanHandleResource();
 			
 			// Verify some valid resources.
 			assertTrue(loader.canHandleResource(new URLResource("http://example.com")));

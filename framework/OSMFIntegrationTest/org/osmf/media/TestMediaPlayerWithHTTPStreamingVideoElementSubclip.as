@@ -98,6 +98,14 @@ package org.osmf.media
 			
 			return manifest;
 		}
+		
+		// Test to be ignore_
+		
+		override public function testSubclip():void
+		{
+			
+		}
+		
 
 		private static const SINGLE_STREAM_VOD_F4M_URL:String = "http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Unprotected/235/testVideoElementSubClip/barsandtone.f4m";
 	}

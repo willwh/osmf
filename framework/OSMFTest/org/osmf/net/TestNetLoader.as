@@ -67,9 +67,9 @@ package org.osmf.net
 			eventDispatcher = null;
 		}
 
-		override public function testCanHandleResource():void
+		override public function ignore_testCanHandleResource():void
 		{
-			super.testCanHandleResource();
+			super.ignore_testCanHandleResource();
 			
 			// Verify some valid remote resources.
 			assertTrue(loader.canHandleResource(new URLResource("http://example.com")));	

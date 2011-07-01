@@ -44,7 +44,7 @@ package org.osmf.net.drm
 				Assert.assertNull(services.endDate);
 				Assert.assertEquals(services.period, NaN);
 			}
-			
+	
 			public function testAuthenticationError():void
 			{		
 				var testFinished:Function = addAsync( function (event:Event):void {}, 20000);	

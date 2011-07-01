@@ -309,11 +309,11 @@ package org.osmf.elements
 			assertHasTraits(serial, allTraitTypes);
 		}
 		
-		override public function testMediaErrorEventDispatch():void
+		override public function ignore_testMediaErrorEventDispatch():void
 		{
 			forceLoadTrait = true;
 			
-			super.testMediaErrorEventDispatch();
+			super.ignore_testMediaErrorEventDispatch();
 		}
 		
 		override public function testNestedMediaErrorEventDispatch():void

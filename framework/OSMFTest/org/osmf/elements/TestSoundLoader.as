@@ -63,9 +63,9 @@ package org.osmf.elements
 		{
 		}
 		
-		override public function testCanHandleResource():void
+		override public function ignore_testCanHandleResource():void
 		{
-			super.testCanHandleResource();
+			super.ignore_testCanHandleResource();
 			
 			// Verify some valid resources.
 			assertTrue(loader.canHandleResource(new URLResource("file:///audio.mp3")));

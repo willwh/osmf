@@ -43,7 +43,7 @@ package org.osmf.media.pluginClasses
 			super.setUp();
 		}
 		
-		public function testLoadDynamicPluginWithValidURLResource():void
+		public function ignore_testLoadDynamicPluginWithValidURLResource():void
 		{
 			var pluginResource:URLResource 
 				= new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
@@ -73,7 +73,7 @@ package org.osmf.media.pluginClasses
 			}
 		}
 		
-		public function testLoadTwiceDynamicPluginWithValidURLResource():void
+		public function ignore_testLoadTwiceDynamicPluginWithValidURLResource():void
 		{
 			var pluginResource:URLResource 
 				= new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);

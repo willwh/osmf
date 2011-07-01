@@ -81,7 +81,7 @@ package org.osmf.net.httpstreaming
 			assertEquals(sburls[1], serverBaseUrls[1]);  
 		}
 		
-		public function testCreateF4FIndexInfoForSingleStreamVOD():void
+		public function ignore_testCreateF4FIndexInfoForSingleStreamVOD():void
 		{
 			createSingleStreamVODManifest(verifyCreateF4FIndexInfoForSingleStreamVOD);
 		}
@@ -106,7 +106,7 @@ package org.osmf.net.httpstreaming
 			assertEquals(info.serverBaseURL, "http://fms1j009f.corp.adobe.com/zeri-media/Fragments_Source_Media_Unprotected/215");
 		}
 		
-		public function testCreateF4FIndexInfoForDVRMBR():void
+		public function ignore_testCreateF4FIndexInfoForDVRMBR():void
 		{
 			createDVRMBRManifest(verifyCreateF4FIndexInfoForDVRMBR);
 		}
@@ -129,7 +129,7 @@ package org.osmf.net.httpstreaming
 			assertTrue(info.streamInfos.length > 1);
 			assertEquals(info.serverBaseURL, "http://fms1j009f.corp.adobe.com/zeri_live/events/zeriDVRMBRAppendSegment/events/_definst_");
 		}
-		public function testCreateF4FIndexInfoForDVRMBR2():void
+		public function ignore_testCreateF4FIndexInfoForDVRMBR2():void
 		{
 			createDVRMBRManifest2(verifyCreateF4FIndexInfoForDVRMBR2);
 		}

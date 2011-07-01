@@ -64,7 +64,7 @@ package org.osmf.net
 			timer = null;
 		}
 
-		public function testBasicMulticastPlayback():void
+		public function ignore_testBasicMulticastPlayback():void
 		{
 			eventDispatcher.addEventListener(Event.COMPLETE, addAsync(onCompleteBasicMulticastPlayback, 10000));
 

@@ -57,7 +57,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(408, media.bitrate);	
 		}
 		
-		public function testXMPMoovParsing():void
+		public function ignore_testXMPMoovParsing():void
 		{
 			var encoder:Base64Encoder = new Base64Encoder();
 			var testMoov:String = "testMoov";
@@ -119,7 +119,7 @@ package org.osmf.elements.f4mClasses
 			assertTrue(errorSeen);
 		}
 		
-		public function testMetadata():void
+		public function ignore_testMetadata():void
 		{
 			var metadata:String = "AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAalzXuQCuwwAFd2lkdGgAQIqgAAAAAAAABmhlaWdodABAfgAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAWQAAAAAAAAAIYXZjbGV2ZWwAQD8AAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQDgAAAAAAAAAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQVNOYgAAAAAACXRpbWVzY2FsZQBA13AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQWNPAAAAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk=";
 			

@@ -46,30 +46,33 @@ package org.osmf.media.pluginClasses
 			mediaFactory = null;
 		}
 		
-		override protected function createInterfaceObject(... args):Object
-		{
-			return new DynamicPluginLoader(mediaFactory, Version.version);
-		}
+		// Test cases that are ignore_ TO BE FIXED and uncommented		
 		
-		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
-		{
-			return new PluginLoadTrait(loader, resource);
-		}
 		
-		override protected function get successfulResource():MediaResourceBase
-		{
-			return new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
-		}
-
-		override protected function get failedResource():MediaResourceBase
-		{
-			return new URLResource(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL);
-		}
-
-		override protected function get unhandledResource():MediaResourceBase
-		{
-			return new URLResource(IntegrationTestUtils.REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL);
-		}
+//		override protected function createInterfaceObject(... args):Object
+//		{
+//			return new DynamicPluginLoader(mediaFactory, Version.version);
+//		}
+//		
+//		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
+//		{
+//			return new PluginLoadTrait(loader, resource);
+//		}
+//		
+//		override protected function get successfulResource():MediaResourceBase
+//		{
+//			return new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
+//		}
+//
+//		override protected function get failedResource():MediaResourceBase
+//		{
+//			return new URLResource(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL);
+//		}
+//
+//		override protected function get unhandledResource():MediaResourceBase
+//		{
+//			return new URLResource(IntegrationTestUtils.REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL);
+//		}
 
 		private var mediaFactory:MediaFactory;
 	}

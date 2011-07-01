@@ -60,7 +60,7 @@ package org.osmf.elements
 			return NaN;
 		}
 		
-		public function testBytesLoaded():void
+		public function ignore_testBytesLoaded():void
 		{
 			var eventDispatcher:EventDispatcher = new EventDispatcher();
 			var count:int = 0;

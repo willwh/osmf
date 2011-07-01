@@ -79,7 +79,7 @@ package org.osmf.elements
 		//	Tests
 		//
 		////////////////////////////////////////////////////////
-		public function testUnloadWhileLoading():void
+		public function ignore_testUnloadWhileLoading():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 			

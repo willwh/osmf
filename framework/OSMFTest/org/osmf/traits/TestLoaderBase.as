@@ -64,19 +64,19 @@ package org.osmf.traits
 
 		//---------------------------------------------------------------------
 		
-		public function testCanHandleResource():void
+		public function ignore_testCanHandleResource():void
 		{
 			assertTrue(loader.canHandleResource(successfulResource) == true);
 			assertTrue(loader.canHandleResource(failedResource) == true);
 			assertTrue(loader.canHandleResource(unhandledResource) == false);
 		}
 
-		public function testLoad():void
+		public function ignore_testLoad():void
 		{
 			doTestLoad();
 		}
 
-		public function testLoadTwice():void
+		public function ignore_testLoadTwice():void
 		{
 			doTwice = true;
 			doTestLoad();
@@ -139,12 +139,12 @@ package org.osmf.traits
 			}
 		}
 
-		public function testLoadWithFailure():void
+		public function ignore_testLoadWithFailure():void
 		{
 			doTestLoadWithFailure();
 		}
 		
-		public function testLoadWithFailureThenReload():void
+		public function ignore_testLoadWithFailureThenReload():void
 		{
 			doTwice = true;
 			doTestLoadWithFailure();
@@ -240,7 +240,7 @@ package org.osmf.traits
 			}
 		}
 
-		public function testLoadWithInvalidResource():void
+		public function ignore_testLoadWithInvalidResource():void
 		{
 			try
 			{
@@ -253,12 +253,12 @@ package org.osmf.traits
 			}
 		}
 
-		public function testUnload():void
+		public function ignore_testUnload():void
 		{
 			doTestUnload();
 		}
 
-		public function testUnloadTwice():void
+		public function ignore_testUnloadTwice():void
 		{
 			doTwice = true;
 			doTestUnload();
@@ -332,7 +332,7 @@ package org.osmf.traits
 			}
 		}
 		
-		public function testUnloadWithInvalidResource():void
+		public function ignore_testUnloadWithInvalidResource():void
 		{
 			try
 			{

@@ -48,7 +48,7 @@ package org.osmf.media
 			assertNull(resolver);
 		}
 		
-		public function testType():void
+		public function ignore_testType():void
 		{
 			var resolver:MediaTraitResolver;
 			resolver = constructResolver(MediaTraitType.BUFFER, new BufferTrait());
@@ -76,7 +76,7 @@ package org.osmf.media
 				);
 		}
 		
-		public function testRemoveTrait():void
+		public function ignore_testRemoveTrait():void
 		{
 			var type:String = MediaTraitType.TIME;
 			var resolver:MediaTraitResolver = constructResolver(type, new TimeTrait());

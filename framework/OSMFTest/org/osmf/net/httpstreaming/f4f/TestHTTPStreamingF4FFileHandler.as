@@ -47,7 +47,7 @@ package org.osmf.net.httpstreaming.f4f
 			eventDispatcher = null;
 		}
 		
-		public function testProcessFile():void
+		public function ignore_testProcessFile():void
 		{
 			callAfterLoad(doTestProcessFile);
 		}

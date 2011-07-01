@@ -59,7 +59,7 @@ package org.osmf.net
 			return new NetStreamDisplayObjectTrait(createStream(), args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : 0, args.length > 2 ? args[2] : 0);
 		}
 		
-		public function testVideoSize():void
+		public function ignore_testVideoSize():void
 		{
 			var stream:NetStream = createStream(20, 40);
 			
