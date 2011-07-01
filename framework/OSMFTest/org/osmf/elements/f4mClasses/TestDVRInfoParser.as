@@ -29,6 +29,9 @@ package org.osmf.elements.f4mClasses
 	public class TestDVRInfoParser extends TestCase
 	{
 		private var parser:DVRInfoParser;
+	
+		private const BOGUS_PATH:String = "http://BOGUS_PATH.com/";
+
 		
 		public function testDVRInfoParser():void
 		{					
@@ -40,7 +43,7 @@ package org.osmf.elements.f4mClasses
 			
 			parser = new DVRInfoParser();
 			parser.addEventListener(ParseEvent.PARSE_COMPLETE, addAsync(verifyParse, 1000));
-			parser.parse(test.toXMLString());
+			parser.parse(test.toXMLString(), BOGUS_PATH);
 		}
 		
 		private function verifyParse(event:ParseEvent):void
@@ -65,7 +68,7 @@ package org.osmf.elements.f4mClasses
 			
 			parser = new DVRInfoParser();
 			parser.addEventListener(ParseEvent.PARSE_COMPLETE, addAsync(verifyDVRInfoFailure, 1000));
-			parser.parse(test.toXMLString());
+			parser.parse(test.toXMLString(), BOGUS_PATH);
 		}
 		
 		private function verifyDVRInfoFailure(event:ParseEvent):void
@@ -74,7 +77,7 @@ package org.osmf.elements.f4mClasses
 			
 			assertNotNull(dvrInfo);
 			assertEquals("testInfo", dvrInfo.id);
-			assertEquals("null/GarbageURL", dvrInfo.url);
+			assertEquals(BOGUS_PATH + "GarbageURL", dvrInfo.url);
 			assertEquals(0, dvrInfo.beginOffset);
 			assertEquals(0, dvrInfo.endOffset);
 			assertEquals(false, dvrInfo.offline);

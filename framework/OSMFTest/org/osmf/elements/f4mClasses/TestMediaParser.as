@@ -33,6 +33,8 @@ package org.osmf.elements.f4mClasses
 	{
 		private var parser:MediaParser;
 		
+		private const BOGUS_PATH:String = "http://BOGUS_PATH.com/";
+
 		public function testMediaParser():void
 		{
 			var test:XML = <media url="http://example.com/myvideo/low"
@@ -80,7 +82,7 @@ package org.osmf.elements.f4mClasses
 			
 			parser = new MediaParser();
 			parser.addEventListener(ParseEvent.PARSE_COMPLETE, addAsync(verifyXMPMoovParse, 1000));
-			parser.parse(test.toXMLString());
+			parser.parse(test.toXMLString(), BOGUS_PATH);
 		}
 		
 		private function verifyXMPMoovParse(event:ParseEvent):void
@@ -110,7 +112,7 @@ package org.osmf.elements.f4mClasses
 			try
 			{
 				parser = new MediaParser();
-				parser.parse(test.toXMLString());		
+				parser.parse(test.toXMLString(), BOGUS_PATH);		
 			}
 			catch(error:ArgumentError)
 			{
@@ -131,7 +133,7 @@ package org.osmf.elements.f4mClasses
 			
 			parser = new MediaParser();
 			parser.addEventListener(ParseEvent.PARSE_COMPLETE, addAsync(verifyMetadata, 1000));
-			parser.parse(test.toXMLString());
+			parser.parse(test.toXMLString(), BOGUS_PATH);
 		}
 		
 		private function verifyMetadata(event:ParseEvent):void
