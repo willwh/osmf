@@ -322,9 +322,9 @@ package org.osmf.elements.f4mClasses
 			
 			assertEquals(dynResource.host, "rtmp://newbase.com/myserver/");
 			
-			assertEquals(dynResource.streamItems[0].streamName, "rtmp://newbase.com/myserver/low");
-			assertEquals(dynResource.streamItems[1].streamName, "rtmp://newbase.com/myserver/medium");
-			assertEquals(dynResource.streamItems[2].streamName, "rtmp://newbase.com/myserver/high");			
+			assertEquals(dynResource.streamItems[0].streamName, "low");
+			assertEquals(dynResource.streamItems[1].streamName, "medium");
+			assertEquals(dynResource.streamItems[2].streamName, "high");			
 		}
 		
 		public function testRelativeURL():void
@@ -345,20 +345,20 @@ package org.osmf.elements.f4mClasses
 		{
 			var manifest:Manifest = event.data as Manifest;
 			
-			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource(BOGUS_PATH + 'manifest.f4m'));
 			
 			assertTrue(resource is URLResource);
 			
 			var urlResource:URLResource = resource as URLResource;
 				
-			assertEquals(urlResource.url, "http://example.com/myvideo/low.flv");
+			assertEquals(urlResource.url, BOGUS_PATH + "myvideo/low.flv");
 			CONFIG::FLASH_10_1
 			{
 				var httpMetadata:Metadata = urlResource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
 				assertTrue(httpMetadata != null);
 				var bootstrapInfo:BootstrapInfo = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY) as BootstrapInfo;
 				assertTrue(bootstrapInfo != null);
-				assertTrue(bootstrapInfo.url == "http://example.com/foo");
+				assertTrue(bootstrapInfo.url == BOGUS_PATH + 'foo');
 				assertTrue(bootstrapInfo.profile == "named");
 				assertTrue(bootstrapInfo.id == "1");
 			}
@@ -387,7 +387,7 @@ package org.osmf.elements.f4mClasses
 			var resource:MediaResourceBase;
 			try
 			{
-				resource = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
+				resource = parser.createResource(manifest, new URLResource(BOGUS_PATH + 'manifest.f4m'));
 			}
 			catch(error:Error)
 			{
@@ -400,10 +400,10 @@ package org.osmf.elements.f4mClasses
 			var dynResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			assertTrue(dynResource);
 			assertTrue(dynResource.streamItems.length == 3);
-			assertEquals(dynResource.streamItems[0].streamName, "http://example.com/" +  "low");
-			assertEquals(dynResource.streamItems[1].streamName, "http://example.com/" + "medium");
-			assertEquals(dynResource.streamItems[2].streamName, "http://example.com/" + "high");
-			assertEquals(dynResource.host, "http://example.com/");
+			assertEquals(dynResource.streamItems[0].streamName, BOGUS_PATH +  "low");
+			assertEquals(dynResource.streamItems[1].streamName, BOGUS_PATH + "medium");
+			assertEquals(dynResource.streamItems[2].streamName, BOGUS_PATH + "high");
+			assertEquals(dynResource.host, BOGUS_PATH );
 		}
 		
 		public function testURLIncludesFMSApplicationInstanceDefault():void
@@ -1342,7 +1342,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(manifest.media.length, 1);
 			
 			assertFalse(manifest.media[0].alternate);
-			assertEquals(manifest.media[0].url, "neil_patrick_harris_video_only");
+			assertEquals(manifest.media[0].url, BOGUS_PATH + "neil_patrick_harris_video_only");
 			assertEquals(manifest.media[0].bitrate, "1234");
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
@@ -1459,7 +1459,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(manifest.media.length, 1);
 			
 			assertFalse(manifest.media[0].alternate);
-			assertEquals(manifest.media[0].url, "neil_patrick_harris_video_only");
+			assertEquals(manifest.media[0].url, BOGUS_PATH + "neil_patrick_harris_video_only");
 			assertEquals(manifest.media[0].bitrate, "1234");
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
@@ -1908,7 +1908,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(manifest.media.length, 1);
 			
 			assertFalse(manifest.media[0].alternate);
-			assertEquals(manifest.media[0].url, BOGUS_PATH + "neil_patrick_harris_video_only");
+			assertEquals(manifest.media[0].url, "http://catherine.corp.adobe.com/seq/" +  "neil_patrick_harris_video_only");
 			assertEquals(manifest.media[0].bitrate, "1234");
 			assertNull(manifest.media[0].label);
 			assertNull(manifest.media[0].language);
@@ -1916,7 +1916,7 @@ package org.osmf.elements.f4mClasses
 			assertNotNull(manifest.alternativeMedia);
 			assertEquals(manifest.alternativeMedia.length, 1);
 			assertTrue(manifest.alternativeMedia[0].alternate);
-			assertEquals(manifest.alternativeMedia[0].url, BOGUS_PATH + "neil_patrick_harris_audio_only");
+			assertEquals(manifest.alternativeMedia[0].url, "http://catherine.corp.adobe.com/seq/" + "neil_patrick_harris_audio_only");
 			assertEquals(manifest.alternativeMedia[0].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[0].type, "audio");
 			assertEquals(manifest.alternativeMedia[0].label, "label1");
@@ -1936,7 +1936,7 @@ package org.osmf.elements.f4mClasses
 									0
 								</duration>
 								
-								<drmAdditionalHeader url="http://10.131.237.107/live/streams/ZeriDVRMBR/streams/_definst_/livestream1/livestream1.drmmeta" drmContentId="ZeriDVRMBR/events/_definst_/live_dvr_mbr_event" id="drmMetadata8035">
+								<drmAdditionalHeader url="http://10.131.237.107/live/streams/hs_sbr_live_drm/streams/_definst_/videostream/videostream.drmmeta" drmContentId="ZeriDVRMBR/events/_definst_/live_dvr_mbr_event" id="drmMetadata8035">
 								</drmAdditionalHeader>
 								
 								<bootstrapInfo
@@ -2024,7 +2024,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(manifest.alternativeMedia.length, 2);
 			
 			assertTrue(manifest.alternativeMedia[0].alternate);
-			assertEquals(manifest.alternativeMedia[0].url, "neil_patrick_harris_audio_only");
+			assertEquals(manifest.alternativeMedia[0].url, BOGUS_PATH + "neil_patrick_harris_audio_only");
 			assertEquals(manifest.alternativeMedia[0].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[0].type, "audio");
 			assertEquals(manifest.alternativeMedia[0].label, "audio1");
@@ -2032,7 +2032,7 @@ package org.osmf.elements.f4mClasses
 			assertNotNull(manifest.alternativeMedia[0].drmAdditionalHeader);
 			
 			assertTrue(manifest.alternativeMedia[1].alternate);
-			assertEquals(manifest.alternativeMedia[1].url, "neil_patrick_harris_audio_only2");
+			assertEquals(manifest.alternativeMedia[1].url, BOGUS_PATH + "neil_patrick_harris_audio_only2");
 			assertEquals(manifest.alternativeMedia[1].bitrate, "128");
 			assertEquals(manifest.alternativeMedia[1].type, "audio");
 			assertEquals(manifest.alternativeMedia[1].label, "audio2");
