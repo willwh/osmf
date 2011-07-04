@@ -111,7 +111,7 @@ package org.osmf.net.httpstreaming
 			_indexHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
 			_indexHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onError);
 			
-			setState(HTTPStreamSourceState.INIT);
+			setState(HTTPStreamingState.INIT);
 			
 			CONFIG::LOGGING
 			{			
@@ -188,6 +188,9 @@ package org.osmf.net.httpstreaming
 			{
 				_downloader.close();
 			}
+			
+			_indexHandler.dispose();
+			
 			_endFragment = true;
 			_endOfStream = true;
 			_streamName = null;
@@ -224,7 +227,7 @@ package org.osmf.net.httpstreaming
 			{			
 				logger.debug("Seeking to " + _seekTarget + " in stream [ " + _streamName + " ]. ");
 			}
-			setState(HTTPStreamSourceState.SEEK);
+			setState(HTTPStreamingState.SEEK);
 		}
 		
 		/**
@@ -234,14 +237,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public function getBytes():ByteArray
 		{
-			var bytes:ByteArray = null;
-			
-			if (_state != HTTPStreamSourceState.INIT)
-			{
-				bytes = doSomeProcessingAndGetBytes();
-			}
-			
-			return bytes;
+			return doSomeProcessingAndGetBytes();
 		}
 		
 		/**
@@ -297,7 +293,6 @@ package org.osmf.net.httpstreaming
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////
-		
 		/**
 		 * Process some small chunk of functionality and then 
 		 * tries to return a byte array to the caller.
@@ -310,25 +305,29 @@ package org.osmf.net.httpstreaming
 			
 			switch(_state)
 			{
-				case HTTPStreamSourceState.SEEK:
+				case HTTPStreamingState.INIT:
+					// do nothing
+					break;
+				
+				case HTTPStreamingState.SEEK:
 					if (_downloader != null)
 					{
 						_downloader.close();
 						_fileHandler.flushFileSegment(_downloader.getBytes());
 					}
 					
-					setState(HTTPStreamSourceState.LOAD);
+					setState(HTTPStreamingState.LOAD);
 					break;
 
-				case HTTPStreamSourceState.WAIT:
+				case HTTPStreamingState.WAIT:
 					date = new Date();
 					if (date.getTime() > _retryAfterTime)
 					{
-						setState(HTTPStreamSourceState.LOAD);
+						setState(HTTPStreamingState.LOAD);
 					}
 					break;
 				
-				case HTTPStreamSourceState.LOAD:
+				case HTTPStreamingState.LOAD:
 					// we need to notify our clients about a completed change
 					if (_qualityLevelChanged)
 					{
@@ -358,7 +357,7 @@ package org.osmf.net.httpstreaming
 							_downloader = new HTTPStreamDownloader(_dispatcher);
 						}
 						_downloader.open(_request.urlRequest);
-						setState(HTTPStreamSourceState.BEGIN_FRAGMENT);
+						setState(HTTPStreamingState.BEGIN_FRAGMENT);
 					}
 					else if (_request != null && _request.retryAfter >= 0)
 					{
@@ -367,7 +366,7 @@ package org.osmf.net.httpstreaming
 						//things to update
 						date = new Date();
 						_retryAfterTime = date.getTime() + (1000.0 * _request.retryAfter);
-						setState(HTTPStreamSourceState.WAIT);
+						setState(HTTPStreamingState.WAIT);
 					}
 					else
 					{
@@ -381,11 +380,11 @@ package org.osmf.net.httpstreaming
 						{
 							bytes = _fileHandler.flushFileSegment(_downloader.getBytes()); 
 						}
-						setState(HTTPStreamSourceState.STOP);	
+						setState(HTTPStreamingState.STOP);	
 					}
 					break;
 				
-				case HTTPStreamSourceState.BEGIN_FRAGMENT:
+				case HTTPStreamingState.BEGIN_FRAGMENT:
 					_endFragment = false;
 					if (_seekTarget != -1)
 					{
@@ -410,10 +409,10 @@ package org.osmf.net.httpstreaming
 						)
 					);
 
-					setState(HTTPStreamSourceState.READ);
+					setState(HTTPStreamingState.READ);
 					break;
 				
-				case HTTPStreamSourceState.READ:
+				case HTTPStreamingState.READ:
 					if (_downloader != null)
 					{
 						input =  _downloader.getBytes(_fileHandler.inputBytesNeeded);
@@ -427,7 +426,7 @@ package org.osmf.net.httpstreaming
 						}
 					}
 					
-					if (_state == HTTPStreamSourceState.READ)
+					if (_state == HTTPStreamingState.READ)
 					{
 						if (_endFragment)
 						{
@@ -435,12 +434,12 @@ package org.osmf.net.httpstreaming
 							{
 								_downloader.saveBytes();
 							}
-							setState(HTTPStreamSourceState.END_FRAGMENT);
+							setState(HTTPStreamingState.END_FRAGMENT);
 						}
 					}
 					break;
 				
-				case HTTPStreamSourceState.END_FRAGMENT:
+				case HTTPStreamingState.END_FRAGMENT:
 					if (_downloader != null)
 					{
 						input = _downloader.getBytes();
@@ -464,7 +463,7 @@ package org.osmf.net.httpstreaming
 								)
 							);
 					
-					setState(HTTPStreamSourceState.LOAD);
+					setState(HTTPStreamingState.LOAD);
 					break;
 			}
 			
@@ -506,9 +505,8 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 * 
-		 * Event listener for <code>NOTIFY_INDEX_READY</code> event. Once the index 
-		 * has been processed and is available we create an internal source for 
-		 * handling the actual download of the stream bytes. 
+		 * Event listener for <code>NOTIFY_INDEX_READY</code> event. We store
+		 * the server offset and the live status for further processing.
 		 */
 		private function onIndexReady(event:HTTPStreamingIndexHandlerEvent):void
 		{
@@ -518,7 +516,7 @@ package org.osmf.net.httpstreaming
 
 			CONFIG::LOGGING
 			{			
-				logger.debug("Stream [ " + _streamName + " ] initialized with parameters ( offset = " + _offset + ", live = " + _isLive + ").");
+				logger.debug("Stream [ " + _streamName + " ] refreshed. ( offset = " + _offset + ", live = " + _isLive + ").");
 			}
 		}
 		

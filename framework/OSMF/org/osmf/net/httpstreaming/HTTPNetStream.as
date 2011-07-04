@@ -458,7 +458,7 @@ package org.osmf.net.httpstreaming
 					// if we are getting dry then go back into
 					// active play mode and get more bytes 
 					// from the stream provider
-					if (this.bufferLength < _desiredBufferTime_Max)
+					if (this.bufferLength < _desiredBufferTime_Min)
 					{
 						setState(HTTPStreamingState.PLAY);
 					}
@@ -538,7 +538,7 @@ package org.osmf.net.httpstreaming
 							// if our buffer has grown big enough then go into wait
 							// mode where we let the NetStream consume the buffered 
 							// data
-							if (this.bufferLength > _desiredBufferTime_Min)
+							if (this.bufferLength > _desiredBufferTime_Max)
 							{
 								setState(HTTPStreamingState.WAIT);
 							}

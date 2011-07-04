@@ -197,6 +197,15 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * @private
 		 */
+		override public function dispose():void
+		{
+			//close the bootstrap update timer
+			destroyBootstrapUpdateTimer();
+		}
+		
+		/**
+		 * @private
+		 */
 		override public function processIndexData(data:*, indexContext:Object):void
 		{
 			var index:int = indexContext as int;
@@ -355,7 +364,7 @@ package org.osmf.net.httpstreaming.f4f
 				
 				CONFIG::LOGGING
 				{
-					logger.debug("getFileForTime URL = " + requestUrl);
+					logger.debug("The url for ( time=" + time +", quality=" + quality + ") = " + requestUrl);
 				}
 
 				streamRequest = new HTTPStreamRequest(requestUrl);
@@ -367,7 +376,7 @@ package org.osmf.net.httpstreaming.f4f
 			{
 				if (streamRequest == null)
 				{
-					logger.debug("getFileForTime No URL for time=" + time + " and quality=" + quality);
+					logger.debug("The url for ( time=" + time + ", quality=" + quality + ") = none");
 				}
 			}
 			

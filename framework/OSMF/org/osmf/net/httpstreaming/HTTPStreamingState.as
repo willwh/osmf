@@ -40,8 +40,7 @@ package org.osmf.net.httpstreaming
 	internal class HTTPStreamingState
 	{
 		/**
-		 * Indicates the HTTPNetStream is in its initial state.  No media
-		 * has been passed-in yet.
+		 * Indicates the HDS-related object is in its initial state.  
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -50,32 +49,19 @@ package org.osmf.net.httpstreaming
 		 */
 		internal static const INIT:String = "init";
 		
-//		/**
-//		 * Indicates the HTTPNetStream is about to load a new file in
-//		 * response to a seek (or upon startup).
-//		 *  
-//		 *  @langversion 3.0
-//		 *  @playerversion Flash 10
-//		 *  @playerversion AIR 1.5
-//		 *  @productversion OSMF 1.0
-//		 */
-//		internal static const LOAD_SEEK:String = "loadSeek";
-//
-//		internal static const LOAD_SEEK_RETRY_WAIT:String = "loadSeekRetryWait";
-		
-//		/**
-//		 * Indicates the HTTPNetStream is loading a new file.
-//		 *  
-//		 *  @langversion 3.0
-//		 *  @playerversion Flash 10
-//		 *  @playerversion AIR 1.5
-//		 *  @productversion OSMF 1.0
-//		 */
-//		internal static const LOAD:String = "load";
+		/**
+		 * Indicates the HDS-related source is about to load a new fragment.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		internal static const LOAD:String = "load";
 		
 		/**
-		 * Indicates the HTTPNetStream is waiting for conditions to be
-		 * appropriate to load a new file.
+		 * Indicates the HDS-related object is waiting for conditions to be
+		 * appropriate in order to do additional processing.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -84,56 +70,28 @@ package org.osmf.net.httpstreaming
 		 */
 		internal static const WAIT:String = "wait";
 		
-//		/**
-//		 * Indicates the HTTPNetStream is about to load a new file as
-//		 * a result of completing playback of the previous file.
-//		 *  
-//		 *  @langversion 3.0
-//		 *  @playerversion Flash 10
-//		 *  @playerversion AIR 1.5
-//		 *  @productversion OSMF 1.0
-//		 */
-//		internal static const LOAD_NEXT:String = "loadNext";
-//		
-//		internal static const LOAD_NEXT_RETRY_WAIT:String = "loadNextRetryWait";
-		
-
-		
-//		/**
-//		 * Indicates the HTTPNetStream is preparing to play a new file in
-//		 * response to a seek (or upon startup).
-//		 *  
-//		 *  @langversion 3.0
-//		 *  @playerversion Flash 10
-//		 *  @playerversion AIR 1.5
-//		 *  @productversion OSMF 1.0
-//		 */
-//		internal static const PLAY_START_SEEK:String = "playStartSeek";
-		
-//		/**
-//		 * Indicates the HTTPNetStream is preparing to play a new file as
-//		 * a result of completing playback of the previous file.
-//		 *  
-//		 *  @langversion 3.0
-//		 *  @playerversion Flash 10
-//		 *  @playerversion AIR 1.5
-//		 *  @productversion OSMF 1.0
-//		 */
-//		internal static const PLAY_START_NEXT:String = "playStartNext";
-	
 		/**
-		 * Indicates the HTTPNetStream is about to play a new file.
+		 * Indicates the HDS-related object is starting playing a new fragment.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.6
+		 */
+		internal static const BEGIN_FRAGMENT:String = "beginFragment";
+
+		/**
+		 * Indicates the HDS-related object has finished playing the current fragment.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		internal static const PLAY_COMMON:String = "playCommon";	
-		
-		
+		internal static const END_FRAGMENT:String = "endFragment";
+	
 		/**
-		 * Indicates the HTTPNetStream is playing the current file.
+		 * Indicates the HDS-related object is playing the current stream.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -142,18 +100,18 @@ package org.osmf.net.httpstreaming
 		 */
 		internal static const PLAY:String = "play";
 		
-//		/**
-//		 * Indicates the HTTPNetStream has finished playing the current file.
-//		 *  
-//		 *  @langversion 3.0
-//		 *  @playerversion Flash 10
-//		 *  @playerversion AIR 1.5
-//		 *  @productversion OSMF 1.0
-//		 */
-//		internal static const END_FRAGMENT:String = "endFragment";
-		
 		/**
-		 * Indicates the HTTPNetStream is currently seeking.
+		 * Indicates the HDS-related object is reading the content of the current stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.6
+		 */
+		internal static const READ:String = "read";
+
+		/**
+		 * Indicates the HDS-related object is currently seeking.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -163,7 +121,7 @@ package org.osmf.net.httpstreaming
 		internal static const SEEK:String = "seek";
 
 		/**
-		 * Indicates the HTTPNetStream is stopping playback.
+		 * Indicates the HDS-related object is stopping playback.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -173,7 +131,7 @@ package org.osmf.net.httpstreaming
 		internal static const STOP:String = "stop";
 		
 		/**
-		 * Indicates the HTTPNetStream is not playing back.
+		 * Indicates the HDS-related object is halted.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -181,5 +139,36 @@ package org.osmf.net.httpstreaming
 		 *  @productversion OSMF 1.0
 		 */
 		internal static const HALT:String = "halt";	
+		
+		/**
+		 * Indicates that HDS-related object is undecided about the way stream 
+		 * data should be handled.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.6
+		 */
+		public static const CONSUME_UNDECIDED:String = "consumeUndecided";
+		
+		/**
+		 * Indicates that HDS-related stream data is just pass-though.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.6
+		 */
+		public static const CONSUME_PASS_THROUGH:String = "consumePassThrough";
+		
+		/**
+		 * Indicates that HDS-related stream data is fully mixed.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.6
+		 */
+		public static const CONSUME_MIXED:String = "consumeMixed";
 	}
 }

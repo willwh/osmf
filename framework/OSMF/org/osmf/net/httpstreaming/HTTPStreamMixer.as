@@ -80,7 +80,7 @@ package org.osmf.net.httpstreaming
 
 			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
-			setState(HTTPStreamMixerState.INIT);
+			setState(HTTPStreamingState.INIT);
 		}
 	
 		/**
@@ -134,7 +134,7 @@ package org.osmf.net.httpstreaming
 			// think about some "fake" in buffer seeking.
 			// XXX Here we need to implement enhanced seeking
 			
-			setState(HTTPStreamMixerState.SEEK);
+			setState(HTTPStreamingState.SEEK);
 			
 			clearInternalBuffers();
 			if (_desiredAudioHandler != null)
@@ -228,17 +228,17 @@ package org.osmf.net.httpstreaming
 			
 			switch(_state)
 			{
-				case HTTPStreamMixerState.INIT:
+				case HTTPStreamingState.INIT:
 					// do nothing.
 					break;
 				
-				case HTTPStreamMixerState.SEEK:
+				case HTTPStreamingState.SEEK:
 					// we just wait a little bit more until we go to decide
 					// what should we consume
-					setState(HTTPStreamMixerState.CONSUME_UNDECIDED);
+					setState(HTTPStreamingState.CONSUME_UNDECIDED);
 					break;
 			
-				case HTTPStreamMixerState.CONSUME_UNDECIDED:
+				case HTTPStreamingState.CONSUME_UNDECIDED:
 					// we need to decide what we will consume ( only the 
 					// default stream or both default and alternate streams )
 					if (_audioNeedsInitialization)
@@ -262,15 +262,15 @@ package org.osmf.net.httpstreaming
 					if (_audioHandler == null)
 					{
 						clearInternalBuffers();
-						setState(HTTPStreamMixerState.CONSUME_DEFAULT);
+						setState(HTTPStreamingState.CONSUME_PASS_THROUGH);
 					}
 					else
 					{
-						setState(HTTPStreamMixerState.CONSUME_MIXED);
+						setState(HTTPStreamingState.CONSUME_MIXED);
 					}
 					break;
 				
-				case HTTPStreamMixerState.CONSUME_DEFAULT:
+				case HTTPStreamingState.CONSUME_PASS_THROUGH:
 					// if we are in video only mode then we shortcut
 					// the entire mixing process and return directly
 					// the bytes from the specified video source.
@@ -280,7 +280,7 @@ package org.osmf.net.httpstreaming
 					}
 					break;
 				
-				case HTTPStreamMixerState.CONSUME_MIXED:
+				case HTTPStreamingState.CONSUME_MIXED:
 					bytes = internalMixMDATBytes((_videoTime == -1));
 					if (bytes.length == 0)
 					{
@@ -643,7 +643,7 @@ package org.osmf.net.httpstreaming
 				clearAudioBuffers();
 				_audioSyncedWithVideoTime = false;
 
-				setState(HTTPStreamMixerState.CONSUME_UNDECIDED);
+				setState(HTTPStreamingState.CONSUME_UNDECIDED);
 			}
 			
 			if (_videoHandler != null && _videoHandler.streamName == event.url)

@@ -138,6 +138,21 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/**
+		 * Disposes this index.
+		 * 
+		 * Subclasses must override to provide a specific implementation.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.6
+		 */
+		public function dispose():void
+		{	
+			throw new IllegalOperationError("The dispose() method must be overridden by the derived class.");
+		}
+		
+		/**
 		 * Called when the index file has been loaded and is ready to be processed.
 		 * 
 		 * Subclasses must override to provide a specific implementation.  When the
