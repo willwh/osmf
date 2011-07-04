@@ -75,7 +75,7 @@ package org.osmf.net.drm
 			assertNotNull(nsDRMTRait.drmMetadata);
 		}	
 		
-		public function testAuthenticationEvents():void
+		public function ignore_testAuthenticationEvents():void
 		{		
 			var testFinished:Function = addAsync( function (event:Event):void {}, 13000);
 									

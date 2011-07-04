@@ -58,7 +58,7 @@ package org.osmf.elements
 		
 		private var mediaPlayer:MediaPlayer = new MediaPlayer();
 		
-		public function testAnonSidecar():void
+		public function ignore_testAnonSidecar():void
 		{					
 			//Anonymous w/ metadata sidecar
 			
@@ -77,7 +77,7 @@ package org.osmf.elements
 			mediaPlayer.media = null;				
 		}
 
-		public function testIdentSidecar():void
+		public function ignore_testIdentSidecar():void
 		{						 
 			// Identity based credentials w/ metadata sidecar
 			
@@ -90,7 +90,7 @@ package org.osmf.elements
 			testElementCred(resource, "dmo", "password");
 		}	
 					
-		public function testAnonEncrypted():void
+		public function ignore_testAnonEncrypted():void
 		{
 			// Anonymous Encrypted content without metadata sidecar
 			var resource:URLResource = new URLResource(ANONYMOUS_INLINE);
@@ -128,7 +128,7 @@ package org.osmf.elements
 							
 		}
 		
-		public function testAuthenticationToken():void
+		public function ignore_testAuthenticationToken():void
 		{		
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 									
@@ -205,7 +205,7 @@ package org.osmf.elements
 			}
 		}
 	
-		public function testIdentEncrypted():void
+		public function ignore_testIdentEncrypted():void
 		{
 			// Identity Encrypted content without metadata sidecar
 			var resource:URLResource = new URLResource(IDENT_INLINE);

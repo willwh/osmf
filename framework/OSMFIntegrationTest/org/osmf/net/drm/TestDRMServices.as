@@ -45,7 +45,7 @@ package org.osmf.net.drm
 				Assert.assertEquals(services.period, NaN);
 			}
 	
-			public function testAuthenticationError():void
+			public function ignore_testAuthenticationError():void
 			{		
 				var testFinished:Function = addAsync( function (event:Event):void {}, 20000);	
 						
@@ -75,7 +75,7 @@ package org.osmf.net.drm
 										
 			}
 			
-			public function testAuthenticationSuccess():void
+			public function ignore_testAuthenticationSuccess():void
 			{			
 				var testFinished:Function = addAsync( function (event:Event):void {}, 13000);
 									
@@ -130,6 +130,7 @@ package org.osmf.net.drm
 				assertTrue(authError);
 				assertTrue(authTokenError);
 			}
+	
 		}
 		
 		private static const PASSWORD:String =  "password";
