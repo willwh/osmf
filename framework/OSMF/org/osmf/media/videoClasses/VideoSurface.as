@@ -3,25 +3,25 @@ package org.osmf.media.videoClasses
 	[ExcludeClass]
 	
 	import flash.display.DisplayObject;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import flash.media.Video;
 	import flash.net.NetStream;
-	import flash.system.Capabilities;
 	
 	CONFIG::PLATFORM import flash.display.Stage;
 	CONFIG::MOCK	 import org.osmf.mock.Stage;
 	
 	CONFIG::LOGGING  import org.osmf.logging.Logger;	
-
+	
 	/**
 	 * @private
 	 * 
 	 * VideoSurface class wraps the display object where
 	 * a video should be displayed.
 	 */
-	public class VideoSurface extends Sprite 
+	public class VideoSurface extends Sprite
 	{
 		/**
 		 * Default constructor.
@@ -53,14 +53,14 @@ package org.osmf.media.videoClasses
 				switchRenderer(this.createVideo());
 			}
 		}
-
+		
 		/**
 		 * Returns a VideoSurfaceInfo object whose properties contain statistics 
 		 * about the surface state. The object is a snapshot of the current state.
 		 */
 		public function get info():VideoSurfaceInfo
 		{
-			return new VideoSurfaceInfo(stageVideo != null, renderStatus, stageVideoInUseCount, stageVideoCount);	
+			return new VideoSurfaceInfo(stageVideo != null, renderStatus, stageVideoInUseCount, stageVideoCount);
 		}
 		
 		/**
@@ -93,12 +93,12 @@ package org.osmf.media.videoClasses
 					if (clearStageVideoObject)
 					{
 						stageVideo.depth = 0;
-						stageVideo.viewPort = new Rectangle(0, 0, 0, 0);	
+						stageVideo.viewPort = new Rectangle(0, 0, 0, 0);
 					}
 				}
 			}
 		}
-
+		
 		/**
 		 * Indicates the type of filter applied to decoded video as part of post-processing.
 		 */	
@@ -201,7 +201,6 @@ package org.osmf.media.videoClasses
 			if (surfaceRect.height != value)
 			{
 				surfaceRect.height = value;
-				
 				updateView();
 			}
 		}
@@ -215,7 +214,7 @@ package org.osmf.media.videoClasses
 		{
 			if (surfaceRect.width != value)
 			{
-				surfaceRect.width = value;				
+				surfaceRect.width = value;
 				updateView();
 			}
 		}
@@ -235,14 +234,25 @@ package org.osmf.media.videoClasses
 				viewPort.topLeft = localToGlobal(surfaceRect.topLeft);
 				viewPort.bottomRight = localToGlobal(surfaceRect.bottomRight);
 				stageVideo.viewPort = viewPort;
+				
+				if (surfaceShape == null)
+				{
+					surfaceShape = new Shape();
+				}
+				
+				surfaceShape.graphics.clear();
+				surfaceShape.graphics.drawRect(0, 0, width, height);
+				surfaceShape.alpha = 0;
+				
+				addChild(surfaceShape);
 			}
 			else
-			{			
+			{	
 				currentVideoRenderer.x = surfaceRect.x;
 				currentVideoRenderer.y = surfaceRect.y;
 				currentVideoRenderer.height = surfaceRect.height;
 				currentVideoRenderer.width = surfaceRect.width;
-			}			
+			}
 		}
 		
 		internal function switchRenderer(renderer:*):void
@@ -276,6 +286,13 @@ package org.osmf.media.videoClasses
 					if (stageVideo != null)
 						stageVideo.viewPort = new Rectangle(0,0,0,0);			
 					stageVideo = null;
+					
+					if (surfaceShape != null)
+					{
+						surfaceShape.graphics.clear();
+						removeChild(surfaceShape);
+						surfaceShape = null;
+					}
 				}
 			}
 			
@@ -328,7 +345,6 @@ package org.osmf.media.videoClasses
 			videoSurfaceManager.registerVideoSurface(this);
 		}
 		
-	
 		/**
 		 * @private
 		 * Internal surface used for actual rendering.
@@ -357,6 +373,8 @@ package org.osmf.media.videoClasses
 		 */
 		private var surfaceRect:Rectangle = new Rectangle(0,0,0,0);
 		
+		private var surfaceShape:Shape = null;
+		
 		private var _deblocking:int 	= 0;
 		private var _smoothing:Boolean 	= false;
 		private var _visible:Boolean = true;
@@ -367,7 +385,7 @@ package org.osmf.media.videoClasses
 		 * Internal render status information.
 		 */
 		private var renderStatus:String;
-
+		
 		CONFIG::LOGGING 
 		private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.videoClasses.VideoSurface");
 		
