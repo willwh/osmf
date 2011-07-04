@@ -39,8 +39,10 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
+	import org.osmf.net.httpstreaming.flv.FLVTagAudio;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
 	
 	CONFIG::LOGGING 
 	{	
@@ -103,9 +105,10 @@ package org.osmf.net.httpstreaming
 			addEventListener(HTTPStreamingEvent.END_FRAGMENT, onEndFragment);
 			addEventListener(HTTPStreamingEvent.TRANSITION, onTransition);
 			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, onTransitionComplete);
+			
 			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 
-			this.bufferTime = MINIMUM_VOD_BUFFER_TIME;
+			this.bufferTime = MINIMUM_BUFFER_TIME;
 			this.bufferTimeMax = 0;
 			
 			setState(HTTPStreamingState.INIT);
@@ -120,10 +123,7 @@ package org.osmf.net.httpstreaming
 		///////////////////////////////////////////////////////////////////////
 		/// Public API overrides
 		///////////////////////////////////////////////////////////////////////
-		
 		/**
-		 * @private
-		 * 
 		 * Plays the specified stream with respect to provided arguments.
 		 */
 		override public function play(...args):void 
@@ -156,8 +156,6 @@ package org.osmf.net.httpstreaming
 		}
 
 		/**
-		 * @private
-		 * 
 		 * Plays the specified stream and supports dynamic switching and alternate audio streams. 
 		 */
 		override public function play2(param:NetStreamPlayOptions):void
@@ -183,8 +181,6 @@ package org.osmf.net.httpstreaming
 		} 
 		
 		/**
-		 * @private
-		 * 
 		 * Seeks into the media stream for the specified offset in seconds.
 		 */
 		override public function seek(offset:Number):void
@@ -206,7 +202,6 @@ package org.osmf.net.httpstreaming
 					_seekTarget = offset + _initialTime;
 				}
 				
-				super.seek(offset);
 				setState(HTTPStreamingState.SEEK);		
 			}
 			
@@ -214,8 +209,6 @@ package org.osmf.net.httpstreaming
 		}
 
 		/**
-		 * @private
-		 * 
 		 * Closes the NetStream object.
 		 */
 		override public function close():void
@@ -239,9 +232,25 @@ package org.osmf.net.httpstreaming
 		override public function set bufferTime(value:Number):void
 		{
 			super.bufferTime = value;
-			_desiredBufferTime = Math.max(MINIMUM_VOD_BUFFER_TIME, value);
+			_desiredBufferTime_Min = Math.max(MINIMUM_BUFFER_TIME, value);
+			_desiredBufferTime_Max = _desiredBufferTime_Min + ADDITIONAL_BUFFER_TIME;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
+		override public function get time():Number
+		{
+			if(_seekTime >= 0 && _initialTime >= 0)
+			{
+				_lastValidTimeTime = (super.time + _seekTime) - _initialTime; 
+				//  we remember what we say when time is valid, and just spit that back out any time we don't have valid data. This is probably the right answer.
+				//  the only thing we could do better is also run a timer to ask ourselves what it is whenever it might be valid and save that, just in case the
+				//  user doesn't ask... but it turns out most consumers poll this all the time in order to update playback position displays
+			}
+			return _lastValidTimeTime;
+		}
+
 		///////////////////////////////////////////////////////////////////////
 		/// Custom public API - specific to HTTPNetStream 
 		///////////////////////////////////////////////////////////////////////
@@ -286,6 +295,7 @@ package org.osmf.net.httpstreaming
 		///////////////////////////////////////////////////////////////////////
 		/**
 		 * @private
+		 * 
 		 * Saves the current state of the object and sets it to the value specified.
 		 **/ 
 		private function setState(value:String):void
@@ -391,6 +401,7 @@ package org.osmf.net.httpstreaming
 				CONFIG::LOGGING
 				{
 					logger.debug("Stream source is ready so we can initiate change audio stream to [" + _desiredAudioStreamName + "]");
+					logger.debug("Audio information: total bytes proccessed=" + this.info.audioByteCount + ", audio buffer=" + this.info.audioBufferLength + ".");
 				}
 				
 				var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(_resource, _desiredAudioStreamName);
@@ -411,7 +422,24 @@ package org.osmf.net.httpstreaming
 			
 			_notifyPlayUnpublishPending = false;
 		}
-
+		
+		/**
+		 * @private
+		 * 
+		 * Event handler for net status events. 
+		 */
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.HALT) 
+			{
+				if (_notifyPlayUnpublishPending)
+				{
+					notifyPlayUnpublish();
+					_notifyPlayUnpublishPending = false; 
+				}
+			}
+		}
+		
 		/**
 		 * @private
 		 * 
@@ -430,7 +458,7 @@ package org.osmf.net.httpstreaming
 					// if we are getting dry then go back into
 					// active play mode and get more bytes 
 					// from the stream provider
-					if ( this.bufferLength < (_desiredBufferTime + 2))
+					if (this.bufferLength < _desiredBufferTime_Max)
 					{
 						setState(HTTPStreamingState.PLAY);
 					}
@@ -442,13 +470,16 @@ package org.osmf.net.httpstreaming
 					// we may call seek before our stream provider is
 					// able to fulfill our request - so we'll stay in seek
 					// mode until the provider is ready.
-					CONFIG::FLASH_10_1
-					{
-						appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-					}
-					
 					if (_source.isReady)
 					{
+						_enhancedSeekTarget = _seekTarget;
+						
+						super.seek(_seekTarget);
+						CONFIG::FLASH_10_1
+						{
+							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+						}
+						
 						_seekTime = -1;
 						_source.seek(_seekTarget);
 						setState(HTTPStreamingState.WAIT);
@@ -471,6 +502,7 @@ package org.osmf.net.httpstreaming
 						changeAudioStreamTo(_desiredAudioStreamName);
 					}
 					
+										
 					var processed:int = 0;
 					var processedLimit:int = 40000;//65000 * 4;
 					var keepProcessing:Boolean = true;
@@ -506,7 +538,7 @@ package org.osmf.net.httpstreaming
 							// if our buffer has grown big enough then go into wait
 							// mode where we let the NetStream consume the buffered 
 							// data
-							if (this.bufferLength > _desiredBufferTime)
+							if (this.bufferLength > _desiredBufferTime_Min)
 							{
 								setState(HTTPStreamingState.WAIT);
 							}
@@ -591,7 +623,7 @@ package org.osmf.net.httpstreaming
 						}
 					}
 					
-					if (_playForDuration >= 0)
+					if (_enhancedSeekTarget >= 0 || _playForDuration >= 0)
 					{
 						_flvParserIsSegmentStart = true;	
 					}
@@ -679,6 +711,42 @@ package org.osmf.net.httpstreaming
 					, {code:NetStreamCodes.NETSTREAM_PLAY_START, level:"status"}
 				)
 			); 
+		}
+
+		/**
+		 * @private
+		 * 
+		 * We notify that the playback stopped only when close method is invoked.
+		 * We do that by dispatching a NETSTREAM_PLAY_STOP NetStatusEvent.
+		 */
+		private function notifyPlayStop():void
+		{
+			dispatchEvent(
+				new NetStatusEvent( 
+					NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_STOP, level:"status"}
+				)
+			); 
+		}
+
+		/**
+		 * @private
+		 * 
+		 * We dispatch NETSTREAM_PLAY_UNPUBLISH event when we are preparing
+		 * to stop the HTTP processing.
+		 */		
+		private function notifyPlayUnpublish():void
+		{
+			dispatchEvent(
+				new NetStatusEvent( 
+					NetStatusEvent.NET_STATUS
+					, false
+					, false
+					, {code:NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY, level:"status"}
+				)
+			);
 		}
 
 		/**
@@ -806,11 +874,11 @@ package org.osmf.net.httpstreaming
 				_flvParserProcessed += consumeAllScriptDataTags(tag.timestamp);
 			}
 			
+			var currentTime:Number = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
 			if (_playForDuration >= 0)
 			{
 				if (_initialTime >= 0)	// until we know this, we don't know where to stop, and if we're enhanced-seeking then we need that logic to be what sets this up
 				{
-					var currentTime:Number = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
 					if (currentTime > (_initialTime + _playForDuration))
 					{
 						setState(HTTPStreamingState.STOP);
@@ -826,22 +894,123 @@ package org.osmf.net.httpstreaming
 				}
 			}
 			
-			if (_initialTime < 0)
-			{
-				if (_dvrInfo != null)
-				{
-					_initialTime = _dvrInfo.startTime;
-				}
-				else
-				{
-					_initialTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
-				}
-			}
 			
-			if (_seekTime < 0)
+			if (_enhancedSeekTarget < 0)
 			{
-				_seekTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
-			}
+				if (_initialTime < 0)
+				{
+					_initialTime = _dvrInfo != null ? _dvrInfo.startTime : currentTime;
+				}
+				if (_seekTime < 0)
+				{
+					_seekTime = currentTime;
+				}
+			}		
+			else // doing enhanced seek
+			{
+				if (tag is FLVTagVideo)
+				{	
+					if (_flvParserIsSegmentStart)	
+					{
+						var _muteTag:FLVTagVideo = new FLVTagVideo();
+						_muteTag.timestamp = tag.timestamp; // may get overwritten, ok
+						_muteTag.codecID = FLVTagVideo(tag).codecID; // same as in use
+						_muteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
+						_muteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_START;
+						// and start saving, with this as the first...
+						_enhancedSeekTags = new Vector.<FLVTagVideo>();
+						_enhancedSeekTags.push(_muteTag);
+						_flvParserIsSegmentStart = false;
+					}	
+					
+					if ((tag.timestamp / 1000.0) + _fileTimeAdjustment >= _enhancedSeekTarget)
+					{
+						_enhancedSeekTarget = -1;
+						_seekTime = (tag.timestamp  / 1000.0) + _fileTimeAdjustment;
+						if(_initialTime < 0)
+						{
+							_initialTime = _seekTime;
+						}
+						
+						var _unmuteTag:FLVTagVideo = new FLVTagVideo();
+						_unmuteTag.timestamp = tag.timestamp;  // may get overwritten, ok
+						_unmuteTag.codecID = (_enhancedSeekTags[0]).codecID;	// take the codec ID of the corresponding SEEK_START
+						_unmuteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
+						_unmuteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_END;
+						
+						_enhancedSeekTags.push(_unmuteTag);	
+						
+						// twiddle and dump
+						
+						for (i=0; i<_enhancedSeekTags.length; i++)
+						{
+							var vTag:FLVTagVideo;
+							
+							vTag = _enhancedSeekTags[i];
+							//vTag.timestamp = tag.timestamp;
+							if (vTag.codecID == FLVTagVideo.CODEC_ID_AVC && vTag.avcPacketType == FLVTagVideo.AVC_PACKET_TYPE_NALU)
+							{
+								// for H.264 we need to move the timestamp forward but the composition time offset backwards to compensate
+								var adjustment:int = tag.timestamp - vTag.timestamp; // how far we are adjusting
+								var compTime:int = vTag.avcCompositionTimeOffset;
+								compTime = vTag.avcCompositionTimeOffset;
+								compTime -= adjustment; // do the adjustment
+								vTag.avcCompositionTimeOffset = compTime;	// save adjustment
+								vTag.timestamp = tag.timestamp; // and adjust the timestamp forward
+							}
+							else
+							{
+								// the simple case
+								vTag.timestamp = tag.timestamp;
+							}
+							bytes = new ByteArray();
+							vTag.write(bytes);
+							_flvParserProcessed += bytes.length;
+							attemptAppendBytes(bytes);
+						}
+						_enhancedSeekTags = null;
+						
+						// and append this one
+						bytes = new ByteArray();
+						tag.write(bytes);
+						_flvParserProcessed += bytes.length;
+						attemptAppendBytes(bytes);
+						if (_playForDuration >= 0)
+						{
+							return true;	// need to continue seeing the tags, and can't shortcut because we're being dropped off mid-segment
+						}
+						_flvParserDone = true;
+						return false;	// and end of parsing (caller must dump rest, unparsed)
+						
+					} // past enhanced seek target
+					else
+					{
+						_enhancedSeekTags.push(tag);
+					}
+				} // is video
+				else if (tag is FLVTagScriptDataObject)
+				{
+					// ScriptDataObject tags simply pass through with unadjusted timestamps rather than discarding or saving for later
+					bytes = new ByteArray();
+					tag.write(bytes);
+					_flvParserProcessed += bytes.length;
+					attemptAppendBytes(bytes);
+				} // else tag is FLVTagAudio, which we discard, unless...			
+				else if (tag is FLVTagAudio) 
+				{
+					var aTag:FLVTagAudio = tag as FLVTagAudio;
+					if (aTag.isCodecConfiguration)	// need to pass this through? (ex. AAC AudioConfig message)
+					{
+						// yes, can never skip initialization...
+						bytes = new ByteArray();
+						tag.write(bytes);
+						_flvParserProcessed += bytes.length;
+						attemptAppendBytes(bytes);
+					}
+				}
+				
+				return true;
+			} // enhanced seek
 			
 			// finally, pass this one on to appendBytes...
 			var bytes:ByteArray = new ByteArray();
@@ -888,15 +1057,16 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onScriptData(event:HTTPStreamingEvent):void
 		{
-			CONFIG::LOGGING
-			{
-				logger.debug("onScriptData called with mode [" + event.scriptDataMode + "]");
-			}
 			if (event.scriptDataMode == null || event.scriptDataObject == null)
 			{
 				return;
 			}
-			
+
+			CONFIG::LOGGING
+			{
+				logger.debug("onScriptData called with mode [" + event.scriptDataMode + "].");
+			}
+
 			switch (event.scriptDataMode)
 			{
 				case FLVTagScriptDataMode.NORMAL:
@@ -913,6 +1083,11 @@ package org.osmf.net.httpstreaming
 						var methodName:* = event.scriptDataObject.objects[0];
 						var methodParameters:* = event.scriptDataObject.objects[1];
 						
+						CONFIG::LOGGING
+						{
+							logger.debug(methodName + " invoked."); 
+						}
+						
 						if (client.hasOwnProperty(methodName))
 						{
 							// XXX note that we can only support a single argument for immediate dispatch
@@ -923,23 +1098,6 @@ package org.osmf.net.httpstreaming
 			}
 		}
 		
-		/**
-		 * @private
-		 * 
-		 * Event handler for net status events. 
-		 */
-		private function onNetStatus(event:NetStatusEvent):void
-		{
-			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.HALT) 
-			{
-				if (_notifyPlayUnpublishPending)
-				{
-					notifyPlayUnpublish();
-					_notifyPlayUnpublishPending = false; 
-				}
-			}
-		}
-
 		/**
 		 * @private
 		 * 
@@ -955,52 +1113,6 @@ package org.osmf.net.httpstreaming
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////
-		
-		/**
-		 * @private
-		 */
-		override public function get time():Number
-		{
-			if(_seekTime >= 0 && _initialTime >= 0)
-			{
-				_lastValidTimeTime = (super.time + _seekTime) - _initialTime; 
-				//  we remember what we say when time is valid, and just spit that back out any time we don't have valid data. This is probably the right answer.
-				//  the only thing we could do better is also run a timer to ask ourselves what it is whenever it might be valid and save that, just in case the
-				//  user doesn't ask... but it turns out most consumers poll this all the time in order to update playback position displays
-			}
-			return _lastValidTimeTime;
-		}
-		
-		/// Internal
-		
-		
-		
-
-		///////////////////////////////////////////////////////////////////////
-		/// Internals
-		///////////////////////////////////////////////////////////////////////
-
-		
-		
-
-//		/**
-//		 * Event handler for FRAGMENT_DURATION updates. We use this
-//		 * event to update our buffer estimates.
-//		 */
-//		private function onFragmentDuration(event:HTTPStreamingEvent):void
-//		{
-//			if (event.target == _mediaHandler)
-//			{
-//				_mediaBufferRemaining += event.fragmentDuration * 1000;
-//				_mediaFragmentDuration = event.fragmentDuration;
-//			}
-//			else if (event.target == _audioHandler)
-//			{
-//				_audioBufferRemaining += event.fragmentDuration * 1000;
-//				_audioFragmentDuration = event.fragmentDuration;
-//			}
-//		}
-//		
 //		/**
 //		 * @private
 //		 * 
@@ -1044,108 +1156,71 @@ package org.osmf.net.httpstreaming
 //			}
 //		}
 
-		/**
-		 * @private
-		 * 
-		 * Event handler for all index handler errors.
-		 */		
-		private function onIndexError(event:HTTPStreamingEvent):void
-		{
-			notifyURLError(null);
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * Event handler for all file handler errors.
-		 */  
-		private function onFileError(event:HTTPStreamingEvent):void
-		{
-			notifyFileError(null);
-		}
-
-
-		/**
-		 * @private
-		 * 
-		 * We notify that some error occured when processing the specified file.
-		 * We actually map all URL errors to NETSTREAM_PLAY_STREAMNOTFOUND NetStatusEvent.
-		 * You can check the details property to see the url which triggered 
-		 * this error.
-		 */
-		private function notifyFileError(url:String):void
-		{
-			dispatchEvent( 
-				new NetStatusEvent( 
-					NetStatusEvent.NET_STATUS
-					, false
-					, false
-					, {code:NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID, level:"error", details:url}
-				)
-			);
-		}
-
-		
-		/**
-		 * @private
-		 * 
-		 * We notify that the playback stopped only when close method is invoked.
-		 * We do that by dispatching a NETSTREAM_PLAY_STOP NetStatusEvent.
-		 */
-		private function notifyPlayStop():void
-		{
-			dispatchEvent(
-				new NetStatusEvent( 
-					NetStatusEvent.NET_STATUS
-					, false
-					, false
-					, {code:NetStreamCodes.NETSTREAM_PLAY_STOP, level:"status"}
-				)
-			); 
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * We dispatch NETSTREAM_PLAY_UNPUBLISH event when we are preparing
-		 * to stop the HTTP processing.
-		 */		
-		private function notifyPlayUnpublish():void
-		{
-			dispatchEvent(
-				new NetStatusEvent( 
-					NetStatusEvent.NET_STATUS
-					, false
-					, false
-					, {code:NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY, level:"status"}
-				)
-			);
-		}
-
-		
-		/**
-		 * @private
-		 * 
-		 * We notify that it was some error when downloading the desired url.
-		 * We actually map all URL errors to NETSTREAM_PLAY_STREAMNOTFOUND NetStatusEvent.
-		 * You can check the details property to see the url which triggered 
-		 * this error.
-		 */
-		private function notifyURLError(url:String):void
-		{
-			dispatchEvent(
-				new NetStatusEvent( 
-					NetStatusEvent.NET_STATUS
-					, false
-					, false
-					, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error", details:url}
-				)
-			);
-		}
+//		/**
+//		 * @private
+//		 * 
+//		 * Event handler for all index handler errors.
+//		 */		
+//		private function onIndexError(event:HTTPStreamingEvent):void
+//		{
+//			notifyURLError(null);
+//		}
+//		
+//		/**
+//		 * @private
+//		 * 
+//		 * Event handler for all file handler errors.
+//		 */  
+//		private function onFileError(event:HTTPStreamingEvent):void
+//		{
+//			notifyFileError(null);
+//		}
+//
+//		/**
+//		 * @private
+//		 * 
+//		 * We notify that some error occured when processing the specified file.
+//		 * We actually map all URL errors to NETSTREAM_PLAY_STREAMNOTFOUND NetStatusEvent.
+//		 * You can check the details property to see the url which triggered 
+//		 * this error.
+//		 */
+//		private function notifyFileError(url:String):void
+//		{
+//			dispatchEvent( 
+//				new NetStatusEvent( 
+//					NetStatusEvent.NET_STATUS
+//					, false
+//					, false
+//					, {code:NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID, level:"error", details:url}
+//				)
+//			);
+//		}
+//
+//		/**
+//		 * @private
+//		 * 
+//		 * We notify that it was some error when downloading the desired url.
+//		 * We actually map all URL errors to NETSTREAM_PLAY_STREAMNOTFOUND NetStatusEvent.
+//		 * You can check the details property to see the url which triggered 
+//		 * this error.
+//		 */
+//		private function notifyURLError(url:String):void
+//		{
+//			dispatchEvent(
+//				new NetStatusEvent( 
+//					NetStatusEvent.NET_STATUS
+//					, false
+//					, false
+//					, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error", details:url}
+//				)
+//			);
+//		}
 		
 		/// Internals
-		private static const MINIMUM_VOD_BUFFER_TIME:Number = 4;
-		private var _desiredBufferTime:Number = 0;
+		private static const MINIMUM_BUFFER_TIME:Number = 4;
+		private static const ADDITIONAL_BUFFER_TIME:Number = 2;
+		private var _desiredBufferTime_Min:Number = 0;
+		private var _desiredBufferTime_Max:Number = 0;
 				
 		private static const MAIN_TIMER_INTERVAL:int = 25;
 		private var _mainTimer:Timer = null;
@@ -1165,6 +1240,8 @@ package org.osmf.net.httpstreaming
 		private var _desiredAudioStreamName:String = null;
 		
 		private var _seekTarget:Number = -1;
+		private var _enhancedSeekTarget:Number = -1;
+		private var _enhancedSeekTags:Vector.<FLVTagVideo>;
 
 		private var _notifyPlayStartPending:Boolean = false;
 		private var _notifyPlayUnpublishPending:Boolean = false;
@@ -1184,31 +1261,7 @@ package org.osmf.net.httpstreaming
 		private var _fileTimeAdjustment:Number = 0;	// this is what must be added (IN SECONDS) to the timestamps that come in FLVTags from the file handler to get to the index handler timescale
 		// XXX an event to set the _fileTimestampAdjustment is needed
 
-		
-		
-		
 		private var _mediaFragmentDuration:Number = 0;
-		
-		
-//		private var _mediaSeekTarget:Number = -1;
-//		private var _mediaHasChanged:Boolean = false;
-//		private var _mediaNeedsChanging:Boolean = false;
-//		private var _mediaUrl:String = null;
-//		private var _mediaHandler:HTTPStreamSourceHandler = null;
-//		private var _mediaRequest:HTTPStreamRequest = null;
-//		private var _mediaBufferRemaining:Number = 0;
-//		private var _mediaFragmentDuration:Number = 0;
-//		private var _mediaIsReady:Boolean = false;
-//		
-//		private var _audioSeekTarget:Number = -1;
-//		private var _audioHasChanged:Boolean = false;
-//		private var _audioNeedsChanging:Boolean = false;
-//		private var _audioUrl:String = null;
-//		private var _audioHandler:HTTPStreamSourceHandler = null;
-//		private var _audioRequest:HTTPStreamRequest = null;
-//		private var _audioBufferRemaining:Number = 0;
-//		private var _audioFragmentDuration:Number = 0;
-		
 		
 		private var _dvrInfo:DVRInfo = null;
 				

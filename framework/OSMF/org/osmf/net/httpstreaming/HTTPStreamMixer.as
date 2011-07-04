@@ -137,13 +137,17 @@ package org.osmf.net.httpstreaming
 			setState(HTTPStreamMixerState.SEEK);
 			
 			clearInternalBuffers();
-			if (_videoHandler != null)
+			if (_desiredAudioHandler != null)
 			{
-				_videoHandler.source.seek(offset);
+				_desiredAudioHandler.source.seek(offset);
 			}
 			if (_audioHandler != null)
 			{
 				_audioHandler.source.seek(offset);
+			}
+			if (_videoHandler != null)
+			{
+				_videoHandler.source.seek(offset);
 			}
 		}
 		
@@ -170,8 +174,9 @@ package org.osmf.net.httpstreaming
 			{
 				CONFIG::LOGGING
 				{
-					logger.debug(value == null ? "No specific audio source. Use default." : "Specific audio source selected.");
+					logger.debug( value == null ? "No specific audio source. Use default." : "Specific audio source selected.");
 				}
+				
 				_desiredAudioHandler = value;
 				_audioNeedsInitialization = true;
 				
@@ -623,10 +628,10 @@ package org.osmf.net.httpstreaming
 		private function onBeginFragment(event:HTTPStreamingEvent):void
 		{
 			if (_audioNeedsInitialization)
-			{
+			{	
 				CONFIG::LOGGING
 				{
-					logger.debug("We are at a fragment boundry [state = " + _state + "]. We should switch alternative audio.");
+					logger.debug("We are at a fragment boundary [state = " + _state + "]. We should switch alternative audio.");
 				}
 				
 				if (_audioHandler != null)
