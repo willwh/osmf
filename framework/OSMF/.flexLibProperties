@@ -240,7 +240,11 @@
     <classEntry path="org.osmf.net.httpstreaming.DownloadRatioRule"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStream"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStreamMetrics"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamDownloader"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamMixer"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamQoSInfo"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamRequest"/>
+    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamSource"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFactory"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase"/>
@@ -249,6 +253,8 @@
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingState"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingSwitchManager"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingUtils"/>
+    <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamHandler"/>
+    <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamSource"/>
     <classEntry path="org.osmf.net.httpstreaming.dvr.DVRInfo"/>
     <classEntry path="org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait"/>
     <classEntry path="org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait"/>
@@ -311,10 +317,6 @@
     <classEntry path="org.osmf.utils.TimeUtil"/>
     <classEntry path="org.osmf.utils.URL"/>
     <classEntry path="org.osmf.utils.Version"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamMixer"/>
-    <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamSource"/>
-    <classEntry path="org.osmf.net.httpstreaming.IHTTPStreamHandler"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamMixerState"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
