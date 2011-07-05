@@ -130,11 +130,14 @@ package org.osmf.net.rtmpstreaming
 		
 		// Override test so it will be ignore_
 		
-		override public function testStreamReconnectWithInvalidFMSVersion():void
+		CONFIG::FLASH_10_1	
 		{
-			
-		}
 		
+			override public function testStreamReconnectWithInvalidFMSVersion():void
+			{
+			
+			}
+		}
 		private var eventDispatcher:EventDispatcher;
 		private var _dsResource:DynamicStreamingResource;		
 		
