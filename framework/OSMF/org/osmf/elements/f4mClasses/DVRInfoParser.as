@@ -111,6 +111,10 @@ package org.osmf.elements.f4mClasses
 					{
 						dvrInfo.windowDuration = -1;
 					}
+					else
+					{
+						dvrInfo.windowDuration = v;
+					}
 				}
 				else
 				{
