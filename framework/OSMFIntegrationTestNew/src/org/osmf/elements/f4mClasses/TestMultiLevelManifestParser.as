@@ -18,6 +18,8 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.elements.ManifestLoaderBase;
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.f4mClasses.MultiLevelManifestParser;
+	import org.osmf.events.DRMEvent;
+	import org.osmf.events.DVREvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.events.ParseEvent;
@@ -158,7 +160,7 @@ package org.osmf.elements.f4mClasses
 					, function(event:ParseEvent):void
 					{
 						var manifest:Manifest = event.data as Manifest;
-						Assert.assertEquals(manifest.dvrInfo.windowDuration, 0);
+						Assert.assertEquals(manifest.dvrInfo.windowDuration, -1);
 					}
 				);
 		}
@@ -172,7 +174,21 @@ package org.osmf.elements.f4mClasses
 					, function(event:ParseEvent):void
 					{
 						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.windowDuration, -1);
+					}
+				);
+		}
+		
+		[Test(description="Tests when default=-1 windowDuration parameter is parsed.")]
+		public function testWindowDefaultDuration():void
+		{
+			parser2.parse(F4M_WITH_DEFAULT_WINDOW_DURATION, MLM_PATH);
+			parser.addEventListener
+				( ParseEvent.PARSE_COMPLETE 
+					, function(event:ParseEvent):void
+					{
+						var manifest:Manifest = event.data as Manifest;
+						assertEquals(manifest.dvrInfo.windowDuration, -1);
 					}
 				);
 		}
@@ -214,7 +230,7 @@ package org.osmf.elements.f4mClasses
 					, function(event:ParseEvent):void
 					{
 						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.windowDuration, -1);
 					}
 				);
 		}
@@ -228,7 +244,7 @@ package org.osmf.elements.f4mClasses
 					, function(event:ParseEvent):void
 					{
 						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.windowDuration, -1);
 						assertEquals(manifest.dvrInfo.id, "myid");
 
 					}
@@ -244,7 +260,7 @@ package org.osmf.elements.f4mClasses
 					, function(event:ParseEvent):void
 					{
 						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.windowDuration, -1);
 						assertEquals(manifest.dvrInfo.endOffset, 100);
 						assertEquals(manifest.dvrInfo.beginOffset, 900);
 					}
@@ -260,7 +276,7 @@ package org.osmf.elements.f4mClasses
 					, function(event:ParseEvent):void
 					{
 						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.windowDuration, -1);
 						assertEquals(manifest.dvrInfo.endOffset, 0);
 						assertEquals(manifest.dvrInfo.beginOffset, 0);
 					}
@@ -292,7 +308,7 @@ package org.osmf.elements.f4mClasses
 					, function(event:ParseEvent):void
 					{
 						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 0);
+						assertEquals(manifest.dvrInfo.windowDuration, -1);
 						assertEquals(manifest.dvrInfo.endOffset, 0);
 						assertEquals(manifest.dvrInfo.beginOffset, 0);
 					}
@@ -336,6 +352,7 @@ package org.osmf.elements.f4mClasses
 				}
 			}
 			
+			
 			function onMediaError(event:MediaErrorEvent):void
 			{
 				trace("[Error]", event.toString());	
@@ -373,7 +390,7 @@ package org.osmf.elements.f4mClasses
 				{
 					case MediaPlayerState.READY:
 					{	
-						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 0);
+						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, -1);
 						player.dispatchEvent(new Event("TestEnd"));
 					}
 						break;
@@ -554,9 +571,10 @@ package org.osmf.elements.f4mClasses
 						assertEquals(dsResource.streamItems[2].bitrate, 1800);
 						assertEquals(dsResource.streamItems[3].bitrate, 2400);
 						assertEquals(player.numAlternativeAudioStreams, 2);
-						
-						assertEquals(player.getAlternativeAudioItemAt(0).bitrate, 127);
-						assertEquals(player.getAlternativeAudioItemAt(1).bitrate, 129);
+						//assertEquals(player.getAlternativeAudioItemAt(1).bitrate, 127);
+						//assertEquals(player.getAlternativeAudioItemAt(0).bitrate, 129);
+						//the async nature of MLM does not guarantee that the alternate media will be in the same order, thus:
+						assertEquals(player.getAlternativeAudioItemAt(1).bitrate + player.getAlternativeAudioItemAt(0).bitrate, 256);
 						
 						
 						assertEquals(player.numDynamicStreams, 4);
@@ -599,6 +617,17 @@ package org.osmf.elements.f4mClasses
 		
 		private static const WINDOW_DURATION:Number = 180;
 		
+		private static const F4M_WITH_DEFAULT_WINDOW_DURATION:String = 
+			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+			"<manifest xmlns=\"http://ns.adobe.com/f4m/2.0\">" +
+			"<id>1_rps9u31c</id>" +
+			"<mimeType>video/x-flv</mimeType>" +
+			"<streamType>recorded</streamType>" +
+			"<dvrInfo windowDuration=\"-" + WINDOW_DURATION + "\" />" +
+			"<duration>2824</duration>" +
+			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
+			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
+			"</manifest>";
 		
 		private static const F4M_WITH_NEGATIVE_WINDOW_DURATION:String = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
@@ -606,7 +635,7 @@ package org.osmf.elements.f4mClasses
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
-			"<dvrInfo windowDuration=\"-" + WINDOW_DURATION + "\" />" +
+			"<dvrInfo windowDuration=\"-1\" />" +
 			"<duration>2824</duration>" +
 			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
 			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
