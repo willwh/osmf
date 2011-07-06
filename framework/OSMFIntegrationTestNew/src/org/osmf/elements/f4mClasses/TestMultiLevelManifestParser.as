@@ -20,6 +20,7 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.elements.f4mClasses.MultiLevelManifestParser;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.DVREvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.events.ParseEvent;
@@ -33,6 +34,7 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.net.StreamType;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.TraitEventDispatcher;
 	import org.osmf.utils.URL;
 	
 	
@@ -325,6 +327,8 @@ package org.osmf.elements.f4mClasses
 
 			var player:MediaPlayer = new MediaPlayer();
 			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
+			mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener("TestEnd", asyncHandler);
 			
@@ -338,16 +342,28 @@ package org.osmf.elements.f4mClasses
 				{
 					case MediaPlayerState.READY:
 					{	
-						player.play();
+						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
+						player.dispatchEvent(new Event("TestEnd"));
+						//player.play();
 					}
 						break;
 					case MediaPlayerState.LOADING:
 						break;
 					
 					case MediaPlayerState.PLAYING:
-						assertEquals((player.media.getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
 						player.stop();
-						player.dispatchEvent(new Event("TestEnd"));
+						break;
+				}
+			}
+			
+			function onTraitAdd(event:MediaElementEvent):void
+			{
+				switch (event.traitType)
+				{
+					case MediaTraitType.DVR:
+					{	
+						assertEquals(((event.target as MediaElement).getTrait(MediaTraitType.DVR) as DVRTrait).windowDuration, 177);
+					}
 						break;
 				}
 			}
