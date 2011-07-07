@@ -139,36 +139,5 @@ package org.osmf.net.httpstreaming
 		 *  @productversion OSMF 1.0
 		 */
 		internal static const HALT:String = "halt";	
-		
-		/**
-		 * Indicates that HDS-related object is undecided about the way stream 
-		 * data should be handled.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.6
-		 */
-		public static const CONSUME_UNDECIDED:String = "consumeUndecided";
-		
-		/**
-		 * Indicates that HDS-related stream data is just pass-though.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.6
-		 */
-		public static const CONSUME_PASS_THROUGH:String = "consumePassThrough";
-		
-		/**
-		 * Indicates that HDS-related stream data is fully mixed.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.6
-		 */
-		public static const CONSUME_MIXED:String = "consumeMixed";
 	}
 }

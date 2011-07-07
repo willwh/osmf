@@ -216,7 +216,10 @@
 			private function onPlayerCurrentTimeChange(event:TimeEvent):void
 			{
 				if (event.time >= sldSeek.minimum && event.time <= sldSeek.maximum) 
+				{
 					sldSeek.value = event.time;
+					lblTime.text = Number(event.time).toFixed(3);
+				}
 			}
 			
 			/**
@@ -290,7 +293,6 @@
 			{
 				if (!player.playing)
 				{
-					player.bufferTime = 0.1;
 					if (player.canPlay)
 						player.play();
 				}
@@ -367,73 +369,85 @@
 			protected var urls:ArrayCollection = null;
 			private static const URLS:Array = 
 						[
-							{
-								label:"Rolling window",
-								data:"http://10.131.165.62/live/events/livehds/events/_definst_/liveevent.f4m"
-							},
+//							{
+//								label:"Synced video and audio",
+//								data:"http://10.131.237.104/hds-live/latebind_sync/_definst_/liveevent.f4m"
+//							},
+//							{
+//								label:"Rolling window",
+//								data:"http://10.131.165.62/live/events/livehds/events/_definst_/liveevent.f4m"
+//							},
 							{
 								label:"VOD: 1 video with 2 alternative audio tracks", 
 								data:"http://10.131.165.85/vod/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m"	
 							},
-							{
-								label:"Seek outside buffer", 
-								data:"http://10.131.237.107/vod/hs/vod/ex.f4m"
-							},
-							{
-								label:"Legacy HDS manifest", 
-								data:"http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m"	
-							},
-							{
-								label:"Legacy Live HDS manifest",
-								data:"http://10.131.237.107/live/videostream.f4m"
-							},
-							{
-								label:"Legacy Live HDS with DVR",
-								data:" http://10.131.237.107/live/events/hs_sbr_dvr/events/_definst_/liveevent.f4m"
-							},
-							{ 
-								label:"Legacy Live HDS manifest with MBR",
-								data:"http://10.131.237.107/live/events/hs_mbr_live/events/_definst_/liveevent.f4m"
-							},
-							{
-								label:"Legacy live HDS manifest without DVR",
-								data:"http://10.122.233.48/live/events/livepkgr/events/_definst_/liveevent.f4m" 
-							},
+//							{
+//								label:"Seek outside buffer", 
+//								data:"http://10.131.237.107/vod/hs/vod/ex.f4m"
+//							},
+//							{
+//								label:"Legacy HDS manifest", 
+//								data:"http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m"	
+//							},
+//							{
+//								label:"Legacy Live HDS manifest",
+//								data:"http://10.131.237.107/live/videostream.f4m"
+//							},
+//							{
+//								label:"Legacy Live HDS with DVR",
+//								data:" http://10.131.237.107/live/events/hs_sbr_dvr/events/_definst_/liveevent.f4m"
+//							},
+//							{ 
+//								label:"Legacy Live HDS manifest with MBR",
+//								data:"http://10.131.237.107/live/events/hs_mbr_live/events/_definst_/liveevent.f4m"
+//							},
+//							{
+//								label:"Legacy live HDS manifest without DVR",
+//								data:"http://10.122.233.48/live/events/livepkgr/events/_definst_/liveevent.f4m" 
+//							},
 							{
 								label:"VOD: 1 audio-video with 2 alternative audio tracks",
 								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m"	
 							},
-							{
-								label:"MBR: 1 mbr stream with 2 alternative audio tracks",
-								data:"http://10.131.237.107/vod/mbr/sample1_audio2.f4m"	
-							},
+//							{
+//								label:"MBR: 1 mbr stream with 2 alternative audio tracks",
+//								data:"http://10.131.237.107/vod/mbr/sample1_audio2.f4m"	
+//							},
 							{
 								label:"LIVE: 1 video with 2 alternative audio tracks",
 								data:"http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m"
 							},
+//							{
+//								label:"LIVE: 1 video with 1 alternate audio track",
+//								data:"http://10.131.237.107/live/purelive_lba.f4m"
+//							},
+//							{
+//								label:"LIVE: audio only",
+//								data:"http://10.131.237.107/live/events/live_audio_only/events/_definst_/liveevent_audio_only.f4m"
+//							},
+//							{	
+//								label:"SeeSaw/ioko SBR protected content 1 (700)",
+//								data:"http://10.131.237.107/vod/mbr/drm/sample1_drm_700kbps.f4m" //http://10.131.237.107/vod/SeeSaw/35321_single_796.f4m"
+//							},
+//							{	
+//								label:"SeeSaw/ioko SBR protected content 2 (1000)",
+//								data:"http://10.131.237.107/vod/mbr/drm/sample1_drm_1000kbps.f4m" //http://10.131.237.107/vod/SeeSaw/35322_single_500.f4m"
+//							},
+//							{	
+//								label:"SeeSaw/ioko SBR protected content 3 (1500)",
+//								data:"http://10.131.237.107/vod/mbr/drm/sample1_drm_1500kbps.f4m" //http://10.131.237.107/vod/SeeSaw/35323_single_1500.f4m"
+//							},
+//							{	
+//								label:"SeeSaw/ioko MBR protected content",
+//								data:"http://10.131.237.107/vod/mbr/drm/sample1_mbr_drm.f4m" //http://10.131.237.107/vod/SeeSaw/seesaw_mbr.f4m"
+//							},
 							{
-								label:"LIVE: 1 video with 1 alternate audio track",
-								data:"http://10.131.237.107/live/purelive_lba.f4m"
+								label:"LIVE: 1 video with 1 synced alternative audio track",
+								data:"http://10.131.237.104/hds-live/latebind_sync/_definst_/liveevent.f4m"
 							},
 							{
-								label:"LIVE: audio only",
-								data:"http://10.131.237.107/live/events/live_audio_only/events/_definst_/liveevent_audio_only.f4m"
-							},
-							{	
-								label:"SeeSaw/ioko SBR protected content 1 (700)",
-								data:"http://10.131.237.107/vod/mbr/drm/sample1_drm_700kbps.f4m" //http://10.131.237.107/vod/SeeSaw/35321_single_796.f4m"
-							},
-							{	
-								label:"SeeSaw/ioko SBR protected content 2 (1000)",
-								data:"http://10.131.237.107/vod/mbr/drm/sample1_drm_1000kbps.f4m" //http://10.131.237.107/vod/SeeSaw/35322_single_500.f4m"
-							},
-							{	
-								label:"SeeSaw/ioko SBR protected content 3 (1500)",
-								data:"http://10.131.237.107/vod/mbr/drm/sample1_drm_1500kbps.f4m" //http://10.131.237.107/vod/SeeSaw/35323_single_1500.f4m"
-							},
-							{	
-								label:"SeeSaw/ioko MBR protected content",
-								data:"http://10.131.237.107/vod/mbr/drm/sample1_mbr_drm.f4m" //http://10.131.237.107/vod/SeeSaw/seesaw_mbr.f4m"
+								label:"VOD: 1 audio-video with 2 shorter alternative audio tracks",
+								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_shorter_alternate_a/1_media_av_2_shorter_alternate_a.f4m"
 							}
 						];
 

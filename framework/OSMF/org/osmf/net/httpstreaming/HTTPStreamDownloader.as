@@ -89,6 +89,14 @@ package org.osmf.net.httpstreaming
 		}
 
 		/**
+		 * Returns true if the HTTP stream source has not been found or has some errors.
+		 */
+		public function get hasErrors():Boolean
+		{
+			return _hasErrors;
+		}
+		
+		/**
 		 * Returns the duration of the last download in seconds.
 		 */
 		public function get downloadDuration():Number
@@ -116,6 +124,7 @@ package org.osmf.net.httpstreaming
 					
 			_isComplete = false;
 			_hasData = false;
+			_hasErrors = false;
 			
 			if (_savedBytes == null)
 			{
@@ -158,6 +167,7 @@ package org.osmf.net.httpstreaming
 			_isOpen = false;
 			_isComplete = false;
 			_hasData = false;
+			_hasErrors = false;
 			
 			if (_savedBytes != null)
 			{
@@ -320,6 +330,7 @@ package org.osmf.net.httpstreaming
 				logger.error( "******* attempting to download video fragment caused error event!" );
 			}
 			
+			_hasErrors = true;
 			if (_dispatcher != null)
 			{
 				// We map all URL errors to Play.StreamNotFound.
@@ -338,6 +349,7 @@ package org.osmf.net.httpstreaming
 		private var _isOpen:Boolean = false;
 		private var _isComplete:Boolean = false;
 		private var _hasData:Boolean = false;
+		private var _hasErrors:Boolean = false;
 		private var _savedBytes:ByteArray = null;
 		private var _urlStream:URLStream = null;
 		private var _dispatcher:IEventDispatcher = null;

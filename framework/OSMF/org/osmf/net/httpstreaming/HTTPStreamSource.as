@@ -119,14 +119,16 @@ package org.osmf.net.httpstreaming
 			}
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function get source():IHTTPStreamSource
 		{
 			return this;
 		}
 		
 		/**
-		 * Flag indicating that the stream is ready to perform
-		 * any operation ( like seek, change quality, etc)
+		 * @inheritDoc
 		 */
 		public function get isReady():Boolean
 		{
@@ -134,13 +136,19 @@ package org.osmf.net.httpstreaming
 		}
 
 		/**
-		 * Flag indicating that the current provider has 
-		 * reached the end of the stream and has no more 
-		 * data to process.
+		 * @inheritDoc
 		 */
 		public function get endOfStream():Boolean
 		{
 			return _endOfStream;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get hasErrors():Boolean
+		{
+			return _hasErrors;
 		}
 		
 		/**
@@ -386,6 +394,7 @@ package org.osmf.net.httpstreaming
 				
 				case HTTPStreamingState.BEGIN_FRAGMENT:
 					_endFragment = false;
+					_hasErrors = false;
 					if (_seekTarget != -1)
 					{
 						_fileHandler.beginProcessFile(true, _seekTarget);
@@ -423,6 +432,7 @@ package org.osmf.net.httpstreaming
 						else
 						{
 							_endFragment = (_downloader != null && _downloader.isOpen && _downloader.isComplete && !_downloader.hasData);
+							_hasErrors = (_downloader != null && _downloader.hasErrors);
 						}
 					}
 					
@@ -633,7 +643,17 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onScriptData(event:HTTPStreamingEvent):void
 		{
-			_dispatcher.dispatchEvent(event);
+			_dispatcher.dispatchEvent(
+				new HTTPStreamingEvent(
+					event.type,
+					event.bubbles,
+					event.cancelable,
+					event.fragmentDuration,
+					event.scriptDataObject,
+					event.scriptDataMode,
+					_streamName
+				)
+			);
 		}
 		
 		/**
@@ -750,6 +770,7 @@ package org.osmf.net.httpstreaming
 		private var _pendingIndexLoadingRequests:Vector.<HTTPStreamingIndexHandlerEvent> = new Vector.<HTTPStreamingIndexHandlerEvent>();
 		private var _pendingIndexLoadingRequestsLenght:int = 0;
 
+		private var _hasErrors:Boolean = false;
 		private var _isReady:Boolean = false;
 		private var _ratesAreReady:Boolean = false;
 		private var _endOfStream:Boolean = false;

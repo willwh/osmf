@@ -21,6 +21,19 @@
  *****************************************************/
 package org.osmf.net.httpstreaming
 {
+	[ExcludeClass]
+	
+	/**
+	 * @private
+	 * 
+	 * IHTTPStreamHandler interface defines the method and properties for
+	 * any class which can be used as a handler for HDS objects.
+	 * 
+	 * @langversion 3.0
+	 * @playerversion Flash 10
+	 * @playerversion AIR 1.5
+	 * @productversion OSMF 1.6
+	 */ 
 	public interface IHTTPStreamHandler
 	{
 		function get source():IHTTPStreamSource;
@@ -33,6 +46,5 @@ package org.osmf.net.httpstreaming
 		
 		function getDVRInfo(streamName:Object):void;
 		function changeQualityLevel(streamName:String):void;
-		
 	}
 }

@@ -29,7 +29,7 @@ package org.osmf.net.httpstreaming
 	 * @private
 	 * 
 	 * IHTTPStreamSource interface defines the method and properties for
-	 * any class which can be used as a source for HTTPNetStream objects.
+	 * any class which can be used as a source for HDS objects.
 	 * 
 	 * @langversion 3.0
 	 * @playerversion Flash 10
@@ -39,23 +39,31 @@ package org.osmf.net.httpstreaming
 	public interface IHTTPStreamSource
 	{
 		/**
-		 * Flag indicating that the stream is ready to perform
-		 * any operation ( like seek, change quality, etc)
+		 * Flag indicating that the source is ready to perform any operation 
+		 * ( like seek, change quality, etc)
 		 */
 		function get isReady():Boolean;
 		
 		/**
-		 * Flag indicating that the current provider has 
-		 * reached the end of the stream and has no more 
-		 * data to process.
+		 * Flag indicating that the source has reached the end of the stream 
+		 * and has no more data to process.
 		 */
 		function get endOfStream():Boolean;
 		
+		/**
+		 * Flag indicating that the source has encountered errors and it has no 
+		 * more data to process.
+		 */ 
+		function get hasErrors():Boolean;
+			
 		/**
 		 * Seeks to the specified offset in stream.
 		 */
 		function seek(offset:Number):void;
 		
+		/**
+		 * Gets a chunk of bytes from source for further processing.
+		 */
 		function getBytes():ByteArray;
 	}
 }

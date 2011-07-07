@@ -113,8 +113,10 @@ package org.osmf.net.httpstreaming
 			
 			setState(HTTPStreamingState.INIT);
 			
-			_source = new HTTPStreamMixer(this);
-			_source.video = new HTTPStreamSource(_factory, _resource, _source);
+			_mixer = new HTTPStreamMixer(this);
+			_mixer.video = new HTTPStreamSource(_factory, _resource, _mixer);
+			
+			_source = _mixer;
 			
 			_mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			_mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -213,10 +215,7 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function close():void
 		{
-			if (_source != null)
-			{
-				_source.close();
-			}
+			_mixer.close();
 			
 			_mainTimer.stop();
 			notifyPlayStop();
@@ -259,7 +258,7 @@ package org.osmf.net.httpstreaming
 		 */ 
 		public function DVRGetStreamInfo(streamName:Object):void
 		{
-			if (_source.isReady)
+			if (_mixer.isReady)
 			{
 				// TODO: should we re-trigger the event?
 			}
@@ -268,7 +267,7 @@ package org.osmf.net.httpstreaming
 				// TODO: should there be a guard to protect the case where isReady is not yet true BUT play has already been called, so we are in an
 				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
 				// event back, go ahead and call play()
-				_source.video.getDVRInfo(streamName);
+				_mixer.video.getDVRInfo(streamName);
 			}
 		}
 		
@@ -283,11 +282,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public function get qosInfo():HTTPStreamQoSInfo
 		{
-			if (_source.video != null)
-			{
-				return _source.video.qosInfo;
-			}
-			return null;
+			return ( _mixer.video != null ? _mixer.video.qosInfo : null);
 		}
 
 		///////////////////////////////////////////////////////////////////////
@@ -349,10 +344,7 @@ package org.osmf.net.httpstreaming
 		{
 			_initializeFLVParser = true;
 			_seekTarget = seekTarget;
-			if (_source.video != null)
-			{
-				_source.video.open(streamName);
-			}
+			_mixer.video.open(streamName);
 			setState(HTTPStreamingState.SEEK);
 		}
 		
@@ -367,15 +359,15 @@ package org.osmf.net.httpstreaming
 			_desiredQualityStreamName = streamName;
 			
 			if (
-					_source.isReady 
-				&& (_source.video != null && _source.video.streamName != _desiredQualityStreamName)
+					_mixer.isReady 
+				&& (_mixer.video != null && _mixer.video.streamName != _desiredQualityStreamName)
 			)
 			{
 				CONFIG::LOGGING
 				{
 					logger.debug("Stream source is ready so we can initiate change quality to [" + _desiredQualityStreamName + "]");
 				}
-				_source.video.changeQualityLevel(_desiredQualityStreamName);
+				_mixer.video.changeQualityLevel(_desiredQualityStreamName);
 				_qualityLevelNeedsChanging = false;
 				_desiredQualityStreamName = null;
 			}
@@ -394,26 +386,25 @@ package org.osmf.net.httpstreaming
 			_desiredAudioStreamName = streamName;
 			
 			if (
-					_source.isReady 
-				&& (_source.audio == null || (_source.audio != null && _source.audio.streamName != _desiredAudioStreamName))
+					(_mixer.audio == null && _desiredAudioStreamName != null)	
+				||  (_mixer.audio != null && _mixer.audio.streamName != _desiredAudioStreamName)
 			)
 			{
 				CONFIG::LOGGING
 				{
-					logger.debug("Stream source is ready so we can initiate change audio stream to [" + _desiredAudioStreamName + "]");
-					logger.debug("Audio information: total bytes proccessed=" + this.info.audioByteCount + ", audio buffer=" + this.info.audioBufferLength + ".");
+					logger.debug("Initiating change of audio stream to [" + _desiredAudioStreamName + "]");
 				}
 				
 				var audioResource:MediaResourceBase = HTTPStreamingUtils.createHTTPStreamingResource(_resource, _desiredAudioStreamName);
 				if (audioResource != null)
 				{
 					// audio handler is not dispatching events on the NetStream
-					_source.audio = new HTTPStreamSource(_factory, audioResource, _source);
-					_source.audio.open(_desiredAudioStreamName);
+					_mixer.audio = new HTTPStreamSource(_factory, audioResource, _mixer);
+					_mixer.audio.open(_desiredAudioStreamName);
 				}
 				else
 				{
-					_source.audio = null;
+					_mixer.audio = null;
 				}
 				
 				_audioStreamNeedsChanging = false;
@@ -675,14 +666,6 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onTransitionComplete(event:HTTPStreamingEvent):void
 		{
-			if (event.url != _source.video.streamName)
-			{
-				CONFIG::FLASH_10_1
-				{
-					appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-				}
-			}
-			
 			var info:Object = new Object();
 			info.code = NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE;
 			info.level = "status";
@@ -1233,7 +1216,9 @@ package org.osmf.net.httpstreaming
 		private var _resource:URLResource = null;
 		private var _factory:HTTPStreamingFactory = null;
 		
-		private var _source:HTTPStreamMixer = null;
+		private var _mixer:HTTPStreamMixer = null;
+		private var _source:IHTTPStreamSource = null;
+		
 		private var _qualityLevelNeedsChanging:Boolean = false;
 		private var _desiredQualityStreamName:String = null;
 		private var _audioStreamNeedsChanging:Boolean = false;
