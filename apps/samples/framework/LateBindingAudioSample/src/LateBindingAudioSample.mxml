@@ -448,6 +448,10 @@
 							{
 								label:"VOD: 1 audio-video with 2 shorter alternative audio tracks",
 								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_shorter_alternate_a/1_media_av_2_shorter_alternate_a.f4m"
+							},
+							{
+								label:"VOD: 1 video with 2 shorter alternative audio tracks",
+								data:"http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_shorter_alternate_a/interview_video_only_2_shorter_alternate_audio.f4m"
 							}
 						];
 

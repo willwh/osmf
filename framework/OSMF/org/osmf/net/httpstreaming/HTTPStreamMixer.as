@@ -326,7 +326,21 @@ package org.osmf.net.httpstreaming
 								{
 									logger.debug("Alternate audio track unavailable.");
 								}
+								
+								_dispatcher.dispatchEvent(
+									new HTTPStreamingEvent(
+										HTTPStreamingEvent.ACTION_NEEDED,
+										false,
+										false,
+										NaN,
+										null,
+										null,
+										(_alternateHandler != null ? _alternateHandler.streamName : null)
+									)
+								);
+								
 								_alternateIgnored = true;
+								updateFilters();
 							}
 						}	
 						var mediaBytes:ByteArray = null;
@@ -749,7 +763,7 @@ package org.osmf.net.httpstreaming
 		 */
 		private function updateFilters():void
 		{
-			if (_alternateHandler == null)
+			if (_alternateIgnored)
 			{
 				_mediaFilterTags = FILTER_NONE;
 				_alternateFilterTags = FILTER_ALL;

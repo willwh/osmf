@@ -78,6 +78,11 @@ package org.osmf.events
 		public static const SCRIPT_DATA:String = "scriptData";
 
 		/**
+		 * Dispacthed when streaming objects needs initializations.
+		 */
+		public static const ACTION_NEEDED:String = "actionNeeded";
+
+		/**
 		 * Default constructor.
 		 */
 		public function HTTPStreamingEvent(

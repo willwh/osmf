@@ -105,6 +105,7 @@ package org.osmf.net.httpstreaming
 			addEventListener(HTTPStreamingEvent.END_FRAGMENT, onEndFragment);
 			addEventListener(HTTPStreamingEvent.TRANSITION, onTransition);
 			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, onTransitionComplete);
+			addEventListener(HTTPStreamingEvent.ACTION_NEEDED, onActionNeeded);
 			
 			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 
@@ -1079,6 +1080,30 @@ package org.osmf.net.httpstreaming
 					}
 					break;
 			}
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * We need to do an append bytes action to reset internal state of the NetStream.
+		 */
+		private function onActionNeeded(event:HTTPStreamingEvent):void
+		{
+			CONFIG::LOGGING
+			{
+				logger.debug("We need to to an appendBytesAction in order to reset NetStream internal state");
+			}
+			CONFIG::FLASH_10_1
+			{
+				appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
+			}
+			
+			// Before we feed any TCMessages to the Flash Player, we must feed
+			// an FLV header first.
+			var header:FLVHeader = new FLVHeader();
+			var headerBytes:ByteArray = new ByteArray();
+			header.write(headerBytes);
+			attemptAppendBytes(headerBytes);
 		}
 		
 		/**
