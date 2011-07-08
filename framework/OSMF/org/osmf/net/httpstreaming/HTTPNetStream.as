@@ -387,8 +387,11 @@ package org.osmf.net.httpstreaming
 			_desiredAudioStreamName = streamName;
 			
 			if (
-					(_mixer.audio == null && _desiredAudioStreamName != null)	
-				||  (_mixer.audio != null && _mixer.audio.streamName != _desiredAudioStreamName)
+					_mixer.video.isOpen
+				&& (
+						(_mixer.audio == null && _desiredAudioStreamName != null)	
+					||  (_mixer.audio != null && _mixer.audio.streamName != _desiredAudioStreamName)
+				)
 			)
 			{
 				CONFIG::LOGGING

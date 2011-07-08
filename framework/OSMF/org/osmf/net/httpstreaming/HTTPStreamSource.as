@@ -165,6 +165,14 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/**
+		 * Returns true if the current source is open.
+		 **/
+		public function get isOpen():Boolean
+		{
+			return (_streamName != null);
+		}
+		
+		/**
 		 * Opens and initializes a stream provider to handle a specific stream.
 		 */
 		public function open(streamName:String):void
@@ -177,7 +185,15 @@ package org.osmf.net.httpstreaming
 			_streamName = streamName;
 			CONFIG::LOGGING
 			{			
-				logger.debug("Opening stream [ " + _streamName + " ]. ");
+				if (_streamName == null)
+				{
+					loggedStreamName = _streamName;
+				}
+				else
+				{
+					loggedStreamName = _streamName.substr(_streamName.lastIndexOf("/"));
+				}
+				logger.debug("Opening stream [ " + loggedStreamName + " ]. ");
 			}
 			_indexHandler.initialize(_indexInfo != null? _indexInfo : streamName);
 		}
@@ -189,7 +205,7 @@ package org.osmf.net.httpstreaming
 		{
 			CONFIG::LOGGING
 			{			
-				logger.debug("Closing stream [ " + _streamName + " ]. ");
+				logger.debug("Closing stream [ " + loggedStreamName + " ]. ");
 			}
 			
 			if (_downloader != null)
@@ -233,7 +249,7 @@ package org.osmf.net.httpstreaming
 
 			CONFIG::LOGGING
 			{			
-				logger.debug("Seeking to " + _seekTarget + " in stream [ " + _streamName + " ]. ");
+				logger.debug("Seeking to " + _seekTarget + " in stream [ " + loggedStreamName + " ]. ");
 			}
 			setState(HTTPStreamingState.SEEK);
 		}
@@ -526,7 +542,7 @@ package org.osmf.net.httpstreaming
 
 			CONFIG::LOGGING
 			{			
-				logger.debug("Stream [ " + _streamName + " ] refreshed. ( offset = " + _offset + ", live = " + _isLive + ").");
+				logger.debug("Stream [ " + loggedStreamName + " ] refreshed. ( offset = " + _offset + ", live = " + _isLive + ").");
 			}
 		}
 		
@@ -713,6 +729,18 @@ package org.osmf.net.httpstreaming
 			_qualityLevel = _desiredQualityLevel;
 			_streamName = _desiredQualityStreamName;
 			
+			CONFIG::LOGGING
+			{
+				if (_streamName == null)
+				{
+					loggedStreamName = _streamName;
+				}
+				else
+				{
+					loggedStreamName = _streamName.substr(_streamName.lastIndexOf("/"));
+				}
+			}
+			
 			_desiredQualityLevel = -1;
 			_desiredQualityStreamName = null;
 			_qualityLevelChanged = false;
@@ -731,7 +759,7 @@ package org.osmf.net.httpstreaming
 
 			CONFIG::LOGGING
 			{
-				logger.debug("Quality level switch completed. The current quality level [" + _qualityLevel + "] with stream ["  + _streamName + " ].");
+				logger.debug("Quality level switch completed. The current quality level [" + _qualityLevel + "] with stream ["  + loggedStreamName + " ].");
 			}
 		}
 		
@@ -786,6 +814,8 @@ package org.osmf.net.httpstreaming
 		{
 			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.HTTPStreamSource");
 			private var previouslyLoggedState:String = null;
+			
+			private var loggedStreamName:String = null;
 		}
 
 	}

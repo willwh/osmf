@@ -38,6 +38,8 @@ package org.osmf.net.httpstreaming
 	{
 		function get source():IHTTPStreamSource;
 		
+		function get isOpen():Boolean;
+		
 		function get streamName():String;
 		function get qosInfo():HTTPStreamQoSInfo;
 		

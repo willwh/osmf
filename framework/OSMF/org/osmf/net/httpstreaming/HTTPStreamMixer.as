@@ -156,14 +156,6 @@ package org.osmf.net.httpstreaming
 			
 			_currentTime = 0;
 			
-			if (_desiredAlternateHandler != null)
-			{
-				_desiredAlternateHandler.source.seek(offset);
-			}
-			if (_alternateHandler != null)
-			{
-				_alternateHandler.source.seek(offset);
-			}
 			if (_desiredMediaHandler != null)
 			{
 				_desiredMediaHandler.source.seek(offset);
@@ -171,6 +163,14 @@ package org.osmf.net.httpstreaming
 			if (_mediaHandler != null)
 			{
 				_mediaHandler.source.seek(offset);
+			}
+			if (_desiredAlternateHandler != null)
+			{
+				_desiredAlternateHandler.source.seek(offset);
+			}
+			if (_alternateHandler != null)
+			{
+				_alternateHandler.source.seek(offset);
 			}
 		}
 		
