@@ -667,6 +667,8 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onTransitionComplete(event:HTTPStreamingEvent):void
 		{
+			onActionNeeded(event);
+			
 			var info:Object = new Object();
 			info.code = NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE;
 			info.level = "status";
@@ -907,13 +909,16 @@ package org.osmf.net.httpstreaming
 						_flvParserIsSegmentStart = false;
 					}	
 					
-					if ((tag.timestamp / 1000.0) + _fileTimeAdjustment >= _enhancedSeekTarget)
+					if (currentTime >= _enhancedSeekTarget)
 					{
 						_enhancedSeekTarget = -1;
-						_seekTime = (tag.timestamp  / 1000.0) + _fileTimeAdjustment;
+						if (_seekTime < 0)
+						{
+							_seekTime = currentTime;
+						}
 						if(_initialTime < 0)
 						{
-							_initialTime = _seekTime;
+							_initialTime = currentTime;
 						}
 						
 						var _unmuteTag:FLVTagVideo = new FLVTagVideo();
@@ -925,19 +930,16 @@ package org.osmf.net.httpstreaming
 						_enhancedSeekTags.push(_unmuteTag);	
 						
 						// twiddle and dump
-						
 						for (i=0; i<_enhancedSeekTags.length; i++)
 						{
 							var vTag:FLVTagVideo;
 							
 							vTag = _enhancedSeekTags[i];
-							//vTag.timestamp = tag.timestamp;
 							if (vTag.codecID == FLVTagVideo.CODEC_ID_AVC && vTag.avcPacketType == FLVTagVideo.AVC_PACKET_TYPE_NALU)
 							{
 								// for H.264 we need to move the timestamp forward but the composition time offset backwards to compensate
 								var adjustment:int = tag.timestamp - vTag.timestamp; // how far we are adjusting
 								var compTime:int = vTag.avcCompositionTimeOffset;
-								compTime = vTag.avcCompositionTimeOffset;
 								compTime -= adjustment; // do the adjustment
 								vTag.avcCompositionTimeOffset = compTime;	// save adjustment
 								vTag.timestamp = tag.timestamp; // and adjust the timestamp forward
@@ -971,26 +973,20 @@ package org.osmf.net.httpstreaming
 					{
 						_enhancedSeekTags.push(tag);
 					}
-				} // is video
+				} // else is a data tag, which are simply passthrough with unadjusted timestamps, rather than discarding or saving for later
 				else if (tag is FLVTagScriptDataObject)
 				{
-					// ScriptDataObject tags simply pass through with unadjusted timestamps rather than discarding or saving for later
 					bytes = new ByteArray();
 					tag.write(bytes);
 					_flvParserProcessed += bytes.length;
 					attemptAppendBytes(bytes);
-				} // else tag is FLVTagAudio, which we discard, unless...			
-				else if (tag is FLVTagAudio) 
+				} // else tag is FLVTagAudio, which we discard unless is a configuration tag which needs to be passthrough			
+				else if (tag is FLVTagAudio && FLVTagAudio(tag).isCodecConfiguration)	
 				{
-					var aTag:FLVTagAudio = tag as FLVTagAudio;
-					if (aTag.isCodecConfiguration)	// need to pass this through? (ex. AAC AudioConfig message)
-					{
-						// yes, can never skip initialization...
-						bytes = new ByteArray();
-						tag.write(bytes);
-						_flvParserProcessed += bytes.length;
-						attemptAppendBytes(bytes);
-					}
+					bytes = new ByteArray();
+					tag.write(bytes);
+					_flvParserProcessed += bytes.length;
+					attemptAppendBytes(bytes);
 				}
 				
 				return true;
@@ -1093,6 +1089,7 @@ package org.osmf.net.httpstreaming
 			{
 				logger.debug("We need to to an appendBytesAction in order to reset NetStream internal state");
 			}
+
 			CONFIG::FLASH_10_1
 			{
 				appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);

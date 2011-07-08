@@ -468,6 +468,20 @@ package org.osmf.net.httpstreaming
 				
 				if (_mediaTagDataLoaded || _alternateTagDataLoaded)
 				{
+					CONFIG::LOGGING
+					{
+						if (checkVideoFrame && _mediaTag is FLVTagVideo)
+						{
+							checkVideoFrame = false;
+							
+							var type:int = FLVTagVideo(_mediaTag).frameType;
+							var time:Number = _mediaTag.timestamp;
+							if (type != FLVTagVideo.FRAME_TYPE_KEYFRAME)
+							{
+								logger.warn("Frame at " + time + " is not a key frame. This could lead to video not being displayed.");
+							}
+						}
+					}
 					if (_alternateIgnored)
 					{
 						_currentTime = _mediaTag.timestamp;
@@ -741,7 +755,7 @@ package org.osmf.net.httpstreaming
 					
 				}
 				_alternateNeedsInitialization = false;
-				
+								
 				_dispatcher.dispatchEvent(
 					new HTTPStreamingEvent(
 						HTTPStreamingEvent.TRANSITION_COMPLETE,
@@ -841,6 +855,11 @@ package org.osmf.net.httpstreaming
 					_alternateNeedsSynchronization = true;
 				}
 				
+				CONFIG::LOGGING
+				{
+					checkVideoFrame = true;
+				}
+				
 				_dispatcher.dispatchEvent(event);
 			}
 		}
@@ -931,6 +950,8 @@ package org.osmf.net.httpstreaming
 		{
 			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.HTTPStreamMixer");
 			private var previouslyLoggedState:String = null;
+			
+			private var checkVideoFrame:Boolean = false;
 		}
 
 	}

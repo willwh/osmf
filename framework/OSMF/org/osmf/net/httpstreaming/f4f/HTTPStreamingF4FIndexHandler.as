@@ -321,55 +321,66 @@ package org.osmf.net.httpstreaming.f4f
 			
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 			if (	time >= 0
-				&&	time * abst.timeScale <= abst.currentMediaTime
 				&& 	quality >= 0
 				&&  quality < streamInfos.length
 			   )
 			{
-				currentFAI = frt.findFragmentIdByTime(
-					time * abst.timeScale, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
-				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
+				if (time * abst.timeScale <= abst.currentMediaTime)
 				{
-					if (abst.contentComplete())
+					currentFAI = frt.findFragmentIdByTime(
+						time * abst.timeScale, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
+					if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 					{
-						if (abst.live) // live/DVR playback stops
+						if (abst.contentComplete())
 						{
-							return new HTTPStreamRequest(null, quality, -1, -1, true);
+							if (abst.live) // live/DVR playback stops
+							{
+								return new HTTPStreamRequest(null, quality, -1, -1, true);
+							}
+							else
+							{
+								return null;
+							}
 						}
 						else
 						{
-							return null;
+							adjustDelay();
+							refreshBootstrapInfo(quality);
+							return new HTTPStreamRequest(null, quality, 0, delay);
 						}
 					}
+					
+					playInProgress = true;
+					var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
+					var segId:uint = abst.findSegmentId(currentFAI.fragId - fdp.firstFragment + 1);
+					var requestUrl:String = "";
+					if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
+					{
+						requestUrl = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+					}
 					else
+					{
+						requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+					}
+					
+					CONFIG::LOGGING
+					{
+						logger.debug("The url for ( time=" + time +", quality=" + quality + ") = " + requestUrl);
+					}
+	
+					streamRequest = new HTTPStreamRequest(requestUrl);
+					checkQuality(quality);
+					notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
+				}
+				else
+				{
+					if (abst.live)
 					{
 						adjustDelay();
 						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
 				}
-				
-				playInProgress = true;
-				var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
-				var segId:uint = abst.findSegmentId(currentFAI.fragId - fdp.firstFragment + 1);
-				var requestUrl:String = "";
-				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
-				{
-					requestUrl = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
-				}
-				else
-				{
-					requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
-				}
-				
-				CONFIG::LOGGING
-				{
-					logger.debug("The url for ( time=" + time +", quality=" + quality + ") = " + requestUrl);
-				}
-
-				streamRequest = new HTTPStreamRequest(requestUrl);
-				checkQuality(quality);
-				notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
 			}
 			
 			CONFIG::LOGGING
