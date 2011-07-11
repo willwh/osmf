@@ -226,6 +226,7 @@ package org.osmf.net.httpstreaming
 		public function seek(offset:Number):void
 		{
 			_endOfStream = false;
+			_hasErrors = false;
 			
 			_seekTarget = offset;
 			if (_seekTarget < 0 )

@@ -499,7 +499,6 @@ package org.osmf.net.httpstreaming
 					
 										
 					var processed:int = 0;
-					var processedLimit:int = 40000;//65000 * 4;
 					var keepProcessing:Boolean = true;
 					
 					while(keepProcessing)
@@ -512,9 +511,9 @@ package org.osmf.net.httpstreaming
 						}
 						
 						if (
-							(_state != HTTPStreamingState.PLAY) || // we are no longer in play mode
-							(bytes == null) || // we don't have any additional data
-							(processedLimit > 0 && processed >= processedLimit) // we have processed enough data  
+							    (_state != HTTPStreamingState.PLAY) 	// we are no longer in play mode
+							 || (bytes == null) 						// or we don't have any additional data
+							 || (processed >= BYTES_PROCESSING_LIMIT) 	// or we have processed enough data  
 						)
 						{
 							keepProcessing = false;
@@ -603,6 +602,7 @@ package org.osmf.net.httpstreaming
 			CONFIG::LOGGING
 			{
 				logger.debug("Detected begin fragment for stream [" + event.url + "].");
+				logger.debug("Dropped frames=" + this.info.droppedFrames + ".");
 			}			
 			
 			if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags ||  _playForDuration >= 0)
@@ -1230,6 +1230,7 @@ package org.osmf.net.httpstreaming
 		private var _desiredBufferTime_Min:Number = 0;
 		private var _desiredBufferTime_Max:Number = 0;
 				
+		private static const BYTES_PROCESSING_LIMIT:Number = 65000;
 		private static const MAIN_TIMER_INTERVAL:int = 25;
 		private var _mainTimer:Timer = null;
 		private var _state:String = HTTPStreamingState.INIT;

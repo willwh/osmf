@@ -406,6 +406,15 @@ package org.osmf.net.httpstreaming
 						// and the tags which are marked for filtering
 						if (shouldFilterTag(_mediaTag, _mediaFilterTags))
 						{
+							CONFIG::LOGGING
+							{
+								if (_mediaTag is FLVTagVideo)
+								{
+									droppedVideoFrames++;
+									totalDroppedVideoFrames++;
+								}
+							}
+							
 							_mediaInput.position += _mediaTag.dataSize + FLVTag.PREV_TAG_BYTE_COUNT;
 							_mediaTag = null;
 						}
@@ -453,6 +462,15 @@ package org.osmf.net.httpstreaming
 						// tags whose timestamp are smaller than the latest alternate mixing time
 						if (shouldFilterTag(_alternateTag, _alternateFilterTags))
 						{
+							CONFIG::LOGGING
+							{
+								if (_alternateTag is FLVTagAudio)
+								{
+									droppedAudioFrames++;
+									totalDroppedAudioFrames++;
+								}
+							}
+
 							_alternateInput.position += _alternateTag.dataSize + FLVTag.PREV_TAG_BYTE_COUNT;
 							_alternateTag = null;
 						}
@@ -857,6 +875,10 @@ package org.osmf.net.httpstreaming
 				
 				CONFIG::LOGGING
 				{
+					logger.debug("dvf=" + droppedVideoFrames + "(" + totalDroppedVideoFrames + "), daf=" + droppedAudioFrames + "(" + totalDroppedAudioFrames + ").");
+					
+					droppedVideoFrames = 0;
+					droppedVideoFrames = 0;
 					checkVideoFrame = true;
 				}
 				
@@ -952,6 +974,10 @@ package org.osmf.net.httpstreaming
 			private var previouslyLoggedState:String = null;
 			
 			private var checkVideoFrame:Boolean = false;
+			private var droppedVideoFrames:int = 0;
+			private var droppedAudioFrames:int = 0;
+			private var totalDroppedAudioFrames:int = 0;
+			private var totalDroppedVideoFrames:int = 0;
 		}
 
 	}
