@@ -21,6 +21,8 @@
  *****************************************************/
 package org.osmf.net.httpstreaming
 {
+	import flash.events.DRMErrorEvent;
+	import flash.events.DRMStatusEvent;
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
@@ -108,7 +110,13 @@ package org.osmf.net.httpstreaming
 			addEventListener(HTTPStreamingEvent.ACTION_NEEDED, onActionNeeded);
 			
 			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-
+			
+			CONFIG::FLASH_10_1
+			{
+				addEventListener(DRMErrorEvent.DRM_ERROR, onDRMError);
+				addEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
+			}
+			
 			this.bufferTime = MINIMUM_BUFFER_TIME;
 			this.bufferTimeMax = 0;
 			
@@ -425,12 +433,48 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onNetStatus(event:NetStatusEvent):void
 		{
+			CONFIG::LOGGING
+			{
+				logger.debug("NetStatus event:" + event.info.code);
+			}
+			
 			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.HALT) 
 			{
 				if (_notifyPlayUnpublishPending)
 				{
 					notifyPlayUnpublish();
 					_notifyPlayUnpublishPending = false; 
+				}
+			}
+		}
+		
+		CONFIG::FLASH_10_1
+		{
+			/**
+			 * @private
+			 * 
+			 * We need to process DRM-related errors in order to prevent downloading
+			 * of unplayable content. 
+			 */ 
+			private function onDRMError(event:DRMErrorEvent):void
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("Received an DRM error. Change to waiting mode until DRM state is updated."); 
+				}
+				_waitForDRM = true;
+				setState(HTTPStreamingState.WAIT);
+			}
+			
+			private function onDRMStatus(event:DRMStatusEvent):void
+			{
+				if (event.voucher != null)
+				{
+					CONFIG::LOGGING
+					{
+						logger.debug("DRM state updated. We'll exit waiting mode once the buffer is consumed.");
+					}
+					_waitForDRM = false;
 				}
 			}
 		}
@@ -453,7 +497,7 @@ package org.osmf.net.httpstreaming
 					// if we are getting dry then go back into
 					// active play mode and get more bytes 
 					// from the stream provider
-					if (this.bufferLength < _desiredBufferTime_Min)
+					if (!_waitForDRM && this.bufferLength < _desiredBufferTime_Min)
 					{
 						setState(HTTPStreamingState.PLAY);
 					}
@@ -1275,7 +1319,9 @@ package org.osmf.net.httpstreaming
 		private var _mediaFragmentDuration:Number = 0;
 		
 		private var _dvrInfo:DVRInfo = null;
-				
+		
+		private var _waitForDRM:Boolean = false;
+		
 		CONFIG::LOGGING
 		{
 			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");
