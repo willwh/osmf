@@ -155,7 +155,7 @@ package org.osmf.net.httpstreaming
 			clearBuffers();
 			
 			_currentTime = 0;
-			_alternateIgnored = false;
+			_alternateIgnored = (_alternateHandler == null);;
 			updateFilters();
 			
 			if (_mediaHandler != null)
