@@ -419,10 +419,13 @@ package org.osmf.net
 					}
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
-					switching  = false;
 					actualIndex = dsResource.indexFromName(event.info.details);
-					metrics.currentIndex = actualIndex;
-					lastTransitionIndex = actualIndex;
+					if (actualIndex > -1)
+					{
+						switching  = false;
+						metrics.currentIndex = actualIndex;
+						lastTransitionIndex = actualIndex;
+					}
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
 					switching  = false;
