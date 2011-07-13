@@ -55,38 +55,6 @@ package org.osmf.media
 		{
 		}
 		
-//		// Protected API
-//		/**
-//		 * @private
-//		 * 
-//		 * Check the player state.
-//		 */
-//		protected function checkPlayerState(state:String):void
-//		{
-//			var info:Object = null;
-//			if (state != null)
-//			{
-//				assertThat("MediaPlayer is the expected state.", state, equalTo(mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount]));
-//				mediaPlayerRecordedStatesCount++;
-//			}
-//			
-//			// if we didn't verified all our expected states then wait for more events
-//			if (mediaPlayerExpectedStates.length > mediaPlayerRecordedStatesCount)
-//			{
-//				info = new Object;
-//				info.expectedEventType = "MediaPlayerStateChangeEvent";
-//				info.expectedEvent = mediaPlayerExpectedStates[mediaPlayerRecordedStatesCount];
-//				
-//				mediaPlayer.addEventListener(
-//					MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE,
-//					Async.asyncHandler(this, onStateChange, 2000, info, onTimeout),
-//					false,
-//					0,
-//					true
-//				);
-//			}
-//		}
-		
 		/// Protected event handlers
 		/**
 		 * @private

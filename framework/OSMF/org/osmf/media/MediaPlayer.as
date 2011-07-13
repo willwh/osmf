@@ -1582,11 +1582,11 @@ package org.osmf.media
 				case MediaTraitType.ALTERNATIVE_AUDIO:					
 					_hasAlternativeAudio = add;	
 					var alternativeAudioTrait:AlternativeAudioTrait = AlternativeAudioTrait(media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO));
-					if (alternativeAudioTrait.switching) 
+					if (alternativeAudioTrait.switching && add) 
 					{
 						dispatchEvent(new AlternativeAudioEvent(AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE, false, false, alternativeAudioTrait.switching));
 					}
-					dispatchEvent(new AlternativeAudioEvent(AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE, false, false, alternativeAudioTrait.switching));
+					dispatchEvent(new AlternativeAudioEvent(AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE, false, false, alternativeAudioTrait.switching && add));
 					break;						
 				case MediaTraitType.DISPLAY_OBJECT:						
 					_hasDisplayObject = add;

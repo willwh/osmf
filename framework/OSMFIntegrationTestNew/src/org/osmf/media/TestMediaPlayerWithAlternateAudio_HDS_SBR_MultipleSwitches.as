@@ -74,12 +74,12 @@ package org.osmf.media
 			var switchInitiated:Boolean = false;
 			function onReady(event:Event):void
 			{
-				assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
-				assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));				assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
-				assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
-				
 				if (!switchInitiated)
 				{
+					assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
+					assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));				assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
+					assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
+					
 					switchInitiated = true;
 					playerHelper.actualPlayer.switchAlternativeAudioIndex(1);
 					playerHelper.actualPlayer.switchAlternativeAudioIndex(0);
@@ -136,16 +136,19 @@ package org.osmf.media
 			
 			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE);
+			var switchInitiated:Boolean = false;
 				
 			function onReady(event:Event):void
 			{
-				assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
-				assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));				assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
-				assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
-				playerHelper.actualPlayer.play();
+				if (!switchInitiated)
+				{
+					assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
+					assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));				assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
+					assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
+					playerHelper.actualPlayer.play();
+				}
 			}
 			
-			var switchInitiated:Boolean = false;
 			function onPlaying(event:Event):void
 			{
 				if (!switchInitiated)
@@ -209,12 +212,15 @@ package org.osmf.media
 			
 			function onReady(event:Event):void
 			{
-				assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
-				assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));
-				assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
-				assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
-				
-				playerHelper.actualPlayer.play();
+				if (!switchInitiated)
+				{
+					assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
+					assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));
+					assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
+					assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
+					
+					playerHelper.actualPlayer.play();
+				}
 			}
 			
 			function onPlaying(event:Event):void
@@ -306,12 +312,15 @@ package org.osmf.media
 			
 			function onReady(event:Event):void
 			{
-				assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
-				assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));
-				assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
-				assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
-				
-				playerHelper.actualPlayer.play();
+				if (!switchInitiated)
+				{
+					assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
+					assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));
+					assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
+					assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
+					
+					playerHelper.actualPlayer.play();
+				}
 			}
 			
 			function onPlaying(event:Event):void
@@ -362,7 +371,7 @@ package org.osmf.media
 		 * Tests the late-binding behavior when we switch back to the default audio track 
 		 * after playing at least 5 seconds of main content with an alternate track selected.
 		 */ 
-		[Test(async, timeout="60000", order=5)]
+		[Test(async, timeout="600000", order=5)]
 		public function playVOD_BackToDefault_After5Sec():void
 		{
 			const testLenght:uint = DEFAULT_TEST_LENGTH;
@@ -398,7 +407,7 @@ package org.osmf.media
 			setUpEvents(playerHelper, true);
 			playerHelper.mediaResource = new URLResource(ALTERNATE_AUDIO_HDS_SBR_WITH_VOD);
 			
-			const switchTimerInterval:Number = 6000;			
+			const switchTimerInterval:Number = 5000;			
 			var switchTimer:Timer = new Timer(switchTimerInterval, 1);
 			switchTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onSwitchTimerComplete);
 			
@@ -407,12 +416,15 @@ package org.osmf.media
 			
 			function onReady(event:Event):void
 			{
-				assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
-				assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));
-				assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
-				assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
-				
-				playerHelper.actualPlayer.play();
+				if (!switchInitiated)
+				{
+					assertThat("We should have access to alternatve audio information", playerHelper.actualPlayer.hasAlternativeAudio);
+					assertThat("The number of alternative audio streams is equal with the expected one.", playerHelper.actualPlayer.numAlternativeAudioStreams, equalTo(expectedData.numAlternativeAudioStreams));
+					assertThat("No alternate audio stream change is in progress.", playerHelper.actualPlayer.alternativeAudioStreamSwitching, equalTo(false));
+					assertThat("No alternate audio stream is selected.", playerHelper.actualPlayer.currentAlternativeAudioStreamIndex, equalTo(expectedData.selectedIndex_onReady));
+					
+					playerHelper.actualPlayer.play();
+				}
 			}
 			
 			function onPlaying(event:Event):void
@@ -466,7 +478,7 @@ package org.osmf.media
 
 		/// Internals
 		protected static const ALTERNATE_AUDIO_HDS_SBR_WITH_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
-		protected static const ALTERNATE_AUDIO_HDS_SBR_WITH_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m";
+		protected static const ALTERNATE_AUDIO_HDS_SBR_WITH_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m";
 
 	}
 }

@@ -122,21 +122,21 @@ package org.osmf.net.httpstreaming
 			
 			clearBuffers();
 			
-			if (_desiredAlternateHandler != null)
-			{
-				_desiredAlternateHandler.close();
-			}
 			if (_alternateHandler != null)
 			{
 				_alternateHandler.close();
 			}
-			if (_desiredMediaHandler != null)
+			if (_desiredAlternateHandler != null && _desiredAlternateHandler != _alternateHandler)
 			{
-				_desiredMediaHandler.close();
+				_desiredAlternateHandler.close();
 			}
 			if (_mediaHandler != null)
 			{
 				_mediaHandler.close();
+			}
+			if (_desiredMediaHandler != null && _desiredMediaHandler != _mediaHandler)
+			{
+				_desiredMediaHandler.close();
 			}
 		}
 		
@@ -155,22 +155,24 @@ package org.osmf.net.httpstreaming
 			clearBuffers();
 			
 			_currentTime = 0;
+			_alternateIgnored = false;
+			updateFilters();
 			
-			if (_desiredMediaHandler != null)
-			{
-				_desiredMediaHandler.source.seek(offset);
-			}
 			if (_mediaHandler != null)
 			{
 				_mediaHandler.source.seek(offset);
 			}
-			if (_desiredAlternateHandler != null)
+			if (_desiredMediaHandler != null && _desiredMediaHandler != _mediaHandler)
 			{
-				_desiredAlternateHandler.source.seek(offset);
+				_desiredMediaHandler.source.seek(offset);
 			}
 			if (_alternateHandler != null)
 			{
 				_alternateHandler.source.seek(offset);
+			}
+			if (_desiredAlternateHandler != null && _desiredAlternateHandler != _alternateHandler)
+			{
+				_desiredAlternateHandler.source.seek(offset);
 			}
 		}
 		
