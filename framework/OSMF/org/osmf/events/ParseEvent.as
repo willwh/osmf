@@ -25,7 +25,11 @@ package org.osmf.events
 
 	import org.osmf.elements.f4mClasses.Manifest;
 
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * An event used by parsers to indicate completion or errors.
 	 */
 	public class ParseEvent extends Event

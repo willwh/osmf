@@ -51,7 +51,7 @@ package org.osmf.elements.f4mClasses
 		/**
 		 * @private
 		 */
-		override public function parse(value:String, baseUrl:String=null):void
+		override public function parse(value:String, baseUrl:String = null, idPrefix:String = ""):void
 		{
 			var root:XML = new XML(value);
 
@@ -88,13 +88,13 @@ package org.osmf.elements.f4mClasses
 			if (root.attribute('drmAdditionalHeaderId').length() > 0)
 			{
 				media.drmAdditionalHeader = new DRMAdditionalHeader();
-				media.drmAdditionalHeader.id = root.@drmAdditionalHeaderId;
+				media.drmAdditionalHeader.id = idPrefix + root.@drmAdditionalHeaderId;
 			}
 
 			if (root.attribute('bootstrapInfoId').length() > 0)
 			{
 				media.bootstrapInfo = new BootstrapInfo();
-				media.bootstrapInfo.id = root.@bootstrapInfoId;
+				media.bootstrapInfo.id = idPrefix + root.@bootstrapInfoId;
 			}
 
 			if (root.attribute('height').length() > 0)

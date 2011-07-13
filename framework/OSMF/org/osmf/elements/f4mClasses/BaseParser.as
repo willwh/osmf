@@ -45,7 +45,7 @@ package org.osmf.elements.f4mClasses
 		 *
 		 * @throws Error if the parse fails.
 		 */
-		public function parse(value:String, rootUrl:String=null):void
+		public function parse(value:String, rootUrl:String = null, idPrefix:String = ""):void
 		{
 
 		}

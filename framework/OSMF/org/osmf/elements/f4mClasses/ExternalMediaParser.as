@@ -61,7 +61,7 @@ package org.osmf.elements.f4mClasses
 		/**
 		 * @private
 		 */
-		override public function parse(value:String, baseUrl:String=null):void
+		override public function parse(value:String, baseUrl:String=null, idPrefix:String = ""):void
 		{
 			var root:XML = new XML(value);
 
@@ -80,7 +80,7 @@ package org.osmf.elements.f4mClasses
 			// Otherwise we're a regular media node, so parse.
 			else
 			{
-				super.parse(value, baseUrl);
+				super.parse(value, baseUrl, idPrefix);
 			}
 		}
 	}

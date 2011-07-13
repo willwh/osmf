@@ -23,7 +23,12 @@ package org.osmf.elements.f4mClasses
 {
 	import flash.utils.ByteArray;
 	
+	[ExcludeClass]
+	
 	/**
+	 * 
+	 * @private
+	 * 
 	 * Describes a specific piece of media.
 	 *  
 	 *  @langversion 3.0

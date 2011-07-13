@@ -29,6 +29,8 @@ package org.osmf.elements.f4mClasses
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
 	
+	import mx.messaging.channels.StreamingAMFChannel;
+	
 	import org.osmf.events.ParseEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.URL;
@@ -52,8 +54,11 @@ package org.osmf.elements.f4mClasses
 
 		/**
 		 * @private
+		 * 
+		 * //XXX idPrefix is not propagated to the stream-level manifests. It should not be passed to this function. 
+		 * 
 		 */
-		override public function parse(value:String, rootUrl:String=null, manifest:Manifest=null):void
+		override public function parse(value:String, rootUrl:String = null, manifest:Manifest = null, idPrefix:String = ""):void
 		{
 			unfinishedLoads = 0;
 			parsing = true;
@@ -206,7 +211,9 @@ package org.osmf.elements.f4mClasses
 			{
 				var xml:XML = queue.pop() as XML;
 				var baseUrl:String = baseUrls[xml];
-				super.parse(xml.toXMLString(), baseUrl, manifest);
+				externalMediaCount += 1;
+				var idPrefix:String = "external" + externalMediaCount + "_";
+				super.parse(xml.toXMLString(), baseUrl, manifest, idPrefix);
 				return true;
 			}
 			else
@@ -324,6 +331,8 @@ package org.osmf.elements.f4mClasses
 		private var baseUrls:Dictionary;
 
 		private var loadingInfo:Dictionary;
+		
+		private var externalMediaCount:Number = 0;
 	}
 }
 

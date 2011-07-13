@@ -57,7 +57,7 @@ package org.osmf.elements.f4mClasses
 		/**
 		 * @private
 		 */
-		override public function parse(value:String, baseUrl:String=null):void
+		override public function parse(value:String, baseUrl:String=null, idPrefix:String=""):void
 		{
 			var root:XML = new XML(value);
 
@@ -72,7 +72,7 @@ package org.osmf.elements.f4mClasses
 
 			if (root.attribute("id").length() > 0)
 			{
-				drmAdditionalHeader.id = root.@id;
+				drmAdditionalHeader.id = idPrefix + root.@id;
 			}
 
 			if (root.attribute("url").length() > 0)

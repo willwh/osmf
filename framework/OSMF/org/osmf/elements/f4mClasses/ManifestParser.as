@@ -85,7 +85,7 @@ package org.osmf.elements.f4mClasses
 		 * @param manifest The existing <code>Manifest</code> object to append to.
 		 * 				   If not specified, a new <code>Manifest</code> is created.
 		 */
-		public function parse(value:String, rootUrl:String=null, manifest:Manifest=null):void
+		public function parse(value:String, rootUrl:String = null, manifest:Manifest = null, idPrefix:String = ""):void
 		{
 			if (!value)
 			{
@@ -177,14 +177,14 @@ package org.osmf.elements.f4mClasses
 			for each (var media:XML in root.nmsp::media)
 			{
 				unfinishedLoads++;
-				parseMedia(media, baseUrl);
+				parseMedia(media, baseUrl, idPrefix);
 			}
 
 			// DRM Metadata	
 			for each (var data:XML in root.nmsp::drmAdditionalHeader)
 			{
 				unfinishedLoads++;
-				parseDRMAdditionalHeader(data, baseUrl);
+				parseDRMAdditionalHeader(data, baseUrl, idPrefix);
 			}
 
 			// Bootstrap
@@ -192,7 +192,7 @@ package org.osmf.elements.f4mClasses
 			for each (var info:XML in root.nmsp::bootstrapInfo)
 			{
 				unfinishedLoads++;
-				parseBootstrapInfo(info, baseUrl);
+				parseBootstrapInfo(info, baseUrl, idPrefix);
 			}
 
 			// Required if base URL is omitted from Manifest
@@ -599,9 +599,9 @@ package org.osmf.elements.f4mClasses
 			dispatchEvent(new ParseEvent(ParseEvent.PARSE_COMPLETE, false, false, manifest));
 		}
 
-		private function parseMedia(value:XML, baseUrl:String):void
+		private function parseMedia(value:XML, baseUrl:String, idPrefix:String = ""):void
 		{
-			mediaParser.parse(value.toXMLString(), baseUrl);
+			mediaParser.parse(value.toXMLString(), baseUrl, idPrefix);
 		}
 
 		private function parseDVRInfo(value:XML, baseUrl:String):void
@@ -609,14 +609,14 @@ package org.osmf.elements.f4mClasses
 			dvrInfoParser.parse(value.toXMLString(), baseUrl);
 		}
 
-		private function parseDRMAdditionalHeader(value:XML, baseUrl:String):void
+		private function parseDRMAdditionalHeader(value:XML, baseUrl:String, idPrefix:String = ""):void
 		{
-			drmAdditionalHeaderParser.parse(value.toXMLString(), baseUrl);
+			drmAdditionalHeaderParser.parse(value.toXMLString(), baseUrl, idPrefix);
 		}
 
-		private function parseBootstrapInfo(value:XML, baseUrl:String):void
+		private function parseBootstrapInfo(value:XML, baseUrl:String, idPrefix:String = ""):void
 		{
-			bootstrapInfoParser.parse(value.toXMLString(), baseUrl);
+			bootstrapInfoParser.parse(value.toXMLString(), baseUrl, idPrefix);
 		}
 
 		/**
