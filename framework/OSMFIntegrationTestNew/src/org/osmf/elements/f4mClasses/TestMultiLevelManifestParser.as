@@ -11,9 +11,11 @@ package org.osmf.elements.f4mClasses
 	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.assertFalse;
+	import org.flexunit.asserts.assertNull;
 	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
+	import org.flexunit.async.AsyncHandler;
 	import org.osmf.elements.F4MElement;
 	import org.osmf.elements.ManifestLoaderBase;
 	import org.osmf.elements.ProxyElement;
@@ -44,16 +46,12 @@ package org.osmf.elements.f4mClasses
 		public function setUp():void
 		{
 			parser = new MultiLevelManifestParser();
-			parser2 = new MultiLevelManifestParser();
-
 		}
 		
 		[After]
 		public function tearDown():void
 		{
 			parser = null;
-			parser2 = null;
-			
 		}
 		
 		[Test(async, description="Tests backwards compatability with a 1.0 F4M.")]
@@ -139,182 +137,198 @@ package org.osmf.elements.f4mClasses
 		}
 		
 		
-		[Test(description="Tests that the windowDuration parameter is parsed.")]
+		[Test(async, description="Tests that the windowDuration parameter is parsed.")]
 		public function testWindowDuration():void
 		{
-			parser2.parse(F4M_WITH_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						Assert.assertEquals(manifest.dvrInfo.windowDuration, WINDOW_DURATION);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);
+			parser.parse(F4M_WITH_WINDOW_DURATION, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				Assert.assertEquals(manifest.dvrInfo.windowDuration, WINDOW_DURATION);
+			} 
 		}
 		
-		[Test(description="Tests that a negative windowDuration parameter is parsed.")]
+		[Test(async, description="Tests that a negative windowDuration parameter is parsed.")]
 		public function testWindowNegativeDuration():void
 		{
-			parser2.parse(F4M_WITH_NEGATIVE_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						Assert.assertEquals(manifest.dvrInfo.windowDuration, -1);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler); 
+			parser.parse(F4M_WITH_NEGATIVE_WINDOW_DURATION, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, -1);
+			} 
 		}
 		
-		[Test(description="Tests that a null/empty windowDuration parameter is parsed.")]
+		[Test(async, description="Tests that a null/empty windowDuration parameter is parsed.")]
 		public function testWindowNullDuration():void
 		{
-			parser2.parse(F4M_WITH_NULL_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, -1);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);
+			parser.parse(F4M_WITH_NULL_WINDOW_DURATION, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, -1);
+			}
 		}
 		
-		[Test(description="Tests when default=-1 windowDuration parameter is parsed.")]
+		/*
+		private function onTestEnd(passThroughData:Object):void
+		{
+			Assert.assertTrue(true);
+		}
+		*/
+		
+		[Test(async, description="Tests when default=-1 windowDuration parameter is parsed.")]
 		public function testWindowDefaultDuration():void
 		{
-			parser2.parse(F4M_WITH_DEFAULT_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, -1);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler); 
+			parser.parse(F4M_WITH_DEFAULT_WINDOW_DURATION, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, -1);
+			}
 		}
 		
-		[Test(description="Tests when zero windowDuration parameter is parsed.")]
+		[Test(async, description="Tests when zero windowDuration parameter is parsed.")]
 		public function testWindowZeroDuration():void
 		{
-			parser2.parse(F4M_WITH_ZERO_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 0);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler); 
+			parser.parse(F4M_WITH_ZERO_WINDOW_DURATION, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, 0);
+			}
 		}
 		
-		[Test(description="Tests when float windowDuration parameter is parsed.")]
+		[Test(async, description="Tests when float windowDuration parameter is parsed.")]
 		public function testWindowFloatDuration():void
 		{
-			parser2.parse(F4M_WITH_FLOAT_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 180.6);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+						
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);  
+			parser.parse(F4M_WITH_FLOAT_WINDOW_DURATION, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, 180);
+			}
 		}
 		
-		[Test(description="Tests when alpha windowDuration parameter is parsed.")]
+		[Test(async, description="Tests when alpha windowDuration parameter is parsed.")]
 		public function testWindowAlphaDuration():void
 		{
-			parser2.parse(F4M_WITH_ALPHA_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, -1);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);  
+			parser.parse(F4M_WITH_ALPHA_WINDOW_DURATION, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, -1);
+			}
 		}
 		
-		[Test(description="Tests when no windowDuration parameter is parsed.")]
+		[Test(async, description="Tests when no windowDuration parameter is parsed.")]
 		public function testWindowNoDuration():void
 		{
-			parser2.parse(F4M_WITH_NO_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, -1);
-						assertEquals(manifest.dvrInfo.id, "myid");
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);  
+			parser.parse(F4M_WITH_NO_WINDOW_DURATION, MLM_PATH);
 
-					}
-				);
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, -1);
+				assertEquals(manifest.dvrInfo.id, "myid");
+			}
 		}
 		
-		[Test(description="Tests a v1.0 manifest with windowDuration")]
+		[Test(async, description="Tests a v1.0 manifest with windowDuration, beginOffset and endOffset")]
 		public function testV1WithWindowDuration():void
 		{
-			parser2.parse(F4M_V1_WITH_WINDOW_DURATION, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, -1);
-						assertEquals(manifest.dvrInfo.endOffset, 100);
-						assertEquals(manifest.dvrInfo.beginOffset, 900);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);
+			parser.parse(F4M_V1_WITH_WINDOW_DURATION, MLM_PATH);
+
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, -1);
+				assertEquals(manifest.dvrInfo.endOffset, 100);
+				assertEquals(manifest.dvrInfo.beginOffset, 90);
+			}
 		}
 		
-		[Test(description="Tests a v2.0 manifest with beginOffset and endOffset")]
+		[Test(async, description="Tests a v2.0 manifest with beginOffset and endOffset")]
 		public function testV2WithBeginOffsetAndEndOffset():void
 		{
-			parser2.parse(F4M_V2_WITHOUT_WINDOW_DURATION_WITH_BEGINOFFSET_ENDOFFSET, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, -1);
-						assertEquals(manifest.dvrInfo.endOffset, 0);
-						assertEquals(manifest.dvrInfo.beginOffset, 0);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);
+			parser.parse(F4M_V2_WITHOUT_WINDOW_DURATION_WITH_BEGINOFFSET_ENDOFFSET, MLM_PATH);
+
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, -1);
+				assertEquals(manifest.dvrInfo.endOffset, 0);
+				assertEquals(manifest.dvrInfo.beginOffset, 0);
+			}
 		}
 		
-		[Test(description="Tests a v2.0 manifest with windowDuration, beginOffset and endOffset")]
+		[Test(async, description="Tests a v2.0 manifest with windowDuration, beginOffset and endOffset")]
 		public function testV2WithWindowDurationBeginOffsetAndEndOffset():void
 		{
-			parser2.parse(F4M_V2_WITH_WINDOW_DURATION_BEGINOFFSET_ENDOFFSET, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, 180);
-						assertEquals(manifest.dvrInfo.endOffset, 0);
-						assertEquals(manifest.dvrInfo.beginOffset, 0);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);
+			parser.parse(F4M_V2_WITH_WINDOW_DURATION_BEGINOFFSET_ENDOFFSET, MLM_PATH);
+
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertEquals(manifest.dvrInfo.windowDuration, 180);
+				assertEquals(manifest.dvrInfo.endOffset, 0);
+				assertEquals(manifest.dvrInfo.beginOffset, 0);
+			}
 		}
 		
-		[Test(description="Tests a v2.0 manifest with no dvrInfo tag")]
+		[Test(async, description="Tests a v2.0 manifest with no dvrInfo tag")]
 		public function testV2WithoutDVRInfo():void
 		{
-			parser2.parse(F4M_V2_WITHOUT_DVRINFO, MLM_PATH);
-			parser.addEventListener
-				( ParseEvent.PARSE_COMPLETE 
-					, function(event:ParseEvent):void
-					{
-						var manifest:Manifest = event.data as Manifest;
-						assertEquals(manifest.dvrInfo.windowDuration, -1);
-						assertEquals(manifest.dvrInfo.endOffset, 0);
-						assertEquals(manifest.dvrInfo.beginOffset, 0);
-					}
-				);
+			var asyncHandler:Function = Async.asyncHandler(this, onParseComplete, TIMEOUT, null, onTimeout);
+			
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler);
+			parser.parse(F4M_V2_WITHOUT_DVRINFO, MLM_PATH);
+			
+			function onParseComplete(event:ParseEvent, passThroughData:Object):void
+			{
+				var manifest:Manifest = event.data as Manifest;
+				assertNull(manifest.dvrInfo);
+			}
 		}
 		
 		[Test(async, description="Tests if dvrinfo duration is found in dvr trait.")]
@@ -492,7 +506,7 @@ package org.osmf.elements.f4mClasses
 		
 		[Test(async, description="Tests a 2.0 F4M relative urls without base URL.")]
 		public function testParseMultiLevelF4MWithoutBaseUrl():void
-		{			
+		{
 			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
 			
 			var resource:URLResource =  new URLResource(F4M_V2_WITHOUT_BASEURL);
@@ -614,6 +628,51 @@ package org.osmf.elements.f4mClasses
 			
 		}
 		
+		/**
+		 * The MLM references two external manifests.
+		 * Each of them has a <media> and a <bootstrapInfo>
+		 * The bootstrapInfoId from one manifest equals the bootstrapInfoId from the other manifest
+		 */
+		[Test(async, description="Tests that bootstrap info is parsed correctly when an MLM has conflicting ids.")]
+		public function testMLMConflictingIds():void
+		{
+			var asyncHandler:Function = Async.asyncHandler(this, onF4MLoad, TIMEOUT, null, onTimeout);
+						
+			var loader:URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, asyncHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, onF4MError);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onF4MError);
+			loader.load(new URLRequest(MLM_CONFLICT_IDS));
+		}
+		
+		private function onF4MLoad(event:Event, passThroughData:Object):void
+		{
+			var resourceData:String = String((event.target as URLLoader).data);
+			
+			var asyncHandler:Function = Async.asyncHandler(this, onF4MComplete, TIMEOUT, null, onTimeout);
+			parser.addEventListener(ParseEvent.PARSE_COMPLETE, asyncHandler, false, 0, true);
+			parser.parse(resourceData, MLM_PATH);	
+		}
+		
+		private function onF4MError(event:Event):void
+		{
+			throw new Error("Error loading F4M file.");
+		}
+		
+		private function onF4MComplete(event:ParseEvent, passThroughData:Object):void
+		{
+			var manifest:Manifest = event.data as Manifest;
+			
+			Assert.assertNotNull(manifest);
+			Assert.assertTrue(manifest.media[0].bootstrapInfo.url != manifest.media[1].bootstrapInfo.url);
+			Assert.assertTrue(manifest.drmAdditionalHeaders[0].data.bytesAvailable != manifest.drmAdditionalHeaders[1].data.bytesAvailable);
+		}
+		
+		private function onTimeout(passThroughData:Object):void
+		{
+			Assert.fail("Timeout reached!");
+		}
+		
 		
 		private static const F4M_V2_DVR_DURATION_VOD:String = "http://catherine.corp.adobe.com/osmf/rolling_window/v2.f4m";
 		private static const F4M_V1_DVR_DURATION_VOD:String = "http://catherine.corp.adobe.com/osmf/rolling_window/v1.f4m";
@@ -651,7 +710,7 @@ package org.osmf.elements.f4mClasses
 			"<id>1_rps9u31c</id>" +
 			"<mimeType>video/x-flv</mimeType>" +
 			"<streamType>recorded</streamType>" +
-			"<dvrInfo windowDuration=\"-1\" />" +
+			"<dvrInfo windowDuration=\"-5\" />" +
 			"<duration>2824</duration>" +
 			"<media url=\"http://cdnbakmi.kaltura.com/p/7463/sp/746300/serveFlavor/flavorId/1_69z5anh0/name/1_69z5anh0.flv\"" +
 			"bitrate=\"368\" width=\"624\" height=\"352\" />" +
@@ -774,13 +833,11 @@ package org.osmf.elements.f4mClasses
 		private static const F4M_V2_WITH_EMPTY_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/nobaseurl.f4m";
 		private static const F4M_V2_WITH_ALTERNATE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/alternate.f4m";
 
-
+		private static const MLM_CONFLICT_IDS:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/mlm_conflict_ids.f4m";
 		
 		private static const MLM_PATH:String = "http://catherine.corp.adobe.com/osmf/mlm_tests";
 		private static const TIMEOUT:Number = 10000;
 		
 		private var parser:MultiLevelManifestParser;
-		private var parser2:MultiLevelManifestParser;
-
 	}
 }
