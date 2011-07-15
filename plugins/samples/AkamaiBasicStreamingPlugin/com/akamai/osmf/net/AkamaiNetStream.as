@@ -378,6 +378,9 @@ package com.akamai.osmf.net
 					
 			switch (info.code) 
 			{
+				case "NetStream.Play.Start":
+					resetAllLiveTimers();
+					break;				
 				case "NetStream.Play.StreamNotFound":
 					if (_liveStreamRetryTimer != null && !_liveStreamRetryTimer.running)
 					{
