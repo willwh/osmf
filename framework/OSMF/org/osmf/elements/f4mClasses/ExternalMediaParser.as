@@ -38,13 +38,13 @@ package org.osmf.elements.f4mClasses
 	 * @private
 	 *
 	 * Handles the parsing of multi-level media XML nodes.  Multi-level media XML nodes are introduced in the
-	 * 2.0 version of the F4M manifest.  These objects contain an <code>externalUrl</code> attribute which
+	 * 2.0 version of the F4M manifest.  These objects contain an <code>href</code> attribute which
 	 * points to another F4M file that contains the actual data for the media object.
 	 *
-	 * The 2.0 F4M manifest does not require media to be externalized.  If no <code>externalUrl</code> attribute
+	 * The 2.0 F4M manifest does not require media to be externalized.  If no <code>href</code> attribute
 	 * is available, the media XML node is parsed as usual.
 	 *
-	 * If the F4M file specified in the <code>externalUrl</code> attribute has more than one media node
+	 * If the F4M file specified in the <code>href</code> attribute has more than one media node
 	 * only the *first* will be parsed.  It is assumed that each external F4M file represents *one* media
 	 * node.
 	 */
@@ -61,7 +61,7 @@ package org.osmf.elements.f4mClasses
 		/**
 		 * @private
 		 */
-		override public function parse(value:String, baseUrl:String=null, idPrefix:String = ""):void
+		override public function parse(value:String, baseURL:String=null, idPrefix:String = ""):void
 		{
 			var root:XML = new XML(value);
 
@@ -80,7 +80,7 @@ package org.osmf.elements.f4mClasses
 			// Otherwise we're a regular media node, so parse.
 			else
 			{
-				super.parse(value, baseUrl, idPrefix);
+				super.parse(value, baseURL, idPrefix);
 			}
 		}
 	}

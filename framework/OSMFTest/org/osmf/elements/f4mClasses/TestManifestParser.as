@@ -2498,7 +2498,7 @@ package org.osmf.elements.f4mClasses
 								<bootstrapInfo profile="named" id="bootstrap7923">
 									AAAAk2Fic3QAAAAAAAAAAgAAAAPoAAAAAAABv/oAAAAAAAAAAAAAAAAAAQAAACFhc3J0AAAAAAAAAAACAAAAAQAAAAQAAAACAAAAAgEAAABGYWZydAAAAAAAAAPoAAAAAAMAAAABAAAAAAAAAAAAAE4gAAAABgAAAAAAAYaoAAA5bAAAAAAAAAAAAAAAAAAAAAAA
 								</bootstrapInfo>
-								<baseUrl>http://www.example.com</baseUrl>
+								<baseURL>http://www.example.com</baseURL>
 							</manifest>;
 			
 			loadManifest(test, verifyBugFM1243_ResourceFromNoMedia);

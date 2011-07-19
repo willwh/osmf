@@ -58,20 +58,12 @@ package org.osmf.elements.f4mClasses
 		 * //XXX idPrefix is not propagated to the stream-level manifests. It should not be passed to this function. 
 		 * 
 		 */
-		override public function parse(value:String, rootUrl:String = null, manifest:Manifest = null, idPrefix:String = ""):void
+		override public function parse(value:String, rootURL:String = null, manifest:Manifest = null, idPrefix:String = ""):void
 		{
 			unfinishedLoads = 0;
 			parsing = true;
 
-			// If we weren't passed a manifest we need to build one.
-			// Otherwise we'll use the one that was passed in and add to it.
-			if (!manifest)
-			{
-				manifest = new Manifest();
-			}
-
-			// Now use whatever manifest we end up with.
-			this.manifest = manifest;
+			this.manifest = new Manifest();
 
 			var root:XML = new XML(value);
 			var nmsp:Namespace = root.namespace();
@@ -81,14 +73,19 @@ package org.osmf.elements.f4mClasses
 			queue.push(root);
 			
 			// Save off any information we need.
-			if (!baseUrls)
+			if (!baseURLs)
 			{
-				baseUrls = new Dictionary(true);
+				baseURLs = new Dictionary(true);
 			}
 			
-			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL : rootUrl;
-			baseUrl = URL.normalizeRootURL(baseUrl);
-			baseUrls[root] = baseUrl;
+			var baseURL:String = rootURL;
+			if (root.nmsp::baseURL.length() > 0)
+			{
+				baseURL = root.nmsp::baseURL.text();
+			}
+			baseURL = URL.normalizeRootURL(baseURL);
+			
+			baseURLs[root] = baseURL;
 
 			// Check to see if we need to load any other manifests.
 			// The url will be in the <media> nodes.
@@ -102,7 +99,7 @@ package org.osmf.elements.f4mClasses
 					var href:String = media.@href;
 					if (!URL.isAbsoluteURL(href))
 					{
-						href = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(href);
+						href = URL.normalizeRootURL(baseURL) + URL.normalizeRelativeURL(href);
 					}
 
 					// Get ready to load.
@@ -119,7 +116,7 @@ package org.osmf.elements.f4mClasses
 
 					var info:Info = new Info();
 
-					info.baseUrl = URL.normalizeRootURL(URL.getRootUrl(href));
+					info.baseURL = URL.normalizeRootURL(URL.getRootUrl(href));
 
 					if (media.attribute('bitrate').length() > 0)
 					{
@@ -177,7 +174,7 @@ package org.osmf.elements.f4mClasses
 		{
 			if (!processQueue())
 			{
-				// The baseUrl means nothing here because each source came from someplace different.
+				// The baseURL means nothing here because each source came from someplace different.
 				// The urls have already been made absolute, so just null it out.
 				manifest.baseURL = null;
 
@@ -210,10 +207,10 @@ package org.osmf.elements.f4mClasses
 			if (queue.length > 0)
 			{
 				var xml:XML = queue.pop() as XML;
-				var baseUrl:String = baseUrls[xml];
+				var baseURL:String = baseURLs[xml];
 				externalMediaCount += 1;
 				var idPrefix:String = "external" + externalMediaCount + "_";
-				super.parse(xml.toXMLString(), baseUrl, manifest, idPrefix);
+				super.parse(xml.toXMLString(), baseURL, manifest, idPrefix);
 				return true;
 			}
 			else
@@ -286,23 +283,23 @@ package org.osmf.elements.f4mClasses
 				var url:String = media.@url;
 				if (!URL.isAbsoluteURL(url))
 				{
-					media.@url = URL.normalizeRootURL(info.baseUrl) + URL.normalizeRelativeURL(url);
+					media.@url = URL.normalizeRootURL(info.baseURL) + URL.normalizeRelativeURL(url);
 				}
 //				if (url.indexOf("http") != 0)
 //				{
-//					media.@url = info.baseUrl + '/' + url;
+//					media.@url = info.baseURL + '/' + url;
 //				}
 				
 				*/
 			}
 
 			// Save off any information we need.
-			if (!baseUrls)
+			if (!baseURLs)
 			{
-				baseUrls = new Dictionary(true);
+				baseURLs = new Dictionary(true);
 			}
 
-			baseUrls[root] = URL.normalizeRootURL(info.baseUrl);
+			baseURLs[root] = URL.normalizeRootURL(info.baseURL);
 
 			queue.push(root);
 
@@ -328,7 +325,7 @@ package org.osmf.elements.f4mClasses
 
 		private var queue:Array;
 
-		private var baseUrls:Dictionary;
+		private var baseURLs:Dictionary;
 
 		private var loadingInfo:Dictionary;
 		
@@ -338,7 +335,7 @@ package org.osmf.elements.f4mClasses
 
 class Info
 {
-	public var baseUrl:String;
+	public var baseURL:String;
 	public var attributes:Attributes;
 	
 	

@@ -51,7 +51,7 @@ package org.osmf.elements.f4mClasses
 		/**
 		 * @private
 		 */
-		override public function parse(value:String, baseUrl:String = null, idPrefix:String = ""):void
+		override public function parse(value:String, baseURL:String = null, idPrefix:String = ""):void
 		{
 			var root:XML = new XML(value);
 
@@ -70,7 +70,7 @@ package org.osmf.elements.f4mClasses
 				var url:String = root.@url;
 				if (!URL.isAbsoluteURL(url))
 				{
-					url = URL.normalizeRootURL(baseUrl) + URL.normalizeRelativeURL(url);
+					url = URL.normalizeRootURL(baseURL) + URL.normalizeRelativeURL(url);
 				}
 				media.url = url;
 			}

@@ -447,7 +447,7 @@ package org.osmf.elements.f4mClasses
 		
 		
 		[Test(async, description="Tests a 2.0 F4M relative urls with base URL.")]
-		public function testParseMultiLevelF4MWithBaseUrl():void
+		public function testParseMultiLevelF4MWithBaseURL():void
 		{			
 			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
 			
@@ -505,7 +505,7 @@ package org.osmf.elements.f4mClasses
 		
 		
 		[Test(async, description="Tests a 2.0 F4M relative urls without base URL.")]
-		public function testParseMultiLevelF4MWithoutBaseUrl():void
+		public function testParseMultiLevelF4MWithoutBaseURL():void
 		{
 			var asyncHandler:Function = Async.asyncHandler(this, onTestEnd, TIMEOUT, null, handleTimeout);
 			
@@ -828,7 +828,7 @@ package org.osmf.elements.f4mClasses
 		private static const F4M_SOURCE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/original.f4m";
 		private static const MLM_SOURCE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/mlm.f4m";
 		
-		private static const F4M_V2_WITH_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/baseurl.f4m";
+		private static const F4M_V2_WITH_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/other/baseurl.f4m";
 		private static const F4M_V2_WITHOUT_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/nobaseurl.f4m";
 		private static const F4M_V2_WITH_EMPTY_BASEURL:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/nobaseurl.f4m";
 		private static const F4M_V2_WITH_ALTERNATE:String = "http://catherine.corp.adobe.com/osmf/mlm_tests/alternate.f4m";

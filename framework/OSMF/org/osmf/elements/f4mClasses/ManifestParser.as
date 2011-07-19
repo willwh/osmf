@@ -81,11 +81,11 @@ package org.osmf.elements.f4mClasses
 		 * Parses an F4M file.
 		 *
 		 * @param value The string xml of the F4M file.
-		 * @param rootUrl The rootUrl of the resource.
+		 * @param rootURL The rootURL of the resource.
 		 * @param manifest The existing <code>Manifest</code> object to append to.
 		 * 				   If not specified, a new <code>Manifest</code> is created.
 		 */
-		public function parse(value:String, rootUrl:String = null, manifest:Manifest = null, idPrefix:String = ""):void
+		public function parse(value:String, rootURL:String = null, manifest:Manifest = null, idPrefix:String = ""):void
 		{
 			if (!value)
 			{
@@ -161,15 +161,15 @@ package org.osmf.elements.f4mClasses
 				manifest.urlIncludesFMSApplicationInstance = (root.nmsp::urlIncludesFMSApplicationInstance.text() == "true");
 			}
 
-			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL : rootUrl;
-			baseUrl = URL.normalizeRootURL(baseUrl);
+			var baseURL:String = (manifest.baseURL != null) ? manifest.baseURL : rootURL;
+			baseURL = URL.normalizeRootURL(baseURL);
 			
 			
 			// DVRInfo
 			for each (var dvrInfo:XML in root.nmsp::dvrInfo)
 			{
 				unfinishedLoads++;
-				parseDVRInfo(dvrInfo, baseUrl);
+				parseDVRInfo(dvrInfo, baseURL);
 				break;
 			}
 
@@ -177,14 +177,14 @@ package org.osmf.elements.f4mClasses
 			for each (var media:XML in root.nmsp::media)
 			{
 				unfinishedLoads++;
-				parseMedia(media, baseUrl, idPrefix);
+				parseMedia(media, baseURL, idPrefix);
 			}
 
 			// DRM Metadata	
 			for each (var data:XML in root.nmsp::drmAdditionalHeader)
 			{
 				unfinishedLoads++;
-				parseDRMAdditionalHeader(data, baseUrl, idPrefix);
+				parseDRMAdditionalHeader(data, baseURL, idPrefix);
 			}
 
 			// Bootstrap
@@ -192,7 +192,7 @@ package org.osmf.elements.f4mClasses
 			for each (var info:XML in root.nmsp::bootstrapInfo)
 			{
 				unfinishedLoads++;
-				parseBootstrapInfo(info, baseUrl, idPrefix);
+				parseBootstrapInfo(info, baseURL, idPrefix);
 			}
 
 			// Required if base URL is omitted from Manifest
@@ -599,24 +599,24 @@ package org.osmf.elements.f4mClasses
 			dispatchEvent(new ParseEvent(ParseEvent.PARSE_COMPLETE, false, false, manifest));
 		}
 
-		private function parseMedia(value:XML, baseUrl:String, idPrefix:String = ""):void
+		private function parseMedia(value:XML, baseURL:String, idPrefix:String = ""):void
 		{
-			mediaParser.parse(value.toXMLString(), baseUrl, idPrefix);
+			mediaParser.parse(value.toXMLString(), baseURL, idPrefix);
 		}
 
-		private function parseDVRInfo(value:XML, baseUrl:String):void
+		private function parseDVRInfo(value:XML, baseURL:String):void
 		{
-			dvrInfoParser.parse(value.toXMLString(), baseUrl);
+			dvrInfoParser.parse(value.toXMLString(), baseURL);
 		}
 
-		private function parseDRMAdditionalHeader(value:XML, baseUrl:String, idPrefix:String = ""):void
+		private function parseDRMAdditionalHeader(value:XML, baseURL:String, idPrefix:String = ""):void
 		{
-			drmAdditionalHeaderParser.parse(value.toXMLString(), baseUrl, idPrefix);
+			drmAdditionalHeaderParser.parse(value.toXMLString(), baseURL, idPrefix);
 		}
 
-		private function parseBootstrapInfo(value:XML, baseUrl:String, idPrefix:String = ""):void
+		private function parseBootstrapInfo(value:XML, baseURL:String, idPrefix:String = ""):void
 		{
-			bootstrapInfoParser.parse(value.toXMLString(), baseUrl, idPrefix);
+			bootstrapInfoParser.parse(value.toXMLString(), baseURL, idPrefix);
 		}
 
 		/**
