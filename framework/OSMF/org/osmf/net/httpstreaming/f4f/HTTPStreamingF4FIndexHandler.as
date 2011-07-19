@@ -24,7 +24,6 @@ package org.osmf.net.httpstreaming.f4f
 	import __AS3__.vec.Vector;
 	
 	import flash.events.TimerEvent;
-	// import flash.external.ExternalInterface;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
@@ -305,7 +304,6 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function getFileForTime(time:Number, quality:int):HTTPStreamRequest
 		{
-			// ExternalInterface.call("console.log", "getFileForTime " + time + ", quality: " + quality);
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			if (abst == null)
 				return null;
@@ -334,21 +332,17 @@ package org.osmf.net.httpstreaming.f4f
 					{
 						if (abst.contentComplete())
 						{
-							// ExternalInterface.call("console.log", "contentComplete");
 							if (abst.live) // live/DVR playback stops
 							{
-								// ExternalInterface.call("console.log", "abst.live");
 								return new HTTPStreamRequest(null, quality, -1, -1, true);
 							}
 							else
 							{
-								// ExternalInterface.call("console.log", "return null");
 								return null;
 							}
 						}
 						else
 						{
-							// ExternalInterface.call("console.log", "adjust delay");
 							adjustDelay();
 							refreshBootstrapInfo(quality);
 							return new HTTPStreamRequest(null, quality, 0, delay);
@@ -367,7 +361,6 @@ package org.osmf.net.httpstreaming.f4f
 					{
 						requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
 					}
-					// ExternalInterface.call("console.log", requestUrl + ", time: "+time+", quality: " + quality);
 					
 					CONFIG::LOGGING
 					{
@@ -382,7 +375,6 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					if (abst.live)
 					{
-						// ExternalInterface.call("console.log", "abst.live adjust delay");
 						adjustDelay();
 						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
@@ -406,7 +398,6 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function getNextFile(quality:int):HTTPStreamRequest
 		{
-		//	ExternalInterface.call("console.log", "getNextFile, quality: " + quality);
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
 /*
@@ -453,7 +444,6 @@ package org.osmf.net.httpstreaming.f4f
 					{
 						if (abst.live) // live/DVR playback stops
 						{
-						//	ExternalInterface.call("console.log", "N- live/dvr playback stops");
 							return new HTTPStreamRequest(null, quality, -1, -1, true);
 						}
 						else
@@ -463,7 +453,6 @@ package org.osmf.net.httpstreaming.f4f
 					}
 					else
 					{
-					//	ExternalInterface.call("console.log", "N_ adjust delay");
 						adjustDelay();
 						currentFAI = oldCurrentFAI;
 						refreshBootstrapInfo(quality);
@@ -484,8 +473,6 @@ package org.osmf.net.httpstreaming.f4f
 					requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
 				}
 			
-			//	ExternalInterface.call("console.log", requestUrl);
-				
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
 				notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
@@ -594,7 +581,6 @@ package org.osmf.net.httpstreaming.f4f
 
 		private function refreshBootstrapInfo(quality:uint):void
 		{
-		//	ExternalInterface.call("console.log", "refresh bstr qual="+quality);
 			var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[quality] as HTTPStreamingF4FStreamInfo;
 			if (streamInfo == null)
 				return;
@@ -660,7 +646,6 @@ package org.osmf.net.httpstreaming.f4f
 			}
 			catch (e:Error)
 			{
-				// ExternalInterface.call("console.log", e);
 				boxes = null;
 			}
 			
