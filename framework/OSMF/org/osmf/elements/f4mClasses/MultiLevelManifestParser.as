@@ -60,7 +60,6 @@ package org.osmf.elements.f4mClasses
 		 */
 		override public function parse(value:String, rootURL:String = null, manifest:Manifest = null, idPrefix:String = ""):void
 		{
-			unfinishedLoads = 0;
 			parsing = true;
 
 			this.manifest = new Manifest();
@@ -237,27 +236,10 @@ package org.osmf.elements.f4mClasses
 
 			for each (var media:XML in root.nmsp::media)
 			{
-				/*
-				// Put the bitrate into the media node(s).
+				
+				// Put the properties into the media node(s).
 				// Note: There *should* only be one media node, but we'll
 				// dump the bitrate in a for...each just in case.
-				if (info.bitrate != null && info.bitrate.length > 0)
-				{
-					media.@bitrate = info.bitrate;
-				}
-				
-				// put the width
-				if (info.width != null && info.width.length > 0)
-				{
-					media.@width = info.width;
-				}
-				
-				// put the height
-				if (info.height != null && info.width.length > 0)
-				{
-					media.@height = info.height;
-				}
-				*/
 				
 				var infoList:XMLList = flash.utils.describeType(info.attributes)..variable;
 				
@@ -274,23 +256,6 @@ package org.osmf.elements.f4mClasses
 						delete media.@[key];
 					}
 				}
-
-				/* [Mihai] No longer make the URL absolute. It will be made at a later point.
-				
-				// Make the url absolute.
-				// The streams could have come from anywhere, so we need to
-				// be sure we specify where they came from.
-				var url:String = media.@url;
-				if (!URL.isAbsoluteURL(url))
-				{
-					media.@url = URL.normalizeRootURL(info.baseURL) + URL.normalizeRelativeURL(url);
-				}
-//				if (url.indexOf("http") != 0)
-//				{
-//					media.@url = info.baseURL + '/' + url;
-//				}
-				
-				*/
 			}
 
 			// Save off any information we need.
@@ -305,6 +270,7 @@ package org.osmf.elements.f4mClasses
 
 			// Once we've finished loading we can process everything.
 			unfinishedLoads--;
+			
 			if (unfinishedLoads == 0)
 			{
 				processQueue();
@@ -319,7 +285,7 @@ package org.osmf.elements.f4mClasses
 
 		private var parsing:Boolean = false;
 
-		private var unfinishedLoads:Number;
+		private var unfinishedLoads:Number = 0;
 
 		private var manifest:Manifest;
 

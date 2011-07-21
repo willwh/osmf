@@ -104,7 +104,6 @@ package org.osmf.elements.f4mClasses
 			// Now use whatever manifest we end up with.
 			this.manifest = manifest;
 
-			unfinishedLoads = 0;
 			isMulticast = false;
 			bitrateMissing = false;
 
@@ -903,7 +902,7 @@ package org.osmf.elements.f4mClasses
 
 		private var parsing:Boolean = false;
 
-		private var unfinishedLoads:Number;
+		private var unfinishedLoads:Number = 0;
 
 		private var isMulticast:Boolean;
 
