@@ -40,6 +40,7 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	import org.osmf.utils.OSMFSettings;
 
 	CONFIG::LOGGING 
 	{	
@@ -607,7 +608,7 @@ package org.osmf.net.httpstreaming.f4f
 			// XXX this must be extracted so that a developer can overwrite it. 
 			var previousRequestDate:Date = pendingUrlRequest["date"];
 			var newRequestDate:Date = new Date();
-			if (BOOTSTRAP_REFRESH_INTERVAL && previousRequestDate != null && (newRequestDate.valueOf() - previousRequestDate.valueOf() < BOOTSTRAP_REFRESH_INTERVAL))
+			if (OSMFSettings.hdsMinimumBootstrapRefreshInterval && previousRequestDate != null && (newRequestDate.valueOf() - previousRequestDate.valueOf() < OSMFSettings.hdsMinimumBootstrapRefreshInterval))
 				return;
 			pendingUrlLoads[requestedUrl].date = newRequestDate;
 			pendingUrlLoads[requestedUrl].active = true;
@@ -743,9 +744,9 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			// Update the bootstrap update interval; we set its value to the fragment duration
 			bootstrapUpdateInterval = duration * 1000;
-			if (bootstrapUpdateInterval < BOOTSTRAP_REFRESH_INTERVAL)
+			if (bootstrapUpdateInterval < OSMFSettings.hdsMinimumBootstrapRefreshInterval)
 			{
-				bootstrapUpdateInterval = BOOTSTRAP_REFRESH_INTERVAL;
+				bootstrapUpdateInterval = OSMFSettings.hdsMinimumBootstrapRefreshInterval;
 			}
 			
 			dispatchEvent
@@ -939,7 +940,9 @@ package org.osmf.net.httpstreaming.f4f
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		
-		public static const BOOTSTRAP_REFRESH_INTERVAL:uint = 2000;
+		// This was exposed as a public property in OSMFSettings: hdsMinimumBootstrapRefreshInterval
+		//
+		// public static const BOOTSTRAP_REFRESH_INTERVAL:uint = 2000;
 		
 		private var pendingUrlLoads:Object = new Object();
 

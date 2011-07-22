@@ -45,6 +45,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
+	import org.osmf.utils.OSMFSettings;
 	
 	CONFIG::LOGGING 
 	{	
@@ -117,7 +118,7 @@ package org.osmf.net.httpstreaming
 				addEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
 			}
 			
-			this.bufferTime = MINIMUM_BUFFER_TIME;
+			this.bufferTime = OSMFSettings.hdsMinimumBufferTime;
 			this.bufferTimeMax = 0;
 			
 			setState(HTTPStreamingState.INIT);
@@ -127,7 +128,7 @@ package org.osmf.net.httpstreaming
 			
 			_source = _mixer;
 			
-			_mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
+			_mainTimer = new Timer(OSMFSettings.hdsMainTimerInterval); 
 			_mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
 		}
 		
@@ -240,8 +241,8 @@ package org.osmf.net.httpstreaming
 		override public function set bufferTime(value:Number):void
 		{
 			super.bufferTime = value;
-			_desiredBufferTime_Min = Math.max(MINIMUM_BUFFER_TIME, value);
-			_desiredBufferTime_Max = _desiredBufferTime_Min + ADDITIONAL_BUFFER_TIME;
+			_desiredBufferTime_Min = Math.max(OSMFSettings.hdsMinimumBufferTime, value);
+			_desiredBufferTime_Max = _desiredBufferTime_Min + OSMFSettings.hdsAdditionalBufferTime;
 		}
 		
 		/**
@@ -557,7 +558,7 @@ package org.osmf.net.httpstreaming
 						if (
 							    (_state != HTTPStreamingState.PLAY) 	// we are no longer in play mode
 							 || (bytes == null) 						// or we don't have any additional data
-							 || (processed >= BYTES_PROCESSING_LIMIT) 	// or we have processed enough data  
+							 || (processed >= OSMFSettings.hdsBytesProcessingLimit) 	// or we have processed enough data  
 						)
 						{
 							keepProcessing = false;
@@ -1269,13 +1270,26 @@ package org.osmf.net.httpstreaming
 //		}
 		
 		/// Internals
-		private static const MINIMUM_BUFFER_TIME:Number = 4;
-		private static const ADDITIONAL_BUFFER_TIME:Number = 2;
+		
+		// This was exposed as a public property in OSMFSettings: hdsMinimumBufferTime
+		//
+		// private static const MINIMUM_BUFFER_TIME:Number = 4;
+		
+		// This was exposed as a public property in OSMFSettings: hdsAdditionalBufferTime
+		//
+		// private static const ADDITIONAL_BUFFER_TIME:Number = 2;
+		
 		private var _desiredBufferTime_Min:Number = 0;
 		private var _desiredBufferTime_Max:Number = 0;
 				
-		private static const BYTES_PROCESSING_LIMIT:Number = 65000;
-		private static const MAIN_TIMER_INTERVAL:int = 25;
+		// This was exposed as a public property in OSMFSettings: hdsBytesProcessingLimit
+		//
+		// private static const BYTES_PROCESSING_LIMIT:Number = 65000;
+		
+		// This was exposed as a public property in OSMFSettings: hdsMainTimerInterval
+		//
+		// private static const MAIN_TIMER_INTERVAL:int = 25;
+		
 		private var _mainTimer:Timer = null;
 		private var _state:String = HTTPStreamingState.INIT;
 		

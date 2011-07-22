@@ -35,6 +35,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
+	import org.osmf.utils.OSMFSettings;
 	import org.osmf.utils.OSMFStrings;
 	
 	CONFIG::LOGGING
@@ -233,7 +234,7 @@ package org.osmf.net.httpstreaming
 			{
 				if (_dvrInfo != null)
 				{
-					_seekTarget = Math.floor(_dvrInfo.startTime + _dvrInfo.curLength - DVR_LIVE_OFFSET);
+					_seekTarget = Math.floor(_dvrInfo.startTime + _dvrInfo.curLength - OSMFSettings.hdsDVRLiveOffset);
 				}
 				else
 				{
@@ -765,7 +766,10 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/// Internals
-		private static const DVR_LIVE_OFFSET:Number = 4;
+		
+		// This was exposed as a public property in OSMFSettings: hdsDVRLiveOffset
+		// 
+		// private static const DVR_LIVE_OFFSET:Number = 4;
 		
 		private var _dispatcher:IEventDispatcher = null;
 		

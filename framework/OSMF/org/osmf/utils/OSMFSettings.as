@@ -49,7 +49,61 @@ package org.osmf.utils
 		{
 			return runtimeSupportsStageVideo(Capabilities.version);
 		}
+		
+		
+		/////////////////////////////////////////////
+		//
+		//  HTTPNetStream
+		//
+		/////////////////////////////////////////////
+		/**
+		 * @private
+		 */
+		public static var hdsMinimumBufferTime:Number = 4;
+		
+		/**
+		 * @private
+		 */
+		public static var hdsAdditionalBufferTime:Number = 2;
+		
+		/**
+		 * @private
+		 */
+		public static var hdsBytesProcessingLimit:Number = 65000;
+		
+		/**
+		 * @private
+		 */
+		public static var hdsMainTimerInterval:int = 25;
 
+		
+		/////////////////////////////////////////////
+		//
+		//  HTTPStreamingF4FIndexHandler
+		//
+		/////////////////////////////////////////////
+		/**
+		 * @private
+		 */
+		public static var hdsDefaultFragmentsThreshold:uint = 5;
+		
+		/**
+		 * @private
+		 */
+		public static var hdsMinimumBootstrapRefreshInterval:uint = 2000;
+		
+		
+		/////////////////////////////////////////////
+		//
+		//  HTTPStreamSource
+		//
+		/////////////////////////////////////////////
+		/**
+		 * @private
+		 */
+		public static var hdsDVRLiveOffset:Number = 4;
+		
+		
 		/**
 		 * @private
 		 */
