@@ -21,8 +21,6 @@
  *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import flash.events.DRMErrorEvent;
-	import flash.events.DRMStatusEvent;
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
@@ -56,6 +54,8 @@ package org.osmf.net.httpstreaming
 	CONFIG::FLASH_10_1	
 	{
 		import flash.net.NetStreamAppendBytesAction;
+		import flash.events.DRMErrorEvent;
+		import flash.events.DRMStatusEvent;
 	}
 	
 	[ExcludeClass]
@@ -541,7 +541,6 @@ package org.osmf.net.httpstreaming
 					{
 						changeAudioStreamTo(_desiredAudioStreamName);
 					}
-					
 										
 					var processed:int = 0;
 					var keepProcessing:Boolean = true;
@@ -952,7 +951,10 @@ package org.osmf.net.httpstreaming
 						_muteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
 						_muteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_START;
 						// and start saving, with this as the first...
-						_enhancedSeekTags = new Vector.<FLVTagVideo>();
+						if (_enhancedSeekTags == null)
+						{
+							_enhancedSeekTags = new Vector.<FLVTagVideo>();
+						}
 						_enhancedSeekTags.push(_muteTag);
 						_flvParserIsSegmentStart = false;
 					}	
@@ -975,6 +977,10 @@ package org.osmf.net.httpstreaming
 						_unmuteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
 						_unmuteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_END;
 						
+						if (_enhancedSeekTags == null)
+						{
+							_enhancedSeekTags = new Vector.<FLVTagVideo>();
+						}
 						_enhancedSeekTags.push(_unmuteTag);	
 						
 						// twiddle and dump
@@ -1019,6 +1025,10 @@ package org.osmf.net.httpstreaming
 					} // past enhanced seek target
 					else
 					{
+						if (_enhancedSeekTags == null)
+						{
+							_enhancedSeekTags = new Vector.<FLVTagVideo>();
+						}
 						_enhancedSeekTags.push(tag);
 					}
 				} // else is a data tag, which are simply passthrough with unadjusted timestamps, rather than discarding or saving for later

@@ -22,11 +22,9 @@
 package org.osmf.net.httpstreaming
 {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
-	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
+	import flash.events.NetStatusEvent;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	
@@ -111,6 +109,9 @@ package org.osmf.net.httpstreaming
 			_indexHandler.addEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, onFragmentDuration);
 			_indexHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
 			_indexHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onError);
+			
+			_indexDownloaderMonitor.addEventListener(Event.COMPLETE, onIndexComplete);
+			_indexDownloaderMonitor.addEventListener(NetStatusEvent.NET_STATUS, onIndexError);
 			
 			setState(HTTPStreamingState.INIT);
 			
@@ -380,9 +381,9 @@ package org.osmf.net.httpstreaming
 						// then we use internal source to actually download the chunk
 						if (_downloader == null)
 						{
-							_downloader = new HTTPStreamDownloader(_dispatcher);
+							_downloader = new HTTPStreamDownloader();
 						}
-						_downloader.open(_request.urlRequest);
+						_downloader.open(_request.urlRequest, _dispatcher, FRAGMENT_DOWNLOAD_TIMEOUT_INTERVAL);
 						setState(HTTPStreamingState.BEGIN_FRAGMENT);
 					}
 					else if (_request != null && _request.retryAfter >= 0)
@@ -573,19 +574,13 @@ package org.osmf.net.httpstreaming
 		private function onRequestLoadIndex(event:HTTPStreamingIndexHandlerEvent):void
 		{
 			// ignore any additonal request if an loader operation is still in progress
-			_pendingIndexLoadingRequests[_pendingIndexLoadingRequestsLenght] = event;
-			_pendingIndexLoadingRequestsLenght++;
+			_pendingIndexDownloadRequests[_pendingIndexDownloadRequestsLenght] = event;
+			_pendingIndexDownloadRequestsLenght++;
 			
-			if (_indexLoader == null)
+			if (_currentIndexDownloadEvent == null)
 			{
-				_indexLoader = new URLLoader();
-				_indexLoader.dataFormat = event.binaryData ? URLLoaderDataFormat.BINARY : URLLoaderDataFormat.TEXT;  
-				_indexLoader.addEventListener(Event.COMPLETE, onIndexComplete);
-				_indexLoader.addEventListener(IOErrorEvent.IO_ERROR, onIndexError);
-				_indexLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexError);
-				
-				_currentIndexLoadEvent = event;
-				_indexLoader.load(_currentIndexLoadEvent.request);
+				_currentIndexDownloadEvent = event;
+				_indexDownloader.open(_currentIndexDownloadEvent.request, _indexDownloaderMonitor, BOOTSTRAP_DOWNLOAD_TIMEOUT_INTERVAL);
 			}
 		}
 		
@@ -597,7 +592,12 @@ package org.osmf.net.httpstreaming
 		 */ 
 		private function onIndexComplete(event:Event):void
 		{
-			_indexHandler.processIndexData(_indexLoader.data, _currentIndexLoadEvent.requestContext);
+			var input:IDataInput = _indexDownloader.getBytes(_indexDownloader.downloadBytesCount);
+			var bytes:ByteArray = new ByteArray();
+			input.readBytes(bytes, 0, input.bytesAvailable);
+			bytes.position = 0;
+			
+			_indexHandler.processIndexData(bytes, _currentIndexDownloadEvent.requestContext);
 			processPendingIndexLoadingRequest();
 		}
 		
@@ -625,21 +625,21 @@ package org.osmf.net.httpstreaming
 		 */
 		private function processPendingIndexLoadingRequest():void
 		{
-			_pendingIndexLoadingRequests.shift();
-			_pendingIndexLoadingRequestsLenght--;
+			_pendingIndexDownloadRequests.shift();
+			_pendingIndexDownloadRequestsLenght--;
 			
-			if (_pendingIndexLoadingRequestsLenght == 0)
+			if (_pendingIndexDownloadRequestsLenght == 0)
 			{
-				_indexLoader.removeEventListener(Event.COMPLETE, onIndexComplete);
-				_indexLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexError);
-				_indexLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexError);
-				
-				_indexLoader = null;
+				if (_indexDownloader != null)
+				{
+					_indexDownloader.close();
+				}
+				_currentIndexDownloadEvent = null;
 			}
 			else
 			{
-				_currentIndexLoadEvent = _pendingIndexLoadingRequests[0];
-				_indexLoader.load(_currentIndexLoadEvent.request);
+				_currentIndexDownloadEvent = _pendingIndexDownloadRequests[0];
+				_indexDownloader.open(_currentIndexDownloadEvent.request, _indexDownloaderMonitor, BOOTSTRAP_DOWNLOAD_TIMEOUT_INTERVAL);
 			}	
 		}
 		
@@ -766,7 +766,9 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/// Internals
-		
+		private static const FRAGMENT_DOWNLOAD_TIMEOUT_INTERVAL:Number = 3000;
+		private static const BOOTSTRAP_DOWNLOAD_TIMEOUT_INTERVAL:Number = 1000;
+
 		// This was exposed as a public property in OSMFSettings: hdsDVRLiveOffset
 		// 
 		// private static const DVR_LIVE_OFFSET:Number = 4;
@@ -798,10 +800,11 @@ package org.osmf.net.httpstreaming
 		private var _fragmentDuration:Number = 0;
 		private var _endFragment:Boolean = false;
 		
-		private var _indexLoader:URLLoader = null;
-		private var _currentIndexLoadEvent:HTTPStreamingIndexHandlerEvent = null;
-		private var _pendingIndexLoadingRequests:Vector.<HTTPStreamingIndexHandlerEvent> = new Vector.<HTTPStreamingIndexHandlerEvent>();
-		private var _pendingIndexLoadingRequestsLenght:int = 0;
+		private var _indexDownloaderMonitor:EventDispatcher = new EventDispatcher();
+		private var _indexDownloader:HTTPStreamDownloader = new HTTPStreamDownloader();
+		private var _currentIndexDownloadEvent:HTTPStreamingIndexHandlerEvent = null;
+		private var _pendingIndexDownloadRequests:Vector.<HTTPStreamingIndexHandlerEvent> = new Vector.<HTTPStreamingIndexHandlerEvent>();
+		private var _pendingIndexDownloadRequestsLenght:int = 0;
 
 		private var _hasErrors:Boolean = false;
 		private var _isReady:Boolean = false;

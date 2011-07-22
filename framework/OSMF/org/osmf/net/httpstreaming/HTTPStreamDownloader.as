@@ -27,12 +27,15 @@ package org.osmf.net.httpstreaming
 	import flash.events.NetStatusEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.net.URLStream;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
+	import flash.utils.Timer;
 	
 	import org.osmf.net.NetStreamCodes;
+
 	CONFIG::LOGGING
 	{
 		import org.osmf.logging.Logger;
@@ -59,9 +62,8 @@ package org.osmf.net.httpstreaming
 		 * @param dispatcher A dispatcher object used by HTTPStreamDownloader to
 		 * 					 dispatch any event. 
 		 **/
-		public function HTTPStreamDownloader(dispatcher:IEventDispatcher)
+		public function HTTPStreamDownloader()
 		{
-			_dispatcher = dispatcher;
 		}
 		
 		/**
@@ -117,15 +119,16 @@ package org.osmf.net.httpstreaming
 		 * immediately. It will automatically close any previous opended
 		 * HTTP stream source.
 		 **/
-		public function open(request:URLRequest):void
+		public function open(request:URLRequest, dispatcher:IEventDispatcher, timeout:Number):void
 		{
 			if (isOpen)
 				close();
-					
+								
 			_isComplete = false;
 			_hasData = false;
 			_hasErrors = false;
 			
+			_dispatcher = dispatcher;
 			if (_savedBytes == null)
 			{
 				_savedBytes = new ByteArray();
@@ -141,16 +144,25 @@ package org.osmf.net.httpstreaming
 				_urlStream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 			}
 			
+			_timeoutInterval = timeout;
+			if (_timeoutTimer == null)
+			{
+				_timeoutTimer = new Timer(_timeoutInterval, 1);
+				_timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeout);
+			}
+
 			if (_urlStream != null && request != null)
 			{
+				_request = request;
 				CONFIG::LOGGING
 				{
-					logger.debug("loading :" + request.url.toString());	
+					logger.debug("Loading :" + _request.url.toString());	
 				}
 
 				_downloadBeginDate = new Date();
 				_downloadBytesCount = 0;
-				_urlStream.load(request);
+				startTimeoutMonitor();
+				_urlStream.load(_request);
 			}
 		}
 		
@@ -169,15 +181,18 @@ package org.osmf.net.httpstreaming
 			_hasData = false;
 			_hasErrors = false;
 			
-			if (_savedBytes != null)
+			stopTimeoutMonitor();
+			
+			if (_timeoutTimer != null)
 			{
-				_savedBytes.length = 0;
+				_timeoutTimer.stop();
 				if (dispose)
 				{
-					_savedBytes = null;
+					_timeoutTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, onTimeout);
+					_timeoutTimer = null;
 				}
 			}
-			
+
 			if (_urlStream != null)
 			{
 				if (_urlStream.connected)
@@ -192,6 +207,15 @@ package org.osmf.net.httpstreaming
 					_urlStream.removeEventListener(IOErrorEvent.IO_ERROR, onError);
 					_urlStream.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 					_urlStream = null;
+				}
+			}
+
+			if (_savedBytes != null)
+			{
+				_savedBytes.length = 0;
+				if (dispose)
+				{
+					_savedBytes = null;
 				}
 			}
 		}
@@ -288,6 +312,11 @@ package org.osmf.net.httpstreaming
 		 **/
 		private function onComplete(event:Event):void
 		{
+			if (_timeoutTimer != null)
+			{
+				stopTimeoutMonitor();
+			}
+			
 			_downloadEndDate = new Date();
 			_downloadDuration = (_downloadEndDate.valueOf() - _downloadBeginDate.valueOf())/1000.0;
 			
@@ -295,7 +324,12 @@ package org.osmf.net.httpstreaming
 			
 			CONFIG::LOGGING
 			{
-				logger.debug(" loading complete. It took " + _downloadDuration + " sec to download " + _downloadBytesCount + " bytes.");	
+				logger.debug("Loading complete. It took " + _downloadDuration + " sec to download " + _downloadBytesCount + " bytes.");	
+			}
+			
+			if (_dispatcher != null)
+			{
+				_dispatcher.dispatchEvent(event);
 			}
 		}
 		
@@ -305,12 +339,17 @@ package org.osmf.net.httpstreaming
 		 **/
 		private function onProgress(event:ProgressEvent):void
 		{
+			if (_timeoutTimer != null)
+			{
+				stopTimeoutMonitor();
+			}
+			
 			if (_downloadBytesCount == 0)
 			{
 				_downloadBytesCount = event.bytesTotal;
 				CONFIG::LOGGING
 				{
-					logger.debug(" loaded " + event.bytesLoaded + " bytes from " + _downloadBytesCount + " bytes.");
+					logger.debug("Loaded " + event.bytesLoaded + " bytes from " + _downloadBytesCount + " bytes.");
 				}
 			}
 			
@@ -323,11 +362,15 @@ package org.osmf.net.httpstreaming
 		 **/
 		private function onError(event:Event):void
 		{
+			if (_timeoutTimer != null)
+			{
+				stopTimeoutMonitor();
+			}
+			
 			CONFIG::LOGGING
 			{			
-				logger.error("URLStream: " + _urlStream );
-				logger.error("video error event: " + event );
-				logger.error( "******* attempting to download video fragment caused error event!" );
+				logger.error("URLStream error event: " + event);
+				logger.error("Error while downloading [" + _request.url + "].");
 			}
 			
 			_hasErrors = true;
@@ -339,9 +382,59 @@ package org.osmf.net.httpstreaming
 							( NetStatusEvent.NET_STATUS
 								, false
 								, false
-								, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error"}
+								, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error", details:_request.url}
 							)
 						);
+			}
+		}
+		
+		/**
+		 * @private
+		 * Starts the timeout monitor.
+		 */
+		private function startTimeoutMonitor():void
+		{
+			if (_timeoutTimer != null)
+			{
+				_timeoutTimer.reset();
+				_timeoutTimer.start();
+			}
+		}
+		
+		/**
+		 * @private
+		 * Stops the timeout monitor.
+		 */
+		private function stopTimeoutMonitor():void
+		{
+			if (_timeoutTimer != null)
+			{
+				_timeoutTimer.stop();
+			}
+		}
+		
+		/**
+		 * @private
+		 * Event handler called when no data was received but the timeout interval passed.
+		 */ 
+		private function onTimeout(event:TimerEvent):void
+		{
+			if (_request != null)
+			{
+				CONFIG::LOGGING
+				{
+					logger.error("Timeout while trying to download [" + _request.url + "]");
+					logger.error("Canceling and retrying the download.");
+				}
+				
+				open(_request, _dispatcher, _timeoutInterval);
+			}
+			else
+			{
+				CONFIG::LOGGING
+				{
+					logger.error("Timeout while trying to download unknown request");
+				}
 			}
 		}
 		
@@ -352,12 +445,16 @@ package org.osmf.net.httpstreaming
 		private var _hasErrors:Boolean = false;
 		private var _savedBytes:ByteArray = null;
 		private var _urlStream:URLStream = null;
+		private var _request:URLRequest = null;
 		private var _dispatcher:IEventDispatcher = null;
 		
 		private var _downloadBeginDate:Date = null;
 		private var _downloadEndDate:Date = null;
 		private var _downloadDuration:Number = 0;
 		private var _downloadBytesCount:Number = 0;
+		
+		private var _timeoutTimer:Timer = null;
+		private var _timeoutInterval:Number = 1000;
 		
 		CONFIG::LOGGING
 		{
