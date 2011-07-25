@@ -120,7 +120,7 @@ package org.osmf.utils
 		 * 
 		 * The download of the initial F4M is not affected by this timeout.
 		 */
-		public static var f4mParseTimeout:Number = 3000;
+		public static var f4mParseTimeout:Number = 30000;
 		
 		/**
 		 * @private
