@@ -447,6 +447,13 @@ package org.osmf.net.httpstreaming
 					_notifyPlayUnpublishPending = false; 
 				}
 			}
+			
+			// if we have received a stream not found error
+			// then we close all data
+			if (event.info.code == NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND)
+			{
+				close();
+			}
 		}
 		
 		CONFIG::FLASH_10_1

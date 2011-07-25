@@ -42,6 +42,7 @@ package
 	import org.osmf.player.debug.*;
 	import org.osmf.player.preloader.*;
 	import org.osmf.traits.*;
+	import org.osmf.utils.OSMFSettings;
 	
 	CONFIG::DEBUG 
 	{
@@ -54,6 +55,9 @@ package
 	{
 		public function OSMFPlayer(preloader:Preloader)
 		{
+			OSMFSettings.enableStageVideo = false;
+			OSMFSettings.hdsDVRLiveOffset = 4;
+			
 			// Get a reference to the stage from the preloader (ours isn't set yet).
 			_stage = preloader.stage;
 			

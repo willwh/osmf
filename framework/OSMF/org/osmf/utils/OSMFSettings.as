@@ -124,6 +124,36 @@ package org.osmf.utils
 		
 		/**
 		 * @private
+		 * 
+		 * Maximum retries in case of a loading failure.
+		 */
+		public static var hdsMaximumRetries:Number = 5;
+		
+		/**
+		 * @private
+		 * 
+		 * The value used to increment the timeout value on each retry. The first time
+		 * the framework will wait x, on the second try it will wait x+hdsTimeoutAdjustmentOnRetry,
+		 * and so on. 
+		 */
+		public static var hdsTimeoutAdjustmentOnRetry:Number = 4000;
+		
+		/**
+		 * @private
+		 * 
+		 * Initial timeout for fragment downloads. 
+		 */
+		public static var hdsFragmentDownloadTimeout:Number = 4000;
+		
+		/**
+		 * @private
+		 * 
+		 * Initial timeout for index downloads.
+		 */
+		public static var hdsIndexDownloadTimeout:Number = 4000;
+		
+		/**
+		 * @private
 		 */
 		internal static function runtimeSupportsStageVideo(runtimeVersion:String):Boolean
 		{

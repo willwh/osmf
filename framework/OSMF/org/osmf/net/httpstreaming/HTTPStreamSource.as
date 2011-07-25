@@ -32,6 +32,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.utils.OSMFSettings;
 	import org.osmf.utils.OSMFStrings;
@@ -383,7 +384,7 @@ package org.osmf.net.httpstreaming
 						{
 							_downloader = new HTTPStreamDownloader();
 						}
-						_downloader.open(_request.urlRequest, _dispatcher, FRAGMENT_DOWNLOAD_TIMEOUT_INTERVAL);
+						_downloader.open(_request.urlRequest, _dispatcher, OSMFSettings.hdsFragmentDownloadTimeout);
 						setState(HTTPStreamingState.BEGIN_FRAGMENT);
 					}
 					else if (_request != null && _request.retryAfter >= 0)
@@ -580,7 +581,7 @@ package org.osmf.net.httpstreaming
 			if (_currentIndexDownloadEvent == null)
 			{
 				_currentIndexDownloadEvent = event;
-				_indexDownloader.open(_currentIndexDownloadEvent.request, _indexDownloaderMonitor, BOOTSTRAP_DOWNLOAD_TIMEOUT_INTERVAL);
+				_indexDownloader.open(_currentIndexDownloadEvent.request, _indexDownloaderMonitor, OSMFSettings.hdsIndexDownloadTimeout);
 			}
 		}
 		
@@ -639,7 +640,7 @@ package org.osmf.net.httpstreaming
 			else
 			{
 				_currentIndexDownloadEvent = _pendingIndexDownloadRequests[0];
-				_indexDownloader.open(_currentIndexDownloadEvent.request, _indexDownloaderMonitor, BOOTSTRAP_DOWNLOAD_TIMEOUT_INTERVAL);
+				_indexDownloader.open(_currentIndexDownloadEvent.request, _indexDownloaderMonitor, OSMFSettings.hdsIndexDownloadTimeout);
 			}	
 		}
 		
@@ -766,13 +767,6 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/// Internals
-		private static const FRAGMENT_DOWNLOAD_TIMEOUT_INTERVAL:Number = 3000;
-		private static const BOOTSTRAP_DOWNLOAD_TIMEOUT_INTERVAL:Number = 1000;
-
-		// This was exposed as a public property in OSMFSettings: hdsDVRLiveOffset
-		// 
-		// private static const DVR_LIVE_OFFSET:Number = 4;
-		
 		private var _dispatcher:IEventDispatcher = null;
 		
 		private var _resource:MediaResourceBase = null;

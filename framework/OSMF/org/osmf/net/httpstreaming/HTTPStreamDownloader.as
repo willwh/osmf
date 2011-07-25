@@ -35,6 +35,7 @@ package org.osmf.net.httpstreaming
 	import flash.utils.Timer;
 	
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.utils.OSMFSettings;
 
 	CONFIG::LOGGING
 	{
@@ -64,6 +65,14 @@ package org.osmf.net.httpstreaming
 		 **/
 		public function HTTPStreamDownloader()
 		{
+		}
+		
+		/**
+		 * Returns tru if the HTTP stream source is loading data and false otherwise.
+		 */
+		public function get isLoading():Boolean
+		{
+			return _isLoading;
 		}
 		
 		/**
@@ -121,9 +130,15 @@ package org.osmf.net.httpstreaming
 		 **/
 		public function open(request:URLRequest, dispatcher:IEventDispatcher, timeout:Number):void
 		{
-			if (isOpen)
+			if (isOpen || (_urlStream != null && _urlStream.connected))
 				close();
-								
+			
+			if(request == null)
+			{
+				throw new ArgumentError("Null request in HTTPStreamDownloader open method."); 
+			}
+			
+			_isLoading = true;
 			_isComplete = false;
 			_hasData = false;
 			_hasErrors = false;
@@ -144,24 +159,24 @@ package org.osmf.net.httpstreaming
 				_urlStream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 			}
 			
-			_timeoutInterval = timeout;
 			if (_timeoutTimer == null)
 			{
 				_timeoutTimer = new Timer(_timeoutInterval, 1);
 				_timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeout);
 			}
 
-			if (_urlStream != null && request != null)
+			if (_urlStream != null)
 			{
+				_timeoutInterval = timeout;
 				_request = request;
 				CONFIG::LOGGING
 				{
-					logger.debug("Loading :" + _request.url.toString());	
+					logger.debug("Loading (timeout=" + _timeoutInterval + "):" + _request.url.toString());
 				}
 
 				_downloadBeginDate = new Date();
 				_downloadBytesCount = 0;
-				startTimeoutMonitor();
+				startTimeoutMonitor(_timeoutInterval);
 				_urlStream.load(_request);
 			}
 		}
@@ -176,12 +191,21 @@ package org.osmf.net.httpstreaming
 		 **/ 
 		public function close(dispose:Boolean = false):void
 		{
+			CONFIG::LOGGING
+			{
+				if (_request != null)
+				{
+					logger.debug("Closing :" + _request.url.toString());
+				}
+			}
+			
+			stopTimeoutMonitor();
+
 			_isOpen = false;
 			_isComplete = false;
 			_hasData = false;
 			_hasErrors = false;
-			
-			stopTimeoutMonitor();
+			_request = null;
 			
 			if (_timeoutTimer != null)
 			{
@@ -392,10 +416,14 @@ package org.osmf.net.httpstreaming
 		 * @private
 		 * Starts the timeout monitor.
 		 */
-		private function startTimeoutMonitor():void
+		private function startTimeoutMonitor(timeout:Number):void
 		{
 			if (_timeoutTimer != null)
 			{
+				if (timeout > 0)
+				{
+					_timeoutTimer.delay = timeout;
+				}
 				_timeoutTimer.reset();
 				_timeoutTimer.start();
 			}
@@ -419,26 +447,25 @@ package org.osmf.net.httpstreaming
 		 */ 
 		private function onTimeout(event:TimerEvent):void
 		{
-			if (_request != null)
+			CONFIG::LOGGING
 			{
-				CONFIG::LOGGING
-				{
-					logger.error("Timeout while trying to download [" + _request.url + "]");
-					logger.error("Canceling and retrying the download.");
-				}
-				
-				open(_request, _dispatcher, _timeoutInterval);
+				logger.error("Timeout while trying to download [" + _request.url + "]");
+				logger.error("Canceling and retrying the download.");
+			}
+			
+			_currentRetry++;
+			if (OSMFSettings.hdsMaximumRetries != -1 && _currentRetry < OSMFSettings.hdsMaximumRetries)
+			{					
+				open(_request, _dispatcher, _timeoutInterval + OSMFSettings.hdsTimeoutAdjustmentOnRetry);
 			}
 			else
 			{
-				CONFIG::LOGGING
-				{
-					logger.error("Timeout while trying to download unknown request");
-				}
+				onError(new Event(Event.CANCEL));
 			}
 		}
 		
 		/// Internals
+		private var _isLoading:Boolean = false;
 		private var _isOpen:Boolean = false;
 		private var _isComplete:Boolean = false;
 		private var _hasData:Boolean = false;
@@ -455,6 +482,7 @@ package org.osmf.net.httpstreaming
 		
 		private var _timeoutTimer:Timer = null;
 		private var _timeoutInterval:Number = 1000;
+		private var _currentRetry:Number = 0;
 		
 		CONFIG::LOGGING
 		{
