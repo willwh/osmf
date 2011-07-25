@@ -45,6 +45,7 @@ package org.osmf.elements
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.OSMFSettings;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
@@ -115,7 +116,7 @@ package org.osmf.elements
 				parser.addEventListener(ParseEvent.PARSE_ERROR, onParserLoadError);
 				
 				// Set up the timeout.
-				parserTimer = new Timer(DEFAULT_TIMEOUT, 1);
+				parserTimer = new Timer(OSMFSettings.f4mParseTimeout, 1);
 				parserTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onParserTimerComplete);
 				parserTimer.start();
 				

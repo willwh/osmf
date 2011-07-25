@@ -182,8 +182,6 @@ package org.osmf.elements
 			return parser;
 		}
 		
-		protected static const DEFAULT_TIMEOUT:Number = 3000;
-		
 		protected var factory:MediaFactory;
 		
 		protected var builders:Vector.<BaseManifestBuilder>;
