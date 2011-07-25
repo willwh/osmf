@@ -53,7 +53,7 @@ package org.osmf.utils
 		
 		/////////////////////////////////////////////
 		//
-		//  HTTPNetStream
+		//  org.osmf.net.httpstreaming.HTTPNetStream
 		//
 		/////////////////////////////////////////////
 		/**
@@ -79,7 +79,7 @@ package org.osmf.utils
 		
 		/////////////////////////////////////////////
 		//
-		//  HTTPStreamingF4FIndexHandler
+		//  org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler
 		//
 		/////////////////////////////////////////////
 		/**
@@ -95,14 +95,32 @@ package org.osmf.utils
 		
 		/////////////////////////////////////////////
 		//
-		//  HTTPStreamSource
+		//  org.osmf.net.httpstreaming.HTTPStreamSource
 		//
 		/////////////////////////////////////////////
 		/**
 		 * @private
+		 * 
+		 * The amount of seconds OSMF will stay behind the live point
 		 */
 		public static var hdsDVRLiveOffset:Number = 4;
 		
+		
+		/////////////////////////////////////////////
+		//
+		//  org.osmf.elements.ManifestLoaderBase
+		//
+		/////////////////////////////////////////////
+		/**
+		 * @private
+		 * 
+		 * The timeout (in milliseconds) for the parsing of an F4M.
+		 * This timeout applies to the actual parsing of the F4M 
+		 * (including the download of referenced F4Ms, external DRM metadata etc.)
+		 * 
+		 * The download of the initial F4M is not affected by this timeout.
+		 */
+		public static var f4mParseTimeout:Number = 3000;
 		
 		/**
 		 * @private
