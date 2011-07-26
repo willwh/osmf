@@ -24,7 +24,6 @@ package org.osmf.net.httpstreaming
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	import flash.events.NetStatusEvent;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	
@@ -32,7 +31,6 @@ package org.osmf.net.httpstreaming
 	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.utils.OSMFSettings;
 	import org.osmf.utils.OSMFStrings;
@@ -111,9 +109,9 @@ package org.osmf.net.httpstreaming
 			_indexHandler.addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
 			_indexHandler.addEventListener(HTTPStreamingEvent.INDEX_ERROR, onError);
 			
-			_indexDownloaderMonitor.addEventListener(Event.COMPLETE, onIndexComplete);
-			_indexDownloaderMonitor.addEventListener(NetStatusEvent.NET_STATUS, onIndexError);
-			
+			_indexDownloaderMonitor.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, 	onIndexComplete);
+			_indexDownloaderMonitor.addEventListener(HTTPStreamingEvent.DOWNLOAD_ERROR, 	onIndexError);
+				
 			setState(HTTPStreamingState.INIT);
 			
 			CONFIG::LOGGING
@@ -606,17 +604,21 @@ package org.osmf.net.httpstreaming
 		 * @private 
 		 * 
 		 * Event listener for error triggered by download of index file. We'll just 
-		 * close the index loader and forward this event further.
+		 * forward this event further.
 		 */ 
-		private function onIndexError(event:Event):void
+		private function onIndexError(event:HTTPStreamingEvent):void
 		{
 			CONFIG::LOGGING
 			{			
-				logger.error("index url error: " + event );
-				logger.error( "******* attempting to download the index file (bootstrap) caused error!" );
+				logger.error("Attempting to download the index file (bootstrap) caused error!");
 			}
 			
-			processPendingIndexLoadingRequest();
+			if (_indexDownloader != null)
+			{
+				_indexDownloader.close();
+			}
+			_currentIndexDownloadEvent = null;
+			_dispatcher.dispatchEvent(event);
 		}
 		
 		/**

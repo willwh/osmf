@@ -24,7 +24,6 @@ package org.osmf.net.httpstreaming
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
-	import flash.events.NetStatusEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.events.TimerEvent;
@@ -34,7 +33,7 @@ package org.osmf.net.httpstreaming
 	import flash.utils.IDataInput;
 	import flash.utils.Timer;
 	
-	import org.osmf.net.NetStreamCodes;
+	import org.osmf.events.HTTPStreamingEvent;
 	import org.osmf.utils.OSMFSettings;
 
 	CONFIG::LOGGING
@@ -65,14 +64,6 @@ package org.osmf.net.httpstreaming
 		 **/
 		public function HTTPStreamDownloader()
 		{
-		}
-		
-		/**
-		 * Returns tru if the HTTP stream source is loading data and false otherwise.
-		 */
-		public function get isLoading():Boolean
-		{
-			return _isLoading;
 		}
 		
 		/**
@@ -138,7 +129,6 @@ package org.osmf.net.httpstreaming
 				throw new ArgumentError("Null request in HTTPStreamDownloader open method."); 
 			}
 			
-			_isLoading = true;
 			_isComplete = false;
 			_hasData = false;
 			_hasErrors = false;
@@ -345,6 +335,7 @@ package org.osmf.net.httpstreaming
 			_downloadDuration = (_downloadEndDate.valueOf() - _downloadBeginDate.valueOf())/1000.0;
 			
 			_isComplete = true;
+			_hasErrors = false;
 			
 			CONFIG::LOGGING
 			{
@@ -353,7 +344,17 @@ package org.osmf.net.httpstreaming
 			
 			if (_dispatcher != null)
 			{
-				_dispatcher.dispatchEvent(event);
+				_dispatcher.dispatchEvent(
+					new HTTPStreamingEvent(
+							HTTPStreamingEvent.DOWNLOAD_COMPLETE,
+							false,
+							false,
+							NaN,
+							null,
+							null,
+							_request.url
+					)
+				);
 			}
 		}
 		
@@ -391,24 +392,31 @@ package org.osmf.net.httpstreaming
 				stopTimeoutMonitor();
 			}
 			
+			_downloadEndDate = new Date();
+			_downloadDuration = (_downloadEndDate.valueOf() - _downloadBeginDate.valueOf())/1000.0;
+
+			_isComplete = false;
+			_hasErrors = true;
+
 			CONFIG::LOGGING
-			{			
+			{
+				logger.error("Loading failed. It took " + _downloadDuration + " sec to fail while downloading [" + _request.url + "].");
 				logger.error("URLStream error event: " + event);
-				logger.error("Error while downloading [" + _request.url + "].");
 			}
 			
-			_hasErrors = true;
 			if (_dispatcher != null)
 			{
-				// We map all URL errors to Play.StreamNotFound.
-				_dispatcher.dispatchEvent
-						( new NetStatusEvent
-							( NetStatusEvent.NET_STATUS
-								, false
-								, false
-								, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error", details:_request.url}
-							)
-						);
+				_dispatcher.dispatchEvent(
+					new HTTPStreamingEvent(
+						HTTPStreamingEvent.DOWNLOAD_ERROR,
+						false,
+						false,
+						NaN,
+						null,
+						null,
+						_request.url
+					)
+				);
 			}
 		}
 		
@@ -465,7 +473,6 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/// Internals
-		private var _isLoading:Boolean = false;
 		private var _isOpen:Boolean = false;
 		private var _isComplete:Boolean = false;
 		private var _hasData:Boolean = false;

@@ -102,13 +102,14 @@ package org.osmf.net.httpstreaming
 			_resource = resource;
 			_factory = factory;
 			
-			addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
-			addEventListener(HTTPStreamingEvent.SCRIPT_DATA, onScriptData);
-			addEventListener(HTTPStreamingEvent.BEGIN_FRAGMENT, onBeginFragment);
-			addEventListener(HTTPStreamingEvent.END_FRAGMENT, onEndFragment);
-			addEventListener(HTTPStreamingEvent.TRANSITION, onTransition);
-			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, onTransitionComplete);
-			addEventListener(HTTPStreamingEvent.ACTION_NEEDED, onActionNeeded);
+			addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, 			onDVRStreamInfo);
+			addEventListener(HTTPStreamingEvent.SCRIPT_DATA, 			onScriptData);
+			addEventListener(HTTPStreamingEvent.BEGIN_FRAGMENT, 		onBeginFragment);
+			addEventListener(HTTPStreamingEvent.END_FRAGMENT, 			onEndFragment);
+			addEventListener(HTTPStreamingEvent.TRANSITION, 			onTransition);
+			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, 	onTransitionComplete);
+			addEventListener(HTTPStreamingEvent.ACTION_NEEDED, 			onActionNeeded);
+			addEventListener(HTTPStreamingEvent.DOWNLOAD_ERROR,			onDownloadError);
 			
 			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
@@ -732,6 +733,25 @@ package org.osmf.net.httpstreaming
 			sdoTag.objects = ["onPlayStatus", info];
 			
 			insertScriptDataTag(sdoTag);
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * We received an download error event. We will dispatch a NetStatusEvent with StreamNotFound
+		 * error to notify all NetStream consumers and close the current NetStream.
+		 */
+		private function onDownloadError(event:HTTPStreamingEvent):void
+		{
+			// We map all URL errors to Play.StreamNotFound.
+			dispatchEvent
+					( new NetStatusEvent
+						( NetStatusEvent.NET_STATUS
+							, false
+							, false
+							, {code:NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, level:"error", details:event.url}
+						)
+					);
 		}
 		
 		/**

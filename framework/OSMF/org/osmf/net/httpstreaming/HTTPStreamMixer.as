@@ -76,10 +76,9 @@ package org.osmf.net.httpstreaming
 			addEventListener(HTTPStreamingEvent.SCRIPT_DATA, 			onScriptData, 			false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.BEGIN_FRAGMENT, 		onBeginFragment, 		false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.END_FRAGMENT, 			onEndFragment, 			false, HIGH_PRIORITY, true);
-			addEventListener(HTTPStreamingEvent.TRANSITION, 			onTransition,			false, HIGH_PRIORITY, true);
-			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, 	onTransitionComplete,	false, HIGH_PRIORITY, true);
-
-			addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			addEventListener(HTTPStreamingEvent.TRANSITION, 			onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, 	onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.DOWNLOAD_ERROR,			onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
 			
 			setState(HTTPStreamingState.INIT);
 			
@@ -904,36 +903,14 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 * 
-		 * Event handler for transition events. We just forward this
+		 * Event handler for all streaming events that we just forward 
 		 * for further processing.
 		 */
-		private function onTransition(event:HTTPStreamingEvent):void
+		private function onHTTPStreamingEvent(event:HTTPStreamingEvent):void
 		{
 			_dispatcher.dispatchEvent(event);
 		}
 		
-		/**
-		 * @private
-		 * 
-		 * Event handler for transition complete events. We just forward this
-		 * for further processing.
-		 */
-		private function onTransitionComplete(event:HTTPStreamingEvent):void
-		{
-			_dispatcher.dispatchEvent(event);
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * NetStatusEvent handler. The net status events are dispatched by sources
-		 * when there are download errors. We forward this to the actual HTTPNetStream.
-		 */
-		private function onNetStatus(event:NetStatusEvent):void
-		{
-			_dispatcher.dispatchEvent(event);
-		}
-
 		/// Internals
 		private static const FILTER_NONE:uint = 0;
 		private static const FILTER_VIDEO:uint = 1;

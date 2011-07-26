@@ -58,6 +58,16 @@ package org.osmf.events
 		public static const END_FRAGMENT:String = "endFragment";
 		
 		/**
+		 * Dispatched when the downloading of a fragment has been reached.
+		 */
+		public static const DOWNLOAD_COMPLETE:String = "downloadComplete";
+		
+		/**
+		 * Dispatched when an error occurs while downloading a fragment.
+		 */
+		public static const DOWNLOAD_ERROR:String = "downloadError";
+		
+		/**
 		 * Dispatched when the duration of the current fragment/chunk has been calculated.
 		 */
 		public static const FRAGMENT_DURATION:String = "fragmentDuration";
