@@ -149,9 +149,9 @@ package org.osmf.net.httpstreaming
 				_urlStream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 			}
 			
-			if (_timeoutTimer == null)
+			if (_timeoutTimer == null && timeout != -1)
 			{
-				_timeoutTimer = new Timer(_timeoutInterval, 1);
+				_timeoutTimer = new Timer(timeout, 1);
 				_timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeout);
 			}
 
@@ -161,7 +161,7 @@ package org.osmf.net.httpstreaming
 				_request = request;
 				CONFIG::LOGGING
 				{
-					logger.debug("Loading (timeout=" + _timeoutInterval + "):" + _request.url.toString());
+					logger.debug("Loading (timeout=" + _timeoutInterval + ", retry=" + _currentRetry + "):" + _request.url.toString());
 				}
 
 				_downloadBeginDate = new Date();
@@ -326,11 +326,6 @@ package org.osmf.net.httpstreaming
 		 **/
 		private function onComplete(event:Event):void
 		{
-			if (_timeoutTimer != null)
-			{
-				stopTimeoutMonitor();
-			}
-			
 			_downloadEndDate = new Date();
 			_downloadDuration = (_downloadEndDate.valueOf() - _downloadBeginDate.valueOf())/1000.0;
 			
@@ -339,7 +334,7 @@ package org.osmf.net.httpstreaming
 			
 			CONFIG::LOGGING
 			{
-				logger.debug("Loading complete. It took " + _downloadDuration + " sec to download " + _downloadBytesCount + " bytes.");	
+				logger.debug("Loading complete. It took " + _downloadDuration + " sec and " + _currentRetry + " retries to download " + _downloadBytesCount + " bytes.");	
 			}
 			
 			if (_dispatcher != null)
@@ -364,13 +359,14 @@ package org.osmf.net.httpstreaming
 		 **/
 		private function onProgress(event:ProgressEvent):void
 		{
-			if (_timeoutTimer != null)
-			{
-				stopTimeoutMonitor();
-			}
-			
 			if (_downloadBytesCount == 0)
 			{
+				if (_timeoutTimer != null)
+				{
+					stopTimeoutMonitor();
+				}
+				_currentRetry = 0;
+
 				_downloadBytesCount = event.bytesTotal;
 				CONFIG::LOGGING
 				{
@@ -400,7 +396,7 @@ package org.osmf.net.httpstreaming
 
 			CONFIG::LOGGING
 			{
-				logger.error("Loading failed. It took " + _downloadDuration + " sec to fail while downloading [" + _request.url + "].");
+				logger.error("Loading failed. It took " + _downloadDuration + " sec and " + _currentRetry + " retries to fail while downloading [" + _request.url + "].");
 				logger.error("URLStream error event: " + event);
 			}
 			
@@ -461,8 +457,15 @@ package org.osmf.net.httpstreaming
 				logger.error("Canceling and retrying the download.");
 			}
 			
-			_currentRetry++;
-			if (OSMFSettings.hdsMaximumRetries != -1 && _currentRetry < OSMFSettings.hdsMaximumRetries)
+			if (OSMFSettings.hdsMaximumRetries > -1)
+			{
+				_currentRetry++;
+			}
+			
+			if (	
+					OSMFSettings.hdsMaximumRetries == -1 
+				||  (OSMFSettings.hdsMaximumRetries != -1 && _currentRetry < OSMFSettings.hdsMaximumRetries)
+			)
 			{					
 				open(_request, _dispatcher, _timeoutInterval + OSMFSettings.hdsTimeoutAdjustmentOnRetry);
 			}
