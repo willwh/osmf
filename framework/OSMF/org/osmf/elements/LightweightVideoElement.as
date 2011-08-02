@@ -84,14 +84,20 @@ package org.osmf.elements
 
 	CONFIG::FLASH_10_1
 	{
-	import flash.events.DRMAuthenticateEvent;
-	import flash.events.DRMErrorEvent;
-	import flash.events.DRMStatusEvent;
-	import flash.net.drm.DRMContentData;	
-	import flash.system.SystemUpdaterType;
-	import flash.system.SystemUpdater;	
-	import org.osmf.net.drm.NetStreamDRMTrait;
-	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+		import flash.events.DRMAuthenticateEvent;
+		import flash.events.DRMErrorEvent;
+		import flash.events.DRMStatusEvent;
+		import flash.net.drm.DRMContentData;	
+		import flash.system.SystemUpdaterType;
+		import flash.system.SystemUpdater;	
+		import org.osmf.net.drm.NetStreamDRMTrait;
+		import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+	}
+	
+	CONFIG::LOGGING
+	{
+		import org.osmf.logging.Log;
+		import org.osmf.logging.Logger;
 	}
 	
 	/**
@@ -359,12 +365,18 @@ package org.osmf.elements
 				var metadata:ByteArray = getDRMContentData(resource);
     			if (metadata != null && metadata.bytesAvailable > 0)
     			{
-					// Side-case case, metadata present in F4M or loaded direclty
+					CONFIG::LOGGING
+					{
+						logger.debug("DRM Content data available upfront from loaded resource. Adding DRM trait.");
+					}
     				setupDRMTrait(metadata);					    				 			
 	    		}
 				else
 				{
-					// Non sidecar, we need to play before getting access to the DRMTrait.
+					CONFIG::LOGGING
+					{
+						logger.debug("No DRM Contenta data available upfront. Play the content and listen for any DRM-related events.");
+					}
 	   				stream.addEventListener(StatusEvent.STATUS, onStatus);
    					stream.addEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
 				}
@@ -442,7 +454,6 @@ package org.osmf.elements
 					}
 				}
 				
-				
 				return null;
 			}
 			
@@ -513,6 +524,11 @@ package org.osmf.elements
 				{
 					createDRMTrait();	
 				}	
+				
+				CONFIG::LOGGING
+				{
+					logger.debug("DRM library is performing an " + type + " update.");
+				}
 				var updater:SystemUpdater = drmTrait.update(type);	
 				updater.addEventListener(Event.COMPLETE, onUpdateComplete);			
 			}
@@ -750,6 +766,11 @@ package org.osmf.elements
      	// Fired when the DRM subsystem is updated.  NetStream needs to be recreated.
      	private function onUpdateComplete(event:Event):void
      	{          		
+			CONFIG::LOGGING
+			{
+				logger.debug("DRM update completed. Associated objects need to be recreated");
+			}
+			
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).load();		
      	}
@@ -780,10 +801,14 @@ package org.osmf.elements
 					
 			CONFIG::FLASH_10_1
 			{
-			if (event.info.code == NetStreamCodes.NETSTREAM_DRM_UPDATE)
-			{
-				update(SystemUpdaterType.DRM);
-	     	}
+				if (event.info.code == NetStreamCodes.NETSTREAM_DRM_UPDATE)
+				{
+					CONFIG::LOGGING
+					{
+						logger.debug("Updating FAXS library.");
+					}
+					update(SystemUpdaterType.DRM);
+		     	}
 			}
 						
 			if (error != null)
@@ -804,9 +829,14 @@ package org.osmf.elements
 		
 		CONFIG::FLASH_10_1
 		{	
-		private static const DRM_STATUS_CODE:String 		= "DRM.encryptedFLV";
-		private static const DRM_NEEDS_AUTHENTICATION:int	= 3330; 
-		private var drmTrait:NetStreamDRMTrait;	
+			private static const DRM_STATUS_CODE:String 		= "DRM.encryptedFLV";
+			private static const DRM_NEEDS_AUTHENTICATION:int	= 3330; 
+			private var drmTrait:NetStreamDRMTrait;	
+		}
+		
+		CONFIG::LOGGING
+		{
+			private static const logger:Logger = Log.getLogger("org.osmf.elements.LightweightVideoElement");
 		}
 	}
 }

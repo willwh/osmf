@@ -657,13 +657,28 @@ package org.osmf.elements.f4mClasses
 				var encryption:Object = data.readObject();
 				var enc:Object = encryption["Encryption"];
 				var params:Object = enc["Params"];
+				var version:String = enc["Version"].toString();
 				var keyInfo:Object = params["KeyInfo"];
-				var fmrmsMetadata:Object = keyInfo["FMRMS_METADATA"];
-				var drmMetadata:String = fmrmsMetadata["Metadata"] as String;
-
-				var decoder:Base64Decoder = new Base64Decoder();
-				decoder.decode(drmMetadata);
-				metadata = decoder.drain();
+				var keyInfoData:Object = null;
+				
+				switch(version)
+				{
+					case "2": // FAXS2 structure KeyInfo > FMRMS_METADATA > Metadata
+						keyInfoData = keyInfo["FMRMS_METADATA"];
+						break;
+					
+//					case "3": // FAXS3 structure KeyInfo > Data > Metadata
+//						keyInfoData = keyInfo["Data"];
+//						break;
+				}
+				
+				if (keyInfoData != null)
+				{
+					var drmMetadata:String = keyInfoData["Metadata"] as String;
+					var decoder:Base64Decoder = new Base64Decoder();
+					decoder.decode(drmMetadata);
+					metadata = decoder.drain();
+				}
 			}
 			catch (e:Error)
 			{

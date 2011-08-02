@@ -556,6 +556,11 @@ package org.osmf.net.httpstreaming.f4f
 				// hit considering the size of the additional header.
 				if (newAdditionalHeader != prevAdditionalHeader && newAdditionalHeader != null)
 				{
+					CONFIG::LOGGING
+					{
+						logger.debug("Quality change in progress. We need to update the DRM header.");
+					}
+					
 					var flvTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
 					flvTag.data = newAdditionalHeader;
 					dispatchEvent

@@ -440,21 +440,40 @@ package org.osmf.net.httpstreaming
 				logger.debug("NetStatus event:" + event.info.code);
 			}
 			
-			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY && _state == HTTPStreamingState.HALT) 
+			switch(event.info.code)
 			{
-				if (_notifyPlayUnpublishPending)
-				{
-					notifyPlayUnpublish();
-					_notifyPlayUnpublishPending = false; 
-				}
+				case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:
+					if  (_state == HTTPStreamingState.HALT) 
+					{
+						if (_notifyPlayUnpublishPending)
+						{
+							notifyPlayUnpublish();
+							_notifyPlayUnpublishPending = false; 
+						}
+					}
+					break;
+				
+				case NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND:
+					// if we have received a stream not found error
+					// then we close all data
+					close();
+					break;
 			}
 			
-			// if we have received a stream not found error
-			// then we close all data
-			if (event.info.code == NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND)
+			CONFIG::FLASH_10_1
 			{
-				close();
+				if( event.info.code == NetStreamCodes.NETSTREAM_DRM_UPDATE)
+				{
+					// if a DRM Update is needed, then we block further data processing
+					// as reloading of current media will be required
+					CONFIG::LOGGING
+					{
+						logger.debug("DRM library needs to be updated. Waiting until DRM state is updated."); 
+					}
+					_waitForDRM = true;
+				}
 			}
+
 		}
 		
 		CONFIG::FLASH_10_1
@@ -584,7 +603,7 @@ package org.osmf.net.httpstreaming
 							// if our buffer has grown big enough then go into wait
 							// mode where we let the NetStream consume the buffered 
 							// data
-							if (this.bufferLength > _desiredBufferTime_Max)
+							if (this.bufferLength > _desiredBufferTime_Max || _waitForDRM)
 							{
 								setState(HTTPStreamingState.WAIT);
 							}
