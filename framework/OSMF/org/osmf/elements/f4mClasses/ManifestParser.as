@@ -667,9 +667,9 @@ package org.osmf.elements.f4mClasses
 						keyInfoData = keyInfo["FMRMS_METADATA"];
 						break;
 					
-//					case "3": // FAXS3 structure KeyInfo > Data > Metadata
-//						keyInfoData = keyInfo["Data"];
-//						break;
+					case "3": // FAXS3 structure KeyInfo > Data > Metadata
+						keyInfoData = keyInfo["Data"];
+						break;
 				}
 				
 				if (keyInfoData != null)
