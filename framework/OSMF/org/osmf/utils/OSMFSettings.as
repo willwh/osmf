@@ -101,11 +101,18 @@ package org.osmf.utils
 		/**
 		 * @private
 		 * 
-		 * The amount of seconds OSMF will stay behind the live point
+		 * The amount of seconds OSMF will stay behind the live point in dvr scenarios.
 		 */
 		public static var hdsDVRLiveOffset:Number = 4;
 		
-		
+
+		/**
+		 * @private
+		 * 
+		 * The amount of seconds OSMF will stay behind the live point in the pure live scenario.
+		 */
+		public static var hdsPureLiveOffset:Number = 5;
+
 		/////////////////////////////////////////////
 		//
 		//  org.osmf.elements.ManifestLoaderBase

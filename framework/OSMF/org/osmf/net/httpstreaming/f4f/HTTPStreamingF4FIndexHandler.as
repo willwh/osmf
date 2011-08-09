@@ -38,6 +38,7 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
+	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataMode;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.utils.OSMFSettings;
@@ -58,33 +59,18 @@ package org.osmf.net.httpstreaming.f4f
 	public class HTTPStreamingF4FIndexHandler extends HTTPStreamingIndexHandlerBase
 	{
 		/**
-		 * Constructor.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * Default Constructor.
+		 *
+		 * @param fileHandler The associated file handler object which is responsable for processing the actual data.
+		 * 					  We need this object as it may process bootstrap information found into the stream.
+		 * @param fragmentsThreshold The default threshold for fragments.   
 		 */
 		public function HTTPStreamingF4FIndexHandler(fileHandler:HTTPStreamingFileHandlerBase, fragmentsThreshold:uint = DEFAULT_FRAGMENTS_THRESHOLD)
 		{
 			super();
 			
-			currentQuality = -1;
-			currentFAI = null;
-			fragmentRunTablesUpdating = false;		
-			this.fileHandler = fileHandler;	
-			this.fragmentsThreshold = fragmentsThreshold;
-			dvrGetStreamInfoCall = false;
-			
-			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_BOOTSTRAP_BOX, onNewBootstrapBox);
-		}
-		
-		/**
-		 * @private
-		 */
-		public function get bootstrapInfo():AdobeBootstrapBox
-		{
-			return currentQuality < 0? null : bootstrapBoxes[currentQuality];
+			// listen for any bootstrap box information dispatched by file handler
+			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_BOOTSTRAP_BOX, onBootstrapBox);
 		}
 		
 		/**
@@ -92,110 +78,110 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function dvrGetStreamInfo(indexInfo:Object):void
 		{
-			dvrGetStreamInfoCall = true;
+			_invokedFromDvrGetStreamInfo = true;
 			playInProgress = false;
 			initialize(indexInfo);
 		} 
 		
 		/**
-		 * @private
+		 * Initializes the index handler.
+		 * 
+		 * @param indexInfor The index information.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
 		 */
 		override public function initialize(indexInfo:Object):void
 		{
 			// Make sure we have an info object of the expected type.
-			f4fIndexInfo = indexInfo as HTTPStreamingF4FIndexInfo;
-			if (f4fIndexInfo == null || f4fIndexInfo.streamInfos == null || f4fIndexInfo.streamInfos.length <= 0)
+			_f4fIndexInfo = indexInfo as HTTPStreamingF4FIndexInfo;
+			if (_f4fIndexInfo == null || _f4fIndexInfo.streamInfos == null || _f4fIndexInfo.streamInfos.length <= 0)
 			{
 				CONFIG::LOGGING
 				{			
-					logger.error("f4fIndexInfo: " + f4fIndexInfo );
-					logger.error( "******* F4M wrong or contains insufficient information!" );
+					logger.error("indexInfo object wrong or contains insufficient information!");
 				}
 				
 				dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
 				return;					
 			}
 			
-			bootstrapBoxes = new Vector.<AdobeBootstrapBox>(f4fIndexInfo.streamInfos.length);
-			fragmentRunTablesUpdating= false;
+			_indexUpdating = false;
+			_pendingIndexLoads = 0;
+			_pendingIndexUpdates = 0;
+			_pendingIndexUrls = new Object();
+			
 			playInProgress = false;
-			pendingIndexLoads = 0;
-			pureLiveOffset = NaN;
-			
-			serverBaseURL = f4fIndexInfo.serverBaseURL;			
-			streamInfos = f4fIndexInfo.streamInfos;
-			
+			_pureLiveOffset = NaN;
+
+			_serverBaseURL = _f4fIndexInfo.serverBaseURL;			
+			_streamInfos = _f4fIndexInfo.streamInfos;
+
 			var bootstrapBox:AdobeBootstrapBox;
-			for (var i:int = 0; i < streamInfos.length; i++)
+			var streamCount:int = _streamInfos.length;
+			
+			_streamQualityRates = [];
+			_streamNames = [];
+			
+			_bootstrapBoxesURLs = new Vector.<String>(streamCount);
+			_bootstrapBoxes = new Vector.<AdobeBootstrapBox>(streamCount);
+			for (var quality:int = 0; quality < streamCount; quality++)
 			{
-				var bootstrap:BootstrapInfo = streamInfos[i].bootstrapInfo;
-				if (bootstrap == null || (bootstrap.url == null && bootstrap.data == null))
+				var streamInfo:HTTPStreamingF4FStreamInfo = _streamInfos[quality];
+				if (streamInfo != null)
 				{
-					CONFIG::LOGGING
-					{			
-						logger.error("bootstrap: " + bootstrap );
-						logger.error( "******* bootstrap null or contains inadequate information!" );
-					}
+					_streamQualityRates[quality]	= streamInfo.bitrate;
+					_streamNames[quality] 			= streamInfo.streamName;
 					
-					dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
-					return;					
-				}
-				if (bootstrap.data != null)
-				{
-					bootstrapBox = processBootstrapData(bootstrap.data, null);
-					if (bootstrapBox == null)
+					var bootstrap:BootstrapInfo = streamInfo.bootstrapInfo;
+					
+					if (bootstrap == null || (bootstrap.url == null && bootstrap.data == null))
 					{
 						CONFIG::LOGGING
 						{			
-							logger.error("bootstrap.data: " + bootstrap.data );
-							logger.error( "******* bootstrapBox is null, potentially from bad bootstrap data!" );
+							logger.error("Bootstrap(" + quality + ")  null or contains inadequate information!");
 						}
 						
 						dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
 						return;					
 					}
-					bootstrapBoxes[i] = bootstrapBox;
-				}
-				else
-				{
-					pendingIndexLoads++;
-					dispatchEvent
-						(	new HTTPStreamingIndexHandlerEvent
-								( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
-								, false
-								, false
-								, false
-								, NaN
-								, null
-								, null
-								, new URLRequest(HTTPStreamingUtils.normalizeURL(bootstrap.url))
-								, i
-								, true
-								)
-						);
+					
+					if (bootstrap.data != null)
+					{
+						bootstrapBox = processBootstrapData(bootstrap.data, quality);
+						if (bootstrapBox == null)
+						{
+							CONFIG::LOGGING
+							{			
+								logger.error("BootstrapBox(" + quality + ") is null, potentially from bad bootstrap data!");
+							}
+							
+							dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
+							return;					
+						}
+						_bootstrapBoxes[quality] = bootstrapBox;
+					}
+					else
+					{
+						_bootstrapBoxesURLs[quality] 	= HTTPStreamingUtils.normalizeURL(bootstrap.url);
+						
+						_pendingIndexLoads++;
+						dispatchIndexLoadRequest(quality);
+					}
 				}
 			}
 			
-			if (pendingIndexLoads == 0)
+			if (_pendingIndexLoads == 0)
 			{
-				dispatchEvent
-					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.RATES_READY
-						, false
-						, false
-						, false
-						, NaN
-						, getStreamNames(streamInfos)
-						, getQualityRates(streamInfos)
-						)
-					);
-
+				notifyRatesReady();
 				notifyIndexReady(0);
 			}
 		}
 		
 		/**
-		 * @private
+		 * @inheritDoc
 		 */
 		override public function dispose():void
 		{
@@ -204,190 +190,189 @@ package org.osmf.net.httpstreaming.f4f
 		}
 		
 		/**
-		 * @private
+		 * Called when the index file has been loaded and is ready to be processed.
+		 * 
+		 * @param data The data from the loaded index file.
+		 * @param indexContext An arbitrary context object which describes the loaded
+		 * index file.  Useful for index handlers which load multiple index files
+		 * (and thus need to know which one to process).
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		override public function processIndexData(data:*, indexContext:Object):void
 		{
-			var index:int = indexContext as int;
-			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, index);
+			var quality:int = indexContext as int;
+			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, quality);
 
 			if (bootstrapBox == null)
 			{
 				CONFIG::LOGGING
 				{			
-					logger.error( "******* bootstrapBox is null when attempting to process index data during a bootstrap update for" +
-						"live or live+dvr stream!" );
+					logger.error("BootstrapBox(" + quality + ") is null when attempting to process index data during a bootstrap update.");
 				}
 				
 				dispatchEvent(new HTTPStreamingEvent(HTTPStreamingEvent.INDEX_ERROR));
 				return;					
 			}
-			
-			CONFIG::LOGGING
-			{			
-				logger.debug("processIndexData: " + index + " pendingIndexUpdates: " + pendingIndexUpdates);
-				logger.debug("abst version: " + bootstrapBox.bootstrapVersion + 
-					" fragments calculated: " + bootstrapBox.totalFragments +
-					" fragments from segment run table: " + bootstrapBox.segmentRunTables[0].totalFragments);
-			}
-			
-			if (!fragmentRunTablesUpdating) 
+
+			if (!_indexUpdating) 
 			{
-				pendingIndexLoads--;
+				// we are processing an index initialization
+				_pendingIndexLoads--;
+
+				CONFIG::LOGGING
+				{			
+					logger.debug("Pending index loads: " + _pendingIndexLoads);
+				}
 			}
 			else
 			{
-				pendingIndexUpdates--;
-				
-				var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[index] as HTTPStreamingF4FStreamInfo;
-				if (streamInfo != null)
+				// we are processing an index update
+				_pendingIndexUpdates--;
+
+				CONFIG::LOGGING
+				{			
+					logger.debug("Pending index updates: " + _pendingIndexUpdates);
+				}
+
+				var requestedUrl:String = _bootstrapBoxesURLs[quality];
+				if (requestedUrl != null && _pendingIndexUrls.hasOwnProperty(requestedUrl))
 				{
-					var requestedUrl:String = streamInfo.bootstrapInfo.url;
-					if (requestedUrl != null && pendingUrlLoads.hasOwnProperty(requestedUrl))
-					{
-						pendingUrlLoads[requestedUrl].active = false;
-					}
+					_pendingIndexUrls[requestedUrl].active = false;
 				}
 				
-				if (pendingIndexUpdates == 0)
+				if (_pendingIndexUpdates == 0)
 				{
-					fragmentRunTablesUpdating = false;
-// FM-924, onMetadata is called twice on http streaming live/dvr content 
-// It is really unnecessary to call onMetadata multiple times. The change of
-// media length is fixed for VOD, and is informed by the call dispatchDVRStreamInfo
-// for DVR. For "pure live", it does not really matter. Whenever MBR switching
-// happens, onMetadata will be called by invoking checkMetadata method.
-// 
-//					notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale, indexContext as int);
-					dispatchDVRStreamInfo(bootstrapBox);
+					_indexUpdating = false;
+					// FM-924, onMetadata is called twice on http streaming live/dvr content 
+					// It is really unnecessary to call onMetadata multiple times. The change of
+					// media length is fixed for VOD, and is informed by the call dispatchDVRStreamInfo
+					// for DVR. For "pure live", it does not really matter. Whenever MBR switching
+					// happens, onMetadata will be called by invoking checkMetadata method.
+					// 
+					//notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale, indexContext as int);
 				}
 			}
 			
-			if (bootstrapBoxes[index] == null || 
-				bootstrapBoxes[index].bootstrapVersion < bootstrapBox.bootstrapVersion ||
-				bootstrapBoxes[index].currentMediaTime < bootstrapBox.currentMediaTime)
-			{
-				delay = 0.05; 		
-				bootstrapBoxes[index] = bootstrapBox;
+			CONFIG::LOGGING
+			{			
+				logger.debug("BootstrapBox(" + quality + ") loaded successfully." + 
+					"[version:" + bootstrapBox.bootstrapVersion + 
+					", fragments from frt:" + bootstrapBox.totalFragments +
+					", fragments from srt:" + bootstrapBox.segmentRunTables[0].totalFragments + "]"
+				);
 			}
-
-			if (pendingIndexLoads == 0 && !fragmentRunTablesUpdating)
+			updateBootstrapBox(quality, bootstrapBox);
+			
+			if (_pendingIndexLoads == 0 && !_indexUpdating)
 			{
-				dispatchEvent
-					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.RATES_READY
-						, false
-						, false
-						, false
-						, NaN
-						, getStreamNames(streamInfos)
-						, getQualityRates(streamInfos)
-						)
-					);
-
-				notifyIndexReady(index);
+				notifyRatesReady();
+				notifyIndexReady(quality);
 			}
 		}	
 		
-		override public function getFragmentDurationFromUrl(fragmentUrl:String):Number
-		{
-			// we assume that there is only one afrt in bootstrap
-			
-			var tempFragmentId:String = fragmentUrl.substr(fragmentUrl.indexOf("Frag")+4, fragmentUrl.length);
-			var fragId:uint = uint(tempFragmentId);
-			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-			var afrt:AdobeFragmentRunTable = abst.fragmentRunTables[0];
-			return afrt.getFragmentDuration(fragId);
-		}
-
 		/**
-		 * @private
+		 * Returns the HTTPStreamRequest which encapsulates the file for the given
+		 * playback time and quality.  If no such file exists for the specified time
+		 * or quality, then this method should return null. 
+		 * 
+		 * @param time The time for which to retrieve a request object.
+		 * @param quality The quality of the requested stream.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
 		 */
 		override public function getFileForTime(time:Number, quality:int):HTTPStreamRequest
 		{
-			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
-			if (abst == null)
+			if (   quality < 0 
+				|| quality >= _streamInfos.length 
+				|| time < 0)
+			{
+				CONFIG::LOGGING
+				{
+					logger.warn("Invalid parameters for getFileForTime(time=" + time + ", quality=" + quality + ").");	
+				}
+				return null;
+			}
+				
+			var bootstrapBox:AdobeBootstrapBox = _bootstrapBoxes[quality];
+			if (bootstrapBox == null)
 				return null;
 			
-			var streamRequest:HTTPStreamRequest = null;
-
-			if (!playInProgress && stopPlaying(abst))
+			if (!playInProgress && isStopped(bootstrapBox))
 			{
 				destroyBootstrapUpdateTimer();
 				return null;
 			}
 							
-			checkMetadata(quality, abst);
+			updateMetadata(quality);
 			
-			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-			if (	time >= 0
-				&& 	quality >= 0
-				&&  quality < streamInfos.length
-			   )
+			var refreshNeeded:Boolean = false;
+			var streamRequest:HTTPStreamRequest = null;
+			
+			var currentTime:Number = bootstrapBox.currentMediaTime;
+			var desiredTime:Number = time * bootstrapBox.timeScale;
+			if (desiredTime <= currentTime)
 			{
-				if (time * abst.timeScale <= abst.currentMediaTime)
+				// we should know the segment and fragment containing the desired time
+				var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
+				if (frt != null)
 				{
-					currentFAI = frt.findFragmentIdByTime(
-						time * abst.timeScale, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
-					if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
+					_currentFAI = frt.findFragmentIdByTime(desiredTime, currentTime, bootstrapBox.contentComplete() ? false : bootstrapBox.live);
+				}
+				
+				if (_currentFAI == null || fragmentOverflow(bootstrapBox, _currentFAI.fragId))
+				{
+					if (bootstrapBox.contentComplete())
 					{
-						if (abst.contentComplete())
+						if (bootstrapBox.live) // live/DVR playback stops
 						{
-							if (abst.live) // live/DVR playback stops
-							{
-								return new HTTPStreamRequest(null, quality, -1, -1, true);
-							}
-							else
-							{
-								return null;
-							}
+							streamRequest = new HTTPStreamRequest(null, quality, -1, -1, true);
 						}
-						else
-						{
-							adjustDelay();
-							refreshBootstrapInfo(quality);
-							return new HTTPStreamRequest(null, quality, 0, delay);
-						}
-					}
-					
-					playInProgress = true;
-					var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
-					var segId:uint = abst.findSegmentId(currentFAI.fragId - fdp.firstFragment + 1);
-					var requestUrl:String = "";
-					if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
-					{
-						requestUrl = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
 					}
 					else
 					{
-						requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+						refreshNeeded = true;
 					}
-					
-					CONFIG::LOGGING
-					{
-						logger.debug("The url for ( time=" + time +", quality=" + quality + ") = " + requestUrl);
-					}
-	
-					streamRequest = new HTTPStreamRequest(requestUrl);
-					checkQuality(quality);
-					notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
 				}
 				else
 				{
-					if (abst.live)
-					{
-						adjustDelay();
-						refreshBootstrapInfo(quality);
-						return new HTTPStreamRequest(null, quality, 0, delay);
-					}
+					playInProgress = true;
+					
+					streamRequest = new HTTPStreamRequest(getFragmentUrl(quality, _currentFAI));
+					updateQuality(quality);
+					notifyFragmentDuration(_currentFAI.fragDuration / bootstrapBox.timeScale);
 				}
+			}
+			else
+			{
+				// we are trying to get pass the known "live" point
+				// if we are in a live scenario we should refresh the bootstrap
+				// and retry
+				refreshNeeded = bootstrapBox.live;
+			}
+
+			if (refreshNeeded)
+			{
+				adjustDelay();
+				refreshBootstrapBox(quality);
+				streamRequest = new HTTPStreamRequest(null, quality, 0, _delay);
 			}
 			
 			CONFIG::LOGGING
 			{
 				if (streamRequest == null)
 				{
-					logger.debug("The url for ( time=" + time + ", quality=" + quality + ") = none");
+					logger.debug("The url for ( time=" + time + ", quality=" + quality + ") = none.");
+				}
+				else
+				{
+					logger.debug("The url for ( time=" + time + ", quality=" + quality + ") = " + streamRequest.toString());
 				}
 			}
 			
@@ -399,250 +384,326 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function getNextFile(quality:int):HTTPStreamRequest
 		{
-			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
-			var streamRequest:HTTPStreamRequest = null;
-/*
-			if (quality != this.currentQuality)
+			if (quality < 0 || quality >= _streamInfos.length)
 			{
-				var curAbst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-				if (currentFAI == null || (currentFAI.fragmentEndTime*abst.timeScale/curAbst.timeScale > abst.currentMediaTime))
+				CONFIG::LOGGING
 				{
-					adjustDelay();
-					refreshBootstrapInfo(quality);					
-					return new HTTPStreamRequest(null, quality, 0, delay);
+					logger.warn("Invalid parameters for getNextFile(quality=" + quality + ").");	
 				}
-
-				return getFileForTime(currentFAI.fragmentEndTime / curAbst.timeScale, quality); 
+				return null;
 			}
-*/			
-			if (!playInProgress && stopPlaying(abst))
+			
+			var bootstrapBox:AdobeBootstrapBox = _bootstrapBoxes[quality];
+			if (bootstrapBox == null)
+				return null;
+			
+			if (!playInProgress && isStopped(bootstrapBox))
 			{
 				destroyBootstrapUpdateTimer();
 				return null;
 			}
+			
+			updateMetadata(quality);
+			
+			var refreshNeeded:Boolean = false;
+			var streamRequest:HTTPStreamRequest = null;
 
-			checkMetadata(quality, abst);
-
-			if (quality >= 0 && quality < streamInfos.length)
+			var currentTime:Number = bootstrapBox.currentMediaTime;
+			var oldCurrentFAI:FragmentAccessInformation = _currentFAI;
+			if (oldCurrentFAI == null)
 			{
-				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-				if (frt == null)
-					return null;
-				
-				var oldCurrentFAI:FragmentAccessInformation = currentFAI;
-				if (oldCurrentFAI == null)
+				_currentFAI = null;
+			}
+			else
+			{
+				var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
+				if (frt != null)
 				{
-//					var fragId:uint = frt.fragmentDurationPairs[frt.fragmentDurationPairs.length - 1].firstFragment;
-//					currentFAI = frt.validateFragment(fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
-					currentFAI = null;
+					_currentFAI = frt.validateFragment(oldCurrentFAI.fragId + 1, currentTime, bootstrapBox.contentComplete()? false : bootstrapBox.live);
 				}
-				else
-					currentFAI = frt.validateFragment(oldCurrentFAI.fragId + 1, abst.currentMediaTime, abst.contentComplete()? false : abst.live);
-				
-				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
+			}
+			
+			if (_currentFAI == null || fragmentOverflow(bootstrapBox, _currentFAI.fragId))
+			{
+				if (!bootstrapBox.live || bootstrapBox.contentComplete())
 				{
-					if (!abst.live || abst.contentComplete())
+					if (bootstrapBox.live) // live/DVR playback stops
 					{
-						if (abst.live) // live/DVR playback stops
-						{
-							return new HTTPStreamRequest(null, quality, -1, -1, true);
-						}
-						else
-						{
-							return null;
-						}
+						return new HTTPStreamRequest(null, quality, -1, -1, true);
 					}
 					else
 					{
-						adjustDelay();
-						currentFAI = oldCurrentFAI;
-						refreshBootstrapInfo(quality);
-						return new HTTPStreamRequest(null, quality, 0, delay);
+						return null;
 					}
-				}
-
-				playInProgress = true;
-				var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
-				var segId:uint = abst.findSegmentId(currentFAI.fragId - fdp.firstFragment + 1);
-				var requestUrl:String = "";
-				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
-				{
-					requestUrl = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
 				}
 				else
 				{
-					requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+					_currentFAI = oldCurrentFAI;
+					refreshNeeded = true;
 				}
+			}
+			else
+			{
+				playInProgress = true;
+				
+				streamRequest = new HTTPStreamRequest(getFragmentUrl(quality, _currentFAI));
+				updateQuality(quality);
+				notifyFragmentDuration(_currentFAI.fragDuration / bootstrapBox.timeScale);
+			}
 			
-				streamRequest = new HTTPStreamRequest(requestUrl);
-				checkQuality(quality);
-				notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
-					
-				CONFIG::LOGGING
-				{
-					logger.debug("getNextFile URL = " + requestUrl);
-				}				
+			if (refreshNeeded)
+			{
+				adjustDelay();
+				refreshBootstrapBox(quality);
+				streamRequest = new HTTPStreamRequest(null, quality, 0, _delay);
 			}
 			
 			CONFIG::LOGGING
 			{
 				if (streamRequest == null)
 				{
-					logger.debug("getNextFile No URL for quality=" + quality);
+					logger.debug("Next url for (quality=" + quality + ") = none.");
+				}
+				else
+				{
+					logger.debug("Next url for (quality=" + quality + ") = " + streamRequest.toString());
 				}
 			}
 			
 			return streamRequest;
 		}
 		
+		/// Internals
+		
 		/**
-		 * @private
+		 * Checks if specified fragment identifier overflows the actual 
+		 * fragments contained into the bootstrap.
 		 * 
-		 * Given timeBias, calculates the corresponding segment duration.
+		 * @param  bootstrapBox The bootstrap which contains the fragment run table.
+		 * @param fragId Specified fragment identifier which must be checked.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
 		 */
-		internal function calculateSegmentDuration(abst:AdobeBootstrapBox, timeBias:Number):Number
+		private function fragmentOverflow(bootstrapBox:AdobeBootstrapBox, fragId:uint):Boolean
 		{
-			var fragmentDurationPairs:Vector.<FragmentDurationPair> = (abst.fragmentRunTables)[0].fragmentDurationPairs;
-			var fragmentId:uint = currentFAI.fragId;
-			
-			var index:int =  fragmentDurationPairs.length - 1;
-			while (index >= 0)
-			{
-				var fragmentDurationPair:FragmentDurationPair = fragmentDurationPairs[index];
-				if (fragmentDurationPair.firstFragment <= fragmentId)
-				{
-					var duration:Number = fragmentDurationPair.duration;
-					var durationAccrued:Number = fragmentDurationPair.durationAccrued;
-					durationAccrued += (fragmentId - fragmentDurationPair.firstFragment) * fragmentDurationPair.duration;
-					if (timeBias > 0)
-					{
-						duration -= (timeBias - durationAccrued);
-					}
-					
-					return duration;
-				}
-				else
-				{
-					index--;
-				}
-			}
-			
-			return 0;
+			var fragmentRunTable:AdobeFragmentRunTable = bootstrapBox.fragmentRunTables[0];
+			var fdp:FragmentDurationPair = fragmentRunTable.fragmentDurationPairs[0];
+			var segmentRunTable:AdobeSegmentRunTable = bootstrapBox.segmentRunTables[0];
+			return ((segmentRunTable == null) || ((segmentRunTable.totalFragments + fdp.firstFragment - 1) < fragId));
 		}
 
-		// Internal
-		//
+		/**
+		 * Checks if there is no more data available for a specified
+		 * bootstrap and if we should stop playback.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		private function isStopped(bootstrapBox:AdobeBootstrapBox):Boolean
+		{
+			var result:Boolean = false;
+			
+			if (_f4fIndexInfo.dvrInfo != null)
+			{
+				// in DVR scenario, the content is considered stopped once the dvr 
+				// data is taken offline
+				result = _f4fIndexInfo.dvrInfo.offline;
+			}
+			else if (bootstrapBox != null && bootstrapBox.live)
+			{
+				// in pure live, the content is considered stopped once the 
+				// fragment run table reports complete flag is set
+				var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
+				if (frt != null)
+				{
+					result = frt.tableComplete();
+				}
+			}
+						
+			return result;
+		}
 		
 		/**
-		 * When there is an MBR switching and the switched-to fragment is DRM protected,
-		 * we need to append the additionalHeader that contains the DRM metadata to the Flash Player
-		 * for that fragment before any additional TCMessage can be appended to FP.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * Gets the url for specified fragment and quality.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
 		 */
-		private function checkQuality(quality:int):void
+		private function getFragmentUrl(quality:int, fragment:FragmentAccessInformation):String
 		{
-			if (currentQuality != quality)
+			var bootstrapBox:AdobeBootstrapBox = _bootstrapBoxes[quality];
+			var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
+			var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
+			var segId:uint = bootstrapBox.findSegmentId(fragment.fragId - fdp.firstFragment + 1);
+			
+			var requestUrl:String = "";
+			if (_streamNames[quality].indexOf("http") != 0)
 			{
-				var prevAdditionalHeader:ByteArray = (currentQuality < 0)? null : streamInfos[currentQuality].additionalHeader;
-				currentQuality = quality;
-				var newAdditionalHeader:ByteArray = streamInfos[currentQuality].additionalHeader;
-				
-				// Strictly speaking, the != comparison of additional header is not enough. 
-				// Ideally, we need to do bytewise comparison, however there might be a performance
-				// hit considering the size of the additional header.
-				if (newAdditionalHeader != prevAdditionalHeader && newAdditionalHeader != null)
-				{
-					CONFIG::LOGGING
-					{
-						logger.debug("Quality change in progress. We need to update the DRM header.");
-					}
-					
-					var flvTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-					flvTag.data = newAdditionalHeader;
-					dispatchEvent
-						( new HTTPStreamingEvent
-							( HTTPStreamingEvent.SCRIPT_DATA
-							, false
-							, false
-							, 0
-							, flvTag
-							, FLVTagScriptDataMode.FIRST
-							)
-						);
-				}
+				requestUrl = _serverBaseURL + "/" ;
 			}
+			requestUrl += _streamNames[quality] + "Seg" + segId + "-Frag" + fragment.fragId;
+
+			return requestUrl;
 		}
 		
-		private function checkMetadata(quality:int, abst:AdobeBootstrapBox):void
+		/**
+		 * Returns the fragment run table from the specified bootstrap box.
+		 * It assumes that there is only one fragment run table.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		private function getFragmentRunTable(bootstrapBox:AdobeBootstrapBox):AdobeFragmentRunTable
 		{
-			if (currentQuality != quality && abst != null)
+			if (bootstrapBox == null)
+				return null;
+			
+			return bootstrapBox.fragmentRunTables[0];
+		}
+
+		/**
+		 * Adjusts the delay for future inquires from clients.
+		 * When the index handler needs more time to obtain data in order to
+		 * respond to a request from its clients, it will return a response 
+		 * requesting more time. This method varies the delay.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function adjustDelay():void
+		{
+			if (_delay < 1.0)
 			{
-				notifyTotalDuration(abst.totalDuration / abst.timeScale, quality);
+				_delay = _delay * 2.0;
+				if (_delay > 1.0)
+				{
+					_delay = 1.0;
+				} 
 			}
 		}
 
-		private function refreshBootstrapInfo(quality:uint):void
+		/**
+		 * Issues a request for refreshing the specified quality bootstrap.
+		 *
+		 * @param quality Quality level for which a refresh should be requested.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		private function refreshBootstrapBox(quality:uint):void
 		{
-			var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[quality] as HTTPStreamingF4FStreamInfo;
-			if (streamInfo == null)
-				return;
-			var requestedUrl:String = streamInfo.bootstrapInfo.url;
+			var requestedUrl:String = _bootstrapBoxesURLs[quality];
 			if (requestedUrl == null)
 				return;
-
-			var pendingUrlRequest:Object = null;
-			if (pendingUrlLoads.hasOwnProperty(requestedUrl))
+			
+			var pendingIndexUrl:Object = null;
+			if (_pendingIndexUrls.hasOwnProperty(requestedUrl))
 			{
-				pendingUrlRequest = pendingUrlLoads[requestedUrl];
+				pendingIndexUrl = _pendingIndexUrls[requestedUrl];
 			}
 			else
 			{
-				pendingUrlRequest = new Object();
-				pendingUrlRequest["active"] = false;
-				pendingUrlRequest["date"] = null;
-				pendingUrlLoads[requestedUrl] = pendingUrlRequest;
+				pendingIndexUrl = new Object();
+				pendingIndexUrl["active"] = false;
+				pendingIndexUrl["date"] = null;
+				_pendingIndexUrls[requestedUrl] = pendingIndexUrl;
 			}
-			
-			if (pendingUrlRequest.active)
-				return;
-			
-			// XXX this must be extracted so that a developer can overwrite it. 
-			var previousRequestDate:Date = pendingUrlRequest["date"];
+
+			var ignoreRefreshRequest:Boolean = pendingIndexUrl.active;
 			var newRequestDate:Date = new Date();
-			if (OSMFSettings.hdsMinimumBootstrapRefreshInterval && previousRequestDate != null && (newRequestDate.valueOf() - previousRequestDate.valueOf() < OSMFSettings.hdsMinimumBootstrapRefreshInterval))
-				return;
-			pendingUrlLoads[requestedUrl].date = newRequestDate;
-			pendingUrlLoads[requestedUrl].active = true;
-			pendingIndexUpdates++;
-			fragmentRunTablesUpdating = true;
-			CONFIG::LOGGING
+			var elapsedTime:Number = 0;
+			
+			if (!ignoreRefreshRequest && OSMFSettings.hdsMinimumBootstrapRefreshInterval > 0)
 			{
-				logger.debug("refresh frt: " + requestedUrl);
+				var previousRequestDate:Date = pendingIndexUrl["date"];
+				elapsedTime = Number.MAX_VALUE;
+				if (previousRequestDate != null)
+				{
+					elapsedTime = newRequestDate.valueOf() - previousRequestDate.valueOf();
+				}
+				
+				ignoreRefreshRequest = elapsedTime < OSMFSettings.hdsMinimumBootstrapRefreshInterval;
 			}
-			dispatchEvent
-				(	new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
-						, false
-						, false
-						, false
-						, NaN
-						, null
-						, null
-						, new URLRequest(HTTPStreamingUtils.normalizeURL(requestedUrl))
-						, quality
-						, true
-						)
-				);				
+			
+			if (!ignoreRefreshRequest)
+			{
+				_pendingIndexUrls[requestedUrl].date = newRequestDate;
+				_pendingIndexUrls[requestedUrl].active = true;
+				_pendingIndexUpdates++;
+				_indexUpdating = true;
+				
+				CONFIG::LOGGING
+				{
+					logger.debug("Refresh (quality=" + quality + ") using " + requestedUrl + ". [active=" + pendingIndexUrl.active + ", elapsedTime=" + elapsedTime.toFixed(2) + "]");
+				}
+				
+				dispatchIndexLoadRequest(quality);
+			}
+			else
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("Refresh (quality=" + quality + ") ignored. [active=" + pendingIndexUrl.active + ", elapsedTime=" + elapsedTime.toFixed(2) + "]");
+				}
+			}
+		}
+
+		/**
+		 * Updates the specified bootstrap box if the specified information
+		 * is newer than the current one. If the updated box if the current one, 
+		 * it also refreshes the associated DVR information.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function updateBootstrapBox(quality:int, bootstrapBox:AdobeBootstrapBox):void
+		{
+			if (   _bootstrapBoxes[quality] == null 
+				|| _bootstrapBoxes[quality].bootstrapVersion < bootstrapBox.bootstrapVersion 
+				|| _bootstrapBoxes[quality].currentMediaTime < bootstrapBox.currentMediaTime
+			)
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("Bootstrap information for quality[" + quality + "] updated. (version=" + bootstrapBox.bootstrapVersion + ", time=" + bootstrapBox.currentMediaTime + ")");
+				}
+				_bootstrapBoxes[quality] = bootstrapBox;
+				_delay = 0.05;
+				if (quality == _currentQuality)
+				{
+					dispatchDVRStreamInfo(bootstrapBox);
+				}
+			}
 		}
 		
+		/**
+		 * Processes bootstrap raw information and returns an AdobeBootstrapBox object.
+		 * 
+		 * @param data The raw representation of bootstrap.
+		 * @param indexContext The index context used while processing bootstrap.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
 		private function processBootstrapData(data:*, indexContext:Object):AdobeBootstrapBox
 		{
-			var bootstrapBox:AdobeBootstrapBox = null;
-			
 			var parser:BoxParser = new BoxParser();
 			data.position = 0;
 			parser.init(data);
@@ -660,13 +721,13 @@ package org.osmf.net.httpstreaming.f4f
 				return null;
 			}
 			
-			bootstrapBox = boxes[0] as AdobeBootstrapBox;
+			var bootstrapBox:AdobeBootstrapBox = boxes[0] as AdobeBootstrapBox;
 			if (bootstrapBox == null)
 			{
 				return null;
 			}
 			
-			if (serverBaseURL == null || serverBaseURL.length <= 0)
+			if (_serverBaseURL == null || _serverBaseURL.length <= 0)
 			{
 				if (bootstrapBox.serverBaseURLs == null || bootstrapBox.serverBaseURLs.length <= 0)
 				{
@@ -676,112 +737,253 @@ package org.osmf.net.httpstreaming.f4f
 					// under this circumstance.
 					return null;
 				}
+				
+				_serverBaseURL = bootstrapBox.serverBaseURLs[0];
 			}
 			
 			return bootstrapBox;
 		}	
 
-		private function getQualityRates(streamInfos:Vector.<HTTPStreamingF4FStreamInfo>):Array
+		/**
+		 * Updates the current quality index. 
+		 * 
+		 * Also in MBR scenarios with protected content we need to append the additionalHeader 
+		 * that contains the DRM metadata to the Flash Player for that fragment before any 
+		 * additional TCMessage.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function updateQuality(quality:int):void
 		{
-			var rates:Array = [];
-			
-			if (streamInfos.length >= 1)
+			if (quality != _currentQuality)
 			{
-				for (var i:int = 0; i < streamInfos.length; i++)
+				// we preserve this for later comparison
+				var prevAdditionalHeader:ByteArray = _currentAdditionalHeader;
+				var newAdditionalHeader:ByteArray = _streamInfos[quality].additionalHeader;
+
+				CONFIG::LOGGING
 				{
-					var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[i] as HTTPStreamingF4FStreamInfo;
-					rates.push(streamInfo.bitrate);
+					logger.debug("Quality changed from " + _currentQuality + " to " +  quality + ".");
+				}
+				_currentQuality = quality;
+				_currentAdditionalHeader = newAdditionalHeader;
+				
+				// We compare the two DRM headers and if they are different we inject
+				// the new one as script data into the underlying objects.
+				// Strictly speaking, the != comparison of additional header is not enough. 
+				// Ideally, we need to do bytewise comparison, however there might be a performance
+				// hit considering the size of the additional header.
+				if (newAdditionalHeader != null && newAdditionalHeader != prevAdditionalHeader)
+				{
+					CONFIG::LOGGING
+					{
+						logger.debug("Update of DRM header is required.");
+					}
+					dispatchAdditionalHeader(newAdditionalHeader);
 				}
 			}
-			
-			return rates;
 		}
-		
-		private function getStreamNames(streamInfos:Vector.<HTTPStreamingF4FStreamInfo>):Array
+
+		/**
+		 * Updates the metadata for the current quality.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function updateMetadata(quality:int):void
 		{
-			var streamNames:Array = [];
-			
-			if (streamInfos.length >= 1)
+			if (quality != _currentQuality)
 			{
-				for (var i:int = 0; i < streamInfos.length; i++)
+				var bootstrapBox:AdobeBootstrapBox = _bootstrapBoxes[quality];
+				if (bootstrapBox != null)
 				{
-					var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[i] as HTTPStreamingF4FStreamInfo;
-					streamNames.push(streamInfo.streamName);
+					notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale, quality);
 				}
 			}
-			
-			return streamNames;
 		}
 
-		private function getFragmentRunTable(abst:AdobeBootstrapBox):AdobeFragmentRunTable
+		/**
+		 * Dispatches the protected content header.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function dispatchAdditionalHeader(additionalHeader:ByteArray):void
 		{
-			if (abst == null)
-				return null;
+			var flvTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+			flvTag.data = additionalHeader;
 			
-			// For now, we assume that there is only one fragment run table.
-			return abst.fragmentRunTables[0];
-		}
-		
-		private function notifyTotalDuration(duration:Number, quality:int):void
-		{
-			var sdo:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-			var metaInfo:Object = this.f4fIndexInfo.streamInfos[quality].streamMetadata;
-			if (metaInfo == null)
-			{
-				metaInfo = new Object();
-			}
-			metaInfo.duration = duration;
-
-			sdo.objects = ["onMetaData", metaInfo];
-			dispatchEvent
-				( new HTTPStreamingEvent
-					( HTTPStreamingEvent.SCRIPT_DATA
+			dispatchEvent(
+				new HTTPStreamingEvent(
+					HTTPStreamingEvent.SCRIPT_DATA
 					, false
 					, false
 					, 0
-					, sdo
-					, FLVTagScriptDataMode.IMMEDIATE
-					)
-				);
+					, flvTag
+					, FLVTagScriptDataMode.FIRST
+				)
+			);
 		}
 		
-		private function notifyFragmentDuration(duration:Number):void
+		/**
+		 * Dispatches the DVR information extracted from the specified bootstrap.
+		 *  
+		 * @param bootstrapBox The bootstrap box containing the DVR information.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function dispatchDVRStreamInfo(bootstrapBox:AdobeBootstrapBox):void
 		{
-			// Update the bootstrap update interval; we set its value to the fragment duration
-			bootstrapUpdateInterval = duration * 1000;
-			if (bootstrapUpdateInterval < OSMFSettings.hdsMinimumBootstrapRefreshInterval)
-			{
-				bootstrapUpdateInterval = OSMFSettings.hdsMinimumBootstrapRefreshInterval;
-			}
+			var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
 			
-			dispatchEvent
-				(	new HTTPStreamingEvent
-						( HTTPStreamingEvent.FRAGMENT_DURATION 
-						, false
-						, false
-						, duration
-						, null
-						, null
-						)
-				);				
+			var dvrInfo:DVRInfo = _f4fIndexInfo.dvrInfo;
+			if (dvrInfo != null)
+			{
+				// update recording status from fragment runt table
+				dvrInfo.isRecording = !frt.tableComplete();
+				
+				// calculate current duration
+				var currentDuration:Number = bootstrapBox.totalDuration/bootstrapBox.timeScale;
+				
+				// update start time for the first time
+				if (isNaN(dvrInfo.startTime))
+				{
+					if (!dvrInfo.isRecording)
+					{
+						dvrInfo.startTime = 0;
+					}
+					else
+					{
+						var beginOffset:Number = ((dvrInfo.beginOffset < 0) || isNaN(dvrInfo.beginOffset)) ? 0 : dvrInfo.beginOffset;
+						var endOffset:Number = ((dvrInfo.endOffset < 0) || isNaN(dvrInfo.endOffset))? 0 : dvrInfo.endOffset;
+						
+						dvrInfo.startTime = DVRUtils.calculateOffset(beginOffset, endOffset, currentDuration);  
+					}
+					
+					dvrInfo.startTime += (frt.fragmentDurationPairs)[0].durationAccrued/bootstrapBox.timeScale;
+					if (dvrInfo.startTime > currentDuration)
+					{
+						dvrInfo.startTime = currentDuration;
+					}
+				}
+				
+				// update current length of the DVR window 
+				dvrInfo.curLength = currentDuration - dvrInfo.startTime;	
+				
+				// adjust the start time if we have a DVR rooling window active
+				if ((dvrInfo.windowDuration != -1) && (dvrInfo.curLength > dvrInfo.windowDuration))
+				{
+					dvrInfo.startTime += dvrInfo.curLength - dvrInfo.windowDuration;
+					dvrInfo.curLength = dvrInfo.windowDuration;
+				}
+				
+				dispatchEvent(
+					new DVRStreamInfoEvent(
+						DVRStreamInfoEvent.DVRSTREAMINFO, 
+						false, 
+						false, 
+						dvrInfo
+					)
+				); 								
+			}	
+		}
+
+		
+		/**
+		 * Dispatches an event requesting loading/refreshing of the specified quality.
+		 * 
+		 * @param quality The quality level for which the request should be made.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function dispatchIndexLoadRequest(quality:int):void
+		{
+			dispatchEvent(
+				new HTTPStreamingIndexHandlerEvent( 
+					HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
+					, false
+					, false
+					, false
+					, NaN
+					, null
+					, null
+					, new URLRequest(_bootstrapBoxesURLs[quality])
+					, quality
+					, true
+				)
+			);
 		}
 		
+		/**
+		 * Notifies clients that rates are ready.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		private function notifyRatesReady():void
+		{
+			dispatchEvent( 
+				new HTTPStreamingIndexHandlerEvent( 
+					HTTPStreamingIndexHandlerEvent.RATES_READY
+					, false
+					, false
+					, false
+					, NaN
+					, _streamNames
+					, _streamQualityRates
+				)
+			);
+		}
+		
+		/**
+		 * Notifies clients that index is ready.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
 		private function notifyIndexReady(quality:int):void
 		{
-			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
-			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-
-			dispatchDVRStreamInfo(abst);
-
-			if (!dvrGetStreamInfoCall)
+			var bootstrapBox:AdobeBootstrapBox = _bootstrapBoxes[quality];
+			var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
+			
+			dispatchDVRStreamInfo(bootstrapBox);
+			
+			if (!_invokedFromDvrGetStreamInfo)
 			{
-				if (abst.live && f4fIndexInfo.dvrInfo == null && isNaN(pureLiveOffset))
+				// in pure live scenario, update the "closest" position to live we want
+				if (bootstrapBox.live && _f4fIndexInfo.dvrInfo == null && isNaN(_pureLiveOffset))
 				{
-					pureLiveOffset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
+					_pureLiveOffset = bootstrapBox.currentMediaTime - OSMFSettings.hdsPureLiveOffset * bootstrapBox.timeScale;
+					if (_pureLiveOffset < 0)
+					{
+						_pureLiveOffset = NaN;
+					}
+					else
+					{
+						_pureLiveOffset = _pureLiveOffset / bootstrapBox.timeScale;
+					}
 				}
 				
 				// If the stream is live, initialize the bootstrap update timer
-				if (abst.live)
+				// if we are in a live stream with rolling window feature activated
+				if (bootstrapBox.live && _f4fIndexInfo.dvrInfo != null && _f4fIndexInfo.dvrInfo.windowDuration != -1)
 				{
 					initializeBootstrapUpdateTimer();
 				}
@@ -792,102 +994,79 @@ package org.osmf.net.httpstreaming.f4f
 					destroyBootstrapUpdateTimer();
 				}
 				
-
-				dispatchEvent
-					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.INDEX_READY
+				dispatchEvent(
+					new HTTPStreamingIndexHandlerEvent(
+						HTTPStreamingIndexHandlerEvent.INDEX_READY
 						, false
 						, false
-						, abst.live
-						, pureLiveOffset 
-						)
-					);
-			}
-			dvrGetStreamInfoCall = false;
-		}
-
-		private function stopPlaying(abst:AdobeBootstrapBox):Boolean
-		{
-			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-			if ((f4fIndexInfo.dvrInfo == null && abst != null && abst.live && frt != null && frt.tableComplete()) ||
-				(f4fIndexInfo.dvrInfo != null && f4fIndexInfo.dvrInfo.offline))
-			{
-				return true;
-			}
-			
-			return false;
-		}
-		
-		private function onNewBootstrapBox(event:HTTPStreamingFileHandlerEvent):void
-		{
-			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
-			if (abst.bootstrapVersion < event.bootstrapBox.bootstrapVersion || 
-				abst.currentMediaTime < event.bootstrapBox.currentMediaTime)
-			{
-				bootstrapBoxes[currentQuality] = event.bootstrapBox;
-				dispatchDVRStreamInfo(event.bootstrapBox);
-			}			
-		}
-		
-		private function dispatchDVRStreamInfo(abst:AdobeBootstrapBox):void
-		{
-			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-			
-			if (f4fIndexInfo.dvrInfo != null)
-			{
-				f4fIndexInfo.dvrInfo.isRecording = !frt.tableComplete();
-				if (isNaN(f4fIndexInfo.dvrInfo.startTime))
-				{
-					f4fIndexInfo.dvrInfo.startTime = 
-						frt.tableComplete()? 0 : DVRUtils.calculateOffset(
-							((f4fIndexInfo.dvrInfo.beginOffset < 0) || isNaN(f4fIndexInfo.dvrInfo.beginOffset))? 0 : f4fIndexInfo.dvrInfo.beginOffset, 
-							((f4fIndexInfo.dvrInfo.endOffset < 0) || isNaN(f4fIndexInfo.dvrInfo.endOffset))? 0 : f4fIndexInfo.dvrInfo.endOffset, 
-							abst.totalDuration/abst.timeScale);
-					f4fIndexInfo.dvrInfo.startTime += (frt.fragmentDurationPairs)[0].durationAccrued/abst.timeScale;
-							
-					if (f4fIndexInfo.dvrInfo.startTime > abst.currentMediaTime / abst.timeScale)
-					{
-						f4fIndexInfo.dvrInfo.startTime = abst.currentMediaTime / abst.timeScale;
-					}
-				}
-				
-				f4fIndexInfo.dvrInfo.curLength = abst.currentMediaTime/abst.timeScale - f4fIndexInfo.dvrInfo.startTime;
-				
-				if 
-					(
-						(f4fIndexInfo.dvrInfo.windowDuration != -1) && 
-						(f4fIndexInfo.dvrInfo.curLength > f4fIndexInfo.dvrInfo.windowDuration)
+						, bootstrapBox.live
+						, _pureLiveOffset 
 					)
-				{
-					f4fIndexInfo.dvrInfo.startTime += f4fIndexInfo.dvrInfo.curLength - f4fIndexInfo.dvrInfo.windowDuration;
-					f4fIndexInfo.dvrInfo.curLength = f4fIndexInfo.dvrInfo.windowDuration;
-				}
-				
-				dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
-			}	
-		}
-		
-		private function fragmentOverflow(abst:AdobeBootstrapBox, fragId:uint):Boolean
-		{
-			var fragmentRunTable:AdobeFragmentRunTable = abst.fragmentRunTables[0];
-			var fdp:FragmentDurationPair = fragmentRunTable.fragmentDurationPairs[0];
-			var segmentRunTable:AdobeSegmentRunTable = abst.segmentRunTables[0];
-			return ((segmentRunTable == null) || ((segmentRunTable.totalFragments + fdp.firstFragment - 1) < fragId));
-		}
-		
-		private function adjustDelay():void
-		{
-			if (delay < 1.0)
-			{
-				delay = delay * 2.0;
-				if (delay > 1.0)
-				{
-					delay = 1.0;
-				} 
+				);
 			}
+			_invokedFromDvrGetStreamInfo = false;
 		}
-		
-		
+
+		/**
+		 * Notifies clients that total duration is available through onMetadata message.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		private function notifyTotalDuration(duration:Number, quality:int):void
+		{
+			var metaInfo:Object = _streamInfos[quality].streamMetadata;
+			if (metaInfo == null)
+			{
+				metaInfo = new Object();
+			}
+			metaInfo.duration = duration;
+			
+			var sdo:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+			sdo.objects = ["onMetaData", metaInfo];
+			dispatchEvent(
+				new HTTPStreamingEvent(
+					HTTPStreamingEvent.SCRIPT_DATA
+					, false
+					, false
+					, 0
+					, sdo
+					, FLVTagScriptDataMode.IMMEDIATE
+				)
+			);
+		}
+
+		/**
+		 * Notifies clients that total duration is available through onMetadata message.
+		 *  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.0
+		 */
+		private function notifyFragmentDuration(duration:Number):void
+		{
+			// Update the bootstrap update interval; we set its value to the fragment duration
+			bootstrapUpdateInterval = duration * 1000;
+			if (bootstrapUpdateInterval < OSMFSettings.hdsMinimumBootstrapRefreshInterval)
+			{
+				bootstrapUpdateInterval = OSMFSettings.hdsMinimumBootstrapRefreshInterval;
+			}
+			
+			dispatchEvent(
+				new HTTPStreamingEvent( 
+					HTTPStreamingEvent.FRAGMENT_DURATION 
+					, false
+					, false
+					, duration
+					, null
+					, null
+				)
+			);				
+		}
+
 		private function initializeBootstrapUpdateTimer():void
 		{
 			if (bootstrapUpdateTimer == null)
@@ -910,47 +1089,112 @@ package org.osmf.net.httpstreaming.f4f
 				bootstrapUpdateTimer = null;
 			}
 		}
+
+		/// Event handlers
+		/**
+		 * Handler called when bootstrap information is available from external objects
+		 * (for exemple: the stream packager can insert bootstrap information into
+		 * the stream itself, and this information is processed by file handler).
+		 * 
+		 * We will use it to update the bootstrap information for current quality.
+		 * 
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */ 
+		private function onBootstrapBox(event:HTTPStreamingFileHandlerEvent):void
+		{
+			updateBootstrapBox(_currentQuality, event.bootstrapBox);			
+		}
 		
 		private function onBootstrapUpdateTimer(event:TimerEvent):void
 		{ 
-			if (currentQuality != -1)
+			if (_currentQuality != -1)
 			{
-				refreshBootstrapInfo(currentQuality);
+				refreshBootstrapBox(_currentQuality);
 				bootstrapUpdateTimer.delay = bootstrapUpdateInterval;
 			}
 		}
 		
-		
+//		/**
+//		 * @private
+//		 * 
+//		 * Given timeBias, calculates the corresponding segment duration.
+//		 */
+//		internal function calculateSegmentDuration(abst:AdobeBootstrapBox, timeBias:Number):Number
+//		{
+//			var fragmentDurationPairs:Vector.<FragmentDurationPair> = (abst.fragmentRunTables)[0].fragmentDurationPairs;
+//			var fragmentId:uint = currentFAI.fragId;
+//			
+//			var index:int =  fragmentDurationPairs.length - 1;
+//			while (index >= 0)
+//			{
+//				var fragmentDurationPair:FragmentDurationPair = fragmentDurationPairs[index];
+//				if (fragmentDurationPair.firstFragment <= fragmentId)
+//				{
+//					var duration:Number = fragmentDurationPair.duration;
+//					var durationAccrued:Number = fragmentDurationPair.durationAccrued;
+//					durationAccrued += (fragmentId - fragmentDurationPair.firstFragment) * fragmentDurationPair.duration;
+//					if (timeBias > 0)
+//					{
+//						duration -= (timeBias - durationAccrued);
+//					}
+//					
+//					return duration;
+//				}
+//				else
+//				{
+//					index--;
+//				}
+//			}
+//			
+//			return 0;
+//		}
+//
+//		override public function getFragmentDurationFromUrl(fragmentUrl:String):Number
+//		{
+//			// we assume that there is only one afrt in bootstrap
+//			
+//			var tempFragmentId:String = fragmentUrl.substr(fragmentUrl.indexOf("Frag")+4, fragmentUrl.length);
+//			var fragId:uint = uint(tempFragmentId);
+//			var abst:AdobeBootstrapBox = bootstrapBoxes[_currentQuality];
+//			var afrt:AdobeFragmentRunTable = abst.fragmentRunTables[0];
+//			return afrt.getFragmentDuration(fragId);
+//		}
 
-		private var pendingIndexLoads:int;
-		private var pendingIndexUpdates:int;
-		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
-		private var serverBaseURL:String;
-		private var streamInfos:Vector.<HTTPStreamingF4FStreamInfo>;
-		private var currentQuality:int;
-		private var currentFAI:FragmentAccessInformation;
-		private var fragmentsThreshold:uint;
-		private var fragmentRunTablesUpdating:Boolean;
-		private var f4fIndexInfo:HTTPStreamingF4FIndexInfo;
-		private var fileHandler:HTTPStreamingFileHandlerBase;
-		private var dvrGetStreamInfoCall:Boolean;
-		private var playInProgress:Boolean;
 		
-		private var offsetFromCurrent:Number = 5;
-		private var delay:Number = 0.05;
-		private var pureLiveOffset:Number = NaN;
+		/// Internals		
+		private var _currentQuality:int = -1;
+		private var _currentAdditionalHeader:ByteArray = null;
+		private var _currentFAI:FragmentAccessInformation = null;
+		
+		private var _pureLiveOffset:Number = NaN;
+		
+		private var _f4fIndexInfo:HTTPStreamingF4FIndexInfo = null;
+		private var _bootstrapBoxes:Vector.<AdobeBootstrapBox> = null;
+		private var _bootstrapBoxesURLs:Vector.<String> = null;
+		private var _streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = null;
+		private var _streamNames:Array = null;
+		private var _streamQualityRates:Array = null;
+		private var _serverBaseURL:String = null;
+		
+		private var _delay:Number = 0.05;
+		
+		private var _indexUpdating:Boolean = false;
+		private var _pendingIndexLoads:int = 0;
+		private var _pendingIndexUpdates:int = 0;
+		private var _pendingIndexUrls:Object = new Object();
+
+		private var _invokedFromDvrGetStreamInfo:Boolean = false;
+		
+		
+		private var playInProgress:Boolean;
 		
 		private var bootstrapUpdateTimer:Timer;
 		private var bootstrapUpdateInterval:Number = 4000;
-		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		
-		// This was exposed as a public property in OSMFSettings: hdsMinimumBootstrapRefreshInterval
-		//
-		// public static const BOOTSTRAP_REFRESH_INTERVAL:uint = 2000;
-		
-		private var pendingUrlLoads:Object = new Object();
-
 		CONFIG::LOGGING
 		{
 			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.HTTPStreamF4FIndexHandler");

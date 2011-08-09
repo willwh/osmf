@@ -75,6 +75,16 @@ package org.osmf.net.httpstreaming
 			return _unpublishNotify;
 		}
 
+		public function toString():String
+		{
+			return  "[url=" + (urlRequest != null ? urlRequest.url : "null") +
+				    ", quality = " + _quality +
+				    ", truncateAt = " + _truncateAt.toString() + 
+					", retryAfter = " + _retryAfter.toString() + 
+					", unpublishNotify = " + unpublishNotify +
+					"]";
+					
+		}
 		private var _urlRequest:URLRequest;
 		private var _quality:int;
 		private var _truncateAt:Number;

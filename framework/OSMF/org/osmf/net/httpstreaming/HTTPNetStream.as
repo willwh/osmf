@@ -488,7 +488,8 @@ package org.osmf.net.httpstreaming
 			{
 				CONFIG::LOGGING
 				{
-					logger.debug("Received an DRM error. Change to waiting mode until DRM state is updated."); 
+					logger.debug("Received an DRM error (" + event.toString() + ").");
+					logger.debug("Entering waiting mode until DRM state is updated."); 
 				}
 				_waitForDRM = true;
 				setState(HTTPStreamingState.WAIT);

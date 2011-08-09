@@ -231,18 +231,18 @@ package org.osmf.net.httpstreaming
 			throw new IllegalOperationError("The dvrGetStreamInfo() method must be overridden by the derived class.");
 		}
 		
-		/**
-		 * Returns the duration of the fragment identified thorugh the provided url.
-		 * 
-		 * @langversion 3.0
-		 * @playerversion Flash 10
-		 * @playerversion AIR 1.5
-		 * @productversion OSMF 1.0
-		 */
-		public function getFragmentDurationFromUrl(fragmentUrl:String):Number
-		{
-			throw new IllegalOperationError("The getFragmentDurationFromUrl() method must be overridden by the derived class.");
-		}
+//		/**
+//		 * Returns the duration of the fragment identified thorugh the provided url.
+//		 * 
+//		 * @langversion 3.0
+//		 * @playerversion Flash 10
+//		 * @playerversion AIR 1.5
+//		 * @productversion OSMF 1.0
+//		 */
+//		public function getFragmentDurationFromUrl(fragmentUrl:String):Number
+//		{
+//			throw new IllegalOperationError("The getFragmentDurationFromUrl() method must be overridden by the derived class.");
+//		}
 
 	}
 }
