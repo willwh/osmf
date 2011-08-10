@@ -219,7 +219,36 @@ package org.osmf.media.videoClasses
 			}
 		}
 		
-		// Internals	
+		// Internals
+		
+		/**
+		 * Returns a valid rectangle object which can be used 
+		 * both with StageVideo and with graphics object. If any
+		 * of the x,y, width, height properties is NaN, it will
+		 * be reset to 0.
+		 */ 
+		private static function updateRect(rect:Rectangle):Rectangle
+		{
+			var result:Rectangle = rect;
+			if (isNaN(result.x))
+			{
+				result.x = 0;
+			}
+			if (isNaN(result.y))
+			{
+				result.y = 0;
+			}
+			if (isNaN(result.width))
+			{
+				result.width = 0;
+			}
+			if (isNaN(result.height))
+			{
+				result.height = 0;
+			}
+			
+			return result;
+		}
 		
 		internal function updateView():void
 		{
@@ -228,11 +257,12 @@ package org.osmf.media.videoClasses
 				return;
 			}
 			
+			var actualRect:Rectangle = updateRect(surfaceRect);
 			if (currentVideoRenderer == stageVideo)
 			{
 				var viewPort:Rectangle = new Rectangle();
-				viewPort.topLeft = localToGlobal(surfaceRect.topLeft);
-				viewPort.bottomRight = localToGlobal(surfaceRect.bottomRight);
+				viewPort.topLeft = localToGlobal(actualRect.topLeft);
+				viewPort.bottomRight = localToGlobal(actualRect.bottomRight);
 				stageVideo.viewPort = viewPort;
 				
 				if (surfaceShape == null)
@@ -241,17 +271,17 @@ package org.osmf.media.videoClasses
 				}
 				
 				surfaceShape.graphics.clear();
-				surfaceShape.graphics.drawRect(0, 0, width, height);
+				surfaceShape.graphics.drawRect(0, 0, actualRect.width, actualRect.height);
 				surfaceShape.alpha = 0;
 				
 				addChild(surfaceShape);
 			}
 			else
 			{	
-				currentVideoRenderer.x = surfaceRect.x;
-				currentVideoRenderer.y = surfaceRect.y;
-				currentVideoRenderer.height = surfaceRect.height;
-				currentVideoRenderer.width = surfaceRect.width;
+				currentVideoRenderer.x = actualRect.x;
+				currentVideoRenderer.y = actualRect.y;
+				currentVideoRenderer.height = actualRect.height;
+				currentVideoRenderer.width = actualRect.width;
 			}
 		}
 		
@@ -372,6 +402,7 @@ package org.osmf.media.videoClasses
 		 * Internal rect used for representing the actual size.
 		 */
 		private var surfaceRect:Rectangle = new Rectangle(0,0,0,0);
+		private var invalidSurfaceRect:Boolean = false;
 		
 		private var surfaceShape:Shape = null;
 		
