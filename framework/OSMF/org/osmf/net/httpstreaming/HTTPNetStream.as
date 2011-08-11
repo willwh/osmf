@@ -988,48 +988,65 @@ package org.osmf.net.httpstreaming
 			}		
 			else // doing enhanced seek
 			{
-				if (tag is FLVTagVideo)
-				{	
-					if (_flvParserIsSegmentStart)	
+				if (currentTime < _enhancedSeekTarget)
+				{
+					if (tag is FLVTagVideo)
 					{
-						var _muteTag:FLVTagVideo = new FLVTagVideo();
-						_muteTag.timestamp = tag.timestamp; // may get overwritten, ok
-						_muteTag.codecID = FLVTagVideo(tag).codecID; // same as in use
-						_muteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
-						_muteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_START;
-						// and start saving, with this as the first...
 						if (_enhancedSeekTags == null)
 						{
 							_enhancedSeekTags = new Vector.<FLVTagVideo>();
 						}
-						_enhancedSeekTags.push(_muteTag);
-						_flvParserIsSegmentStart = false;
-					}	
-					
-					if (currentTime >= _enhancedSeekTarget)
+
+						if (_flvParserIsSegmentStart)	
+						{
+							var _muteTag:FLVTagVideo = new FLVTagVideo();
+							_muteTag.timestamp = tag.timestamp; // may get overwritten, ok
+							_muteTag.codecID = FLVTagVideo(tag).codecID; // same as in use
+							_muteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
+							_muteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_START;
+							// and start saving, with this as the first...
+							_enhancedSeekTags.push(_muteTag);
+							_flvParserIsSegmentStart = false;
+						}	
+
+						_enhancedSeekTags.push(tag);
+					} // else is a data tag, which are simply passthrough with unadjusted timestamps, rather than discarding or saving for later
+					else if (tag is FLVTagScriptDataObject)
 					{
-						_enhancedSeekTarget = -1;
-						if (_seekTime < 0)
-						{
-							_seekTime = currentTime;
-						}
-						if(_initialTime < 0)
-						{
-							_initialTime = currentTime;
-						}
-						
+						bytes = new ByteArray();
+						tag.write(bytes);
+						_flvParserProcessed += bytes.length;
+						attemptAppendBytes(bytes);
+					} // else tag is FLVTagAudio, which we discard unless is a configuration tag which needs to be passthrough			
+					else if (tag is FLVTagAudio && FLVTagAudio(tag).isCodecConfiguration)	
+					{
+						bytes = new ByteArray();
+						tag.write(bytes);
+						_flvParserProcessed += bytes.length;
+						attemptAppendBytes(bytes);
+					}
+				}
+				else
+				{
+					_enhancedSeekTarget = -1;
+					if (_seekTime < 0)
+					{
+						_seekTime = currentTime;
+					}
+					if(_initialTime < 0)
+					{
+						_initialTime = currentTime;
+					}
+					
+					if (_enhancedSeekTags != null && _enhancedSeekTags.length > 0)
+					{
 						var _unmuteTag:FLVTagVideo = new FLVTagVideo();
 						_unmuteTag.timestamp = tag.timestamp;  // may get overwritten, ok
 						_unmuteTag.codecID = (_enhancedSeekTags[0]).codecID;	// take the codec ID of the corresponding SEEK_START
 						_unmuteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
 						_unmuteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_END;
-						
-						if (_enhancedSeekTags == null)
-						{
-							_enhancedSeekTags = new Vector.<FLVTagVideo>();
-						}
-						_enhancedSeekTags.push(_unmuteTag);	
-						
+						_enhancedSeekTags.push(_unmuteTag);
+					
 						// twiddle and dump
 						for (i=0; i<_enhancedSeekTags.length; i++)
 						{
@@ -1056,42 +1073,19 @@ package org.osmf.net.httpstreaming
 							attemptAppendBytes(bytes);
 						}
 						_enhancedSeekTags = null;
-						
-						// and append this one
-						bytes = new ByteArray();
-						tag.write(bytes);
-						_flvParserProcessed += bytes.length;
-						attemptAppendBytes(bytes);
-						if (_playForDuration >= 0)
-						{
-							return true;	// need to continue seeing the tags, and can't shortcut because we're being dropped off mid-segment
-						}
-						_flvParserDone = true;
-						return false;	// and end of parsing (caller must dump rest, unparsed)
-						
-					} // past enhanced seek target
-					else
-					{
-						if (_enhancedSeekTags == null)
-						{
-							_enhancedSeekTags = new Vector.<FLVTagVideo>();
-						}
-						_enhancedSeekTags.push(tag);
 					}
-				} // else is a data tag, which are simply passthrough with unadjusted timestamps, rather than discarding or saving for later
-				else if (tag is FLVTagScriptDataObject)
-				{
+					
+					// and append this one
 					bytes = new ByteArray();
 					tag.write(bytes);
 					_flvParserProcessed += bytes.length;
 					attemptAppendBytes(bytes);
-				} // else tag is FLVTagAudio, which we discard unless is a configuration tag which needs to be passthrough			
-				else if (tag is FLVTagAudio && FLVTagAudio(tag).isCodecConfiguration)	
-				{
-					bytes = new ByteArray();
-					tag.write(bytes);
-					_flvParserProcessed += bytes.length;
-					attemptAppendBytes(bytes);
+					if (_playForDuration >= 0)
+					{
+						return true;	// need to continue seeing the tags, and can't shortcut because we're being dropped off mid-segment
+					}
+					_flvParserDone = true;
+					return false;	// and end of parsing (caller must dump rest, unparsed)
 				}
 				
 				return true;
