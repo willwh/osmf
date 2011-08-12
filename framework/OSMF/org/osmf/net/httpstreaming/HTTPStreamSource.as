@@ -184,6 +184,8 @@ package org.osmf.net.httpstreaming
 			}
 			
 			_streamName = streamName;
+			_qualityAndStreamNameInSync = false;
+			
 			CONFIG::LOGGING
 			{			
 				if (_streamName == null)
@@ -546,6 +548,17 @@ package org.osmf.net.httpstreaming
 			{			
 				logger.debug("Stream [ " + loggedStreamName + " ] refreshed. ( offset = " + _offset + ", live = " + _isLive + ").");
 			}
+			
+			if (!_qualityAndStreamNameInSync)
+			{
+				CONFIG::LOGGING
+				{			
+					logger.debug("Stream name [ " + loggedStreamName + " ] and quality level [" + _qualityLevel + "] are not in sync.");
+				}
+				
+				_qualityAndStreamNameInSync = true;
+				changeQualityLevel(_streamName);
+			}
 		}
 		
 		/**
@@ -792,6 +805,7 @@ package org.osmf.net.httpstreaming
 		private var _qualityLevelChanged:Boolean = false;
 		private var _desiredQualityLevel:int = -1;
 		private var _desiredQualityStreamName:String = null;
+		private var _qualityAndStreamNameInSync:Boolean = false;
 		
 		private var _fragmentDuration:Number = 0;
 		private var _endFragment:Boolean = false;
