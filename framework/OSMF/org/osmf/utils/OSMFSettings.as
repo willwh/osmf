@@ -68,8 +68,19 @@ package org.osmf.utils
 		
 		/**
 		 * @private
+		 * 
+		 * Controls how much bytes should be appended at one to a NetStream object.
+		 * Defaul is 100Kb per appendBytes.
 		 */
-		public static var hdsBytesProcessingLimit:Number = 65000;
+		public static var hdsBytesProcessingLimit:Number = 102400;
+		
+		/**
+		 * @private
+		 * 
+		 * Controls how much bytes should be readed once from a HDS stream.
+		 * Defaul is 100Kb per read
+		 */
+		public static var hdsBytesReadingLimit:Number = 102400; 
 		
 		/**
 		 * @private

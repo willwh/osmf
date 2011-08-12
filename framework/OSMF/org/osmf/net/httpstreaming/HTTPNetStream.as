@@ -35,6 +35,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
@@ -124,10 +125,7 @@ package org.osmf.net.httpstreaming
 			
 			setState(HTTPStreamingState.INIT);
 			
-			_mixer = new HTTPStreamMixer(this);
-			_mixer.video = new HTTPStreamSource(_factory, _resource, _mixer);
-			
-			_source = _mixer;
+			createSource(resource);
 			
 			_mainTimer = new Timer(OSMFSettings.hdsMainTimerInterval); 
 			_mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -226,7 +224,14 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function close():void
 		{
-			_mixer.close();
+			if (_videoHandler != null)
+			{
+				_videoHandler.close();
+			}
+			if (_mixer != null)
+			{
+				_mixer.close();
+			}
 			
 			_mainTimer.stop();
 			notifyPlayStop();
@@ -269,7 +274,7 @@ package org.osmf.net.httpstreaming
 		 */ 
 		public function DVRGetStreamInfo(streamName:Object):void
 		{
-			if (_mixer.isReady)
+			if (_source.isReady)
 			{
 				// TODO: should we re-trigger the event?
 			}
@@ -278,7 +283,7 @@ package org.osmf.net.httpstreaming
 				// TODO: should there be a guard to protect the case where isReady is not yet true BUT play has already been called, so we are in an
 				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
 				// event back, go ahead and call play()
-				_mixer.video.getDVRInfo(streamName);
+				_videoHandler.getDVRInfo(streamName);
 			}
 		}
 		
@@ -293,7 +298,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public function get qosInfo():HTTPStreamQoSInfo
 		{
-			return ( _mixer.video != null ? _mixer.video.qosInfo : null);
+			return ( _videoHandler != null ? _videoHandler.qosInfo : null);
 		}
 
 		///////////////////////////////////////////////////////////////////////
@@ -355,7 +360,7 @@ package org.osmf.net.httpstreaming
 		{
 			_initializeFLVParser = true;
 			_seekTarget = seekTarget;
-			_mixer.video.open(streamName);
+			_videoHandler.open(streamName);
 			setState(HTTPStreamingState.SEEK);
 		}
 		
@@ -370,15 +375,15 @@ package org.osmf.net.httpstreaming
 			_desiredQualityStreamName = streamName;
 			
 			if (
-					_mixer.isReady 
-				&& (_mixer.video != null && _mixer.video.streamName != _desiredQualityStreamName)
+					_source.isReady 
+				&& (_videoHandler != null && _videoHandler.streamName != _desiredQualityStreamName)
 			)
 			{
 				CONFIG::LOGGING
 				{
 					logger.debug("Stream source is ready so we can initiate change quality to [" + _desiredQualityStreamName + "]");
 				}
-				_mixer.video.changeQualityLevel(_desiredQualityStreamName);
+				_videoHandler.changeQualityLevel(_desiredQualityStreamName);
 				_qualityLevelNeedsChanging = false;
 				_desiredQualityStreamName = null;
 			}
@@ -393,11 +398,23 @@ package org.osmf.net.httpstreaming
 		 */
 		private function changeAudioStreamTo(streamName:String):void
 		{
+			if (_mixer == null)
+			{
+				CONFIG::LOGGING
+				{
+					logger.warn("Invalid operation(changeAudioStreamTo) for legacy source. Should been a mixed source.");
+				}
+				
+				_audioStreamNeedsChanging = false;
+				_desiredAudioStreamName = null;
+				return;
+			}
+			
 			_audioStreamNeedsChanging = true;
 			_desiredAudioStreamName = streamName;
 			
 			if (
-					_mixer.video.isOpen
+					_videoHandler.isOpen
 				&& (
 						(_mixer.audio == null && _desiredAudioStreamName != null)	
 					||  (_mixer.audio != null && _mixer.audio.streamName != _desiredAudioStreamName)
@@ -1215,7 +1232,33 @@ package org.osmf.net.httpstreaming
 				appendBytes(bytes);
 			}
 		}
-
+		
+		/**
+		 * @private
+		 * 
+		 * Creates the source object which will be used to consume the associated resource.
+		 */
+		protected function createSource(resource:URLResource):void
+		{
+			var source:IHTTPStreamSource = null;
+			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+			if (streamingResource == null || streamingResource.alternativeAudioStreamItems == null || streamingResource.alternativeAudioStreamItems.length == 0)
+			{
+				// we are not in alternative audio scenario, we are going to the legacy mode
+				var legacySource:HTTPStreamSource = new HTTPStreamSource(_factory, _resource, this);
+				
+				_source = legacySource;
+				_videoHandler = legacySource;
+			}
+			else
+			{
+				_mixer = new HTTPStreamMixer(this);
+				_mixer.video = new HTTPStreamSource(_factory, _resource, _mixer);
+				
+				_source = _mixer;
+				_videoHandler = _mixer.video;
+			}
+		}
 		///////////////////////////////////////////////////////////////////////////////////
 //		/**
 //		 * @private
@@ -1352,6 +1395,7 @@ package org.osmf.net.httpstreaming
 		private var _factory:HTTPStreamingFactory = null;
 		
 		private var _mixer:HTTPStreamMixer = null;
+		private var _videoHandler:IHTTPStreamHandler = null;
 		private var _source:IHTTPStreamSource = null;
 		
 		private var _qualityLevelNeedsChanging:Boolean = false;

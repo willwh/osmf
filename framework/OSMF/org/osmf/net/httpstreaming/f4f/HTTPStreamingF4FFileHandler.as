@@ -28,6 +28,7 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
+	import org.osmf.utils.OSMFSettings;
 	
 	CONFIG::LOGGING
 	{			
@@ -71,15 +72,6 @@ package org.osmf.net.httpstreaming.f4f
 			_countingReadBytes = false;
 			_boxInfoPending = true;
 			_nextBox = null;
-			
-			// XXX Must be revisted 
-			// [cdobre] It's only downhill from here...
-			_bytesNeeded1 = F4FConstants.FIELD_SIZE_LENGTH + F4FConstants.FIELD_TYPE_LENGTH + F4FConstants.FIELD_LARGE_SIZE_LENGTH + F4FConstants.FIELD_EXTENDED_TYPE_LENGTH;
-			_bytesReadSinceAfraStart1 = 0;
-			_countingReadBytes1 = false;
-			_boxInfoPending1 = true;
-			_nextBox1 = null;
- 
 		}
 		
 		/**
@@ -249,9 +241,9 @@ package org.osmf.net.httpstreaming.f4f
 			if (_mdatBytesPending > 0)
 			{
 				var bytesToRead:uint = _mdatBytesPending < input.bytesAvailable? _mdatBytesPending : input.bytesAvailable;
-				if (!endOfFile && bytesToRead > MAX_BYTES_PER_MDAT_READ)
+				if (!endOfFile && bytesToRead > OSMFSettings.hdsBytesReadingLimit)
 				{
-					bytesToRead = MAX_BYTES_PER_MDAT_READ;
+					bytesToRead = OSMFSettings.hdsBytesReadingLimit;
 				}
 				ba = new ByteArray();
 				_mdatBytesPending -= bytesToRead;
@@ -337,41 +329,9 @@ package org.osmf.net.httpstreaming.f4f
 		private var _mdatBytesOffset:Number;
 		private var _processRequestWasSeek:Boolean = false;
 		
-		private static const MAX_BYTES_PER_MDAT_READ:uint = 10*1024;
-		
-		private var _ba1:ByteArray;
-		private var _boxInfoPending1:Boolean;
-		private var _bytesNeeded1:uint;
-		private var _bytesReadSinceAfraStart1:uint;
-		private var _countingReadBytes1:Boolean;
-		private var _mdatBytesPending1:uint = 0;
-		private var _nextBox1:BoxInfo;
-		private var _mixedVideoTime:uint;
-		private var _mixedAudioTime:uint;
-		private var tagHeaderPending:Boolean = true;
-		private var tagBodyPending:Boolean;
-		private var tagHeaderPending1:Boolean = true;
-		private var tagBodyPending1:Boolean;
-		private var _parser1:BoxParser = new BoxParser();
-		private	var currTime:uint = 0;
-		private	var videoTag:int = FLVTag.TAG_TYPE_VIDEO;
-		private	var videoTime:uint = 0;
-		private	var videoDataSize:uint = 0;
-		private	var audioTag:int = FLVTag.TAG_TYPE_AUDIO;
-		private	var audioTime:uint = 0;
-		private	var audioDataSize:uint = 0;
-		private	var	videoHeaderBytes:ByteArray = new ByteArray();
-		private var	audioHeaderBytes:ByteArray = new ByteArray();
-		private	var	videoDataBytes:ByteArray = new ByteArray();
-		private	var	audioDataBytes:ByteArray = new ByteArray();
-		
-		private	var _videoInput:ByteArray = new ByteArray();
-		private	var _audioInput:ByteArray = new ByteArray();
-
-		
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler");
+			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler");
 		}
 	}
 }
