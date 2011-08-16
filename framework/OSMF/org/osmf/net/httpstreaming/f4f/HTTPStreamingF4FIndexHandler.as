@@ -854,6 +854,7 @@ package org.osmf.net.httpstreaming.f4f
 				
 				// calculate current duration
 				var currentDuration:Number = bootstrapBox.totalDuration/bootstrapBox.timeScale;
+				var currentTime:Number = bootstrapBox.currentMediaTime/bootstrapBox.timeScale;
 				
 				// update start time for the first time
 				if (isNaN(dvrInfo.startTime))
@@ -871,14 +872,14 @@ package org.osmf.net.httpstreaming.f4f
 					}
 					
 					dvrInfo.startTime += (frt.fragmentDurationPairs)[0].durationAccrued/bootstrapBox.timeScale;
-					if (dvrInfo.startTime > currentDuration)
+					if (dvrInfo.startTime > currentTime)
 					{
-						dvrInfo.startTime = currentDuration;
+						dvrInfo.startTime = currentTime;
 					}
 				}
 				
 				// update current length of the DVR window 
-				dvrInfo.curLength = currentDuration - dvrInfo.startTime;	
+				dvrInfo.curLength = currentTime - dvrInfo.startTime;	
 				
 				// adjust the start time if we have a DVR rooling window active
 				if ((dvrInfo.windowDuration != -1) && (dvrInfo.curLength > dvrInfo.windowDuration))

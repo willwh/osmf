@@ -677,6 +677,7 @@ package org.osmf.net.httpstreaming
 		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
 		{
 			_dvrInfo = event.info as DVRInfo;
+			//_initialTime = _dvrInfo.startTime;
 		}
 		
 		/**
