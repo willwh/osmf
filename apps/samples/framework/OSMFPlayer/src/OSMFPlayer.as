@@ -70,6 +70,7 @@ package
 
 			super();
 			
+			
 			// Set the SWF scale mode, and listen to the stage change
 			// dimensions:
 			_stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -102,6 +103,9 @@ package
 		{
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
+			
+			player.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+			
 			player.autoPlay = true;
 			
 			container.clipChildren = true;
@@ -149,7 +153,7 @@ package
 						( MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE
 						, onCanSeekChange
 						);
-						
+					
 					function onCanSeekChange(event:MediaPlayerCapabilityChangeEvent):void
 					{
 						player.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onCanSeekChange);
@@ -217,6 +221,25 @@ package
 
 		// Handlers
 		//
+		
+		private function onCurrentTimeChange(event:TimeEvent):void
+		{
+			if  (	player.state == MediaPlayerState.BUFFERING
+				|| player.state == MediaPlayerState.PLAYING
+				|| player.state == MediaPlayerState.PAUSED
+			) // If the player is in a relevant state
+			{
+				var dvrTrait:DVRTrait = player.media.getTrait(MediaTraitType.DVR) as DVRTrait;
+				if ((dvrTrait != null) && (dvrTrait.windowDuration != -1)) // If rolling window is present
+				{
+					if (event.time < DEFAULT_FRAGMENT_SIZE) // If we're too close to the left-most side of the rolling window
+					{
+						// Seek to a safe area
+						player.seek(DEFAULT_SEGMENT_SIZE);
+					}
+				}
+			}
+		}
 
 		private function onStageResize(event:Event = null):void
 		{
@@ -303,5 +326,8 @@ package
 		
 		/* static */
 		private static const URL_LOADER_NOT_FOUND:String = "Error #2032: Stream Error. URL: ";
+		
+		private static const DEFAULT_FRAGMENT_SIZE:Number = 4;
+		private static const DEFAULT_SEGMENT_SIZE:Number = 16;
 	}
 }            
