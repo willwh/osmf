@@ -317,18 +317,28 @@ package org.osmf.net.httpstreaming.f4f
 			
 			var currentTime:Number = bootstrapBox.currentMediaTime;
 			var desiredTime:Number = time * bootstrapBox.timeScale;
+
+			var contentComplete:Boolean = bootstrapBox.contentComplete();
+			CONFIG::LOGGING
+			{
+				if (contentComplete)
+				{
+					logger.debug("Bootstrap reports that content is complete. If this is a live stream, then the publisher stopped it.");
+				}
+			}
+
 			if (desiredTime <= currentTime)
 			{
 				// we should know the segment and fragment containing the desired time
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
 				if (frt != null)
 				{
-					_currentFAI = frt.findFragmentIdByTime(desiredTime, currentTime, bootstrapBox.contentComplete() ? false : bootstrapBox.live);
+					_currentFAI = frt.findFragmentIdByTime(desiredTime, currentTime, contentComplete ? false : bootstrapBox.live);
 				}
 				
 				if (_currentFAI == null || fragmentOverflow(bootstrapBox, _currentFAI.fragId))
 				{
-					if (bootstrapBox.contentComplete())
+					if (contentComplete)
 					{
 						if (bootstrapBox.live) // live/DVR playback stops
 						{
@@ -409,6 +419,16 @@ package org.osmf.net.httpstreaming.f4f
 			var streamRequest:HTTPStreamRequest = null;
 
 			var currentTime:Number = bootstrapBox.currentMediaTime;
+
+			var contentComplete:Boolean = bootstrapBox.contentComplete();
+			CONFIG::LOGGING
+			{
+				if (contentComplete)
+				{
+					logger.debug("Bootstrap reports that content is complete. If this is a live stream, then the publisher stopped it.");
+				}
+			}
+			
 			var oldCurrentFAI:FragmentAccessInformation = _currentFAI;
 			if (oldCurrentFAI == null)
 			{
@@ -419,13 +439,13 @@ package org.osmf.net.httpstreaming.f4f
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
 				if (frt != null)
 				{
-					_currentFAI = frt.validateFragment(oldCurrentFAI.fragId + 1, currentTime, bootstrapBox.contentComplete()? false : bootstrapBox.live);
+					_currentFAI = frt.validateFragment(oldCurrentFAI.fragId + 1, currentTime, contentComplete ? false : bootstrapBox.live);
 				}
 			}
 			
 			if (_currentFAI == null || fragmentOverflow(bootstrapBox, _currentFAI.fragId))
 			{
-				if (!bootstrapBox.live || bootstrapBox.contentComplete())
+				if (!bootstrapBox.live || contentComplete)
 				{
 					if (bootstrapBox.live) // live/DVR playback stops
 					{
@@ -675,7 +695,7 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (   _bootstrapBoxes[quality] == null 
 				|| _bootstrapBoxes[quality].bootstrapVersion < bootstrapBox.bootstrapVersion 
-				|| _bootstrapBoxes[quality].currentMediaTime < bootstrapBox.currentMediaTime
+				|| (_bootstrapBoxes[quality].bootstrapVersion == bootstrapBox.bootstrapVersion && _bootstrapBoxes[quality].currentMediaTime < bootstrapBox.currentMediaTime)
 			)
 			{
 				CONFIG::LOGGING
@@ -1106,6 +1126,10 @@ package org.osmf.net.httpstreaming.f4f
 		 */ 
 		private function onBootstrapBox(event:HTTPStreamingFileHandlerEvent):void
 		{
+			CONFIG::LOGGING
+			{
+				logger.debug("Bootstrap box inside media stream found. Trying to update the bootstrap");
+			}
 			updateBootstrapBox(_currentQuality, event.bootstrapBox);			
 		}
 		

@@ -162,7 +162,7 @@ package org.osmf.traits
 				, TIME
 				, DISPLAY_OBJECT
 				, DVR
-				//, ALTERNATIVE_AUDIO
+				, ALTERNATIVE_AUDIO
 			  	]
 			);
 	}
