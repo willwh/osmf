@@ -1202,22 +1202,27 @@ package org.osmf.net.httpstreaming
 		 */
 		private function onActionNeeded(event:HTTPStreamingEvent):void
 		{
-			CONFIG::LOGGING
-			{
-				logger.debug("We need to to an appendBytesAction in order to reset NetStream internal state");
+			// [FM-1387] we are appending this action only when we are 
+			// dealing with late-binding audio streams
+			if (_mixer != null)
+			{	
+				CONFIG::LOGGING
+				{
+					logger.debug("We need to to an appendBytesAction in order to reset NetStream internal state");
+				}
+	
+				CONFIG::FLASH_10_1
+				{
+					appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
+				}
+				
+				// Before we feed any TCMessages to the Flash Player, we must feed
+				// an FLV header first.
+				var header:FLVHeader = new FLVHeader();
+				var headerBytes:ByteArray = new ByteArray();
+				header.write(headerBytes);
+				attemptAppendBytes(headerBytes);
 			}
-
-			CONFIG::FLASH_10_1
-			{
-				appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
-			}
-			
-			// Before we feed any TCMessages to the Flash Player, we must feed
-			// an FLV header first.
-			var header:FLVHeader = new FLVHeader();
-			var headerBytes:ByteArray = new ByteArray();
-			header.write(headerBytes);
-			attemptAppendBytes(headerBytes);
 		}
 		
 		/**
