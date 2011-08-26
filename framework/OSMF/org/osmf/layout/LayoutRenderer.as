@@ -556,16 +556,16 @@ package org.osmf.layout
 				lastCalculatedBounds = rect;
 			}
 			
-			CONFIG::LOGGING
-			{
-				logger.debug
-					( "dimensions: {0} available: ({1}, {2}), media: ({3},{4}) target ({5})"
-					, rect
-					, availableWidth, availableHeight
-					, target.measuredWidth, target.measuredHeight,
-					target.displayObject
-					);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug
+//					( "dimensions: {0} available: ({1}, {2}), media: ({3},{4}) target ({5})"
+//					, rect
+//					, availableWidth, availableHeight
+//					, target.measuredWidth, target.measuredHeight,
+//					target.displayObject
+//					);
+//			}
 			
 			return rect;
 		}

@@ -401,21 +401,21 @@ package org.osmf.layout
 			// This is a root-node. Flag that we're cleaning up:
 			cleaning = true;
 			
-			CONFIG::LOGGING
-			{
-				logger.debug
-					( "layout dimensions before measurement ({0}, {1})"
-					, _measuredWidth, _measuredHeight
-					);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug
+//					( "layout dimensions before measurement ({0}, {1})"
+//					, _measuredWidth, _measuredHeight
+//					);
+//			}
 			measure();
-			CONFIG::LOGGING
-			{
-				logger.debug
-					( "layout dimensions after measurement ({0}, {1})"
-						, _measuredWidth, _measuredHeight
-					);
-			}
+//			CONFIG::LOGGING
+//			{
+//				logger.debug
+//					( "layout dimensions after measurement ({0}, {1})"
+//						, _measuredWidth, _measuredHeight
+//					);
+//			}
 			
 			layout(_measuredWidth, _measuredHeight);
 			
