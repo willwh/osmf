@@ -17,9 +17,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] OSMFTest</name>
+			<name>[source path] src</name>
 			<type>2</type>
-			<location>C:/svn/osmf/public/trunk/framework/OSMFTest</location>
+			<locationURI>DOCUMENTS/framework/OSMFTest/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
