@@ -1,1 +1,0 @@
-Note: OSMFAIRTest does not currently compile with the FLASH_10_1 flag set to true.
