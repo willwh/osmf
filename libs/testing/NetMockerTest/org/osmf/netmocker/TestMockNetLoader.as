@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.netmocker
 {
+	import flexunit.framework.Assert;
+	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetStreamLoadTrait;
@@ -48,11 +50,11 @@ package org.osmf.netmocker
 		
 		public function testConstructor():void
 		{
-			assertTrue(netLoader.netConnectionExpectation == NetConnectionExpectation.VALID_CONNECTION);
-			assertTrue(netLoader.netStreamExpectedDuration == 0);
-			assertTrue(netLoader.netStreamExpectedHeight == 0);
-			assertTrue(netLoader.netStreamExpectedWidth == 0);
-			assertTrue(netLoader.netStreamExpectedEvents.length == 0);
+			Assert.assertTrue(netLoader.netConnectionExpectation == NetConnectionExpectation.VALID_CONNECTION);
+			Assert.assertTrue(netLoader.netStreamExpectedDuration == 0);
+			Assert.assertTrue(netLoader.netStreamExpectedHeight == 0);
+			Assert.assertTrue(netLoader.netStreamExpectedWidth == 0);
+			Assert.assertTrue(netLoader.netStreamExpectedEvents.length == 0);
 		}
 		
 		override protected function createInterfaceObject(... args):Object
