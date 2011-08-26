@@ -19,12 +19,7 @@
 		<link>
 			<name>[source path] MASTPlugin</name>
 			<type>2</type>
-			<location>C:/svn/osmf/public/trunk/plugins/samples/MASTPlugin</location>
-		</link>
-		<link>
-			<name>[source path] OSMFTest</name>
-			<type>2</type>
-			<location>C:/svn/osmf/public/trunk/framework/OSMFTest</location>
+			<location>/Work/osmf/trunk-osmf/plugins/samples/MASTPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>

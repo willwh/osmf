@@ -17,14 +17,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] OSMFTest</name>
-			<type>2</type>
-			<location>C:/svn/osmf/public/trunk/framework/OSMFTest</location>
-		</link>
-		<link>
 			<name>[source path] SMILPlugin</name>
 			<type>2</type>
-			<location>C:/svn/osmf/public/trunk/plugins/samples/SMILPlugin</location>
+			<location>/Work/osmf/trunk-osmf/plugins/samples/SMILPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>

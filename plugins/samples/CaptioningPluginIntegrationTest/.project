@@ -19,12 +19,7 @@
 		<link>
 			<name>[source path] CaptioningPlugin</name>
 			<type>2</type>
-			<location>C:/svn/osmf/public/trunk/plugins/samples/CaptioningPlugin</location>
-		</link>
-		<link>
-			<name>[source path] OSMFTest</name>
-			<type>2</type>
-			<location>C:/svn/osmf/public/trunk/framework/OSMFTest</location>
+			<location>/Work/osmf/trunk-osmf/plugins/samples/CaptioningPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>
