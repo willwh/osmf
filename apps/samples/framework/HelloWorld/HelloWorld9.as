@@ -15,49 +15,30 @@
 *   
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2011 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
 package
 {
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.events.Event;
-	import flash.text.engine.TextElement;
-	import flash.utils.setTimeout;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.elements.DurationElement;
-	import org.osmf.elements.ParallelElement;
-	import org.osmf.elements.SWFElement;
-	import org.osmf.elements.SerialElement;
-	import org.osmf.elements.VideoElement;
-	import org.osmf.events.AlternativeAudioEvent;
+	import org.osmf.elements.F4MElement;
 	import org.osmf.events.DynamicStreamEvent;
-	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutMode;
-	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.ScaleMode;
 	import org.osmf.layout.VerticalAlign;
-	import org.osmf.media.DefaultMediaFactory;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaPlayerState;
-	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Metadata;
-	import org.osmf.net.StreamingItem;
-	import org.osmf.traits.AlternativeAudioTrait;
-	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TraitEventDispatcher;
+	import org.osmf.net.StreamingXMLResource;
+	
 	
 	/**
 	 * Another simple OSMF application, building on HelloWorld2.as.
@@ -65,9 +46,9 @@ package
 	 * Plays a video, then shows a SWF, then plays another video.
 	 **/
 	[SWF(backgroundColor="0xdedede", width=640, height=480)]
-	public class HelloWorld9 extends Sprite
+	public class HelloWorld12 extends Sprite
 	{
-		public function HelloWorld9()
+		public function HelloWorld12()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
@@ -91,128 +72,24 @@ package
 			layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 
 			// create media element
-			var mediaFactory:MediaFactory = new DefaultMediaFactory();
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(F4M_VOD));
-			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
-			container.addMediaElement(mediaElement);
+			var streamingXMLResource:StreamingXMLResource = new StreamingXMLResource(XML_F4M, XML_PATH);
+			var f4MElement:F4MElement = new F4MElement(streamingXMLResource);			
+			container.addMediaElement(f4MElement);
 			
-			// Set the MediaElement on a MediaPlayer.  Because autoPlay
-			// defaults to true, playback begins immediately.
 			player = new MediaPlayer();
 			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerStateChange);
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-			player.addEventListener(AlternativeAudioEvent.AUDIO_SWITCHING_CHANGE, onAlternateAudioChange);
-			player.addEventListener(AlternativeAudioEvent.NUM_ALTERNATIVE_AUDIO_STREAMS_CHANGE, onNumAlternativeAudioChange);
 			
 			player.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, onAutoSwitchChange);
 			player.addEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, onNumDynamicStreamChange);
 			player.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
-
+			
 			player.muted = false;
 			player.loop = false;
 			player.autoPlay = false;
-			player.media = mediaElement;
+			player.media = f4MElement;
 			player.bufferTime = 4 ;
-			//player.autoDynamicStreamSwitch=false;
-			//player.autoRewind=false;
-			//if (player.hasAlternativeAudio)
-			//{
-				//doChangeAlternativeIndex(1);
-			//}
-		}
-		
-		private function scenario1():void
-		{
-			setTimeout(doChangeAlternativeIndexInTrait, 10000, 1);
-			setTimeout(doChangeAlternativeIndex, 35000, 0);
-			//setTimeout(doSwitch, 15000, 2);
-			//setTimeout(doChangeAlternativeIndexInTrait, 30000, 0);
-			//setTimeout(doSwitch, 45000, 1);
-
-			setTimeout(doPause, 45000);
-			setTimeout(doPlay, 55000);
-			//setTimeout(doSeek, 30000, 10);
-			//setTimeout(doSeek, 450000, 50);
-			//setTimeout(doSeek, 25000, 1);
-			//setTimeout(doSeek, 40000, 100);
-			//setTimeout(doChangeAlternativeIndex, 30000, 1);
-			//setTimeout(doChangeAlternativeIndexInTrait, 5000, 1);
-		}
-		
-		private function doPlay():void
-		{
-			if (player.canPlay)
-			{
-				trace("[LBA] scenario play");
-				player.play();
-			}
-		}
-		
-		private function doSwitch(index:Number):void
-		{
-			if (index >=0 && player.numDynamicStreams>index)
-			{
-				trace("[LBA] scenario switch index to " + index);
-				player.switchDynamicStreamIndex(index);
-			}
-		}
-		
-		
-		private function doPause():void
-		{
-			if (player.canPause)
-			{
-				trace("[LBA] scenario pause");
-				player.pause();
-			}
-		}
-		private function doSeek(pos:Number):void
-		{
-			if (player.canSeekTo(pos))
-			{
-				trace("[LBA] scenario seek " + pos);
-				player.seek(pos);
-			}
-		}
-		
-		private function doChangeAlternativeIndex(newIndex:Number):void
-		{
-			if (player.hasAlternativeAudio)
-			{
-				if(player.numAlternativeAudioStreams>newIndex && -1<=newIndex)
-				{
-					trace("[LBA] scenario LBA switch " + newIndex );
-					player.switchAlternativeAudioIndex(newIndex);
-				}
-				else
-				{
-					trace("[LBA] scenario LBA can't switch to " + newIndex );
-				}
-			} 
-			else
-			{
-				trace("[LBA] no alternate media");
-			}
-		}
-		private function doChangeAlternativeIndexInTrait(newIndex:Number):void
-		{
-			if (player.media.hasTrait(MediaTraitType.ALTERNATIVE_AUDIO))
-			{
-				if((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams>newIndex && 
-						-1<=newIndex)
-				{
-					(player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).switchTo(newIndex);
-					trace("[LBA] scenario LBA switch [trait] " + newIndex );
-				}
-				else
-				{
-					trace("[LBA] scenario LBA can't switch [trait] to " + newIndex );
-				}
-			}
-			else
-			{
-				trace("[LBA] no alternate media [trait]");
-			}
+			player.autoDynamicStreamSwitch=true;
 		}
 		
 		private function onPlayerStateChange(event:MediaPlayerStateChangeEvent):void
@@ -220,22 +97,9 @@ package
 			switch (event.state)
 			{
 				case MediaPlayerState.READY:
-					if (start)
-					{
-						start = false;
-						trace("[LBA] Alternative languages", player.hasAlternativeAudio ? "available" : " not available" );
-						if (player.hasAlternativeAudio)
-						{
-							for (var index:int = 0; index < player.numAlternativeAudioStreams; index++)
-							{
-								var item:StreamingItem = player.getAlternativeAudioItemAt(index);
-								trace("[LBA] [", item.info.language, "]", item.info.label);
-							}
-						}	
+					{	
+						trace("started");
 						player.play();
-						scenario1();
-						//doChangeAlternativeIndex(0);
-
 					}
 					break;
 				case MediaPlayerState.PLAYING:
@@ -243,107 +107,31 @@ package
 			}
 		}
 		
-		private function onAutoSwitchChange(event:DynamicStreamEvent):void
-		{
-			trace("[LBA] [MBR]", event.toString());	
-		}
-		private function onNumDynamicStreamChange(event:DynamicStreamEvent):void
-		{
-			trace("[LBA] [MBR]", event.toString());	
-		}
-		private function onSwitchingChange(event:DynamicStreamEvent):void
-		{
-			trace("[LBA] [MBR]", event.toString());	
-		}
-		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			trace("[Error]", event.toString());	
 		}
 		
-		private function onAlternateAudioChange(event:AlternativeAudioEvent):void
+		private function onAutoSwitchChange(event:DynamicStreamEvent):void
 		{
-			trace("[LBA] [Event]", event.toString());	
-			trace("[LBA] event.streamChanging = "+ event.switching);
-			
-			trace("[LBA] alternativeAudioStreamChanging = "+ player.alternativeAudioStreamSwitching);
-			trace("[LBA] alternate "+ player.currentAlternativeAudioStreamIndex +"/" +(player.numAlternativeAudioStreams-1));
-			
-			trace("[LBA] [trait] alternativeAudioStreamChanging ="+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).switching);
-			trace("[LBA] [trait] alternate"+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).currentIndex 
-					+"/" +((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams-1));
-			
+			trace(" [MBR]", event.toString());	
+		}
+
+		private function onNumDynamicStreamChange(event:DynamicStreamEvent):void
+		{
+			trace(" [MBR]", event.toString());	
 		}
 		
-		private function onNumAlternativeAudioChange(event:AlternativeAudioEvent):void
+		private function onSwitchingChange(event:DynamicStreamEvent):void
 		{
-			trace("[LBA] [Event]", event.toString());	
-			trace("[LBA] alternativeAudioStreamChanging = "+ player.alternativeAudioStreamSwitching);
-			trace("[LBA] alternate "+ player.currentAlternativeAudioStreamIndex +"/" +(player.numAlternativeAudioStreams-1));
-			
-			trace("[LBA] [trait] alternativeAudioStreamChanging ="+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).switching);
-			trace("[LBA] [trait] alternate"+ (player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).currentIndex 
-				+"/" +((player.media.getTrait(MediaTraitType.ALTERNATIVE_AUDIO) as AlternativeAudioTrait).numAlternativeAudioStreams-1));
-			
+			trace(" [MBR]", event.toString());	
 		}
 		
-		private var audioChanged:Boolean = false;
 		private var player:MediaPlayer;
 		private var container:MediaContainer;
 		private var start:Boolean = true;
 		
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/sync_test/sync_test_lba.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m";
-		
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_v_2_alternate_a/1_media_v_2_alternate_a.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a/1_media_av_2_alternate_a.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_longer_alternate_a/1_media_av_2_longer_alternate_a.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_shorter_alternate_a/1_media_av_2_shorter_alternate_a.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a_diff_frag_and_seg_length/1_media_av_2_alternate_a_diff_frag_and_seg_length.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a_diff_fragment_length/1_media_av_2_alternate_a_diff_fragment_length.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a_diff_segment_length/1_media_av_2_alternate_a_diff_segment_length.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a_equal_seg_diff_alternate_frag_length/1_media_av_2_alternate_a_equal_seg_diff_alternate_frag_length.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.104/vod/late_binding_audio/API_tests_assets/1_media_av_2_alternate_a_diff_frag_and_seg_length_for_all_media/1_media_av_2_alternate_a_diff_frag_and_seg_length_for_all_media.f4m";
-		
-		//private static const F4M_LIVE:String = "http://10.131.237.104/live/events/latebind/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://catherine.corp.adobe.com/osmf/late_bindings_audio_sp3/demo_live.f4m";	
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/latebind/events/_definst_/liveevent.f4m";
-		//private static const F4M_HDS:String = "http://zeridemo-f.akamaihd.net/content/inoutedit-mbr/inoutedit_h264_3000.f4m";		
-		//private static const F4M_LIVE1:String = "http://10.131.237.107/vod/live/videostream.f4m";
-		//private static const F4M_MBR:String = "http://10.131.237.107/vod/mbr/sample1_audio2.f4m";
-		//private static const F4M_MBR_DRM:String = "http://10.131.237.107/vod/mbr/drm/sample1_1500kbps.f4m";
-		//private static const F4M_MBR_DRM2:String = "http://10.131.237.107/vod/mbr/drm/sample1_audio2.f4m";
-		
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr_2alt/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr_2alt_drm/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_dvr_drm/events/_definst_/liveevent.f4m";
-		
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live_2alt/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live_2alt_drm/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_mbr_live_drm/events/_definst_/liveevent.f4m";
-		
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr_2alt/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr_2alt_drm/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_dvr_drm/events/_definst_/liveevent.f4m";
-		
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live_2alt/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live_2alt_drm/events/_definst_/liveevent.f4m";
-		//private static const F4M_LIVE:String = "http://10.131.237.107/live/events/hs_sbr_live_drm/events/_definst_/liveevent.f4m";
-		
-		
-		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod/ex.f4m";
-		private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_2alt/ex.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_2alt_drm/ex.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_drm/ex.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr/ex.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr_2alt/ex.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr_2alt_drm/ex.f4m";
-		//private static const F4M_VOD:String = "http://10.131.237.107/vod/hs/vod_mbr_drm/ex.f4m";
-
-
+		private static const XML_F4M:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <manifest xmlns=\"http://ns.adobe.com/f4m/1.0\"> 	<mimeType> 		 	</mimeType> 	<streamType> 		recorded 	</streamType> 	<duration> 		0 	</duration> 	<fragment-duration>  		30000 	</fragment-duration> 	<bootstrapInfo 		 profile=\"named\" 		 id=\"bootstrap1459\" 	> 		AAABq2Fic3QAAAAAAAAAFAAAAAPoAAAAAAAJPCoAAAAAAAAAAAAAAAAAAQAAABlhc3J0AAAAAAAAAAABAAAAAQAAABUBAAABZmFmcnQAAAAAAAAD6AAAAAAVAAAAAQAAAAAAAAAAAAB1lAAAAAMAAAAAAADrQgAAdsAAAAAEAAAAAAABYf8AAHUwAAAABQAAAAAAAddNAAB0zAAAAAYAAAAAAAJMNwAActgAAAAHAAAAAAACvy0AAHeIAAAACAAAAAAAAzaRAAB0BAAAAAkAAAAAAAOqcAAAeFAAAAAKAAAAAAAEIr0AAHUwAAAACwAAAAAABJfJAABzPAAAAAwAAAAAAAULAQAAdAQAAAANAAAAAAAFfuAAAHX4AAAADgAAAAAABfT2AAB3iAAAAA8AAAAAAAZsewAAdGgAAAAQAAAAAAAG4OAAAHTMAAAAEQAAAAAAB1WoAAB1+AAAABIAAAAAAAfLnQAAc6AAAAATAAAAAAAIPxgAAHUwAAAAFAAAAAAACLRmAAB1lAAAABUAAAAAAAkqGAAAEfgAAAAAAAAAAAAAAAAAAAAAAA== 	</bootstrapInfo> 	<media 		 streamId=\"DTV1700K.mp4\" 		 url=\"http://10.122.233.48:8134/jit/DTV1700K.mp4\" 		 bootstrapInfoId=\"bootstrap1459\" bitrate=\"1700\" 	> 		<metadata> 			AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAgupTSQua9wAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAU0AAAAAAAAAIYXZjbGV2ZWwAQEAAAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQD34UeuFHrgAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQXFMd4AAAAAACXRpbWVzY2FsZQBA3USAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQXu0o7AAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk= 		</metadata> 	</media>  	<bootstrapInfo 		 profile=\"named\" 		 id=\"bootstrap1550\" 	> 		AAABq2Fic3QAAAAAAAAAFAAAAAPoAAAAAAAJPCoAAAAAAAAAAAAAAAAAAQAAABlhc3J0AAAAAAAAAAABAAAAAQAAABUBAAABZmFmcnQAAAAAAAAD6AAAAAAVAAAAAQAAAAAAAAAAAAB1lAAAAAMAAAAAAADrQgAAdsAAAAAEAAAAAAABYf8AAHUwAAAABQAAAAAAAddNAAB0zAAAAAYAAAAAAAJMNwAActgAAAAHAAAAAAACvy0AAHeIAAAACAAAAAAAAzaRAAB0BAAAAAkAAAAAAAOqcAAAeFAAAAAKAAAAAAAEIr0AAHUwAAAACwAAAAAABJfJAABzPAAAAAwAAAAAAAULAQAAdAQAAAANAAAAAAAFfuAAAHX4AAAADgAAAAAABfT2AAB3iAAAAA8AAAAAAAZsewAAdGgAAAAQAAAAAAAG4OAAAHTMAAAAEQAAAAAAB1WoAAB1+AAAABIAAAAAAAfLnQAAc6AAAAATAAAAAAAIPxgAAHUwAAAAFAAAAAAACLRmAAB1lAAAABUAAAAAAAkqGAAAEfgAAAAAAAAAAAAAAAAAAAAAAA== 	</bootstrapInfo> 	<media 		 streamId=\"DTV6000K.mp4\" 		 url=\"http://10.122.233.48:8134/jit/DTV6000K.mp4\" 		 bootstrapInfoId=\"bootstrap1550\" bitrate=\"6000\" 	> 		<metadata> 			AgAKb25NZXRhRGF0YQgAAAAAAAhkdXJhdGlvbgBAgupTSQua9wAFd2lkdGgAQJQAAAAAAAAABmhlaWdodABAhoAAAAAAAAAMdmlkZW9jb2RlY2lkAgAEYXZjMQAMYXVkaW9jb2RlY2lkAgAEbXA0YQAKYXZjcHJvZmlsZQBAU0AAAAAAAAAIYXZjbGV2ZWwAQEAAAAAAAAAABmFhY2FvdAAAAAAAAAAAAAAOdmlkZW9mcmFtZXJhdGUAQD34UeuFHrgAD2F1ZGlvc2FtcGxlcmF0ZQBA53AAAAAAAAANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAJdHJhY2tpbmZvCgAAAAIDAAZsZW5ndGgAQXFMd4AAAAAACXRpbWVzY2FsZQBA3USAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkDAAZsZW5ndGgAQXu0o7AAAAAACXRpbWVzY2FsZQBA53AAAAAAAAAIbGFuZ3VhZ2UCAANlbmcAAAkAAAk= 		</metadata> 	</media>  </manifest>";
+		private static const XML_PATH:String = "http://catherine.corp.adobe.com/osmf/mlm_tests";
 	}
 }
