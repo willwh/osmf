@@ -46,9 +46,9 @@ package
 	 * Plays a video, then shows a SWF, then plays another video.
 	 **/
 	[SWF(backgroundColor="0xdedede", width=640, height=480)]
-	public class HelloWorld12 extends Sprite
+	public class HelloWorld9 extends Sprite
 	{
-		public function HelloWorld12()
+		public function HelloWorld9()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
