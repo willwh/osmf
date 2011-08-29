@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="DynamicStreamingSample.mxml" projectUUID="a081a412-5a42-4f4b-8b63-5e3482ac2154" version="6">
-  <compiler additionalCompilerArguments="-locale en_US -define CONFIG::LOGGING false -show-invalid-css-property-warnings=false" autoRSLOrdering="false" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="10.1.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+<actionScriptProperties analytics="false" mainApplicationPath="DynamicStreamingSample.mxml" projectUUID="a081a412-5a42-4f4b-8b63-5e3482ac2154" version="10">
+  <compiler additionalCompilerArguments="-locale en_US -define CONFIG::LOGGING false -show-invalid-css-property-warnings=false" autoRSLOrdering="false" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="/SMILPlugin"/>
     </compilerSourcePath>
@@ -9,7 +9,7 @@
       <libraryPathEntry kind="3" linkType="1" path="/MediaContainerUIComponent/bin/MediaContainerUIComponent.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="4" path="">
         <modifiedEntries>
-          <libraryPathEntry index="6" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/rpc.swc" useDefaultLinkType="true">
+          <libraryPathEntry applicationDomain="default" forceLoad="false" index="8" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/rpc.swc" useDefaultLinkType="true">
             <crossDomainRsls>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.1.0.16076/rpc_4.1.0.16076.swz"/>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="rpc_4.1.0.16076.swz"/>
@@ -17,14 +17,14 @@
           </libraryPathEntry>
         </modifiedEntries>
         <excludedEntries>
-          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
-          <libraryPathEntry index="5" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/sparkskins.swc" useDefaultLinkType="true">
+          <libraryPathEntry applicationDomain="default" forceLoad="false" index="5" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/sparkskins.swc" useDefaultLinkType="true">
             <crossDomainRsls>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.1.0.16076/sparkskins_4.1.0.16076.swz"/>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="sparkskins_4.1.0.16076.swz"/>
             </crossDomainRsls>
           </libraryPathEntry>
-          <libraryPathEntry index="4" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/spark.swc" useDefaultLinkType="true">
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry applicationDomain="default" forceLoad="false" index="4" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/spark.swc" useDefaultLinkType="true">
             <crossDomainRsls>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.1.0.16076/spark_4.1.0.16076.swz"/>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="spark_4.1.0.16076.swz"/>
@@ -40,4 +40,5 @@
   </applications>
   <modules/>
   <buildCSSFiles/>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>

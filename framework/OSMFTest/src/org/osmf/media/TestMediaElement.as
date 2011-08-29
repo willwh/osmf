@@ -23,6 +23,8 @@ package org.osmf.media
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+
+	import flexunit.framework.Assert;
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
@@ -31,7 +33,6 @@ package org.osmf.media
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.flexunit.Assert;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;

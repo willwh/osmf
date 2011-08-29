@@ -34,12 +34,12 @@ package
 	[SWF(backgroundColor="0xC0C0C0", frameRate="25", width="640", height="360")]
 	public class LayoutSample6 extends Sprite
 	{
-		var t:Timer;
-		var ball1:LayoutTargetSprite;
-		var ball2:LayoutTargetSprite;
-		var ball3:LayoutTargetSprite;
-		var ball4:LayoutTargetSprite;
-		var renderer:LayoutRenderer;
+		private var t:Timer;
+		private var ball1:LayoutTargetSprite;
+		private var ball2:LayoutTargetSprite;
+		private var ball3:LayoutTargetSprite;
+		private var ball4:LayoutTargetSprite;
+		private var renderer:LayoutRenderer;
 		
 		public function LayoutSample6()
 		{
