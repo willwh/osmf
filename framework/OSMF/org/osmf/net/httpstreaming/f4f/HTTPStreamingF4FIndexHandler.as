@@ -556,7 +556,7 @@ package org.osmf.net.httpstreaming.f4f
 		 * @playerversion AIR 1.5
 		 * @productversion OSMF 1.0
 		 */
-		private function getFragmentUrl(quality:int, fragment:FragmentAccessInformation):String
+		protected function getFragmentUrl(quality:int, fragment:FragmentAccessInformation):String
 		{
 			var bootstrapBox:AdobeBootstrapBox = _bootstrapBoxes[quality];
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(bootstrapBox);
