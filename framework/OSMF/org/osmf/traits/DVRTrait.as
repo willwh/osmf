@@ -54,6 +54,9 @@ package org.osmf.traits
 		 * Constructor.
 		 * 
 		 * @param isRecording Defines whether the recording is ongoing.
+		 * @param windowDuration If -1, indicates the amount of available recorded 
+		 * content is unlimited. If a non-zero positive number, indicates the number
+		 * of seconds of recorded content that are available behind the live point.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -69,7 +72,9 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Defines the window length on the server.
+		 * Indicates the number of seconds of recorded content that are available
+		 * behind the live point. If -1, indicates the amount of cached content is
+		 * unlimited.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
