@@ -554,7 +554,7 @@ package org.osmf.net.httpstreaming.f4f
 		 * @langversion 3.0
 		 * @playerversion Flash 10
 		 * @playerversion AIR 1.5
-		 * @productversion OSMF 1.0
+		 * @productversion OSMF 1.6
 		 */
 		private function getFragmentUrl(quality:int, fragment:FragmentAccessInformation):String
 		{
@@ -563,13 +563,26 @@ package org.osmf.net.httpstreaming.f4f
 			var fdp:FragmentDurationPair = frt.fragmentDurationPairs[0];
 			var segId:uint = bootstrapBox.findSegmentId(fragment.fragId - fdp.firstFragment + 1);
 			
+			return constructFragmentRequest(_serverBaseURL, _streamNames[quality], segId, fragment.fragId);
+		}
+		
+		/**
+		 * Constructs the url for specified parameters.
+		 * 		  
+		 * @langversion 3.0
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @productversion OSMF 1.6
+		 */
+		protected function constructFragmentRequest(serverBaseURL:String, streamName:String, segmentId:uint, fragmentId:uint):String
+		{
 			var requestUrl:String = "";
-			if (_streamNames[quality].indexOf("http") != 0)
+			if (streamName.indexOf("http") != 0)
 			{
-				requestUrl = _serverBaseURL + "/" ;
+				requestUrl = serverBaseURL + "/" ;
 			}
-			requestUrl += _streamNames[quality] + "Seg" + segId + "-Frag" + fragment.fragId;
-
+			requestUrl += streamName + "Seg" + segmentId + "-Frag" + fragmentId;
+			
 			return requestUrl;
 		}
 		
