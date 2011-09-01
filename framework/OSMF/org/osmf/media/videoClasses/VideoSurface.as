@@ -10,8 +10,6 @@ package org.osmf.media.videoClasses
 	import flash.media.Video;
 	import flash.net.NetStream;
 	
-	import org.osmf.events.VideoSurfaceEvent;
-	
 	CONFIG::PLATFORM import flash.display.Stage;
 	CONFIG::MOCK	 import org.osmf.mock.Stage;
 	
@@ -339,17 +337,11 @@ package org.osmf.media.videoClasses
 					video = currentVideoRenderer;
 					video.deblocking = _deblocking;
 					video.smoothing = _smoothing;
-					addChild(currentVideoRenderer);				
-					
-					/* dispatch an event stating that we are not using StageVideo */
-					dispatchEvent(new VideoSurfaceEvent(VideoSurfaceEvent.RENDER_SWITCH, true, false, false));
+					addChild(currentVideoRenderer);					
 				}						
 				else
 				{
 					stageVideo = currentVideoRenderer;
-					
-					/* dispatch an event stating that we are using StageVideo */
-					dispatchEvent(new VideoSurfaceEvent(VideoSurfaceEvent.RENDER_SWITCH, true, false, true));
 				}
 				updateView();
 				currentVideoRenderer.addEventListener("renderState", onRenderState);

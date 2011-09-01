@@ -27,7 +27,6 @@ package org.osmf.containers
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.ContainerChangeEvent;
-	import org.osmf.events.VideoSurfaceEvent;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererBase;
@@ -69,8 +68,6 @@ package org.osmf.containers
 			
 			_layoutRenderer = layoutRenderer || new LayoutRenderer();
 			_layoutRenderer.container = this; 
-			
-			addEventListener(VideoSurfaceEvent.RENDER_SWITCH, onVideoSurfaceEvent);
 		}
 		
 		/**
@@ -268,7 +265,6 @@ package org.osmf.containers
 			if (value != _backgroundAlpha)
 			{
 				_backgroundAlpha = value;
-				previousBackgroundAlpha = _backgroundAlpha;
 				drawBackground();
 			}
 		}
@@ -394,30 +390,6 @@ package org.osmf.containers
 		/**
 		 * @private
 		 * 
-		 * When a VideoSurface from this container uses StageVideo we need to make the background
-		 * transparent so that it would not cover the accelerated video. The background transparency
-		 * is restored when VideoSurface switches back to video.
-		 */		
-		private function onVideoSurfaceEvent( event:VideoSurfaceEvent ):void
-		{
-			/* we need to use the private member here to avoid going through the setter since we do not 
-			want to overwrite the value of previousBackgroundAlpha as well. Also, we need to redraw 
-			the background since we changed it's transparency */
-			if ( event.usesStageVideo )
-			{				
-				_backgroundAlpha = 0;
-				drawBackground();
-			}
-			else
-			{
-				_backgroundAlpha = previousBackgroundAlpha;
-				drawBackground();
-			}
-		}
-		
-		/**
-		 * @private
-		 * 
 		 * Dictionary of MediaElementLayoutTarget instances, index by the
 		 * media elements that they wrap: 
 		 */		
@@ -430,6 +402,5 @@ package org.osmf.containers
 		
 		private var lastAvailableWidth:Number;
 		private var lastAvailableHeight:Number;
-		private var previousBackgroundAlpha:Number;
 	}
 }
