@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ControlBarPluginSample</name>
+	<name>ControlBarSample</name>
 	<comment></comment>
 	<projects>
 		<project>ControlBarPlugin</project>
@@ -19,7 +19,7 @@
 		<link>
 			<name>[source path] src</name>
 			<type>2</type>
-			<location>/Work/osmf/trunk-osmf/apps/samples/plugins/ControlBarPlugin/src</location>
+			<location>/Work/osmf/trunk-osmf/samples/ControlBarPlugin/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

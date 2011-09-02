@@ -17,9 +17,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] MASTPlugin</name>
+			<name>[source path] src</name>
 			<type>2</type>
-			<location>/Work/osmf/trunk-osmf/plugins/samples/MASTPlugin</location>
+			<locationURI>DOCUMENTS/samples/MASTPlugin/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

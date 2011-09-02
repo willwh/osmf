@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>AkamaiPluginSample</name>
+	<name>AkamaiSample</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -17,19 +17,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] AkamaiBasicStreamingPlugin</name>
+			<name>[source path] AkamaiBasicStreamingPlugin-src</name>
 			<type>2</type>
-			<location>/Work/osmf/trunk-osmf/plugins/samples/AkamaiBasicStreamingPlugin</location>
+			<locationURI>DOCUMENTS/samples/AkamaiBasicStreamingPlugin/src</locationURI>
 		</link>
 		<link>
-			<name>[source path] MASTPlugin</name>
+			<name>[source path] MASTPlugin-src</name>
 			<type>2</type>
-			<location>/Work/osmf/trunk-osmf/plugins/samples/MASTPlugin</location>
+			<locationURI>DOCUMENTS/samples/MASTPlugin/src</locationURI>
 		</link>
 		<link>
-			<name>[source path] SMILPlugin</name>
+			<name>[source path] SMILPlugin-src</name>
 			<type>2</type>
-			<location>/Work/osmf/trunk-osmf/plugins/samples/SMILPlugin</location>
+			<locationURI>DOCUMENTS/samples/SMILPlugin/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

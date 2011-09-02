@@ -17,9 +17,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] CaptioningPlugin</name>
+			<name>[source path] src</name>
 			<type>2</type>
-			<location>/Work/osmf/trunk-osmf/plugins/samples/CaptioningPlugin</location>
+			<locationURI>DOCUMENTS/samples/CaptioningPlugin/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

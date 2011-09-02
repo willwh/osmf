@@ -18,9 +18,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] SMILPlugin</name>
+			<name>[source path] src</name>
 			<type>2</type>
-			<location>/SMILPlugin</location>
+			<locationURI>DOCUMENTS/samples/SMILPlugin/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties analytics="false" mainApplicationPath="AkamaiPluginSample.mxml" projectUUID="06197ff5-f845-4d32-b5c0-7793b649ad39" version="10">
-  <compiler additionalCompilerArguments="-locale en_US -define CONFIG::LOGGING false  -define CONFIG::FLASH_10_1 true -show-invalid-css-property-warnings=false" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-locale en_US -define CONFIG::LOGGING false  -define CONFIG::FLASH_10_1 true -show-invalid-css-property-warnings=false" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath>
-      <compilerSourcePathEntry kind="1" linkType="1" path="/AkamaiBasicStreamingPlugin"/>
-      <compilerSourcePathEntry kind="1" linkType="1" path="/MASTPlugin"/>
-      <compilerSourcePathEntry kind="1" linkType="1" path="/SMILPlugin"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${DOCUMENTS}/samples/AkamaiBasicStreamingPlugin/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${DOCUMENTS}/samples/MASTPlugin/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${DOCUMENTS}/samples/SMILPlugin/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path="">
@@ -39,8 +39,8 @@
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="/VAST/bin/VAST.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/OSMF/bin/OSMF.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/Syndication/bin/Syndication.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/MediaContainerUIComponent/bin/MediaContainerUIComponent.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/SyndicationLibrary/bin-debug/SyndicationLibrary.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
