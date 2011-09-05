@@ -13,7 +13,7 @@
       <!-- List of path elements that form the roots of ActionScript class hierarchies. -->
       <source-path>
          <path-element>src</path-element>
-         <path-element>../../../../plugins/samples/SMILPlugin/</path-element>
+         <path-element>../SMILPlugin/</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
@@ -47,11 +47,6 @@
       
       <!-- List of SWC files or directories that contain SWC files. -->
       <library-path>
- 
-		 <path-element>../../../../framework/OSMF/bin/OSMF.swc</path-element>
-         <path-element>../../../../apps/samples/framework/MediaContainerUIComponent/bin/MediaContainerUIComponent.swc</path-element>
-
-		 
 		 <path-element>${flexlib}/libs/framework.swc</path-element>
          <path-element>${flexlib}/libs/textLayout.swc</path-element>
          <path-element>${flexlib}/libs/advancedgrids.swc</path-element>
@@ -61,28 +56,31 @@
          <path-element>${flexlib}/libs/charts.swc</path-element>
          <path-element>${flexlib}/libs/core.swc</path-element>
          <path-element>${flexlib}/libs/flash-integration.swc</path-element>
-        	
 		 <path-element>${flexlib}/locale/{locale}</path-element>
 
+
+         <path-element>../MediaContainerUIComponentLibrary/#output.bin#/MediaContainerUIComponent.swc</path-element>
+		 <path-element>#osmf.swc.path#</path-element>
+		 
       </library-path>
       
       <namespaces>
       <!-- Specify a URI to associate with a manifest of components for use as MXML -->
       <!-- elements.                                                                -->
-<!--
+
          <namespace>
             <uri>http://ns.adobe.com/mxml/2009</uri>
-            <manifest>mxml-2009-manifest.xml</manifest>
+            <manifest>${flexlib}/mxml-2009-manifest.xml</manifest>
          </namespace>
          <namespace>
             <uri>library://ns.adobe.com/flex/spark</uri>
-            <manifest>spark-manifest.xml</manifest>
+            <manifest>${flexlib}/spark-manifest.xml</manifest>
          </namespace>
          <namespace>
             <uri>library://ns.adobe.com/flex/mx</uri>
-            <manifest>mx-manifest.xml</manifest>
+            <manifest>${flexlib}/mx-manifest.xml</manifest>
          </namespace>
--->
+
          <namespace>
             <uri>http://www.adobe.com/2006/mxml</uri>
             <manifest>${flexlib}/mxml-manifest.xml</manifest>
@@ -336,9 +334,9 @@
    <runtime-shared-library-path>
       <path-element>libs/framework.swc</path-element>
       <rsl-url>framework_3.0.177608.swz</rsl-url>
-      <policy-file-url></policy-file-url>
+      <policy-file-url/>
       <rsl-url>framework_3.0.177608.swf</rsl-url>
-      <policy-file-url></policy-file-url>
+      <policy-file-url/>
    </runtime-shared-library-path>
    <!-- static-link-runtime-shared-libraries: statically link the libraries specified by the -runtime-shared-libraries-path option.-->
    <static-link-runtime-shared-libraries>true</static-link-runtime-shared-libraries>
@@ -362,4 +360,3 @@
    </metadata>
    
 </flex-config>
-

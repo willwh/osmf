@@ -14,6 +14,7 @@
          <path-element>.</path-element>
       </source-path>
  
+
       <!-- Allow the source-path to have path-elements which contain other path-elements -->
       <allow-source-path-overlap>false</allow-source-path-overlap>
       

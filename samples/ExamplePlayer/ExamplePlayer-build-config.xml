@@ -47,10 +47,6 @@
       
       <!-- List of SWC files or directories that contain SWC files. -->
       <library-path>
-		 <path-element>../../../../framework/OSMF/bin/OSMF.swc</path-element>
-         <path-element>../../../../apps/samples/framework/MediaContainerUIComponent/bin/MediaContainerUIComponent.swc</path-element>	
-
-		 
          <path-element>${flexlib}/libs/framework.swc</path-element>
          <path-element>${flexlib}/libs/textLayout.swc</path-element>
          <path-element>${flexlib}/libs/rpc.swc</path-element>
@@ -61,9 +57,10 @@
          <path-element>${flexlib}/libs/core.swc</path-element>
          <path-element>${flexlib}/libs/flash-integration.swc</path-element>
          <path-element>${flexlib}/libs/spark.swc</path-element>
-
 		 <path-element>${flexlib}/locale/{locale}</path-element>
-	 
+
+         <path-element>../MediaContainerUIComponentLibrary/#output.bin#/MediaContainerUIComponent.swc</path-element>	
+         <path-element>#osmf.swc.path#</path-element>
       </library-path>
 
       <namespaces>
@@ -78,11 +75,11 @@
             <uri>library://ns.adobe.com/flex/spark</uri>
             <manifest>spark-manifest.xml</manifest>
          </namespace>
+-->
          <namespace>
             <uri>library://ns.adobe.com/flex/mx</uri>
-            <manifest>mx-manifest.xml</manifest>
+            <manifest>${flexlib}/mx-manifest.xml</manifest>
          </namespace>
--->
          <namespace>
             <uri>http://www.adobe.com/2006/mxml</uri>
             <manifest>${flexlib}/mxml-manifest.xml</manifest>
@@ -360,4 +357,3 @@
    </metadata>
    
 </flex-config>
-
