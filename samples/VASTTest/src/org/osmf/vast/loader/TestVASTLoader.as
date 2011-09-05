@@ -84,7 +84,7 @@ package org.osmf.vast.loader
 				assertTrue(vastLoadTrait != null);
 				
 				// Just check that we got an inline ad back.
-				var document:VASTDocument = vastLoadTrait.vastDocument;
+				var document:VASTDocument = vastLoadTrait.vastDocument as VASTDocument;
 				assertTrue(document != null);
 				assertTrue(document.ads.length == 1);
 				var ad:VASTAd = document.ads[0] as VASTAd;
@@ -114,7 +114,7 @@ package org.osmf.vast.loader
 				// come from the nested VAST document) and that the wrapper ad
 				// (which would have come from the original VAST document) has
 				// been merged and removed.
-				var document:VASTDocument = vastLoadTrait.vastDocument;
+				var document:VASTDocument = vastLoadTrait.vastDocument as VASTDocument;
 				assertTrue(document != null);
 				assertTrue(document.ads.length == 1);
 				var ad:VASTAd = document.ads[0] as VASTAd;
@@ -294,7 +294,7 @@ package org.osmf.vast.loader
 				// a reference to a nested VAST document exists) but no inline
 				// ad (which would show that the nested VAST document was not
 				// retrieved).
-				var document:VASTDocument = vastLoadTrait.vastDocument;
+				var document:VASTDocument = vastLoadTrait.vastDocument as VASTDocument;
 				assertTrue(document != null);
 				assertTrue(document.ads.length == 1);
 				var ad:VASTAd = document.ads[0] as VASTAd;

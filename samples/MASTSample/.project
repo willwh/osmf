@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>MASTSampleNew</name>
+	<name>MASTSample</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -18,7 +18,7 @@
 		<link>
 			<name>[source path] src</name>
 			<type>2</type>
-			<locationURI>DOCUMENTS/samples/MASTPluginNew/src</locationURI>
+			<locationURI>DOCUMENTS/samples/MASTPlugin/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

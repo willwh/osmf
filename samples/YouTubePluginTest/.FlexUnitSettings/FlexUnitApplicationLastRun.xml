@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testrun name="" >
 <testsuite  name="Default Test Suite" project="YouTubePluginTest">
-<testsuite name="YoutubePluginTests" type="testsuiteclass"/>
-<testsuite name="flexunit.framework:EventfulTestCase" type="testcaseclass"/>
 <testsuite name="org.osmf.youtube:TestYoutubePluginInfo" type="testcaseclass"/>
 <testsuite name="org.osmf.youtube.media:TestYoutubeElement" type="testcaseclass"/>
 <testsuite name="org.osmf.youtube.net:TestYoutubeLoader" type="testcaseclass"/>
