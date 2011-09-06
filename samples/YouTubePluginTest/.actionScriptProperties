@@ -39,7 +39,11 @@
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
-  <applications/>
+  <applications>
+    <application path="FlexUnitApplication.mxml">
+      <airExcludes/>
+    </application>
+  </applications>
   <modules/>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
