@@ -6,7 +6,7 @@
       <libraryPathEntry kind="4" path=""/>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
       <libraryPathEntry kind="3" linkType="1" path="/OSMF/bin/OSMF.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/SyndicationLibrary/bin-debug/SyndicationLibrary.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/SyndicationLibrary/bin/SyndicationLibrary.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
