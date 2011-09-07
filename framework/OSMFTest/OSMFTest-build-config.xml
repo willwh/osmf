@@ -50,7 +50,6 @@
       </extensions>
       <!-- compiler.external-library-path: list of SWC files or directories to compile against but to omit from linking-->
       <external-library-path>
-         <path-element>C:\Program Files (x86)\Adobe\Adobe Flash Builder 4.5\sdks\4.5.1\frameworks\libs\air\airglobal.swc</path-element>
       </external-library-path>
       <fonts>
          <!-- compiler.fonts.advanced-anti-aliasing: enables advanced anti-aliasing for embedded fonts, which provides greater clarity for small fonts.-->
