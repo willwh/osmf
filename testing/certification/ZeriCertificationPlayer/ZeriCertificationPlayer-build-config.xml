@@ -61,12 +61,7 @@
          <path-element>${flexlib}/libs/core.swc</path-element>
          <path-element>${flexlib}/libs/flash-integration.swc</path-element>
 		 <path-element>${flexlib}/locale/{locale}</path-element>
-		        
-	  	 <path-element>libs/FlexUnit1Lib.swc</path-element>
-         <path-element>libs/fluint-1_2.swc</path-element>
-         <path-element>libs/hamcrest-1.0.2.swc</path-element>
-		 <path-element>libs/FlexUnit4.swc</path-element>
-		 
+		         
          <path-element>#osmf.swc.path#</path-element>
          
          <path-element>../../../samples/MediaContainerUIComponentLibrary/#output.bin#/MediaContainerUIComponent.swc</path-element>

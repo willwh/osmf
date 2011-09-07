@@ -14,7 +14,7 @@
       <!-- List of path elements that form the roots of ActionScript class hierarchies. -->
       <source-path>
          <path-element>src</path-element>
-         <path-element>../MASTPlugin</path-element>
+         <path-element>../MASTPlugin/src</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
@@ -58,7 +58,7 @@
          <path-element>${flexlib}/libs/core.swc</path-element>
          <path-element>${flexlib}/libs/flash-integration.swc</path-element>
          
-		 <path-element>../MASTPluginSample/assets/EWSamplePlayerUI.swc</path-element>
+		 <path-element>assets/EWSamplePlayerUI.swc</path-element>
          <path-element>../VASTLibrary/#output.bin#/VAST.swc</path-element>
          <path-element>#osmf.swc.path#</path-element>
       </library-path>

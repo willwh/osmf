@@ -6,11 +6,6 @@
 
 	<!-- load external values -->
 	<property file="${basedir}/build.properties" />
-	
-	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
-	<taskdef resource="flexUnitTasks.tasks" classpath="${FLEX_UNIT_HOME}/flexUnitTasks-4.1.0-8.jar" />
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${buildtools.dir}/libs/ant-contrib-1.0b3.jar" />
-
 	<import file ="${buildtools.dir}/utils.xml"/>
 	
 	<!-- ========= main targets ========= -->
@@ -20,36 +15,35 @@
 		<antcall target="clean.bin" />
 		<antcall target="init" />
 		<antcall target="build" />
-		<antcall target="run.tests" />
+		<antcall target="test" />
 		<antcall target="dist" />
 		<antcall target="source" />
 	</target>
 
 	<!-- build entire project -->
 	<target name="build">
-		<antcall target="compile.osmf" />
-		<antcall target="compile.libs" />
-		<antcall target="compile.smp" />
-		<antcall target="compile.extended" />
-		<antcall target="compile.zeri" />
-		<antcall target="compile.tests" />
+		<sequential>
+			<antcall target="compile.osmf" />		
+			<antcall target="compile.libs" />
+			<!--<antcall target="compile.smp" />-->
+			<antcall target="compile.extended" />
+			<antcall target="compile.zeri" />
+		</sequential>
 	</target>
 
 	<!-- compile framework and compile and run framework tests -->
 	<target name="core" depends="compile.core">
-        <subant target="run" inheritall="true" antfile="framework/OSMFTest4Air/build.xml" buildpath="."/>
+        <subant target="run" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
 	</target>
 	
 	<!-- compile strobe media player and compile and run coresponding tests -->
-	<target name="player">
-		<antcall target="compile.player"/>
+	<target name="player" depends="compile.player">
         <subant target="run" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
 	</target>
 	
 	<!-- run all project available tests -->
 	<target name="test">
-		<antcall target="compile.tests" />
-		<antcall target="run.tests" />
+		<antcall target="run.unittests" />
 	</target>
 	
 	<!-- ========= subtargets ========= -->
@@ -72,80 +66,69 @@
 	</target>
 	
 	<target name="compile.core" depends="compile.osmf" >
-        <subant target="build" inheritall="true" antfile="framework/OSMFTest4Air/build.xml" buildpath="."/>
+        <subant target="build" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
 	</target>	
 	
-	<target name="compile.player">
-		<antcall target="compile.smp"/>
+	<target name="compile.player" depends="compile.smp">
         <subant target="build" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
 	</target>
 	
 	<!-- compiles libraries -->
 	<!-- OBS. when adding a new libarary make sure you solve all the dependencies with other libraries -->
 	<target name="compile.libs">
-		<subant target="" inheritall="true">
-			<fileset dir="." includes="*/VPAIDLibrary/build.xml" />
-			<fileset dir="." includes="*/*Library/build.xml" excludes="*VPAID*"/>
-			<fileset dir="." includes="testing/*Library/build.xml"/>
-        </subant>
+		<sequential>
+			<subant target="" inheritall="true">
+				<property name="source.dir" value="${source.dir}"/>
+				<fileset dir="." includes="*/VPAIDLibrary/build.xml" />
+				<fileset dir="." includes="*/*Library/build.xml" excludes="*VPAID*"/>
+				<fileset dir="." includes="testing/*Library/build.xml"/>
+			</subant>
+		</sequential>
 	</target>
 	
 	<!-- compile applications -->
 	<target name="compile.extended">
-		<antcall target="compile.plugins" />
-		<antcall target="compile.samples" />
+		<sequential>
+			<antcall target="compile.plugins" />
+			<antcall target="compile.samples" />
+		</sequential>
 	</target>
 	
 	<target name="compile.plugins">
-		<subant target="" inheritall="true">
+		<subant target="build" inheritall="true">
 			<fileset dir="." includes="*/*Plugin/build.xml"/>
         </subant>
 	</target>
 	
 	<target name="compile.samples">
-		<subant target="" inheritall="true">
-			<fileset dir="." includes="*/*Sample/build.xml"/>
-        </subant>
+		<sequential>
+			<subant target="build" inheritall="true">
+				<fileset dir="." includes="*/*Sample/build.xml"/>
+			</subant>
+		</sequential>
 	</target>
 	
 	<!-- compile zeri certification -->
 	<target name="compile.zeri">
-		<subant target="" inheritall="true">
+		<sequential>
+		<subant target="build" inheritall="true">
 			<fileset dir="." includes="testing/certification/ZeriCertificationUtils/build.xml"/>
 			<fileset dir="." includes="testing/certification/ZeriCertificationPlayer/build.xml"/>
 			<!--<fileset dir="." includes="testing/certification/ZeriCertificationTest/build.xml"/>-->
         </subant>
+		</sequential>
 	</target>
 	
-	<!-- compile tests -->
-	<target name="compile.tests">
-		<antcall target="compile.unittests" />
-	</target>	
-	
-	<!-- compiles unittests -->
-	<target name="compile.unittests">
-		<subant target="build" inheritall="true">
-			<fileset dir="." includes="*/*Test*/build.xml" excludes="buildtools"/>
-        </subant>
-	</target>
-		
-	<!-- run tests -->
-	<target name="run.tests" depends="compile.tests">
-		<antcall target="run.unittests" />
-	</target>
 	
 	<!-- runs unit tests -->
 	<target name="run.unittests" >
-		<!--
-		<subant target="run" inheritall="true">
-			<fileset dir="." includes="*/*Test/build.xml"/>
-		</subant>
-		-->
-		<subant target="run" inheritall="true" antfile="framework/OSMFTest4Air/build.xml" buildpath="."/>
-		<subant target="run" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
-		<!--<subant target="run" inheritall="true" antfile="testing/certification/ZeriCertificationTest/build.xml" buildpath="."/>-->
-		<subant target="run" inheritall="true" antfile="testing/NetMockerTest/build.xml" buildpath="."/>
-		<subant target="run" inheritall="true" antfile="samples/YouTubePluginTest/build.xml" buildpath="."/>		
+		<sequential>
+			<subant target="run" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
+			<!--<subant target="run" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
+			<subant target="run" inheritall="true" antfile="testing/certification/ZeriCertificationTest/build.xml" buildpath="."/>-->
+			<subant target="run" inheritall="true" antfile="testing/NetMockerTest/build.xml" buildpath="."/>
+			<subant target="run" inheritall="true" antfile="samples/YouTubePluginTest/build.xml" buildpath="."/>	
+		</sequential>
 	</target>
 	
 	<!-- creates distribuition for the entire porject -->
@@ -200,6 +183,7 @@
 				   <include name="testing/**/bin/**" />
 				   <include name="**/bin-*/**" />
 				   <include name="**/generated/**" />
+				   <include name="*version.txt" />
 				   <include name="**/*Test*/test-reports/**" />
 				   <exclude name="buildtools/**" />
 				</fileset>
@@ -227,4 +211,5 @@
 			</delete>
 		</sequential>
 	</target>
+	
 </project>

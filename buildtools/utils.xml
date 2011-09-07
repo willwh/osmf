@@ -12,6 +12,9 @@
 	<property name="osmf.swc.path" value="${source.dir}/framework/osmf/${output.bin}/OSMF.swc" />
 	<property name="smp.swf.path" value="${source.dir}/player/StrobeMediaPlayer/${output.bin}/StrobeMediaPlayer.swf" />
 	
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" /> 
+	<taskdef resource="flexUnitTasks.tasks" classpath="${FLEX_UNIT_HOME}/flexUnitTasks-4.1.0-8.jar" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${buildtools.dir}/libs/ant-contrib-1.0b3.jar"/>
 	
 	<!-- Define a task for changing tokens in -build-config.xml -->
 	<macrodef name="OSMF.set.path">
@@ -86,9 +89,9 @@
 	<macrodef name="OSMF.component.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
-		
+		<attribute name="srcDir" default="src" />
 		<sequential>
-			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}" />
+			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}"  />
 			<OSMF.set.path project="@{project}" projectDir="@{projectDir}" />
 			
 			<compc
@@ -134,10 +137,11 @@
 			/>
 			<propertyregex
 				property="@{project}.classes"
-				input="${@{project}.includeClasses.classEntry.path}"
+				input="${@{project}.includeClasses.classEntry.path},"
 				regexp=","
 				replace=" "
 			/>
+
 		</sequential>
 	</macrodef>
 	

@@ -135,7 +135,7 @@
          <path-element>${flexlib}/libs/rpc.swc</path-element>
          <path-element>${flexlib}/libs/charts.swc</path-element>
          <path-element>${flexlib}/libs/spark_dmv.swc</path-element>
-         <path-element>${flexlib}/libs/mx\mx.swc</path-element>
+         <path-element>${flexlib}/libs/mx/mx.swc</path-element>
          <path-element>${flexlib}/libs/advancedgrids.swc</path-element>
          <path-element>${flexlib}/libs/authoringsupport.swc</path-element>
          <path-element>${flexlib}/libs/flash-integration.swc</path-element>

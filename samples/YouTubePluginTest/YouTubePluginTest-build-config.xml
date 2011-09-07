@@ -148,7 +148,7 @@
          <path-element>${flexlib}/libs/air/applicationupdater_ui.swc</path-element>
          <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
-         <path-element>libs</path-element>
+         
          
          <path-element>#osmf.swc.path#</path-element>
 	  </library-path>
