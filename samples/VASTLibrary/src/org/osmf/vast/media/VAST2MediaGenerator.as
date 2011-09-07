@@ -48,6 +48,12 @@ package org.osmf.vast.media
 	import org.osmf.vpaid.elements.VPAIDElement;
 	import org.osmf.vpaid.metadata.VPAIDMetadata;
 	
+	CONFIG::LOGGING
+	{
+		import org.osmf.logging.Logger;
+		import org.osmf.logging.Log;
+	}
+
 	/**
 	 * Utility class for creating MediaElements from a VASTDocument.
 	 *  
@@ -569,6 +575,8 @@ package org.osmf.vast.media
 		private var _adPlacement:String;
 		
 		CONFIG::LOGGING
-		private static const logger:Logger = Log.getLogger("org.osmf.vast.media.VAST2MediaGenerator");
+		{
+			private static const logger:Logger = Log.getLogger("org.osmf.vast.media.VAST2MediaGenerator");
+		}
 	}
 }

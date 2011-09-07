@@ -85,7 +85,11 @@ package org.osmf.vpaid.traits
 		{
 			CONFIG::LOGGING
 			{
-				logger.debug("[VPAID] Pausing timer, remaining time: " + remainingTime +" current time: " + currentTime);
+				if(duration && currentTime)
+				{
+					var remainingTime:Number = duration - currentTime;
+					logger.debug("[VPAID] Pausing timer, remaining time: " + remainingTime +" current time: " + currentTime);
+				}
 			}
 			cleanUpTimer();
 		}

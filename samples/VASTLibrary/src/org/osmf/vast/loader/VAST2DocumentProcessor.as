@@ -129,7 +129,7 @@ package org.osmf.vast.loader
 			parser.removeEventListener(ParserErrorEvent.XML_ERROR, onXMLParseError);
 			CONFIG::LOGGING
 			{
-				logger.debug("[VAST] Error Parsing Tag: " + event.description + ". Contents: " + documentContents);
+				logger.debug("[VAST] Error Parsing Tag: " + event.description);
 			}
 			dispatchEvent(new VASTDocumentProcessedEvent(VASTDocumentProcessedEvent.PROCESSING_FAILED));			
 		}
