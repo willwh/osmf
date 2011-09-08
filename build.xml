@@ -25,19 +25,19 @@
 		<sequential>
 			<antcall target="compile.osmf" />		
 			<antcall target="compile.libs" />
-			<!--<antcall target="compile.smp" />-->
+			<antcall target="compile.smp" />
 			<antcall target="compile.extended" />
 			<antcall target="compile.zeri" />
 		</sequential>
 	</target>
 
 	<!-- compile framework and compile and run framework tests -->
-	<target name="core" depends="compile.core">
+	<target name="core" depends="compile.osmf">
         <subant target="run" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
 	</target>
 	
 	<!-- compile strobe media player and compile and run coresponding tests -->
-	<target name="player" depends="compile.player">
+	<target name="player" depends="compile.smp">
         <subant target="run" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
 	</target>
 	
@@ -63,15 +63,7 @@
 	<target name="compile.smp">
 		<subant target="" inheritall="true" antfile="player/Preloader/build.xml" buildpath="."/>
 		<subant target="" inheritall="true" antfile="player/StrobeMediaPlayback/build.xml" buildpath="."/>
-	</target>
-	
-	<target name="compile.core" depends="compile.osmf" >
-        <subant target="build" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
 	</target>	
-	
-	<target name="compile.player" depends="compile.smp">
-        <subant target="build" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
-	</target>
 	
 	<!-- compiles libraries -->
 	<!-- OBS. when adding a new libarary make sure you solve all the dependencies with other libraries -->
@@ -124,8 +116,7 @@
 	<target name="run.unittests" >
 		<sequential>
 			<subant target="run" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
-			<!--<subant target="run" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
-			<subant target="run" inheritall="true" antfile="testing/certification/ZeriCertificationTest/build.xml" buildpath="."/>-->
+			<subant target="run" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
 			<subant target="run" inheritall="true" antfile="testing/NetMockerTest/build.xml" buildpath="."/>
 			<subant target="run" inheritall="true" antfile="samples/YouTubePluginTest/build.xml" buildpath="."/>	
 		</sequential>

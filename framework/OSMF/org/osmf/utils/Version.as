@@ -124,10 +124,18 @@ package org.osmf.utils
 			}
 			return false;
 		}
-				
+		
+		public static function get buildNumber():String
+		{
+			return build_number;
+		}		
+		
 		private static const _major:String = "1";
 		private static const _minor:String = "6";
 		
 		private static const FIELD_SEPARATOR:String = ".";	
+		
+		/** Use single quotes, to facilitate build system updates **/
+		private static const build_number:String = '0';
 	}
 }

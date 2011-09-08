@@ -1,6 +1,4 @@
-<project name="macroDefinitions">	
-
-	<!-- properties -->
+<project name="utils" >
 	<!-- Set output directory -->
 	<condition property="output.bin" value="bin">
 		<equals arg1="${debug}" arg2="false"/>
@@ -11,10 +9,8 @@
 	
 	<property name="osmf.swc.path" value="${source.dir}/framework/osmf/${output.bin}/OSMF.swc" />
 	<property name="smp.swf.path" value="${source.dir}/player/StrobeMediaPlayer/${output.bin}/StrobeMediaPlayer.swf" />
-	
-	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" /> 
-	<taskdef resource="flexUnitTasks.tasks" classpath="${FLEX_UNIT_HOME}/flexUnitTasks-4.1.0-8.jar" />
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${buildtools.dir}/libs/ant-contrib-1.0b3.jar"/>
+
+	<typedef file="${buildtools.dir}/antlib.xml"/>
 	
 	<!-- Define a task for changing tokens in -build-config.xml -->
 	<macrodef name="OSMF.set.path">
@@ -22,6 +18,7 @@
 		<attribute name="projectDir" />
 		<sequential>
 			<!-- Copy the .-build-config.xml file to a temporary file *-build-congif.tmp.xml and replace the tokens with specified paths -->
+			<delete file="@{projectDir}/@{project}-build-config.tmp.xml"  quiet="true" />
 			<copy file="@{projectDir}/@{project}-build-config.xml" tofile="@{projectDir}/@{project}-build-config.tmp.xml"  force="true">
 				<filterchain>
 					<replacetokens begintoken="#" endtoken="#">
@@ -89,11 +86,10 @@
 	<macrodef name="OSMF.component.compile">
 		<attribute name="project" />
 		<attribute name="projectDir" />
-		<attribute name="srcDir" default="src" />
 		<sequential>
-			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}"  />
+
 			<OSMF.set.path project="@{project}" projectDir="@{projectDir}" />
-			
+			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}"  />
 			<compc
 				output="@{projectDir}/${output.bin}/@{project}.swc"
 				include-classes="${@{project}.classes}"
@@ -335,25 +331,5 @@
 			<!--<fail message="One or more flexunit tests failed. See test reports for details." if="flexunit.failed" -->
 		</sequential>
 	</macrodef>
-	
-	
-	
-	<macrodef name="OSMF.component.doc">
-		<attribute name="project" />
-		<attribute name="projectDir" />
-		<attribute name="srcDir" default="/org" />
 
-		<sequential>
-			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}" />
-			<asdoc output="${dist.dir}/@{project}" lenient="true" failonerror="true">
-				<load-config filename="@{projectDir}/@{project}-build-config.xml" />
-				<define name="CONFIG::useFlexClasses" value="true" />
-				<define name="CONFIG::FLASH_10_1" value="${flash.use.10.1}" />
-				<define name="CONFIG::LOGGING" value="${logging}" />
-				<define name="CONFIG::PLATFORM" value="${platform}" />
-				<define name="CONFIG::MOCK" value="${mock}" />
-				<doc-sources path-element="@{projectDir}@{srcDir}" />
-			</asdoc>
-		</sequential>
-	</macrodef>
 </project>
