@@ -235,12 +235,7 @@ package org.osmf.net
 			// If bytesLoaded is not set (meaning that is zero) then we must check
 			// if the hardware decoding is taking care of loading data. If this is 
 			// the case we don't take into account the seek limitation. 
-			return (
-				loadTrait.bytesLoaded == 0 && 
-				videoSurface.info.renderStatus == "accelerated" ? 
-					false : 
-					true
-			);
+			return loadTrait.bytesLoaded == 0 && videoSurface != null && videoSurface.info.renderStatus == "accelerated";
 		}
 		
 		/**
