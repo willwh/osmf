@@ -20,6 +20,7 @@
 
 package org.osmf.player.chrome.widgets
 {
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.ContextMenuEvent;
