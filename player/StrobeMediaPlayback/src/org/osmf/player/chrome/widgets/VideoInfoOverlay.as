@@ -20,7 +20,6 @@
 
 package org.osmf.player.chrome.widgets
 {
-	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.ContextMenuEvent;
@@ -34,12 +33,12 @@ package org.osmf.player.chrome.widgets
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.Timer;
-	import flash.utils.getDefinitionByName;
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.media.videoClasses.VideoSurfaceInfo;
 	import org.osmf.net.*;
+	import org.osmf.player.chrome.events.WidgetEvent;
 	import org.osmf.player.media.StrobeMediaPlayer;
 	import org.osmf.player.utils.StrobePlayerStrings;
 	import org.osmf.player.utils.StrobeUtils;
@@ -78,38 +77,53 @@ package org.osmf.player.chrome.widgets
 		
 		public function showInfo():void
 		{
-			if (refreshTimer != null)
+			if (refreshTimer == null)
 			{
-				return;
-			}
-			
-			refreshTimer = new Timer(REFRESH_INTERVAL);
-			refreshTimer.addEventListener(TimerEvent.TIMER, onTimer);
-			refreshTimer.start();
-			
-			videoInfoOverlay = new ASSET_VideoInfoOverlay();
-			container.addChild(videoInfoOverlay);
-			containerWidth = container.width;
-			videoInfoOverlayWidth = videoInfoOverlay.width;
-			videoInfoOverlay.x = 5;
-			videoInfoOverlay.y = 5;
-			
-			for (var idx:int=0; idx < videoInfoOverlay.numChildren; idx++)
-			{
-				var child:DisplayObject = videoInfoOverlay.getChildAt(idx);	
-				if (child is CloseButton)
-				{
-					closeButton = child as CloseButton;
-					closeButton.addEventListener(MouseEvent.CLICK, onCloseButtonClick);
-				}
+				refreshTimer = new Timer(REFRESH_INTERVAL);
+				refreshTimer.addEventListener(TimerEvent.TIMER, onTimer);
+				refreshTimer.start();
 				
-				if (child.name == "videoInfo")
+				videoInfoOverlay = new ASSET_VideoInfoOverlay();
+				container.addChild(videoInfoOverlay);
+				containerWidth = container.width;
+				videoInfoOverlayWidth = videoInfoOverlay.width;
+				videoInfoOverlay.x = 5;
+				videoInfoOverlay.y = 5;
+				
+				for (var idx:int=0; idx < videoInfoOverlay.numChildren; idx++)
 				{
-					textField = child as TextField;
+					var child:DisplayObject = videoInfoOverlay.getChildAt(idx);	
+					if (child is CloseButton)
+					{
+						closeButton = child as CloseButton;
+						closeButton.addEventListener(MouseEvent.CLICK, onCloseButtonClick);
+					}
+					
+					if (child.name == "videoInfo")
+					{
+						textField = child as TextField;
+					}
 				}
+				onTimer(null);
 			}
-			onTimer(null);
 		}
+		
+		public function hideInfo():void 
+		{
+			if (refreshTimer != null) {
+				refreshTimer.stop();
+				refreshTimer = null;
+				
+				closeButton.removeEventListener(
+					MouseEvent.CLICK, 
+					onCloseButtonClick
+				);
+				
+				container.removeChild(videoInfoOverlay);
+				videoInfoOverlay = null;
+			}
+		}
+		
 		// Internals
 		private static const REFRESH_INTERVAL:int = 3000;
 		
@@ -129,16 +143,8 @@ package org.osmf.player.chrome.widgets
 		
 		private function onCloseButtonClick(event:MouseEvent):void
 		{
-			refreshTimer.stop();
-			refreshTimer = null;
-			
-			closeButton.removeEventListener(
-				MouseEvent.CLICK, 
-				onCloseButtonClick
-			);
-		
-			container.removeChild(videoInfoOverlay);
-			videoInfoOverlay = null;
+			hideInfo();
+			dispatchEvent(new WidgetEvent(WidgetEvent.VIDEO_INFO_OVERLAY_CLOSE, true));
 		}
 		
 		private function onTimer(event:Event = null):void

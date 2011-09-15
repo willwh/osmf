@@ -25,10 +25,16 @@ package org.osmf.player.chrome.events
 	{
 		public static const REQUEST_FULL_SCREEN:String = "requestFullScreen";
 		public static const REQUEST_FULL_SCREEN_FORCE_FIT:String = "requestFullScreenForceFit";
+		public static const VIDEO_INFO_OVERLAY_CLOSE:String = "videoInfoOverlayClose";
 		
 		public function WidgetEvent(type:String, bubbles:Boolean=true, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
+		}
+		
+		override public function clone():Event 
+		{
+			return new WidgetEvent(type, bubbles, cancelable);
 		}
 	}
 }

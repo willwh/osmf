@@ -21,7 +21,6 @@ package
 {	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.external.ExternalInterface;
 	import flash.system.Capabilities;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
@@ -363,16 +362,21 @@ package
 			}			
 			
 			mainContainer.layoutRenderer.addTarget(mediaContainer);
-			CONFIG::FLASH_10_1
-			{
-				var qosOverlay:VideoInfoOverlay = new VideoInfoOverlay();			
-				qosOverlay.register(controlBarContainer, mainContainer, player);
-				if (configuration.showVideoInfoOverlayOnStartUp)
+
+			qosOverlay = new VideoInfoOverlay();			
+			qosOverlay.register(controlBarContainer, mainContainer, player);
+			qosOverlay.addEventListener(WidgetEvent.VIDEO_INFO_OVERLAY_CLOSE,
+				function (event:WidgetEvent):void 
 				{
-					qosOverlay.showInfo();
+					dispatchEvent(event as WidgetEvent);
 				}
+			);
+			if (configuration.showVideoInfoOverlayOnStartUp)
+			{
+				qosOverlay.showInfo();
 			}
-			// Simulate the stage resizing, to update the dimensions of the container:
+
+			// update the dimensions of the container
 			onStageResize();
 		}
 		
@@ -578,7 +582,7 @@ package
 				// Setup the poster image:
 				//posterImage.smoothing = true;
 				var layoutMetadata:LayoutMetadata = new LayoutMetadata();
-				layoutMetadata.scaleMode = configuration.scaleMode;
+				layoutMetadata.scaleMode = (configuration.posterScaleMode ? configuration.posterScaleMode : configuration.scaleMode);
 				layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
 				layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 				layoutMetadata.percentWidth = 100;
@@ -626,6 +630,28 @@ package
 			posterImage = null;
 		}
 		
+		public function setSize(w:Number, h:Number):void 
+		{
+			strobeWidth = w;
+			strobeHeight = h;
+			onStageResize();
+		}
+		
+		public function showVideoInfo(value:Boolean):void 
+		{
+			if (qosOverlay) 
+			{
+				if (value) 
+				{
+					qosOverlay.showInfo();
+				} 
+				else 
+				{
+					qosOverlay.hideInfo();
+				}
+			}
+		}
+		
 		// Handlers
 		//
 		
@@ -635,9 +661,12 @@ package
 			initialize(loaderInfo.parameters, stage, loaderInfo, null);
 		}
 	
-		private function onMainClick(event:MouseEvent):void{
-			if (_stage.displayState == StageDisplayState.NORMAL) {
-				if (configuration.controlBarType == ControlBarType.SMARTPHONE) {
+		private function onMainClick(event:MouseEvent):void 
+		{
+			if (_stage.displayState == StageDisplayState.NORMAL) 
+			{
+				if (configuration.controlBarType == ControlBarType.SMARTPHONE) 
+				{
 					onFullScreenRequest();
 				}
 				if (configuration.controlBarType == ControlBarType.TABLET &&
@@ -647,7 +676,8 @@ package
 				}
 			}
 			else {
-				if ((player.media.getTrait(MediaTraitType.PLAY) as PlayTrait).playState != PlayState.PLAYING) {
+				if ((player.media.getTrait(MediaTraitType.PLAY) as PlayTrait).playState != PlayState.PLAYING) 
+				{
 					controlBar.visible = !controlBar.visible;
 				}
 				event.stopImmediatePropagation();
@@ -843,18 +873,23 @@ package
 		private function onStageResize(event:Event = null):void
 		{
 			// Propagate dimensions to the main container:
-			mainContainer.width = _stage.stageWidth;
-			mainContainer.height = _stage.stageHeight;
+			var newWidth:Number = isNaN(strobeWidth) ? _stage.stageWidth : strobeWidth;
+			var newHeigth:Number = isNaN(strobeHeight) ? _stage.stageHeight : strobeHeight;
+			
+			if (mainContainer != null) {
+				mainContainer.width = newWidth;
+				mainContainer.height = newHeigth;
+			}
 			
 			// Propagate dimensions to the control bar:
 			if (controlBar != null)
 			{
 				if	(	configuration.controlBarMode != ControlBarMode.FLOATING
-					||	controlBar.width > _stage.stageWidth
-					||	_stage.stageWidth < MAX_OVER_WIDTH
+					||	controlBar.width > newWidth
+					||	newWidth < MAX_OVER_WIDTH
 					)
 				{
-					controlBar.width = _stage.stageWidth;
+					controlBar.width = newWidth;
 				}
 				else if (configuration.controlBarMode == ControlBarMode.FLOATING)
 				{
@@ -1048,6 +1083,11 @@ package
 		
 		private var controlBarWidth:Number;
 		private var controlBarHeight:Number;
+		
+		private var strobeWidth:Number;
+		private var strobeHeight:Number;
+		
+		private var qosOverlay:VideoInfoOverlay;
 		
 		/* static */
 		private static const ALWAYS_ON_TOP:int = 9999;

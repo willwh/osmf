@@ -78,6 +78,9 @@ package org.osmf.player.configuration
 		 */ 
 		public var scaleMode:String = ScaleMode.LETTERBOX;
 		
+		/** Definees the scale mode for poster **/
+		public var posterScaleMode:String = ScaleMode.ZOOM;
+		
 		/** Defines the file that holds the player's skin */
 		public var skin:String = "";
 		
