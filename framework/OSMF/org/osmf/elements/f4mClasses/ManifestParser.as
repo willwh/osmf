@@ -382,7 +382,7 @@ package org.osmf.elements.f4mClasses
 
 					if (URL.isAbsoluteURL(media.url))
 					{
-						stream = NetStreamUtils.getStreamNameFromURL(media.url);
+						stream = NetStreamUtils.getStreamNameFromURL(media.url, dynResource.urlIncludesFMSApplicationInstance);
 					}
 					else
 					{
@@ -710,7 +710,7 @@ package org.osmf.elements.f4mClasses
 
 				if (URL.isAbsoluteURL(media.url))
 				{
-					stream = NetStreamUtils.getStreamNameFromURL(media.url);
+					stream = NetStreamUtils.getStreamNameFromURL(media.url, resource.urlIncludesFMSApplicationInstance);
 				}
 				else
 				{
