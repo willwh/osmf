@@ -660,6 +660,12 @@ package org.osmf.net.httpstreaming
 					var tagBytes:ByteArray = new ByteArray();
 					playCompleteInfoSDOTag.write(tagBytes);
 					attemptAppendBytes(tagBytes);
+					
+					CONFIG::FLASH_10_1
+					{
+						appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
+					}
+					
 					setState(HTTPStreamingState.HALT);
 					break;
 				
