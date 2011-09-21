@@ -353,6 +353,15 @@ function printFlashVars() {
 				
 				<label><acronym title="The location of the poster frame">poster</acronym></label>
 				<input id="fv_poster" name="poster" type="text" value=""/>
+				<label><acronym title="Poster Scale Mode">posterScaleMode</acronym></label>
+ 				<select name="posterScaleMode" id="fv_posterScaleMode">
+ 				 	<option value="">inherited from scaleMode (default)</option>
+ 				 	<option value="letterbox">letterbox</option>
+					<option value="none">none</option>
+					<option value="stretch">stretch</option>                  
+					<option value="zoom">zoom</option>
+                </select>		
+                
 				
 				<label><acronym title="The location of the endOfVideoOverlay frame">endOfVideoOverlay</acronym></label>
 				<input id="fv_endOfVideoOverlay" name="endOfVideoOverlay" type="text" value=""/>
