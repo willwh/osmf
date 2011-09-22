@@ -35,6 +35,7 @@ package org.osmf.player.chrome.widgets
 	import flash.ui.ContextMenuItem;
 	import flash.utils.Timer;
 	
+	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.media.videoClasses.VideoSurfaceInfo;
@@ -111,8 +112,13 @@ package org.osmf.player.chrome.widgets
 		
 		public function hideInfo():void 
 		{
-			if (refreshTimer != null) {
+			if (refreshTimer != null) 
+			{
 				refreshTimer.stop();
+				if (refreshTimer.hasEventListener(TimerEvent.TIMER)) 
+				{
+					refreshTimer.removeEventListener(TimerEvent.TIMER, onTimer);
+				}
 				refreshTimer = null;
 				
 				closeButton.removeEventListener(

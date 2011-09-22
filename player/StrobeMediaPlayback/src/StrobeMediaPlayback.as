@@ -369,7 +369,7 @@ package
 			qosOverlay.addEventListener(WidgetEvent.VIDEO_INFO_OVERLAY_CLOSE,
 				function (event:WidgetEvent):void 
 				{
-					dispatchEvent(event as WidgetEvent);
+					dispatchEvent(event);
 				}
 			);
 			if (configuration.showVideoInfoOverlayOnStartUp)
