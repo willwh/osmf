@@ -33,6 +33,7 @@
 			import org.osmf.traits.TestBufferTraitAsSubclass;
 			import org.osmf.traits.TestBufferTrait;
 			import org.osmf.traits.TestAudioTrait;
+			import org.osmf.net.drm.TestDRMServices;
 			import org.osmf.net.TestDynamicStreamingResource;
 			import org.osmf.net.TestDynamicStreamingItem;
 			import org.osmf.metadata.TestTimelineMetadata;
@@ -155,6 +156,7 @@
 				testsToRun.push(org.osmf.metadata.TestTimelineMetadata);
 				testsToRun.push(org.osmf.net.TestDynamicStreamingItem);
 				testsToRun.push(org.osmf.net.TestDynamicStreamingResource);
+				testsToRun.push(org.osmf.net.drm.TestDRMServices);
 				testsToRun.push(org.osmf.traits.TestAudioTrait);
 				testsToRun.push(org.osmf.traits.TestBufferTrait);
 				testsToRun.push(org.osmf.traits.TestBufferTraitAsSubclass);
