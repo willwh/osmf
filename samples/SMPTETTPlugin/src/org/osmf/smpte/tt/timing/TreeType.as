@@ -124,22 +124,25 @@ package org.osmf.smpte.tt.timing
 			return result;
 		}
 		
+		private var _events:Vector.<TimeCode>;
 		/** 
 		 * return an ordered list of the significant time events 
 		 * in the time tree.
 		 */ 
 		public function get events():Vector.<TimeCode>
-		{
-			var reduceQuery:Function = function(tree:TreeType):Vector.<TimeCode>
+		{   
+			if (!_events)
 			{
-				var t:Vector.<TimeCode> = new Vector.<TimeCode>();
-				t.push(tree.begin);
-				t.push(tree.end);
-				return t;
-			}
-			
-			var reduction:Vector.<TimeCode> = distinctTimeCodeVector( this.reduce(reduceQuery).sort(TimeCode.Compare) );
-			return reduction;
+				var reduceQuery:Function = function(tree:TreeType):Vector.<TimeCode>
+				{
+					var t:Vector.<TimeCode> = new Vector.<TimeCode>();
+					t.push(tree.begin);
+					t.push(tree.end);
+					return t;
+				}
+				_events = distinctTimeCodeVector( this.reduce(reduceQuery).sort(TimeCode.Compare) );
+			} 
+			return _events;
 		}
 		
 		private function distinctTimeCodeVector(pv:Vector.<TimeCode>):Vector.<TimeCode>

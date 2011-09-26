@@ -28,9 +28,6 @@ package org.osmf.smpte.tt.media
 	
 	import flashx.textLayout.compose.TextFlowLine;
 	import flashx.textLayout.container.ContainerController;
-	import flashx.textLayout.container.TextContainerManager;
-	import flashx.textLayout.conversion.ITextImporter;
-	import flashx.textLayout.conversion.TextConverter;
 	import flashx.textLayout.elements.BreakElement;
 	import flashx.textLayout.elements.DivElement;
 	import flashx.textLayout.elements.FlowElement;
@@ -40,6 +37,7 @@ package org.osmf.smpte.tt.media
 	import flashx.textLayout.elements.SpanElement;
 	import flashx.textLayout.elements.SubParagraphGroupElement;
 	import flashx.textLayout.elements.TextFlow;
+	import flashx.textLayout.formats.Direction;
 	import flashx.textLayout.formats.LineBreak;
 	
 	import org.osmf.layout.LayoutMetadata;
@@ -63,7 +61,6 @@ package org.osmf.smpte.tt.media
 	import org.osmf.smpte.tt.styling.PaddingThickness;
 	import org.osmf.smpte.tt.styling.TextOutline;
 	import org.osmf.smpte.tt.styling.WrapOption;
-	import org.osmf.smpte.tt.utilities.DictionaryUtils;
 	import org.osmf.smpte.tt.utilities.VectorUtils;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
@@ -74,7 +71,7 @@ package org.osmf.smpte.tt.media
 		public function RegionLayoutTargetSprite(captionRegion:CaptionRegion, layoutRenderer:LayoutRendererBase=null, layoutMetadata:LayoutMetadata=null)
 		{
 			super(layoutRenderer, layoutMetadata);
-			
+						
 			this.captionRegion = captionRegion;
 			
 			this.layoutMetadata.scaleMode = ScaleMode.NONE;
@@ -148,10 +145,9 @@ package org.osmf.smpte.tt.media
 		private function hasRendererContext():Boolean
 		{
 			return (layoutRenderer 
-				&& layoutRenderer.parent 
-				&& layoutRenderer.parent.container
-				&& layoutRenderer.parent.container.measuredWidth
-				&& layoutRenderer.parent.container.measuredHeight);
+				&& layoutRenderer.parent
+				&& layoutRenderer.parent.measuredWidth
+				&& layoutRenderer.parent.measuredHeight);
 		}
 		
 		public function removeCaption(value:CaptionElement=null):void
@@ -165,38 +161,63 @@ package org.osmf.smpte.tt.media
 			_currentCaption = null;
 		}
 		
-		public function validateCaption(begin:Number=NaN, end:Number=NaN):void
+		public function validateCaption(begin:Number=NaN, end:Number=NaN, currentTime:Number=NaN):void
 		{
 			if (_currentCaption)
 			{
 				var timeTrait:TimeTrait;
+				var round:Boolean = false;
 				
 				if (mediaElement)
 					timeTrait = mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
 				
+				if (isNaN(currentTime) && timeTrait)
+				{
+					// if no currentTime is specified and a TimeTrait exist, 
+					// use the currentTime of the mediaElement's TimeTrait for comparison,
+					// but round to adjust for time interval imprecision.
+					currentTime = timeTrait.currentTime;
+				}
+				
 				if (isNaN(begin))
-					begin = (timeTrait) ? timeTrait.currentTime : _currentCaption.begin;
+				{
+					// If an expilict begin time is not specified,
+					// use either the currentTime if a TimeTrait is present,
+					// or the begin time of the currentCaption for this region.
+					if (timeTrait)
+					{
+						begin = currentTime;
+						round = true;
+					} else 
+					{
+						begin = _currentCaption.begin;
+						round = false;
+					}
+				}				
 
 				if (isNaN(end))
 					end = _currentCaption.end;
 				
-				if (!_currentCaption.isActiveInRange(begin, end))
+				if (timeTrait)
+				{
+					if (!_currentCaption.isActiveAtPosition(currentTime, round))
+					{
+						removeCaption(_currentCaption);
+					} else 
+					{
+						redrawAtPosition(_currentCaption, currentTime);
+					}
+				} else if (!_currentCaption.isActiveInRange(begin, end))
 				{
 					removeCaption(_currentCaption);
-				} 
-				else if (timeTrait)
-				{
-					if (!_currentCaption.isActiveAtPosition(timeTrait.currentTime, true))
-						removeCaption(_currentCaption);
-					else
-						redrawAtPosition(_currentCaption, timeTrait.currentTime);
-				}
+				}  
+					
 			}
 		}
 		
 		private function redrawAtPosition(captionElement:CaptionElement, currentTime:Number):Boolean
 		{
-			if (!captionElement.isActiveAtPosition(currentTime))
+			if (!captionElement.isActiveAtPosition(currentTime, true))
 			{
 				redrawCaption();
 				return true;
@@ -204,7 +225,7 @@ package org.osmf.smpte.tt.media
 			
 			for each(var c:CaptionElement in captionElement.children)
 			{
-				if (!c.isActiveAtPosition(currentTime))
+				if (!c.isActiveAtPosition(currentTime, true))
 				{
 					redrawCaption();
 					return true;
@@ -231,7 +252,11 @@ package org.osmf.smpte.tt.media
 				span.text = captionElement.content;
 				
 				applyStyles(span, captionElement.style, captionElement);
-
+				
+				span.text = addBidirectionEncoding(span.text, 
+													captionElement.style.unicodeBidi,
+													captionElement.style.direction);
+				
 				flowElement = span as FlowElement;				
 			}
 			else if (captionElement.captionElementType == TimedTextElementType.LineBreak)
@@ -313,7 +338,8 @@ package org.osmf.smpte.tt.media
 		}
 		
 		private function updateContext():void {
-			_size = new Size(layoutRenderer.parent.container.measuredWidth, layoutRenderer.parent.container.measuredHeight);
+			if (!hasRendererContext()) return;
+			_size = new Size(layoutRenderer.parent.measuredWidth, layoutRenderer.parent.measuredHeight);
 			_cellSize = new Size(toTextSafeArea(_size.width)/NumberPair.cellColumns, toTextSafeArea(_size.height)/NumberPair.cellRows);
 		}
 		
@@ -476,6 +502,12 @@ package org.osmf.smpte.tt.media
 							blendMode = BlendMode.LAYER;
 							alpha = styles[key];
 						}
+						break;
+					}
+					case "direction":
+					{
+						_containerController.direction = (styles[key]==Direction.RTL) ? Direction.RTL : Direction.LTR;
+						break;
 					}
 					default:
 					{
@@ -646,6 +678,11 @@ package org.osmf.smpte.tt.media
 						}
 						break;
 					}
+					case "direction":
+					{
+						flowElement.direction = styles[key];
+						break;
+					}
 					default :
 					{
 						if(flowElement.hasOwnProperty(key) && styles[key]!=null){
@@ -661,6 +698,57 @@ package org.osmf.smpte.tt.media
 			//trace("*************\n");
 		}
 		
+		/**
+		 * Assemble the Unicode Bidi text for a given string.
+		 * 
+		 * @param text
+		 * @param unicodeBidirection Either embed, normal or bidiOveride
+		 * @param direction Either ltr or rtl
+		 * @return 
+		 */
+		private function addBidirectionEncoding(text:String, unicodeBidirection:String, direction:String):String
+		{
+			var data:String = "";
+			switch (unicodeBidirection)
+			{
+				case "embed":
+					//The direction of this embedding level is given by the 'direction'
+					//property. Inside the element, reordering is done implicitly. 
+					//This corresponds to adding a LRE (U+202A; for 'direction: ltr') 
+					//or RLE (U+202B; for 'direction: rtl') at the start of the 
+					//element and a PDF (U+202C) at the end of the element. 
+					if (direction == "ltr")
+					{
+						data = "\u202A" + text + "\u202C";
+					}
+					else
+					{
+						data = "\u202B" + text + "\u202C";
+					}
+					break;
+				case "bidiOverride":
+					//reordering is strictly in sequence according to the 'direction' 
+					//property; the implicit part of the bidirectional algorithm 
+					//is ignored. This corresponds to adding a LRO (U+202D; for 
+					//'direction: ltr') or RLO (U+202E; for 'direction: rtl') at 
+					//the start of the element and a PDF (U+202C) at the end
+					//of the element. 
+					if (direction == "ltr")
+					{
+						data = "\u202D" + text + "\u202C";
+					}
+					else
+					{
+						data = "\u202E" + text + "\u202C";
+					} break;
+				default:
+					data = text;
+					break;
+				
+			}
+			return data;
+		}
+
 		private function buildTextFlow(captionElement:CaptionElement):void
 		{
 			updateContext();

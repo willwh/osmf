@@ -66,10 +66,6 @@ package org.osmf.smpte.tt.parsing
 	public class SMPTETTParser extends EventDispatcher 
 		implements IEventDispatcher, ISMPTETTParser
 	{
-		
-		
-		
-		
 		public static var ns:Namespace;
 		public static var ttm:Namespace;
 		public static var tts:Namespace;
@@ -381,7 +377,8 @@ package org.osmf.smpte.tt.parsing
 			}
 			
 			var captionRegionsHash:Dictionary = new Dictionary();
-			for each(var k:RegionElement in regionElementsHash){
+			for each(var k:RegionElement in regionElementsHash)
+			{
 				var captionRegion:CaptionRegion = mapToCaptionRegion(k) as CaptionRegion;
 				captionRegionsHash[captionRegion.id] = captionRegion;
 				_document.addCaptionRegion(captionRegion);

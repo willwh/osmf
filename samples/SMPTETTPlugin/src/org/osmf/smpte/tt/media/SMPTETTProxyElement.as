@@ -209,15 +209,15 @@ package org.osmf.smpte.tt.media
 					
 					// Listen for traits to be added so we can add any desired event listeners on any
 					// traits we care about.
-					proxiedElement.addEventListener( MediaElementEvent.TRAIT_ADD, _onAddTrait );
-					proxiedElement.addEventListener( MediaElementEvent.TRAIT_REMOVE, _onRemoveTrait );
+					proxiedElement.addEventListener( MediaElementEvent.TRAIT_ADD, _onAddTrait, false, 0, true );
+					proxiedElement.addEventListener( MediaElementEvent.TRAIT_REMOVE, _onRemoveTrait, false, 0, true );
 					
 					// Listen for metadata to be added so we can add any desired event listeners on any
 					// metadata facets we care about.
-					proxiedElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
+					proxiedElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd, false, 0, true);
 					
 					// Listen for metadata to be removed so we can remove an event listener.
-					proxiedElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataRemove);
+					proxiedElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataRemove, false, 0, true);
 					
 					// Listen for metadata add change and remove events so that we can respond to changes
 					// to the SMPTE-TT url and showCaptions
@@ -518,8 +518,11 @@ package org.osmf.smpte.tt.media
 				captioningMediaElement.addCaption(captionElement);
 				
 				// Start the _currentPositionTimer to monitor playhead position.
-				if(_currentPositionTimer) 
+				if(_currentPositionTimer)
+				{
+					_currentPositionTimer.delay = CURRENT_POSITION_UPDATE_INTERVAL;
 					_currentPositionTimer.start();
+				}
 			}
 		}
 		
@@ -535,7 +538,6 @@ package org.osmf.smpte.tt.media
 			{
 				 clearCaptionElement(captionElement);
 				 _currentCaption = null;
-				 _currentPositionTimer.stop();
 			}
 		}
 		
@@ -561,14 +563,10 @@ package org.osmf.smpte.tt.media
 		 */	
 		private function clearCaptionText():void
 		{
-			if (captioningMediaElement)
-				captioningMediaElement.removeCaption();
-			
-			if(captioningMediaElement 
-				&& _currentPositionTimer)
+			if (captioningMediaElement && _currentCaption)
 			{
-				_currentPositionTimer.stop();
-				captioningMediaElement.validateCaptions();
+				clearCaptionElement(_currentCaption);
+				_currentCaption = null;
 			}
 		}
 		
@@ -584,8 +582,8 @@ package org.osmf.smpte.tt.media
 				debug(">>> Timeline metadata added to "+event.target+", namespace="+event.namespaceURL+" "+event.metadata);
 				_namespaces[metadata] = event.namespaceURL;
 				_timelineMetadata = metadata;
-				_timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onShowCaption);
-				_timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_DURATION_REACHED, onHideCaption);
+				_timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onShowCaption, false, 0, true);
+				_timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_DURATION_REACHED, onHideCaption, false, 0, true);
 			} 
 			else
 			{
@@ -664,27 +662,35 @@ package org.osmf.smpte.tt.media
 			_seeked = false;
 		}
 		
+		private function findNearestCaption(time:Number):CaptionElement
+		{
+			if (!_timelineMetadata) return null;
+			var i:int = 0;
+			var toShow:CaptionElement;
+			var	captionElement:CaptionElement;
+			while (i<_timelineMetadata.numMarkers)
+			{
+				captionElement = _timelineMetadata.getMarkerAt(i) as CaptionElement;
+				if (captionElement.isActiveAtPosition(time,true))
+				{
+					toShow = captionElement;
+				} else if(toShow
+						 &&	time>captionElement.end 
+						 && captionElement.end<toShow.end)
+				{
+					toShow = null;
+				}
+				i++;
+			}
+			return toShow;
+		}
+		
 		/**
 		 * @private
 		 */
 		private function showNearestCaption(time:Number):void
 		{
-			if (!_timelineMetadata) return;
-			
-			var toShow:CaptionElement;
-			
-			for (var i:uint=0; i<_timelineMetadata.numMarkers; i++)
-			{
-				var captionElement:CaptionElement = _timelineMetadata.getMarkerAt(i) as CaptionElement;
-				if (captionElement.isActiveAtPosition(time))
-					toShow = captionElement;
-				else if (toShow
-						 &&	time>captionElement.end 
-						 && captionElement.end<toShow.end)
-					toShow = null;
-				
-			}
-			
+			var toShow:CaptionElement = findNearestCaption(time);
 			if (toShow)
 				_timelineMetadata.dispatchEvent(new TimelineMetadataEvent(TimelineMetadataEvent.MARKER_TIME_REACHED, false, false, toShow as TimelineMarker));
 		}
@@ -711,22 +717,22 @@ package org.osmf.smpte.tt.media
 				case MediaTraitType.PLAY:
 				{
 					var pTrait:PlayTrait = proxiedElement.getTrait( MediaTraitType.PLAY) as PlayTrait;
-					pTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
+					pTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange, false, 0, true);
 					break;
 				}
 				case MediaTraitType.DISPLAY_OBJECT:
 				{
 					var doTrait:DisplayObjectTrait = proxiedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
-					doTrait.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);
-					doTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
+					doTrait.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange, false, 0, true);
+					doTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange, false, 0, true);
 					
-					doTrait.displayObject.addEventListener(Event.ADDED_TO_STAGE, onDisplayObjectAddedToStage);
+					doTrait.displayObject.addEventListener(Event.ADDED_TO_STAGE, onDisplayObjectAddedToStage, false, 0, true);
 					break;
 				}
 				case MediaTraitType.SEEK:
 				{
 					var seekTrait:SeekTrait = proxiedElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
-					seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+					seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange, false, 0, true);
 					break;
 				}
 				case MediaTraitType.TIME:
@@ -736,7 +742,7 @@ package org.osmf.smpte.tt.media
 					if(!_currentPositionTimer)
 					{
 						_currentPositionTimer = new Timer(CURRENT_POSITION_UPDATE_INTERVAL);
-						_currentPositionTimer.addEventListener(TimerEvent.TIMER, onTimerTick);
+						_currentPositionTimer.addEventListener(TimerEvent.TIMER, onTimerTick, false, 0, true);
 					}
 							
 					break;
@@ -781,6 +787,7 @@ package org.osmf.smpte.tt.media
 					
 					if (_currentPositionTimer)
 					{
+						_currentPositionTimer.delay = CURRENT_POSITION_UPDATE_INTERVAL;
 						_currentPositionTimer.stop();
 						_currentPositionTimer.removeEventListener(TimerEvent.TIMER, onTimerTick);
 						_currentPositionTimer = null;

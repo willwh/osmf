@@ -43,6 +43,7 @@ package org.osmf.smpte.tt.captions
 		private var _animations:Vector.<TimedTextAnimation>;
 		private var _children:Vector.<TimedTextElement>;
 		private var _siblings:Vector.<TimedTextElement>;
+		private static const TOLERANCE:Number = 0.25;
 		
 		/**
 		 * Gets or sets a unique identifier for the marker.
@@ -255,29 +256,7 @@ package org.osmf.smpte.tt.captions
 				var eCeil:Number = Math.ceil(tte.end*100)/100;
 				var beginRange:Number = Math.abs(position-tte.begin);
 				var endRange:Number = Math.abs(tte.end-position);
-				var closeEnough:Boolean = (bFloor <= pRound || beginRange <= 0.25) && (eCeil > pRound && endRange>0.1);
-				/*
-				var label:String = "";
-				
-				if (tte.content)
-					label += tte.content;
-				
-				getContent(tte, label);
-				
-				function getContent(ce:TimedTextElement, label:String):void
-				{
-					if (ce.content)
-					{
-						label += ce.content;
-					} 
-					for each (var c:TimedTextElement in ce.children)
-					{
-						getContent(c, label);
-					}
-				}
-				if(label.length)
-					trace(closeEnough+" : \n\t" + label +"\n\t" + bFloor +" <= "+ pRound + " ("+beginRange+") && " + eCeil +" > "+ pRound+ " ("+endRange+")");
-				*/
+				var closeEnough:Boolean = (bFloor <= pRound || beginRange <= TOLERANCE) && (eCeil > pRound && endRange>0.1);
 				return closeEnough;
 			}
 			return tte.begin <= position && position < tte.end;

@@ -394,25 +394,30 @@ package org.osmf.smpte.tt.captions
 				case "lrtb":
 				case "lr":
 					blockProgression = BlockProgression.TB;
-					direction =Direction.LTR;
+					if (!direction)
+						direction = Direction.LTR;
 					break;
 				case "rltb":
 				case "rl":
 					blockProgression = BlockProgression.TB;
-					direction = Direction.RTL;
+					if (!direction)
+						direction = Direction.RTL;
 					break;
 				case "tbrl":
 				case "tb":
 					blockProgression = BlockProgression.RL;
-					direction = Direction.RTL;
+					if (!direction)
+						direction = Direction.RTL;
 					break;
 				case "tblr":
 					blockProgression = BlockProgression.RL;
-					direction = Direction.LTR;	
+					if (!direction)
+						direction = Direction.LTR;	
 					break;
 				default:
 					blockProgression = BlockProgression.TB;
-					direction =Direction.LTR;
+					if (!direction)
+						direction = Direction.LTR;
 					break;
 			}
 		}

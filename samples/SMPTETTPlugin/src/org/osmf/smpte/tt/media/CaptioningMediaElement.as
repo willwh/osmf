@@ -19,32 +19,17 @@
  **********************************************************/
 package org.osmf.smpte.tt.media
 {
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.sampler.NewObjectSample;
 	import flash.utils.Dictionary;
 	
-	import flashx.textLayout.events.DamageEvent;
-	
-	import org.osmf.containers.MediaContainer;
-	import org.osmf.elements.F4MElement;
-	import org.osmf.elements.ParallelElement;
-	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.ILayoutTarget;
 	import org.osmf.layout.LayoutMetadata;
-	import org.osmf.layout.LayoutMode;
-	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutTargetSprite;
-	import org.osmf.layout.ScaleMode;
-	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.smpte.tt.captions.CaptionElement;
 	import org.osmf.smpte.tt.captions.CaptionRegion;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.TimeTrait;
 	
 	public class CaptioningMediaElement extends MediaElement
 	{		
@@ -134,9 +119,15 @@ package org.osmf.smpte.tt.media
 		{
 			if (_rootContainer)
 			{
+				var timeTrait:TimeTrait;
+				var testTime:Number = value.begin;
+				if (mediaElement)
+				{
+					timeTrait = mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+				}
 				for each(var r:RegionLayoutTargetSprite in _regionsHash)
 				{
-					r.validateCaption();
+					r.validateCaption(value.begin, value.end, testTime);
 				}
 			}
 			//trace("addCaption: "+value.id);
@@ -172,7 +163,7 @@ package org.osmf.smpte.tt.media
 			{
 				for each(r in _regionsHash)
 				{
-					r.validateCaption(value.begin,value.end);
+					r.validateCaption();
 				}
 			}
 			//trace("removeCaption: "+value.id);
@@ -236,7 +227,7 @@ package org.osmf.smpte.tt.media
 		
 		public function validateCaptions():void
 		{
-			if (_currentCaption && _regionsHash)
+			if (_regionsHash)
 			{
 				for each(var r:RegionLayoutTargetSprite in _regionsHash){
 					r.validateCaption();
