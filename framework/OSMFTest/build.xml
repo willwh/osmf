@@ -12,6 +12,10 @@
 	<!-- run unittests -->
 	<target name="run" depends="build">
 		<OSMF.unittest.run project="OSMFTest" projectDir="${basedir}" flexUnitPlayer="air" />
+	</target>	
+	
+	<target name="run.existing" >
+		<OSMF.unittest.run project="OSMFTest" projectDir="${basedir}" flexUnitPlayer="air" />
 	</target>
 	
 	<!-- cleans the output directory -->

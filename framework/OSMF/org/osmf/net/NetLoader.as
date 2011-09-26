@@ -404,7 +404,7 @@ package org.osmf.net
 				 
 				loadTrait.netStream.attach(loadTrait.connection);
 				
-				nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
+				nsPlayOptions.transition = "resume";
 				
 				var resource:URLResource = loadTrait.resource as URLResource;
 				var urlIncludesFMSApplicationInstance:Boolean = 

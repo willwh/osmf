@@ -134,7 +134,7 @@ package org.osmf.net.rtmpstreaming
 					var nsPlayOptions:NetStreamPlayOptions = new NetStreamPlayOptions();
 					 
 					loadTrait.netStream.attach(loadTrait.connection);
-					nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
+					nsPlayOptions.transition = "resume";
 					
 					var currentStreamItem:DynamicStreamingItem = dsResource.streamItems[loadTrait.switchManager.currentIndex]; 
 					var streamName:String = currentStreamItem.streamName;
