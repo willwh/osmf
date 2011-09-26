@@ -2,18 +2,15 @@
 
 <!-- This is an auto generated file and is not intended for modification. -->
 
-<mx:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
-				xmlns:mx="library://ns.adobe.com/flex/mx"
-				creationComplete="onCreationComplete()"
-				
-				>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:flexui="flexunit.flexui.*"
+					   creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
 			import org.flexunit.listeners.*;
 			import org.flexunit.runner.FlexUnitCore;
-			
-			import com.allurent.coverage.runtime.CoverageManager;
-			import mx.events.ModuleEvent;
 			
 			import org.osmf.utils.OSMFUtilTestURL;
 			import org.osmf.utils.OSMFUtilTestTime;
@@ -36,6 +33,7 @@
 			import org.osmf.traits.TestBufferTraitAsSubclass;
 			import org.osmf.traits.TestBufferTrait;
 			import org.osmf.traits.TestAudioTrait;
+			import org.osmf.net.drm.TestDRMServices;
 			import org.osmf.net.TestDynamicStreamingResource;
 			import org.osmf.net.TestDynamicStreamingItem;
 			import org.osmf.metadata.TestTimelineMetadata;
@@ -158,6 +156,7 @@
 				testsToRun.push(org.osmf.metadata.TestTimelineMetadata);
 				testsToRun.push(org.osmf.net.TestDynamicStreamingItem);
 				testsToRun.push(org.osmf.net.TestDynamicStreamingResource);
+				testsToRun.push(org.osmf.net.drm.TestDRMServices);
 				testsToRun.push(org.osmf.traits.TestAudioTrait);
 				testsToRun.push(org.osmf.traits.TestBufferTrait);
 				testsToRun.push(org.osmf.traits.TestBufferTraitAsSubclass);
@@ -181,7 +180,7 @@
 				testsToRun.push(org.osmf.utils.OSMFUtilTestURL);
 				return testsToRun;
 			}
-			
+
 			
 			private function onCreationComplete():void
 			{
@@ -195,52 +194,13 @@
 				/**If you would like to see text output in verbose mode, umcomment either of the follow listeners **/
 				//core.addListener( new TraceListener() ); - For AS3 Projects
 				//core.addListener( TextListener.getDefaultTextListener( LogEventLevel.DEBUG ) ); - For Flex Projects
-				core.addEventListener(FlexUnitCore.TESTS_COMPLETE, onTestsComplete, false, 10000, false);   
+				
 				core.run(currentRunTestSuite());
-				
-				
-				
 			}
 			
-			/**
-			 * "Test Complete" event listener for the test suite- wait a bit to allow the code coverage
-			 * information to be relayed to any Coverage receiver and then close the flash
-			 * player so the automated test suite can continue
-			 */
-			private function onTestsComplete(event : Event) : void {
-				trace("--- test complete waiting 10sec to signal");
-				
-				if (_event == null)
-				{
-					event.stopImmediatePropagation();
-					_event = event;
-					
-					_timer = new Timer(10000, 2);
-					_timer.addEventListener(TimerEvent.TIMER, exitCoverageManager);
-					_timer.addEventListener(TimerEvent.TIMER_COMPLETE, redispatchEvent);
-					
-					_timer.start();
-				}
-			}
-			
-			
-			private function exitCoverageManager(event:TimerEvent):void 
-			{
-				trace("--- coverage manager exit");
-				CoverageManager.exit();
-			}
-			
-			private function redispatchEvent(event:TimerEvent):void 
-			{
-				trace("--- redispatch event to close air unit tests");
-				dispatchEvent(_event);
-			}
-			
-			private var _timer:Timer = null;
-			private var _event:Event = null;
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-</mx:Application>
+</s:WindowedApplication>
