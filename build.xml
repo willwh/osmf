@@ -33,11 +33,13 @@
 
 	<!-- compile framework and compile and run framework tests -->
 	<target name="core" depends="compile.osmf">
+		<subant target="build" inheritall="true" antfile="testing/NetMockerLibrary/build.xml" buildpath="."/>
         <subant target="run" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
 	</target>
 	
 	<!-- compile strobe media player and compile and run coresponding tests -->
 	<target name="player" depends="compile.smp">
+		<subant target="build" inheritall="true" antfile="testing/NetMockerLibrary/build.xml" buildpath="."/>
         <subant target="run" inheritall="true" antfile="player/StrobeMediaPlaybackTest/build.xml" buildpath="."/>
 	</target>
 	
