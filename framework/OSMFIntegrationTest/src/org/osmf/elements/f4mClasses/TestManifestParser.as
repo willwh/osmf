@@ -39,7 +39,11 @@ package org.osmf.elements.f4mClasses
 				var manifest:Manifest = event.data as Manifest;
 				var resource:DynamicStreamingResource = parser.createResource(manifest, xmlResource) as DynamicStreamingResource;
 				
+				// Validate that the urlIncludesFMSApplicationInstance value is passed on to the resource.
+				// http://bugs.adobe.com/jira/browse/FM-1405
 				assertTrue(resource.urlIncludesFMSApplicationInstance);
+				
+				// Validate that the correct number of streams reaches the resource
 				assertEquals(resource.streamItems.length, 5);
 			}
 		}
