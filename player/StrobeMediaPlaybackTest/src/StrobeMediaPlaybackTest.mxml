@@ -23,7 +23,7 @@
 				//core.addListener( new TraceListener() ); - For AS3 Projects
 				//core.addListener( TextListener.getDefaultTextListener( LogEventLevel.DEBUG ) ); - For Flex Projects
 				
-				core.run(StrobeMediaPlaybackTests);				
+				core.run(StrobeMediaPlaybackTests.currentRunTestSuite());				
 			}
 			
 		]]>
