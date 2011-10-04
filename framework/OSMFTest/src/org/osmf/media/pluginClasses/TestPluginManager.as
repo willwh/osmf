@@ -175,7 +175,7 @@ package org.osmf.media.pluginClasses
 			// Note: This test will need updating any time the framework
 			// version number changes.  I've added the following Assert.assertion
 			// to make this explicit.
-			Assert.assertTrue(Version.version == "1.6");
+			Assert.assertTrue(Version.version == "1.6.1");
 			
 			// First number is minimum supported framework version.
 			// Second number is plugin's framework version.
