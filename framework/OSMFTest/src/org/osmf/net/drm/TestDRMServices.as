@@ -29,10 +29,10 @@ package org.osmf.net.drm
 	
 	public class TestDRMServices
 	{
-		CONFIG::FLASH_10_1
+		[Test(description="Using a null or an empty token")]
+		public function convertEmptyTokens():void
 		{
-			[Test(description="Using a null or an empty token")]
-			public function convertEmptyTokens():void
+			CONFIG::FLASH_10_1
 			{
 				var token:ByteArray = null;
 				
@@ -42,9 +42,12 @@ package org.osmf.net.drm
 				token = DRMServices.convertToken("");
 				Assert.assertEquals(token, null);
 			}
-			
-			[Test(description="Using a byte array token. Conversion shouldn't happen.")]
-			public function convertByteArrayTokens():void
+		}
+		
+		[Test(description="Using a byte array token. Conversion shouldn't happen.")]
+		public function convertByteArrayTokens():void
+		{
+			CONFIG::FLASH_10_1
 			{
 				var token:ByteArray = null;
 				
@@ -56,9 +59,12 @@ package org.osmf.net.drm
 				token = DRMServices.convertToken(originalToken);
 				Assert.assertEquals(token, originalToken);
 			}
-			
-			[Test(description="Using a string as token. The string content should be serialized as a byte array.")]
-			public function convertStringToken():void
+		}
+		
+		[Test(description="Using a string as token. The string content should be serialized as a byte array.")]
+		public function convertStringToken():void
+		{
+			CONFIG::FLASH_10_1
 			{
 				var token:ByteArray = null;
 				
@@ -74,12 +80,12 @@ package org.osmf.net.drm
 				Assert.assertEquals(token.length, LONGER_TOKEN_DATA_LEN);
 				Assert.assertEquals(token.toString(), LONGER_TOKEN_DATA);
 			}
-			
-			/// Internals
-			private static const DEFAULT_TOKEN_DATA:String = "1234";
-			private static const DEFAULT_TOKEN_DATA_LEN:int = 4;
-			private static const LONGER_TOKEN_DATA:String = "0123456789";
-			private static const LONGER_TOKEN_DATA_LEN:int = 10;
 		}
+		
+		/// Internals
+		private static const DEFAULT_TOKEN_DATA:String = "1234";
+		private static const DEFAULT_TOKEN_DATA_LEN:int = 4;
+		private static const LONGER_TOKEN_DATA:String = "0123456789";
+		private static const LONGER_TOKEN_DATA_LEN:int = 10;
 	}
 }
