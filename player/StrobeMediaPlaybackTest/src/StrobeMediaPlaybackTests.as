@@ -63,7 +63,6 @@ package
 				public static function currentRunTestSuite():Array
 				{
 					
-
 					testsToRun.push(TestStrobeMediaPlayback);
 					testsToRun.push(org.osmf.net.TestPlaybackOptimizationManager);
 					testsToRun.push(org.osmf.net.TestPlaybackOptimizationMetrics);
@@ -98,7 +97,6 @@ package
 					testsToRun.push(org.osmf.player.plugins.TestPluginWhitelist);
 					testsToRun.push(org.osmf.player.utils.TestStrobeUtils);
 					testsToRun.push(org.osmf.player.utils.TestVideoRenderingUtils);
-					testsToRun.push(StrobeMediaPlaybackTests);
 					
 					return testsToRun;
 					
