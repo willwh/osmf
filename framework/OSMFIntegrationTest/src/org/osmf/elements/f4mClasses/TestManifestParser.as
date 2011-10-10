@@ -26,6 +26,8 @@ package org.osmf.elements.f4mClasses
 			xmlResource = null;
 		}
 		
+		// Test Comment
+		
 		[Test(async, description="Tests the creation of a DynamicStreamingResource.")]
 		public function testCreateDynamicStreamingResource():void
 		{
