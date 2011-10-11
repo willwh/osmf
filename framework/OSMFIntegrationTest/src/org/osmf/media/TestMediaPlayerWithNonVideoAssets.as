@@ -281,17 +281,17 @@ package org.osmf.media
 			
 			function onReady(event:Event):void
 			{
-				playerHelper.actualPlayer.play();
+				assertThat("MediaElement has display trait",playerHelper.actualPlayer.media.hasTrait(MediaTraitType.DISPLAY_OBJECT));
+				assertThat("Player doesn't have time trait.", !playerHelper.actualPlayer.temporal);
+
 			}
 			
 			function onPlaying(event:Event):void
 			{
-				assertThat("MediaElement has display trait",playerHelper.actualPlayer.media.hasTrait(MediaTraitType.DISPLAY_OBJECT));
 			}
 			
 			function onComplete(passThroughData:Object):void
 			{
-				assertThat("Player doesn't have time trait.", !playerHelper.actualPlayer.temporal);
 				setUpEvents(playerHelper, false);
 			}
 		}
