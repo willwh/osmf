@@ -147,6 +147,6 @@ package org.osmf.media
 		/// Internals
 		protected var playerHelper:MediaPlayerHelper = null;
 		
-		protected static const DEFAULT_TEST_LENGTH:Number = 20000; //30 sec
+		protected static const DEFAULT_TEST_LENGTH:Number = 15000; //15 sec
 	}
 }
