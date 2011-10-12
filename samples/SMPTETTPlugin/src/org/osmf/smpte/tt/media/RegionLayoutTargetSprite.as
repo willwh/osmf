@@ -28,6 +28,8 @@ package org.osmf.smpte.tt.media
 	
 	import flashx.textLayout.compose.TextFlowLine;
 	import flashx.textLayout.container.ContainerController;
+	import flashx.textLayout.conversion.ConversionType;
+	import flashx.textLayout.conversion.TextConverter;
 	import flashx.textLayout.elements.BreakElement;
 	import flashx.textLayout.elements.DivElement;
 	import flashx.textLayout.elements.FlowElement;
@@ -39,6 +41,7 @@ package org.osmf.smpte.tt.media
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.formats.Direction;
 	import flashx.textLayout.formats.LineBreak;
+	import flashx.textLayout.formats.TextDecoration;
 	
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutRendererBase;
@@ -50,6 +53,7 @@ package org.osmf.smpte.tt.media
 	import org.osmf.smpte.tt.captions.TimedTextElementType;
 	import org.osmf.smpte.tt.captions.TimedTextStyle;
 	import org.osmf.smpte.tt.enums.Unit;
+	import org.osmf.smpte.tt.model.TimedTextElementBase;
 	import org.osmf.smpte.tt.primitives.Size;
 	import org.osmf.smpte.tt.styling.AutoExtent;
 	import org.osmf.smpte.tt.styling.AutoOrigin;
@@ -59,7 +63,9 @@ package org.osmf.smpte.tt.media
 	import org.osmf.smpte.tt.styling.NumberPair;
 	import org.osmf.smpte.tt.styling.Origin;
 	import org.osmf.smpte.tt.styling.PaddingThickness;
+	import org.osmf.smpte.tt.styling.TextDecorationAttributeValue;
 	import org.osmf.smpte.tt.styling.TextOutline;
+	import org.osmf.smpte.tt.styling.Visibility;
 	import org.osmf.smpte.tt.styling.WrapOption;
 	import org.osmf.smpte.tt.utilities.VectorUtils;
 	import org.osmf.traits.MediaTraitType;
@@ -125,9 +131,8 @@ package org.osmf.smpte.tt.media
 		public function redrawCaption():void
 		{
 			if (_textFlow.numChildren>0 && _textFlow.getText().length)
-			{
 				_textFlow.replaceChildren(0,_textFlow.numChildren);
-			}
+			
 			
 			if (hasRendererContext())
 			{
@@ -165,11 +170,7 @@ package org.osmf.smpte.tt.media
 		{
 			if (_currentCaption)
 			{
-				var timeTrait:TimeTrait;
 				var round:Boolean = false;
-				
-				if (mediaElement)
-					timeTrait = mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
 				
 				if (isNaN(currentTime) && timeTrait)
 				{
@@ -217,15 +218,18 @@ package org.osmf.smpte.tt.media
 		
 		private function redrawAtPosition(captionElement:CaptionElement, currentTime:Number):Boolean
 		{
-			if (!captionElement.isActiveAtPosition(currentTime, true))
+			if (captionElement.hasAnimations 
+				|| captionRegion.hasAnimations 
+				|| !captionElement.isActiveAtPosition(currentTime, true))
 			{
+				//trace(_id+" redrawAtPosition("+captionElement+", "+currentTime+") hasAnimations="+captionElement.hasAnimations);
 				redrawCaption();
 				return true;
 			}
 			
 			for each(var c:CaptionElement in captionElement.children)
-			{
-				if (!c.isActiveAtPosition(currentTime, true))
+			{	
+				if (c.hasAnimations || !c.isActiveAtPosition(currentTime, true))
 				{
 					redrawCaption();
 					return true;
@@ -239,23 +243,31 @@ package org.osmf.smpte.tt.media
 		
 		private function getFlowElement(captionElement:CaptionElement):FlowElement
 		{
-			if (captionElement.style.display == "none") 
+			//("\t>>>START getFlowElement "+captionElement.captionElementType+"<<<");
+			
+			if (timeTrait)
+				captionElement.calculateCurrentStyle(timeTrait.currentTime);
+			
+			if (captionElement.currentStyle.display == "none") 
 				return null;
 			
-			//trace(captionElement+" "+captionElement.captionElementType +" "+captionElement.content);
+			//(captionElement+" "+captionElement.captionElementType +" "+captionElement.content);
 			
 			var flowElement:FlowElement;
+			var parentElement:TimedTextElement = captionElement.parentElement;
 			
 			if(captionElement.captionElementType == TimedTextElementType.Text)
 			{
 				var span:SpanElement = new SpanElement();
 				span.text = captionElement.content;
 				
-				applyStyles(span, captionElement.style, captionElement);
+				applyStyles(span, captionElement.currentStyle, captionElement);
 				
 				span.text = addBidirectionEncoding(span.text, 
-													captionElement.style.unicodeBidi,
-													captionElement.style.direction);
+					(captionElement.currentStyle.unicodeBidi 
+						|| parentElement.currentStyle.unicodeBidi),
+					(captionElement.currentStyle.direction 
+					|| parentElement.currentStyle.direction));
 				
 				flowElement = span as FlowElement;				
 			}
@@ -263,7 +275,7 @@ package org.osmf.smpte.tt.media
 			{
 				var br:BreakElement = new BreakElement();
 				
-				applyStyles(br, captionElement.style, captionElement);
+				applyStyles(br, captionElement.currentStyle, captionElement);
 				
 				flowElement = br;
 			} else if (captionElement.captionElementType == TimedTextElementType.Container 
@@ -293,44 +305,40 @@ package org.osmf.smpte.tt.media
 					flowElement = paragraph as FlowElement;
 				}
 				
-				if (flowElement) {
-					applyStyles(flowElement, captionElement.style, captionElement);
-				}
-				
-				var timeTrait:TimeTrait;
-				if (mediaElement)
-					timeTrait = mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
-				
-				if(timeTrait)
+				if (flowElement)
 				{
-					var currentTime:Number = timeTrait.currentTime;
-				
-					for each(var c:CaptionElement in children)
+					applyStyles(flowElement, captionElement.currentStyle, captionElement);
+
+					if (timeTrait)
 					{
-						if (timeTrait 
-							&& c.isActiveAtPosition(currentTime, true)
-							&& c.isActiveInRange(currentTime,captionElement.end)
-							&& c.style.display != "none")
+						var currentTime:Number = timeTrait.currentTime;
+					
+						for each(var c:CaptionElement in children)
 						{
-								/*
-								trace("YES: "+c.captionElementType
+							if (c.isActiveAtPosition(currentTime, true)
+								&& c.isActiveInRange(currentTime,captionElement.end)
+								&& c.currentStyle.display != "none")
+							{
+									/*
+									trace("YES: "+c.captionElementType
+											+"\t"+ currentTime
+											+"\t("+c.begin+", "+c.end+")"
+											+"\t"+c.content+"\n");
+									*/
+								var childElement:FlowElement = getFlowElement(c);
+								if (childElement)
+									FlowGroupElement(flowElement).addChild(childElement);
+							} 
+							/*else
+							{
+									trace("NO: "+c.captionElementType
 										+"\t"+ currentTime
 										+"\t("+c.begin+", "+c.end+")"
-										+"\t"+c.content+"\n");
-								*/
-							var childElement:FlowElement = getFlowElement(c);
-							if(childElement)
-								FlowGroupElement(flowElement).addChild(childElement);
-						} 
-						/*else
-						{
-								trace("NO: "+c.captionElementType
-									+"\t"+ currentTime
-									+"\t("+c.begin+", "+c.end+")"
-									+"\t"+c.content);
-						}*/
+										+"\t"+c.content);
+							}*/
+						}
 					}
-				}
+					}
 			}
 			
 			// trace(captionElement.captionElementType + " " + flowElement + " "+(flowElement as FlowElement).getText());
@@ -372,7 +380,10 @@ package org.osmf.smpte.tt.media
 		private function applyRegionStyles():void
 		{
 			//trace("\n*************\n"+this.id+".applyRegionStyles()");
-			var styles:Object = captionRegion.style.styles;
+			if (timeTrait)
+				captionRegion.calculateCurrentStyle(timeTrait.currentTime);
+						
+			var styles:Object = captionRegion.currentStyle.styles;
 			var cellWidth:Number, cellHeight:Number,
 				safeAreaWidth:Number, safeAreaHeight:Number;
 			
@@ -380,12 +391,11 @@ package org.osmf.smpte.tt.media
 			layoutMetadata.right = NaN;
 			layoutMetadata.bottom = NaN;
 			
-			if(styles.origin){
-				 
+			if (styles.origin)
+			{ 
 				//trace("is AutoOrigin? "+ (styles.origin is AutoOrigin));
 				if (styles.origin as AutoOrigin == null)
 				{
-					
 					styles.origin.setContext(size.width,size.height);
 					styles.origin.setFontContext(cellSize.width,cellSize.height);
 					
@@ -409,7 +419,8 @@ package org.osmf.smpte.tt.media
 				//trace("\tlayoutMetadata {x:"+layoutMetadata.x +", y:"+layoutMetadata.y+"}");
 			}
 			
-			if(styles.extent){
+			if(styles.extent)
+			{
 				//trace("{width:"+size.width+", height:"+size.height+"}")
 				
 				//trace("is AutoExtent? "+ (styles.extent is AutoExtent));
@@ -430,13 +441,20 @@ package org.osmf.smpte.tt.media
 				//trace("\tlayoutMetadata {width:"+layoutMetadata.width +", height:"+layoutMetadata.height+"}");
 			}
 			
+			if(styles.zIndex)
+			{
+				layoutMetadata.index = styles.zIndex;
+			}
+			
 			for(var key:String in styles){
+				var value:* = styles[key];
+				//trace("\t{"+key+":"+value+"}");
 				switch(key){
 					case "showBackground":
 					case "backgroundColor":
 					case "backgroundAlpha":
 					{
-						this[key] = styles[key];
+						this[key] = value;
 						break;
 					}
 					case "wrapOption":
@@ -446,7 +464,7 @@ package org.osmf.smpte.tt.media
 					}
 					case "ttFontSize":
 					{
-						var ttFontSize:FontSize = styles[key] as FontSize;
+						var ttFontSize:FontSize = value as FontSize;
 						if(ttFontSize){
 							safeAreaWidth = (ttFontSize.unitMeasureHorizontal==Unit.CELL) ? toTextSafeArea(size.width) : size.width;
 							safeAreaHeight = (ttFontSize.unitMeasureVertical==Unit.CELL) ? toTextSafeArea(size.height) : size.height;
@@ -467,7 +485,7 @@ package org.osmf.smpte.tt.media
 					}
 					case "ttLineHeight":
 					{
-						var ttLineHeight:LineHeight = styles[key] as LineHeight;
+						var ttLineHeight:LineHeight = value as LineHeight;
 						if(ttLineHeight){
 							safeAreaWidth = (ttLineHeight.unitMeasureHorizontal==Unit.CELL) ? toTextSafeArea(size.width) : size.width;
 							safeAreaHeight = (ttLineHeight.unitMeasureVertical==Unit.CELL) ? toTextSafeArea(size.height) : size.height;
@@ -483,7 +501,7 @@ package org.osmf.smpte.tt.media
 					}
 					case "padding":
 					{
-						var padding:PaddingThickness = styles[key] as PaddingThickness;
+						var padding:PaddingThickness = value as PaddingThickness;
 						if (padding)
 						{
 							padding.setContext(this.layoutRenderer.parent.container.measuredWidth,this.layoutRenderer.parent.container.measuredHeight);
@@ -497,24 +515,44 @@ package org.osmf.smpte.tt.media
 					}
 					case "opacity":
 					{
-						if (!isNaN(styles[key]))
+						if (!isNaN(value))
 						{
 							blendMode = BlendMode.LAYER;
-							alpha = styles[key];
+							alpha = value;
 						}
+						break;
+					}	
+					case "lineThrough":
+					case "textDecoration":
+					{
+						_containerController.textDecoration = styles["textDecoration"] ? styles["textDecoration"] : TextDecoration.NONE;
+						_containerController.lineThrough = (styles["lineThrough"]) ? styles["lineThrough"] : false;
 						break;
 					}
 					case "direction":
 					{
-						_containerController.direction = (styles[key]==Direction.RTL) ? Direction.RTL : Direction.LTR;
+						_containerController.direction = (value==Direction.RTL) ? Direction.RTL : Direction.LTR;
+						break;
+					}
+					case "visibility":
+					{
+						if (styles[key]==Visibility.HIDDEN.value)
+						{
+							_containerController.textAlpha = 0;
+							_containerController.backgroundAlpha = 0;
+						} else
+						{
+							_containerController.textAlpha = styles["textAlpha"];
+							_containerController.backgroundAlpha = styles["backgroundAlpha"];
+						}
 						break;
 					}
 					default:
 					{
-						if(_containerController.hasOwnProperty(key) && styles[key]!=null){
-							_containerController.setStyle(key,styles[key]);
+						if(_containerController.hasOwnProperty(key) && value){
+							_containerController.setStyle(key,value);
 						} else {
-							//trace(this+" "+key+"="+styles[key]);
+							// trace(this+" "+key+"="+styles[key]);
 						}
 						break;
 					}
@@ -528,29 +566,39 @@ package org.osmf.smpte.tt.media
 		private function applyStyles(flowElement:FlowElement, style:TimedTextStyle, captionElement:CaptionElement):void {
 			
 			//trace("\n*************\n"+flowElement+".applyStyles()");
-			
 			updateContext();
 			
 			var styles:Object = style.styles;
 			var cellWidth:Number, cellHeight:Number,
 				safeAreaWidth:Number, safeAreaHeight:Number;
 			
-			for(var key:String in styles){
+			for(var key:String in styles)
+			{
+				var value:* = styles[key];
+				//trace("\t{"+key+":"+value+"}");
 				switch(key)
 				{
 					case "backgroundColor" :
 					case "backgroundAlpha" :
-					{
+					{						
 						if(flowElement is ParagraphFormattedElement){
-							this[key] = styles[key];	
+							this[key] = value;	
 						} else {
-							flowElement[key] = styles[key];
+							flowElement[key] = value;
 						}
 						break;
 					}
+						
+					case "color" :
+					case "textAlpha" :
+					{						
+						flowElement[key] = value;
+						break;
+					}
+						
 					case "showBackground" :
 					{
-						this[key] = styles[key];
+						this[key] = value;
 						break;
 					}
 					case "wrapOption" :
@@ -562,7 +610,7 @@ package org.osmf.smpte.tt.media
 					}
 					case "ttFontSize" :
 					{
-						var ttFontSize:FontSize = styles[key] as FontSize;
+						var ttFontSize:FontSize = value as FontSize;
 						if(ttFontSize){
 							safeAreaWidth = (ttFontSize.unitMeasureHorizontal==Unit.CELL) ? toTextSafeArea(size.width) : size.width;
 							safeAreaHeight = (ttFontSize.unitMeasureVertical==Unit.CELL) ? toTextSafeArea(size.height) : size.height;
@@ -583,7 +631,7 @@ package org.osmf.smpte.tt.media
 					}
 					case "ttLineHeight" :
 					{
-						var ttLineHeight:LineHeight = styles[key] as LineHeight;
+						var ttLineHeight:LineHeight = value as LineHeight;
 						if(ttLineHeight){
 							safeAreaWidth = (ttLineHeight.unitMeasureHorizontal==Unit.CELL) ? toTextSafeArea(size.width) : size.width;
 							safeAreaHeight = (ttLineHeight.unitMeasureVertical==Unit.CELL) ? toTextSafeArea(size.height) : size.height;
@@ -600,7 +648,7 @@ package org.osmf.smpte.tt.media
 					}
 					case "padding" :
 					{
-						var padding:PaddingThickness = styles[key] as PaddingThickness;
+						var padding:PaddingThickness = value as PaddingThickness;
 						if(padding){
 							padding.setContext(this.layoutRenderer.parent.container.measuredWidth,this.layoutRenderer.parent.container.measuredHeight);
 							
@@ -638,9 +686,7 @@ package org.osmf.smpte.tt.media
 					}
 					case "textOutline" :
 					{
-						
-						
-						var textOutline:TextOutline = styles[key] as TextOutline;
+						var textOutline:TextOutline = value as TextOutline;
 						if (textOutline)
 						{
 							
@@ -678,16 +724,36 @@ package org.osmf.smpte.tt.media
 						}
 						break;
 					}
+					case "lineThrough":
+					case "textDecoration":
+					{
+						flowElement.textDecoration = styles["textDecoration"] ? styles["textDecoration"] : TextDecoration.NONE;
+						flowElement.lineThrough = (styles["lineThrough"]) ? styles["lineThrough"] : false;
+						break;
+					}
 					case "direction":
 					{
-						flowElement.direction = styles[key];
+						flowElement.direction = (value==Direction.RTL) ? Direction.RTL : Direction.LTR;
+						break;
+					}
+					case "visibility":
+					{
+						if (value==Visibility.HIDDEN.value)
+						{
+							flowElement.textAlpha = 0;
+							flowElement.backgroundAlpha = 0;
+						} else
+						{
+							flowElement.textAlpha = styles["textAlpha"];
+							flowElement.backgroundAlpha = styles["backgroundAlpha"];
+						}
 						break;
 					}
 					default :
 					{
-						if(flowElement.hasOwnProperty(key) && styles[key]!=null){
+						if(flowElement.hasOwnProperty(key) && value!==null){
 							// trace(flowElement+"\t"+key+"\t"+styles[key]);
-							flowElement.setStyle(key,styles[key]);
+							flowElement.setStyle(key,value);
 						} else {
 							//trace(captionElement+" "+key+"="+styles[key]);
 						}
@@ -751,21 +817,25 @@ package org.osmf.smpte.tt.media
 
 		private function buildTextFlow(captionElement:CaptionElement):void
 		{
+			//("\n>>>START buildTextFlow<<<");
 			updateContext();
 			
 			_textOutlineFiltersDict = null;
 			_textOutlineFiltersHash = null;
 			
 			applyRegionStyles();
+			
+			if (timeTrait)
+				captionElement.calculateCurrentStyle(timeTrait.currentTime);
 						
-			var styles:Object = captionElement.style.styles;
+			var styles:Object = captionElement.currentStyle.styles;
 			var origin:Origin,
 				extent:Extent,
 				opacity:Number,
 				ttFontSize:FontSize,
 				ttLineHeight:LineHeight;
-				
-			if(styles.origin){
+			
+			if(styles.origin && styles.origin as AutoOrigin == null){
 				origin = styles.origin as Origin;
 				
 				origin.setContext(size.width,size.height);
@@ -784,7 +854,7 @@ package org.osmf.smpte.tt.media
 				//trace("layoutMetadata {x:"+layoutMetadata.x +", y:"+layoutMetadata.y+"}");
 			}
 			
-			if(styles.extent){
+			if(styles.extent && styles.extent as AutoExtent == null){
 				extent = styles.extent as Extent;
 				extent.setContext(size.width,size.height);
 				extent.setFontContext(cellSize.width,cellSize.height);
@@ -808,13 +878,13 @@ package org.osmf.smpte.tt.media
 			
 			if (flowElement) 
 				_textFlow.addChild(flowElement);
-			
+			var xmlOut:XML = TextConverter.export(_textFlow,TextConverter.TEXT_LAYOUT_FORMAT, ConversionType.XML_TYPE) as XML;
+			//trace(xmlOut.toXMLString());
 			autoSizeContainerController();
 		}
 		
 		private function applyTextOutlines():void
 		{
-			
 			if (_textOutlineFiltersDict)
 			{
 				var len:Number = _textOutlineFiltersHash.length;
@@ -859,8 +929,8 @@ package org.osmf.smpte.tt.media
 		
 		private function autoSizeContainerController():void
 		{
-			
 			_textFlow.flowComposer.composeToPosition();
+			
 			var contentBounds:Rectangle = _containerController.getContentBounds();
 
 			_containerController.setCompositionSize(Math.min(_containerController.compositionWidth, layoutMetadata.x-size.width), contentBounds.height);
@@ -910,6 +980,16 @@ package org.osmf.smpte.tt.media
 			super.height = value;
 		}
 		
+		
+		private function get timeTrait():TimeTrait
+		{
+			if (!_timeTrait && mediaElement)
+			{
+				_timeTrait = mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+			}	
+			return _timeTrait;
+		}
+		
 		private var _id:String = "";
 		private var _captionRegion:CaptionRegion;
 		private var _textFlow:TextFlow;
@@ -921,6 +1001,7 @@ package org.osmf.smpte.tt.media
 		private var _showBackground:String = ShowBackground.Always.value;
 		private var _textOutlineFiltersDict:Dictionary;
 		private var _textOutlineFiltersHash:Vector.<FlowElement>;
+		private var _timeTrait:TimeTrait;
 		private static const TEXT_SAFE_AREA_RATIO:Number = 0.8;
 	}
 }

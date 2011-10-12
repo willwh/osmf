@@ -277,7 +277,7 @@ package org.osmf.smpte.tt.parsing
 			var xmlStr:String = rawData.replace(/\s+$/, "");
 			
 			// Remove whitespaces between tags
-			xmlStr = xmlStr.replace(/>\s+</g, "><");
+			xmlStr = xmlStr.replace(/(?<!span)>\s+<(?!$1)|(?<=span)>\s*[\n\r\t]\s*</g, "><");
 			
 			// Tell the XML class to show white space in text nodes		
 			XML.ignoreWhitespace = false;
@@ -508,9 +508,9 @@ package org.osmf.smpte.tt.parsing
 				
 				var child:TimedTextElement = buildTimedTextElements(element, regionElement);
 				
-				if (child != null && child.captionElementType == TimedTextElementType.Animation)
+				if (child && child is TimedTextAnimation)
 				{
-					captionRegion.animations.push(child as TimedTextAnimation);
+					captionRegion.animations.push(child);
 				}
 			} 
 			return captionRegion;
@@ -533,13 +533,17 @@ package org.osmf.smpte.tt.parsing
 			for each (var c:TimedTextElementBase in element.children)
 			{
 				var child:TimedTextElement = buildTimedTextElements(c, region);
+				if (!child) continue;
+				
+				child.parentElement = captionElement;
+				
 				if (child is TimedTextAnimation)
 				{
-					timedTextElement.animations.push(TimedTextAnimation(child));
-				} else if (captionElement != null && child is CaptionElement)
+					timedTextElement.animations.push(child);
+				} else if (child is CaptionElement)
 				{
-					(child as CaptionElement).index = captionElement.children.length;
-					captionElement.children.push(child as CaptionElement);
+					CaptionElement(child).index = captionElement.children.length;
+					captionElement.children.push(child);
 				}
 			}
 			return timedTextElement;
@@ -551,7 +555,8 @@ package org.osmf.smpte.tt.parsing
 				? TimedTextElement(buildCaptionAnimationElement(element))
 				: new CaptionElement(element.begin.totalSeconds, element.end.totalSeconds) as TimedTextElement;
 			
-			if(captionElement is CaptionElement && region) {
+			if (captionElement is CaptionElement && region)
+			{
 				CaptionElement(captionElement).regionId = region.id;
 			}
 			
@@ -567,9 +572,8 @@ package org.osmf.smpte.tt.parsing
 				captionElement.captionElementType = TimedTextElementType.Text;
 				captionElement.content = aSpan.text;
 				
-				var styledElement:TimedTextElementBase = (element.parent is SpanElement) ? TimedTextElementBase(element.parent) : element;
-				
-				captionElement.style = TimedTextStyleParser.mapStyle(styledElement, region);
+				if (element.parent is SpanElement)
+					captionElement.style = TimedTextStyleParser.mapStyle(TimedTextElementBase(element.parent), region);
 				
 				remainingNodeCount--;
 			}

@@ -963,29 +963,31 @@ package org.osmf.smpte.tt.model
 					case "textDecoration":
 						if (validAttributeValue(s_textDecorationExpression, attribute))
 						{
-							switch (value)
-							{   //underline | noUnderline ] || [ lineThrough  | noLineThrough ] || [ overline | noOverline
-								case "underline": 
-									_styling["textDecoration"] = TextDecorationAttributeValue.UNDERLINE;
-									break;
-								case "noUnderline": 
-									_styling["textDecoration"] = TextDecorationAttributeValue.NO_UNDERLINE;
-									break;
-								case "lineThrough": 
-									_styling["textDecoration"] = TextDecorationAttributeValue.LINE_THROUGH;
-									break;
-								case "noLineThrough": 
-									_styling["textDecoration"] = TextDecorationAttributeValue.NO_LINE_THROUGH;
-									break;
-								case "overline": 
-									_styling["textDecoration"] = TextDecorationAttributeValue.OVERLINE;
-									break;
-								case "noOverline": 
-									_styling["textDecoration"] = TextDecorationAttributeValue.NO_OVERLINE;
-									break;
-								default: 
-									_styling["textDecoration"] = TextDecorationAttributeValue.NONE;
-									break;
+							var matchRE:RegExp = new RegExp(s_textDecorationExpression,"g");
+							var result:Array = matchRE.exec(value);
+							
+							while (result != null) 
+							{ 
+								switch(result.toString())
+								{
+									case TextDecorationAttributeValue.UNDERLINE.value: 
+										_styling["textDecoration"] = TextDecorationAttributeValue.UNDERLINE;
+										break;
+									case TextDecorationAttributeValue.NO_UNDERLINE.value: 
+										_styling["textDecoration"] = TextDecorationAttributeValue.NO_UNDERLINE;
+										break;
+									case TextDecorationAttributeValue.LINE_THROUGH.value: 
+										_styling["lineThrough"] = TextDecorationAttributeValue.LINE_THROUGH;
+										break;
+									case TextDecorationAttributeValue.NO_LINE_THROUGH.value: 
+										_styling["lineThrough"] = TextDecorationAttributeValue.NO_LINE_THROUGH;
+										break;
+									case TextDecorationAttributeValue.NONE.value: 
+										_styling["textDecoration"] = TextDecorationAttributeValue.NONE;
+										break;
+								}
+								
+								result = matchRE.exec(value); 
 							}
 						}
 						break;

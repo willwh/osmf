@@ -19,13 +19,9 @@
  **********************************************************/
 package org.osmf.smpte.tt.captions
 {
-	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
 	import org.osmf.metadata.TimelineMarker;
-	import org.osmf.smpte.tt.events.PropertyChangedEvent;
-	import org.osmf.smpte.tt.timing.TimeCode;
-	import org.osmf.smpte.tt.timing.TimeSpan;
 	import org.osmf.smpte.tt.utilities.VectorUtils;
 	
 	/**
@@ -37,10 +33,11 @@ package org.osmf.smpte.tt.captions
 		private var _type:String;
 		private var _end:Number;
 		private var _content:*;
+		private var _parentElement:TimedTextElement;
 		private var _currentStyle:TimedTextStyle;
 		private var _style:TimedTextStyle;
 		private var _captionElementType:TimedTextElementType;
-		private var _animations:Vector.<TimedTextAnimation>;
+		private var _animations:Vector.<TimedTextElement>;
 		private var _children:Vector.<TimedTextElement>;
 		private var _siblings:Vector.<TimedTextElement>;
 		private static const TOLERANCE:Number = 0.25;
@@ -61,8 +58,21 @@ package org.osmf.smpte.tt.captions
 				_id = value;
 			}
 		}
-
 		
+		/**
+		 * Gets or sets the text associated with this marker.
+		 */
+		public function get parentElement():*
+		{
+			return _parentElement;
+		}
+		
+		public function set parentElement(value:*):void
+		{
+			if (_parentElement!=value)
+				_parentElement = value;
+		}
+
 		/**
 		 * Gets or sets the text associated with this marker.
 		 */
@@ -73,10 +83,8 @@ package org.osmf.smpte.tt.captions
 		
 		public function set content(value:*):void
 		{
-			if(_content!=value){
-				var oldContent:* = _content;
+			if (_content!=value)
 				_content = value;
-			}
 		}
 		
 		/**
@@ -88,10 +96,8 @@ package org.osmf.smpte.tt.captions
 		}
 		public function set type(value:String):void
 		{
-			if(_type!=value){
-				var oldValue:* = _type;
+			if (_type!=value)
 				_type = value;
-			}
 		}
 		
 		public function get children():Vector.<TimedTextElement>
@@ -113,7 +119,8 @@ package org.osmf.smpte.tt.captions
 		}
 		public function set style(value:TimedTextStyle):void
 		{
-			if(_style!=value){
+			if (_style!=value)
+			{
 				var oldValue:* = _style;
 				_style = value;
 				_currentStyle = value;
@@ -125,13 +132,12 @@ package org.osmf.smpte.tt.captions
 		 */
 		public function get currentStyle():TimedTextStyle
 		{
-			return _currentStyle;
+			return (_currentStyle) ? _currentStyle : _style;
 		}
-		protected function set currentStyle(value:TimedTextStyle):void
+		public function set currentStyle(value:TimedTextStyle):void
 		{			
 			if (_currentStyle != value)
 			{
-				var oldValue:* = _currentStyle;
 				_currentStyle = value;
 			}
 		}
@@ -178,7 +184,7 @@ package org.osmf.smpte.tt.captions
 		/**
 		 * Gets or sets the list of animations to be applied to this element.
 		 */
-		public function get animations():Vector.<TimedTextAnimation>
+		public function get animations():Vector.<TimedTextElement>
 		{
 			return _animations;
 		}
@@ -191,7 +197,7 @@ package org.osmf.smpte.tt.captions
 			
 			_type = "captionelement";
 			_style = new TimedTextStyle();
-			_animations = new Vector.<TimedTextAnimation>();
+			_animations = new Vector.<TimedTextElement>();
 			_children = new Vector.<TimedTextElement>();
 			_siblings = new Vector.<TimedTextElement>();
 			_end = end;
@@ -210,17 +216,23 @@ package org.osmf.smpte.tt.captions
 		public function calculateCurrentStyle(position:Number):void
 		{
 			var func:Function;
-			var activeAnimations:Vector.<TimedTextElement> = TimedTextElement.whereActiveAtPosition(animations as Vector.<TimedTextElement>,position);
-			
+			var activeAnimations:Vector.<TimedTextElement> = TimedTextElement.whereActiveAtPosition(animations,position);
 			if (activeAnimations.length>0)
-			{
+			{	
 				var animatedStyle:TimedTextStyle = style.clone();
 				func = function(item:*, index:int, array:Array):void
 				{
-					if(item is TimedTextAnimation) (item as TimedTextAnimation).mergeStyle(this);
+					if (item is TimedTextAnimation)
+					{
+						TimedTextAnimation(item).mergeStyle(this);
+						// trace("\t"+TimedTextAnimation(item).propertyName+" "+TimedTextAnimation(item).style[TimedTextAnimation(item).propertyName]);
+					}
 				}
 				VectorUtils.toArray(activeAnimations).map(func, animatedStyle);
 				_currentStyle = animatedStyle;
+			} else
+			{
+				_currentStyle = style;
 			}
 			var i:Vector.<TimedTextElement> = TimedTextElement.whereActiveAtPosition(children,position);
 			func = function(item:*, index:int, array:Array):void
@@ -229,7 +241,6 @@ package org.osmf.smpte.tt.captions
 			}
 			VectorUtils.toArray(i).map(func,position);
 		}
-		
 		
 		public function isActiveAtPosition(position:Number, round:Boolean = false):Boolean
 		{
@@ -279,10 +290,9 @@ package org.osmf.smpte.tt.captions
 		{
 			var func:Function = function(item:*, index:int, vector:Array):Boolean
 				{
-					return (item as TimedTextElement).isActiveAtPosition(this);
+					return TimedTextElement(item).isActiveAtPosition(this,true);
 				}
 			return Vector.<TimedTextElement>( VectorUtils.toArray(vector).filter(func,position) );
 		}
-		
 	}
 }
