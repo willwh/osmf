@@ -30,15 +30,7 @@ package org.osmf.media
 	import org.hamcrest.object.equalTo;
 	import org.osmf.events.SeekEvent;
 	
-	/**
-	 * @private
-	 * 
-	 * Tests the functionality of OSMF while playing legacy HDS. The tests cover 
-	 * the following legacy HDS cases with multi bit rate (MBR) streams:
-	 * - Pure Live
-	 * - Live with DVR
-	 * - VOD
-	 */ 
+
 	public class TestMediaPlayerWithRTMP_MBR  extends TestMediaPlayerHelper
 	{
 		
@@ -51,7 +43,7 @@ package org.osmf.media
 		[Test(async, timeout="60000", order=1)]
 		public function playVOD_AutoSwitch():void
 		{
-			const testLenght:uint = DEFAULT_TEST_LENGTH;
+			const testLenght:uint = 20000;
 			
 			runAfterInterval(this, testLenght, playerHelper.info, onComplete, onTimeout);
 			

@@ -32,24 +32,16 @@ package org.osmf.media
 	import org.osmf.events.SeekEvent;
 	import org.osmf.traits.MediaTraitType;
 	
-	/**
-	 * @private
-	 * 
-	 * Tests the functionality of OSMF while playing legacy HDS. The tests cover 
-	 * the following legacy HDS cases with single bit rate (SBR) streams:
-	 * - Pure Live
-	 * - Live with DVR
-	 * - VOD
-	 */ 
+
 	public class TestMediaPlayerWithStreamingRTMP_Vod  extends TestMediaPlayerHelper
 	{
 		
 		
 		/**
-		 * Tests automatic playback of Encrypted FLV.
+		 * Tests automatic playback of Streaming RTMP VOD
 		 */
 		[Test(async, timeout="60000", order=1)]
-		public function playProgressiveVOD_FLV_DRM():void
+		public function playProgressiveVOD_RTMP():void
 		{
 			const testLenght:uint = DEFAULT_TEST_LENGTH;
 			

@@ -35,11 +35,10 @@ package org.osmf.media
 	/**
 	 * @private
 	 * 
-	 * Tests the functionality of OSMF while playing legacy HDS. The tests cover 
-	 * the following legacy HDS cases with single bit rate (SBR) streams:
-	 * - Pure Live
-	 * - Live with DVR
-	 * - VOD
+	 * Tests the functionality of OSMF while playing non Video Assets. The tests cover 
+	 * the following assets:
+	 * - MP3
+	 * - SWF
 	 */ 
 	public class TestMediaPlayerWithNonVideoAssets  extends TestMediaPlayerHelper
 	{
@@ -251,7 +250,9 @@ package org.osmf.media
 			}
 		}		
 		
-		// Test the loading of a SWF
+		/**
+		 * Test the loading of a SWF
+		 */
 		
 		[Test(async, timeout="60000", order=4)]
 		public function testSWF():void
