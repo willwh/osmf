@@ -11,7 +11,7 @@
 	
 	<!-- run unittests -->
 	<target name="run" depends="build">
-		<OSMF.unittest.run project="OSMFTest" projectDir="${basedir}" flexUnitPlayer="air" />
+		<OSMF.unittest.run project="OSMFIntegrationTest" projectDir="${basedir}" flexUnitPlayer="air" />
 	</target>
 	
 	<!-- cleans the output directory -->
@@ -27,7 +27,8 @@
 
 	<!-- compile project -->
 	<target name="build" depends="clean-bin" >	
-		<OSMF.unittest.compile project="OSMFTest" projectDir="${basedir}" />
+		<OSMF.unittest.compile project="OSMFIntegrationTest" projectDir="${basedir}" />
+		
 	</target>
 
 </project>
