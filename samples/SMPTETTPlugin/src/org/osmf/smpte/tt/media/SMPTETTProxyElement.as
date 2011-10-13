@@ -82,7 +82,7 @@ package org.osmf.smpte.tt.media
 		 **/ 
 		public static const MEDIA_ERROR_INVALID_PROXIED_ELEMENT:int = 2201;
 		
-		private static const DEBUG:Boolean = true;
+		private static const DEBUG:Boolean = false;
 		
 		/**
 		 * Constructor.
@@ -540,7 +540,7 @@ package org.osmf.smpte.tt.media
 				&& captionElementsDisplayed[captionElement].displayed == false)
 			{
 				captionElementsDisplayed[captionElement].displayed = true;
-				debug((captionElementsDisplayed[captionElement].index+1)+" of "+totalCaptionElementsToDisplay+":\t"+captionElement.regionId+"\t"+TimeExpression.parse(captionElement.begin+"s")+"\t"+captionElement.content);
+				debug((captionElementsDisplayed[captionElement].index+1)+" of "+totalCaptionElementsToDisplay+":\t"+captionElement.regionId+"\t"+TimeExpression.parse(captionElement.begin+"s")+"\t"+TimeExpression.parse(captionElement.end+"s")+"\t"+captionElement.content);
 			} else
 			{
 				var c:CaptionElement;

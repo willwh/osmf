@@ -242,15 +242,18 @@ package org.osmf.smpte.tt.parsing
 			}
 		}
 		
-		private function repairNamespaces(xml:XML):Namespace {
+		private function repairNamespaces(xml:XML):Namespace
+		{
+			
+			Namespaces.useLegacyNamespace(Namespaces.DEFAULT_TTML_NS);
+			
 			var newDefaultNS:Namespace = xml.namespace();
 			if (newDefaultNS.uri.length==0)
 			{
 				var nsDeclarations:Array = xml.namespaceDeclarations();
 				for each(var ns:Namespace in nsDeclarations)
 				{
-					if(ns.uri.match(/^http\:\/\/www\.w3\.org\/2006\/(?:02|04|10)\/ttaf1/)
-						|| ns.uri.indexOf("http://www.w3.org/ns/ttml")==0)
+					if(ns.uri.match(Namespaces.TTML_NS_REGEXP))
 					{ 
 						newDefaultNS = new Namespace(ns.uri.split("#")[0]);
 						break;
@@ -301,9 +304,7 @@ package org.osmf.smpte.tt.parsing
 
 				// rewrite xml with corrected namespace
 				xml = new XML(xmlStr);
-								
-				default xml namespace = new Namespace( "" );
-				
+												
 				parsetree = TimedTextElementBase.parse(xml) as TtElement;
 								
 			} catch (e:SMPTETTException) {
@@ -311,6 +312,7 @@ package org.osmf.smpte.tt.parsing
 				throw e;				
 			} finally {
 				// restore our original XML.ignoreWhitespace and XML.prettyPrinting settings from cache
+				default xml namespace = Namespaces.XML_NS;
 				XML.ignoreWhitespace = saveXMLIgnoreWhitespace;
 				XML.prettyPrinting = saveXMLPrettyPrinting;
 			}
@@ -336,9 +338,9 @@ package org.osmf.smpte.tt.parsing
 			
 			parsetree.computeTimeIntervals(TimeContainer.PAR, startTime, endTime);	
 			
-			//XML.ignoreWhitespace = true;
-			//XML.prettyPrinting = false;
-			// trace(XML(parsetree.serialize()).toXMLString());
+			XML.ignoreWhitespace = true;
+			XML.prettyPrinting = false;
+			trace(parsetree.serialize());
 			
 			dispatchEvent(new ParseEvent(ParseEvent.PROGRESS, true, false, parsetree) );
 			return parsetree;

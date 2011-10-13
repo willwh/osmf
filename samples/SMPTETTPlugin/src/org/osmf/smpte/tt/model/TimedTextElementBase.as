@@ -385,17 +385,6 @@ package org.osmf.smpte.tt.model
 									: new Namespace(a.namespace.prefix,a.namespace.uri);
 				writer.@aNS::[a.localName] = a.value;
 			}
-			var ns:Namespace = new Namespace( writer.namespace().uri );
-			if(begin){
-				writer.@ns::begin = begin.toString();
-			}
-			if(duration){
-				writer.@ns::dur = duration.toString();
-			}
-			if(end){
-				writer.@ns::end = end.toString();
-			}
-			
 		}
 		
 		public function serialize():String
@@ -1148,7 +1137,8 @@ package org.osmf.smpte.tt.model
 		private static function parseRecursive(xmlElement:XML, root:TtElement, preserveContext:Boolean):TimedTextElementBase
 		{	
 			if(root==null){
-				if(xmlElement.namespace().uri.match(/^http\:\/\/www.w3.org\/2006\/(?:02|04|10)\/ttaf1/)){
+				if(xmlElement.namespace().uri.match(Namespaces.TTML_NS_REGEXP))
+				{
 					Namespaces.useLegacyNamespace(xmlElement.namespace());
 				}
 			}
