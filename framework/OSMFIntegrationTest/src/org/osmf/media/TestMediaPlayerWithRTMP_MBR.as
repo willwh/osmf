@@ -81,9 +81,7 @@ package org.osmf.media
 			function onComplete(passThroughData:Object):void
 			{
 				assertThat("Player has time trait.", playerHelper.actualPlayer.temporal);
-				assertThat("Player current time is valid.", !isNaN(playerHelper.actualPlayer.currentTime));
 				assertThat("Player current time greater than 0.", playerHelper.actualPlayer.currentTime, greaterThan(0));
-				assertThat("The current index of the dynamic stream trait is greater than 0.", playerHelper.actualPlayer.currentDynamicStreamIndex, greaterThan(0));
 				setUpEvents(playerHelper, false);
 			}
 		}
