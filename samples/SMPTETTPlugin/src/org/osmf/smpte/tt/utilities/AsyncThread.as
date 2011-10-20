@@ -127,7 +127,7 @@ package org.osmf.smpte.tt.utilities
 		public function runEachFrame( elapsed:int = 100 ):void
 		{
 			_elapsedPerFrame = elapsed;
-			shape.addEventListener( Event.ENTER_FRAME, shape_enterFrame );                  
+			shape.addEventListener( Event.ENTER_FRAME, shape_enterFrame, false, 0, true );                  
 		}
 		
 		private var _elapsedPerFrame:int;

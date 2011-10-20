@@ -20,6 +20,7 @@
 package org.osmf.smpte.tt.loader
 {
 	import flash.events.IEventDispatcher;
+	import flash.utils.getTimer;
 	
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
@@ -114,12 +115,18 @@ package org.osmf.smpte.tt.loader
 				}
 			}
 			
+			// var smptettLoader:SMPTETTLoader = this;
+			// var loadTime:int = getTimer();
+			
 			httpLoader.load(httpLoadTrait);
 
 			function onHTTPLoaderStateChange(event:LoaderEvent):void
 			{
 				if (event.newState == LoadState.READY)
 				{
+					// trace(smptettLoader+" onHTTPLoaderStateChange: "+event.newState+" "+(getTimer()-loadTime)/1000+"s");
+					// loadTime = getTimer();
+					
 					// This is a terminal state, so remove all listeners.
 					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
@@ -153,7 +160,8 @@ package org.osmf.smpte.tt.loader
 					
 					function onParseEvent(event:ParseEvent):void
 					{
-						// trace(event);
+						// trace(smptettLoader+" onParseEvent: "+event.type+" "+(getTimer()-loadTime)/1000+"s");
+						// loadTime = getTimer();
 						if(event.type == ParseEvent.COMPLETE){
 							captioningDocument = event.data as CaptioningDocument;
 							SMPTETTLoadTrait(loadTrait).document = captioningDocument;
