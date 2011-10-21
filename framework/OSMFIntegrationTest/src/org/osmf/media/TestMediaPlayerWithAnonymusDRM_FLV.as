@@ -41,7 +41,8 @@ package org.osmf.media
 	 */ 
 	public class TestMediaPlayerWithAnonymusDRM_FLV  extends TestMediaPlayerHelper
 	{
-		
+		CONFIG::FLASH_10_1	
+		{
 		
 		/**
 		 * Tests automatic playback of Encrypted FLV. 
@@ -187,5 +188,6 @@ package org.osmf.media
 
 
 		private static const PROGRESSIVE_ENCRYPTED_FLV:String = "http://cobra.certificationsuites.com/vod/media/video/flv/encrypted/On2F15Ht480Qlt350.flv"; 
+		}
 	}
 }
