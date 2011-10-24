@@ -42,6 +42,8 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.StreamingXMLResource;
 	import org.osmf.net.httpstreaming.dvr.DVRInfo;
+	import org.osmf.utils.Base64Decoder;
+	import org.osmf.utils.DateUtil;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
