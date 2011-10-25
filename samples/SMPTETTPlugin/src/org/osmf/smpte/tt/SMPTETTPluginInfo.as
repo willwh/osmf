@@ -106,7 +106,6 @@ package org.osmf.smpte.tt
 		// dependencies.
 		private function creationNotificationFunction(media:MediaElement):void
 		{
-			trace("creationNotificationFunction( "+media+" )");
 			if (media is VideoElement)
 			{
 				VideoElement( media ).smoothing = true;

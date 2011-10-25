@@ -53,6 +53,7 @@ package org.osmf.smpte.tt.media
 	import org.osmf.smpte.tt.captions.TimedTextElementType;
 	import org.osmf.smpte.tt.loader.SMPTETTLoadTrait;
 	import org.osmf.smpte.tt.loader.SMPTETTLoader;
+	import org.osmf.smpte.tt.timing.TimeCode;
 	import org.osmf.smpte.tt.timing.TimeExpression;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
@@ -397,14 +398,27 @@ package org.osmf.smpte.tt.media
 			_timedTextURL = null;
 			
 			debug( "loadCaptions(\""+timedTextURL+"\");");
-			if (_mediaPlayer && _mediaPlayer.canPause)
+			
+			var smptettLoader:SMPTETTLoader = new SMPTETTLoader();
+			var urlResource:URLResource = new URLResource(timedTextURL);
+			
+			
+			if (_mediaPlayer)
 			{
-				if (_mediaPlayer.playing) _wasPlaying = true;
-				if (_mediaPlayer.paused) _wasPaused = true;
-				_mediaPlayer.pause();
+				if(_mediaPlayer.canPause)
+				{
+					if (_mediaPlayer.playing) _wasPlaying = true;
+					if (_mediaPlayer.paused) _wasPaused = true;
+					_mediaPlayer.pause();
+				}
+				if(_mediaPlayer.duration)
+				{
+					TimeExpression.initializeParameters();
+					smptettLoader.endTime = TimeExpression.parse(_mediaPlayer.duration+"s");
+				}
 			}
 			
-			loadTrait = new SMPTETTLoadTrait(new SMPTETTLoader(), new URLResource(timedTextURL));	
+			loadTrait = new SMPTETTLoadTrait(smptettLoader, urlResource);	
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 99, true);
 			addTrait(MediaTraitType.LOAD, loadTrait);
 		}
@@ -452,8 +466,6 @@ package org.osmf.smpte.tt.media
 			// Our work is done, remove the custom LoadTrait.  This will
 			// expose the base LoadTrait, which we can then use to do
 			// the actual load.
-			removeTrait(MediaTraitType.LOAD);
-			
 			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
 			
 			if (loadTrait != null 

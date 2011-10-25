@@ -262,12 +262,12 @@ package org.osmf.smpte.tt.captions
 
 			if (round)
 			{
-				var bFloor:Number = Math.floor(tte.begin*100)/100;
-				var pRound:Number = Math.round(position*100)/100;
-				var eCeil:Number = Math.ceil(tte.end*100)/100;
+				var bFloor:Number = Math.floor(tte.begin*500)/500;
+				var pRound:Number = Math.round(position*500)/500;
+				var eCeil:Number = Math.ceil(tte.end*500)/500;
 				var beginRange:Number = Math.abs(position-tte.begin);
 				var endRange:Number = Math.abs(tte.end-position);
-				var closeEnough:Boolean = (bFloor <= pRound || beginRange <= TOLERANCE) && (eCeil > pRound && endRange>0.1);
+				var closeEnough:Boolean = (bFloor <= pRound || beginRange <= TOLERANCE) && (eCeil > pRound && endRange>0.05);
 				return closeEnough;
 			}
 			return tte.begin <= position && position < tte.end;

@@ -23,6 +23,7 @@ package org.osmf.smpte.tt.parsing
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
@@ -66,6 +67,9 @@ package org.osmf.smpte.tt.parsing
 	public class SMPTETTParser extends EventDispatcher 
 		implements IEventDispatcher, ISMPTETTParser
 	{
+		
+		private static const DEBUG:Boolean = true;
+		
 		public static var ns:Namespace;
 		public static var ttm:Namespace;
 		public static var tts:Namespace;
@@ -77,15 +81,6 @@ package org.osmf.smpte.tt.parsing
 		public static var REMAINING_NODE_COUNT:uint;
 		
 		private var _document:CaptioningDocument;
-		private var _sprite:Sprite;
-
-		private function get sprite():Sprite
-		{
-			if(!_sprite){
-				_sprite = new Sprite();
-			}
-			return _sprite;
-		}
 
 		public function get document():CaptioningDocument
 		{
@@ -95,7 +90,6 @@ package org.osmf.smpte.tt.parsing
 		public function SMPTETTParser(){
 		}
 		
-		private var _startTime:TimeCode = null;
 		private var _taskId:uint=0;
 		
 		private var _ttElement:TtElement;
@@ -132,7 +126,7 @@ package org.osmf.smpte.tt.parsing
 			return _captionElements;
 		}
 		
-
+		private var _startTime:TimeCode = null;
 		public function get startTime():TimeCode
 		{
 			return _startTime;
@@ -144,7 +138,6 @@ package org.osmf.smpte.tt.parsing
 		}
 
 		private var _endTime:TimeCode = null;
-
 		public function get endTime():TimeCode
 		{
 			return _endTime;
@@ -194,7 +187,6 @@ package org.osmf.smpte.tt.parsing
 				removeEventListener(ParseEvent.PROGRESS, handleComputeTimeIntervals);
 				var parseTree:TtElement =  e.data as TtElement;
 				_ttElement = parseTree;
-				//trace(_ttElement.serialize());
 				addEventListener(ParseEvent.PROGRESS, handleBuildDocumentTimeInterval);
 				buildRegions(parseTree);
 			}
@@ -218,13 +210,14 @@ package org.osmf.smpte.tt.parsing
 						if(!ASYNC_THREAD)
 						{
 							parseTime = getTimer();
+							_captionElements = new Vector.<CaptionElement>;		
 							ASYNC_THREAD = AsyncThread.create( buildCaptions, 
 															  [ ped.timedTextElement,
 																ped.regionElementsHash,
 																ped.captionRegionsHash,
 																ped.timelineEventsHash ] );
 							ASYNC_THREAD.addEventListener(Event.COMPLETE, asyncThread_completeHandler, false, 0, true);
-							ASYNC_THREAD.runEachFrame(66);
+							ASYNC_THREAD.runEachFrame(50);
 						} else
 						{
 							AsyncThread.queue( buildCaptions, 
@@ -237,20 +230,12 @@ package org.osmf.smpte.tt.parsing
 					} else
 					{
 						removeEventListener(ParseEvent.PROGRESS, handleBuildDocumentTimeInterval);
+
+						_regionElementsHash = ped.regionElementsHash;
+						_captionRegionsHash =  ped.captionRegionsHash;
 						
-						var keys:Array = DictionaryUtils.getKeys(ped.timelineEventsHash).sort();
-						
-						_captionElements = new Vector.<CaptionElement>;
-						for each(var k:String in keys)
-						{
-							_captionElements.push(ped.timelineEventsHash[k]);
-						} 
-						
-						this._regionElementsHash = ped.regionElementsHash;
-						this._captionRegionsHash =  ped.captionRegionsHash;
-						
-						// var localParseTime:uint = parseTime;
-						// trace(this+" handleBuildDocumentTimeInterval: "+(getTimer()-parseTime)/1000+"s");
+						var localParseTime:uint = parseTime;
+						debug(this+" handleBuildDocumentTimeInterval: "+(getTimer()-parseTime)/1000+"s");
 					}
 				}
 			}
@@ -258,9 +243,16 @@ package org.osmf.smpte.tt.parsing
 		
 		private function asyncThread_completeHandler(event:Event):void
 		{
-			// trace(event.target+" asyncThread_completeHandler: "+(getTimer()-parseTime)/1000+"s");
+			debug(event.target+" asyncThread_completeHandler: "+(getTimer()-parseTime)/1000+"s");
 			ASYNC_THREAD.removeEventListener(Event.COMPLETE, asyncThread_completeHandler);
 			ASYNC_THREAD = null;
+			
+			_captionRegionsHash = null;
+			_regionElementsHash = null;
+			_captionElements = null;
+			startTime = null;
+			endTime = null;
+			
 			dispatchEvent(new ParseEvent(ParseEvent.COMPLETE, true, false, _document));
 		}
 		
@@ -292,7 +284,7 @@ package org.osmf.smpte.tt.parsing
 		
 		private function parseTtElement(rawData:String):TtElement
 		{
-			// parseTime = getTimer();
+			parseTime = getTimer();
 			
 			var parsetree:TtElement = null;
 			
@@ -343,16 +335,16 @@ package org.osmf.smpte.tt.parsing
 			
 			if (parsetree == null)
 			{
-				trace("No Parse tree returned");
+				debug("No Parse tree returned");
 				throw new SMPTETTException("No Parse tree returned");
 			}
 			if (!parsetree.valid())
 			{
-				trace("Document is Well formed XML, but invalid Timed Text");
+				debug("Document is Well formed XML, but invalid Timed Text");
 				throw new SMPTETTException("Document is Well formed XML, but invalid Timed Text");
 			}
 			
-			// trace(this+" parseTTElement: "+(getTimer()-parseTime)/1000+"s");
+			debug(this+" parseTTElement: "+(getTimer()-parseTime)/1000+"s");
 			
 			dispatchEvent(new ParseEvent(ParseEvent.PROGRESS, true, false, parsetree) );
 			return parsetree;
@@ -360,17 +352,19 @@ package org.osmf.smpte.tt.parsing
 		
 		private function computeTimeIntervals(parsetree:TtElement, i_startTime:TimeCode=null, i_endTime:TimeCode=null):TtElement
 		{	
-			// parseTime = getTimer();
+			parseTime = getTimer();
 			
-			var startTime:TimeCode = (i_startTime) ? i_startTime : TimeExpression.parse("00:00:00:00");
-			var endTime:TimeCode = (i_endTime) ? i_endTime : TimeExpression.parse("12:00:00:00");
+			var st:TimeCode = (i_startTime) ? i_startTime : TimeExpression.parse("00:00:00:00");
+			var et:TimeCode = (i_endTime) ? i_endTime : TimeExpression.parse("12:00:00:00");
 			
-			parsetree.computeTimeIntervals(TimeContainer.PAR, startTime, endTime);	
+			
+			
+			parsetree.computeTimeIntervals(TimeContainer.PAR, st, et);	
 			
 			XML.ignoreWhitespace = true;
 			XML.prettyPrinting = false;
 
-			// trace(this+" computeTimeIntervals: "+(getTimer()-parseTime)/1000+"s");
+			debug(this+" computeTimeIntervals("+st+", "+et+"): "+(getTimer()-parseTime)/1000+"s");
 			
 			dispatchEvent(new ParseEvent(ParseEvent.PROGRESS, true, false, parsetree) );
 			return parsetree;
@@ -381,7 +375,7 @@ package org.osmf.smpte.tt.parsing
 		
 		private function buildRegions(document:TtElement):void
 		{
-			// parseTime = getTimer();
+			parseTime = getTimer();
 			
 			var regionElementsHash:Dictionary = new Dictionary();
 			var regionElements:Vector.<RegionElement> = new Vector.<RegionElement>();
@@ -425,9 +419,8 @@ package org.osmf.smpte.tt.parsing
 			{
 				SMPTETTParser.REMAINING_NODE_COUNT = document.totalNodeCount;
 				
-				// trace(this+" buildRegions: "+(getTimer()-parseTime)/1000+"s");
-				
-				// trace("totalNodeCount: "+SMPTETTParser.REMAINING_NODE_COUNT);
+				debug(this+" buildRegions: "+(getTimer()-parseTime)/1000+"s");
+				debug(this+" totalNodeCount: "+SMPTETTParser.REMAINING_NODE_COUNT);
 				
 				var parseEvent:ParseEvent = new ParseEvent(ParseEvent.PROGRESS);
 					parseEvent.data = new ParseEventData(document.body
@@ -457,62 +450,43 @@ package org.osmf.smpte.tt.parsing
 					}
 				}
 				var computedRegionName:String = pElement.getComputedStyle("region",null);
-				var regionName:String = (regionNameAttribute != null) 
+				var regionName:String = (regionNameAttribute) 
 					? regionNameAttribute.value 
 					: ((computedRegionName && computedRegionName!="") 
 						? computedRegionName 
 						: RegionElement.DEFAULT_REGION_NAME);
 				var regionElement:RegionElement;
-				if (DictionaryUtils.containsKey(regionElementsHash,regionName))
+				if (regionElementsHash[regionName] && captionRegionsHash[regionName])
 				{	
-					regionElement =  regionElementsHash[regionName];
-					var captionElement:CaptionElement = mapToCaption(pElement, regionElement) as CaptionElement;
+					regionElement = regionElementsHash[regionName];
 					
-					var captionRegion:CaptionRegion;
-					if (DictionaryUtils.containsKey(captionRegionsHash, regionName))
-					{
-						captionRegion = captionRegionsHash[regionName];
-						captionElement.index = captionRegion.children.length;
-						
-						captionRegion.children.push(captionElement);
-						
-						var timecode:String = TimeExpression.parse(captionElement.begin+"s").toString();
-						if(timelineEventsHash[timecode] is CaptionElement){
-							(timelineEventsHash[timecode] as CaptionElement).siblings.push(captionElement);
-						} else {
-							timelineEventsHash[timecode] = captionElement;
-							// trace("new timeline event at "+timecode);
-						}
-						
-						_document.addCaptionElement(captionElement);
-						_document.captionRegionsHash[regionName].children.push(captionElement);
+					var captionElement:CaptionElement = mapToCaption(pElement, regionElement) as CaptionElement;
+					var captionRegion:CaptionRegion = captionRegionsHash[regionName];
+					
+					captionElement.index = captionRegion.children.length;
+					
+					captionRegion.children.push(captionElement);
+					
+					var timecode:String = TimeExpression.parse(captionElement.begin+"s").toString();
+					if(timelineEventsHash[timecode]){
+						CaptionElement(timelineEventsHash[timecode]).siblings.push(captionElement);
+					} else {
+						timelineEventsHash[timecode] = captionElement;
+						_captionElements.push(captionElement); 
 					}
+						
+					_document.addCaptionElement(captionElement);
+					_document.captionRegionsHash[regionName].children.push(captionElement);
+					
 				}
 			}
-			else if (timedTextElement.children != null)
+			else if (timedTextElement.children)
 			{
-				//trace((++this._taskId) + " build Captions");
 				var count:uint = 0;
 				var children:Vector.<TreeType> = timedTextElement.children;
 				var j:TimedTextElementBase;
 				for each(j in children)
 				{
-					//j = children[k] as TimedTextElementBase;
-					
-					//trace(j)
-					
-					/* green-threading */
-					/*
-					if(getTimer()-parseTime<100){
-						buildCaptions(j, regionElementsHash, captionRegionsHash, timelineEventsHash);
-					} else {
-						parseTime = getTimer();
-						
-						parseEvent = new ParseEvent(ParseEvent.PROGRESS);
-						parseEvent.data = new ParseEventData(j, regionElementsHash, captionRegionsHash, timelineEventsHash);
-						dispatchEvent( parseEvent );
-					}
-					*/
 					AsyncThread.queue(buildCaptions, [ j, regionElementsHash, captionRegionsHash, timelineEventsHash ] );
 				}
 			}
@@ -553,7 +527,7 @@ package org.osmf.smpte.tt.parsing
 		private function mapToCaption(pElement:PElement, region:RegionElement):CaptionElement
 		{	
 			var captionElement:CaptionElement = buildTimedTextElements(pElement, region) as CaptionElement;
-			captionElement.id = (pElement.id) ? pElement.id : flash.utils.getTimer().toString(); //GUID.create();
+			captionElement.id = (pElement.id) ? pElement.id : getTimer().toString();
 			return captionElement;
 		}
 		
@@ -611,19 +585,6 @@ package org.osmf.smpte.tt.parsing
 				
 				SMPTETTParser.REMAINING_NODE_COUNT--;
 			}
-			/*
-			else if (element is SpanElement
-				&& element.children.length==1 
-				&& element.children[0] is AnonymousSpanElement)
-			{
-				var span:SpanElement = element as SpanElement;
-				var child:AnonymousSpanElement = span.children[0] as AnonymousSpanElement;				
-				captionElement.captionElementType = TimedTextElementType.Text;
-				captionElement.content = child.text;
-				captionElement.style = TimedTextStyleParser.mapStyle(span as TimedTextElementBase, region);
-				//remainingNodeCount--;
-			}
-			*/
 			else if (!(element is SetElement))
 			{
 				captionElement.captionElementType = (element is SpanElement) ? TimedTextElementType.SupParagraphGroupElement : TimedTextElementType.Container;
@@ -650,6 +611,19 @@ package org.osmf.smpte.tt.parsing
 				return tta;
 			} else {
 				return null;
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private function debug(msg:String):void
+		{
+			if (DEBUG)
+			{	
+				trace(msg);
+				if (ExternalInterface.available)
+					ExternalInterface.call("function(msg){ if (console && console.log) console.log(msg); }",msg);
 			}
 		}
 	}

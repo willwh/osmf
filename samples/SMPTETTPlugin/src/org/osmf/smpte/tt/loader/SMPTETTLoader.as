@@ -31,6 +31,7 @@ package org.osmf.smpte.tt.loader
 	import org.osmf.smpte.tt.model.TtElement;
 	import org.osmf.smpte.tt.parsing.ISMPTETTParser;
 	import org.osmf.smpte.tt.parsing.SMPTETTParser;
+	import org.osmf.smpte.tt.timing.TimeCode;
 	import org.osmf.smpte.tt.timing.TimeExpression;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -136,10 +137,11 @@ package org.osmf.smpte.tt.loader
 					
 					try
 					{
-						TimeExpression.initializeParameters();
 						var p:SMPTETTParser = parser as SMPTETTParser;
 						if (p) 
 						{
+							p.startTime = startTime;
+							p.endTime = endTime;
 							p.addEventListener(ParseEvent.BEGIN, onParseEvent);
 							p.addEventListener(ParseEvent.PROGRESS, onParseEvent);
 							p.addEventListener(ParseEvent.COMPLETE, onParseEvent);
@@ -220,6 +222,28 @@ package org.osmf.smpte.tt.loader
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		
+		private var _startTime:TimeCode = null;
+		public function get startTime():TimeCode
+		{
+			return _startTime;
+		}
+		
+		public function set startTime(value:TimeCode):void
+		{
+			_startTime = value;
+		}
+		
+		private var _endTime:TimeCode = null;
+		public function get endTime():TimeCode
+		{
+			return _endTime;
+		}
+		
+		public function set endTime(value:TimeCode):void
+		{
+			_endTime = value;
+		}
+		
 		/**
 		 * Override to create your own parser.
 		 */
@@ -227,7 +251,7 @@ package org.osmf.smpte.tt.loader
 		{
 			return new SMPTETTParser();
 		}
-
+		
 		private var httpLoader:HTTPLoader;
 		
 		CONFIG::LOGGING
