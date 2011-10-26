@@ -1,4 +1,8 @@
 <project name="utils" >
+
+	<!-- Set taskdef -->
+	<typedef file="${buildtools.dir}/antlib.xml"/>
+	
 	<!-- Set output directory -->
 	<condition property="output.bin" value="bin">
 		<equals arg1="${debug}" arg2="false"/>
@@ -8,14 +12,11 @@
 	</condition>
 	
 	<!-- Set osmf.swc.path and spm.swf.path properties values to default. Obs.: these will not be loaded if they have been previously set. -->
-	<property name="osmf.swc.path" value="${source.dir}/framework/osmf/${output.bin}/OSMF.swc" />
-	<property name="smp.swf.path" value="${source.dir}/player/StrobeMediaPlayer/${output.bin}/StrobeMediaPlayer.swf" />
-
-	<!-- Set taskdef -->
-	<typedef file="${buildtools.dir}/antlib.xml"/>
+	<property name="osmf.swc.path" value="${trunk.dir}/framework/osmf/${output.bin}/OSMF.swc" />
+	<property name="smp.swf.path" value="${trunk.dir}/player/StrobeMediaPlayer/${output.bin}/StrobeMediaPlayer.swf" />
 	
 	<!-- Define a task for changing tokens in -build-config.xml -->
-	<macrodef name="OSMF.build.config">
+	<macrodef name="OSMF.generate.build.config">
 		<attribute name="project" />
 		<attribute name="projectDir" />
 		<attribute name="project.build.config.xml" default="@{projectDir}/@{project}-build-config.xml"/>
@@ -33,9 +34,9 @@
 					</replacetokens>	
 				</filterchain>
 			</copy>
+			
 		</sequential>
 	</macrodef>
-	
 	
 	<!-- Define a task for compiling an application project. -->
 	<macrodef name="OSMF.application.compile">
@@ -46,7 +47,7 @@
 		<attribute name="height" default="600" />
 		<attribute name="project.build.config.xml" default="@{projectDir}/@{project}-build-config.xml"/>
 		<sequential>			
-			<OSMF.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
+			<OSMF.generate.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
 			<mxmlc
 				output="@{projectDir}/${output.bin}/@{project}.swf"
 				file="@{projectDir}@{srcDir}/@{project}.as"
@@ -94,7 +95,7 @@
 		<attribute name="projectDir" />
 		<attribute name="project.build.config.xml" default="@{projectDir}/@{project}-build-config.xml"/>
 		<sequential>
-			<OSMF.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
+			<OSMF.generate.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
 			<OSMF.generateClassList project="@{project}" projectDir="@{projectDir}"  />
 			<compc
 				output="@{projectDir}/${output.bin}/@{project}.swc"
@@ -157,7 +158,7 @@
 		<attribute name="height" default="600" />
 		<attribute name="project.build.config.xml" default="@{projectDir}/@{project}-build-config.xml"/>
 		<sequential>
-			<OSMF.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
+			<OSMF.generate.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
 			<mxmlc
 				output="@{projectDir}/${output.bin}/@{project}.swf"
 				file="@{projectDir}@{srcDir}/@{project}.mxml" keep-generated-actionscript="false"
@@ -201,7 +202,7 @@
 		<attribute name="project.build.config.xml" default="@{projectDir}/@{project}-build-config.xml"/>
 		<sequential>
 			
-			<OSMF.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
+			<OSMF.generate.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
 			<mxmlc
 				output="@{projectDir}/${output.bin}/@{project}.swf"
 				file="@{projectDir}@{srcDir}/@{project}.as"
@@ -238,7 +239,7 @@
 		<attribute name="project.build.config.xml" default="@{projectDir}/@{project}-build-config.xml"/>
 		<sequential>
 			
-			<OSMF.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
+			<OSMF.generate.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
 			<mxmlc
 				output="@{projectDir}/${output.bin}/@{project}.swf"
 				file="@{projectDir}@{srcDir}/@{project}.as"
@@ -270,6 +271,21 @@
 		</sequential>
 	</macrodef>
 	
+	<macrodef name="OSMF.generate.test.mxml">
+		<attribute name="project" />
+		<attribute name="projectDir" />
+		<attribute name="srcDir" default="/src" />
+		<attribute name="test.suite.name" default="@{project}s" />
+		<sequential>
+			<copy file="${buildtools.dir}/testProjectTemplate.mxml" tofile="@{projectDir}@{srcDir}/@{project}.mxml"  force="true" overwrite="true">
+				<filterchain>
+					<replacetokens begintoken="[" endtoken="]">
+						<token key="This value will be overwritten in the testsuite name" value='@{test.suite.name}'/>
+					</replacetokens>
+				</filterchain>
+			</copy>
+		</sequential>
+	</macrodef>
 	
 	<!-- Define a task for compiling a unit test project. -->
 	<macrodef name="OSMF.unittest.compile">
@@ -278,9 +294,12 @@
 		<attribute name="srcDir" default="/src" />
 		<attribute name="project.mxml" default="@{projectDir}@{srcDir}/@{project}.mxml"/>
 		<attribute name="project.build.config.xml" default="@{projectDir}/@{project}-build-config.xml"/>
+		<attribute name="test.suite.name" default="@{project}s" />
 		<sequential>
 
-			<OSMF.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
+			<OSMF.generate.build.config project="@{project}" projectDir="@{projectDir}" project.build.config.xml="@{project.build.config.xml}" />
+			<OSMF.generate.test.mxml project="@{project}" projectDir="@{projectDir}" srcDir="@{srcDir}" test.suite.name="@{test.suite.name}" />
+			
 			<mxmlc
 				output="@{projectDir}/${output.bin}/@{project}.swf"
 				file="@{project.mxml}" keep-generated-actionscript="false"
@@ -321,7 +340,8 @@
 		<attribute name="projectDir" />
 		<attribute name="flexUnitPlayer" default="air" />
 		<sequential>
-			
+			<property name="reports.dir" value="@{projectDir}/test-reports/" />
+
 			<mkdir dir="${reports.dir}/@{project}/xml-format" />
      		<flexunit
 				player="@{flexUnitPlayer}" headless="false" localTrusted="true"
