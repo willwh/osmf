@@ -122,6 +122,7 @@
     <classEntry path="org.osmf.events.SerialElementEvent"/>
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.events.TimelineMetadataEvent"/>
+    <classEntry path="org.osmf.events.VideoSurfaceEvent"/>
     <classEntry path="org.osmf.layout.AbsoluteLayoutMetadata"/>
     <classEntry path="org.osmf.layout.AnchorLayoutMetadata"/>
     <classEntry path="org.osmf.layout.BinarySearch"/>
