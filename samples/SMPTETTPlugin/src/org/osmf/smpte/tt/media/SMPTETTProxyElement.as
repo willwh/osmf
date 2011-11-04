@@ -48,6 +48,7 @@ package org.osmf.smpte.tt.media
 	import org.osmf.metadata.TimelineMarker;
 	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.smpte.tt.SMPTETTPluginInfo;
+	import org.osmf.smpte.tt.architecture.creation.SMPTETTFactoryFacade;
 	import org.osmf.smpte.tt.captions.CaptionElement;
 	import org.osmf.smpte.tt.captions.CaptioningDocument;
 	import org.osmf.smpte.tt.captions.TimedTextElementType;
@@ -83,7 +84,7 @@ package org.osmf.smpte.tt.media
 		 **/ 
 		public static const MEDIA_ERROR_INVALID_PROXIED_ELEMENT:int = 2201;
 		
-		private static const DEBUG:Boolean = false;
+		public static const DEBUG:Boolean = false;
 		
 		/**
 		 * Constructor.
@@ -139,7 +140,6 @@ package org.osmf.smpte.tt.media
 		 */
 		override public function set proxiedElement(value:MediaElement):void
 		{
-			
 			super.proxiedElement = value; 
 						
 			if (value != null)
@@ -399,64 +399,105 @@ package org.osmf.smpte.tt.media
 			
 			debug( "loadCaptions(\""+timedTextURL+"\");");
 			
-			var smptettLoader:SMPTETTLoader = new SMPTETTLoader();
+			var smptettLoader:SMPTETTLoader = SMPTETTFactoryFacade.getSMPTETTLoader();
 			var urlResource:URLResource = new URLResource(timedTextURL);
 			
 			
 			if (_mediaPlayer)
 			{
-				if(_mediaPlayer.canPause)
-				{
-					if (_mediaPlayer.playing) _wasPlaying = true;
-					if (_mediaPlayer.paused) _wasPaused = true;
-					_mediaPlayer.pause();
-				}
-				if(_mediaPlayer.duration)
-				{
-					TimeExpression.initializeParameters();
-					smptettLoader.endTime = TimeExpression.parse(_mediaPlayer.duration+"s");
-				}
+				pauseMediaPlayerDuringLoadCaptions();
+				updateEndTimetoMediaDuration(smptettLoader);
 			}
 			
-			loadTrait = new SMPTETTLoadTrait(smptettLoader, urlResource);	
-			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 99, true);
-			addTrait(MediaTraitType.LOAD, loadTrait);
+			loadTrait = createLoadTrait(smptettLoader,urlResource);	
+			addLoadTraitListeners(loadTrait);
+			loadTrait.load();
+			// addTrait(MediaTraitType.LOAD, loadTrait);
+		}
+
+		protected function pauseMediaPlayerDuringLoadCaptions():void
+		{
+			if(_mediaPlayer.canPause)
+			{
+				if (_mediaPlayer.playing) _wasPlaying = true;
+				if (_mediaPlayer.paused) _wasPaused = true;
+				_mediaPlayer.pause();
+			}
+		}
+
+		protected function updateEndTimetoMediaDuration(smptettLoader:SMPTETTLoader):void
+		{
+			if(_mediaPlayer.duration)
+			{
+				TimeExpression.initializeParameters();
+				smptettLoader.endTime = TimeExpression.parse(_mediaPlayer.duration+"s");
+			}
+		}
+
+		protected function createLoadTrait(smptettLoader:SMPTETTLoader, urlResource:URLResource):SMPTETTLoadTrait
+		{
+			return new SMPTETTLoadTrait(smptettLoader, urlResource);
+		}
+
+		protected function addLoadTraitListeners(trait:SMPTETTLoadTrait):void
+		{
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, int.MAX_VALUE, true);
 		}
 		
 		/**
 		 * @private
 		 */
-		private function onLoadStateChange(event:LoadEvent):void
+		protected function onLoadStateChange(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY)
-			{
-				var document:CaptioningDocument = loadTrait.document;
-				
-				// Create a TimelineMetadata object to associate
-				// the captions with the media element.
-				var SMPTETTMetadata:TimelineMetadata = proxiedElement.getMetadata(SMPTETTPluginInfo.SMPTETT_TEMPORAL_METADATA_NAMESPACE) as TimelineMetadata;
-				if (SMPTETTMetadata == null)
-				{
-					SMPTETTMetadata = new TimelineMetadata(proxiedElement);
-					proxiedElement.addMetadata(SMPTETTPluginInfo.SMPTETT_TEMPORAL_METADATA_NAMESPACE, SMPTETTMetadata);
-				}
-				if (document) 
-						addTimelineMarkers(document, SMPTETTMetadata);
-				
+			{				
+				addMetaDataTimelineMarkers();
 				cleanUp();
 			}
 			else if (event.loadState == LoadState.LOAD_ERROR)
 			{
-				if (!_continueLoadOnFailure)
-				{
-					dispatchEvent(event.clone());
-				}
-				else
-				{
-					cleanUp();
-				}
+				onLoadStateChange_Error(event);
 			}
 		}
+
+
+		protected function addMetaDataTimelineMarkers():void
+		{
+			var document:CaptioningDocument = loadTrait.document;
+		
+			// Create a TimelineMetadata object to associate
+			// the captions with the media element.
+			var SMPTETTMetadata:TimelineMetadata = getOrCreateTimelineMetaData();
+			if (document) 
+					addTimelineMarkers(document, SMPTETTMetadata);
+		
+			// cleanUp();
+		}
+
+		protected function getOrCreateTimelineMetaData():TimelineMetadata
+		{
+			var SMPTETTMetadata:TimelineMetadata = proxiedElement.getMetadata(SMPTETTPluginInfo.SMPTETT_TEMPORAL_METADATA_NAMESPACE) as TimelineMetadata;
+			if (SMPTETTMetadata == null)
+			{
+				SMPTETTMetadata = new TimelineMetadata(proxiedElement);
+				proxiedElement.addMetadata(SMPTETTPluginInfo.SMPTETT_TEMPORAL_METADATA_NAMESPACE, SMPTETTMetadata);
+			}
+			return SMPTETTMetadata;
+		}
+
+
+		protected function onLoadStateChange_Error(event:LoadEvent):void
+		{
+			if (!_continueLoadOnFailure)
+			{
+				dispatchEvent(event.clone());
+			}
+			else
+			{
+				cleanUp();
+			}
+		}
+		
 		
 		/**
 		 * @private
@@ -467,13 +508,14 @@ package org.osmf.smpte.tt.media
 			// expose the base LoadTrait, which we can then use to do
 			// the actual load.
 			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
-			
+						
 			if (loadTrait != null 
 				&& loadTrait.loadState == LoadState.UNINITIALIZED)
-				loadTrait.load();
-				
+				loadTrait.load();	
+			
 			if (_mediaPlayer && _mediaPlayer.canPlay)
 			{
+				
 				if (_wasPlaying)
 				{
 					_mediaPlayer.play();
@@ -486,7 +528,7 @@ package org.osmf.smpte.tt.media
 				}
 				
 				showNearestCaption(_mediaPlayer.currentTime);
-			}
+			}		
 		}
 		
 		private var captionElementsDisplayed:Dictionary;
@@ -495,7 +537,7 @@ package org.osmf.smpte.tt.media
 		/**
 		 * @private
 		 */
-		private function addTimelineMarkers(document:CaptioningDocument, 
+		protected function addTimelineMarkers(document:CaptioningDocument, 
 											SMPTETTMetadata:TimelineMetadata):void
 		{
 			buildCaptioningMediaElement(document);
@@ -505,8 +547,13 @@ package org.osmf.smpte.tt.media
 				captionElementsDisplayed = new Dictionary();
 			}
 			
+			addEachCaptionToMetaData(document,SMPTETTMetadata);
+		}
+
+		protected function addEachCaptionToMetaData(document:CaptioningDocument, SMPTETTMetadata:TimelineMetadata):void
+		{
 			for each(var c:CaptionElement in document.captionElements){
-				
+		
 				if (c)
 				{
 					SMPTETTMetadata.addMarker(c);
@@ -518,7 +565,7 @@ package org.osmf.smpte.tt.media
 		/**
 		 * @private
 		 */
-		private function addCaptionElementToDisplay(captionElement:CaptionElement):void
+		protected function addCaptionElementToDisplay(captionElement:CaptionElement):void
 		{
 			if (!DEBUG) return;
 			
@@ -573,6 +620,8 @@ package org.osmf.smpte.tt.media
 		 */
 		private function buildCaptioningMediaElement(document:CaptioningDocument):void
 		{
+			if (captioningMediaElement) {return;}
+			
 			var mediaContainer:IMediaContainer = proxiedElement.container;
 			
 			if (!mediaContainer && _mediaContainer)  
@@ -587,19 +636,31 @@ package org.osmf.smpte.tt.media
 			
 			if (parallelElement)
 			{				
-				parallelElement.addChild(captioningMediaElement);
+				addToParallelElement(parallelElement,captioningMediaElement);
 				
 				captioningMediaElement.mediaElement = mediaElement;
 				
-				for (var i:uint=0; i<document.captionRegions.length; i++)
+				var len:int = document.captionRegions.length
+				for (var i:uint=0; i<len; i++)
 				{
-					
-					var region:RegionLayoutTargetSprite =
-							captioningMediaElement.addRegion(document.captionRegions[i]);				
-					region.mediaElement = mediaElement;
+					regionSpriteAddMediaElement(document,i,captioningMediaElement);
 				}
 			}
 		}
+
+		protected function regionSpriteAddMediaElement(document:CaptioningDocument, i:uint, p_captioningMediaElement:CaptioningMediaElement):void
+		{
+			var region:RegionLayoutTargetSprite =
+					p_captioningMediaElement.addRegion(document.captionRegions[i]);				
+			region.mediaElement = mediaElement;
+		}
+
+
+		protected function addToParallelElement(parallelElement:ParallelElement, p_captioningMediaElement:CaptioningMediaElement):void
+		{
+			parallelElement.addChild(p_captioningMediaElement);
+		}
+
 		
 		/**
 		 * @private
@@ -722,11 +783,16 @@ package org.osmf.smpte.tt.media
 		private function onPlayStateChange(event:PlayEvent):void
 		{
 			debug(event.target + " onPlayStateChange: " + event.playState);
-			if(captioningMediaElement 
-				&& event.playState != PlayState.PLAYING)
+			if (!captioningMediaElement) return;
+			if (event.playState != PlayState.PLAYING)
 			{
+				if (_wasPlaying) _wasPlaying = false;
 				_currentPositionTimer.stop();
 				captioningMediaElement.validateCaptions();
+			} 
+			else if (event.playState != PlayState.PAUSED)
+			{
+				if (_wasPaused) _wasPaused = false;
 			}
 		}
 		
@@ -796,7 +862,7 @@ package org.osmf.smpte.tt.media
 		/**
 		 * @private
 		 */
-		private function showNearestCaption(time:Number):void
+		protected function showNearestCaption(time:Number):void
 		{
 			var toShow:CaptionElement = findNearestCaption(time);
 			if (toShow)
@@ -951,7 +1017,7 @@ package org.osmf.smpte.tt.media
 			}
 		}
 		
-		private var loadTrait:SMPTETTLoadTrait;
+		protected var loadTrait:SMPTETTLoadTrait;
 		private var _continueLoadOnFailure:Boolean;
 		private var _mediaElement:MediaElement;
 		private var captioningMediaElement:CaptioningMediaElement;
@@ -962,10 +1028,10 @@ package org.osmf.smpte.tt.media
 		private var _currentCaption:CaptionElement;	
 		private var _namespaces:Dictionary = new Dictionary();
 		private var _mediaContainer:IMediaContainer;
-		private var _mediaPlayer:MediaPlayer;
+		protected var _mediaPlayer:MediaPlayer;
 		private var _mediaFactory:MediaFactory;
-		private var _wasPlaying:Boolean = false;
-		private var _wasPaused:Boolean = false;
+		protected var _wasPlaying:Boolean = false;
+		protected var _wasPaused:Boolean = false;
 		private var _queueLoad:Boolean = false;
 		private var _timedTextURL:String;
 				

@@ -80,7 +80,7 @@ package org.osmf.smpte.tt.parsing
 		public static var ASYNC_THREAD:AsyncThread;
 		public static var REMAINING_NODE_COUNT:uint;
 		
-		private var _document:CaptioningDocument;
+		protected var _document:CaptioningDocument;
 
 		public function get document():CaptioningDocument
 		{
@@ -113,7 +113,7 @@ package org.osmf.smpte.tt.parsing
 			return _captionRegionsHash;
 		}
 		
-		private var _captionElements:Vector.<CaptionElement>;
+		protected var _captionElements:Vector.<CaptionElement>;
 		/**
 		 * Returns a vector of CaptionElements, one for each unique timeline event in the file.
 		 * <p>Additional CaptionsElements that occur at the same TimelineMarker are stored in each CaptionElements siblings Vector.<CaptionElements>.</p>
@@ -146,6 +146,16 @@ package org.osmf.smpte.tt.parsing
 		public function set endTime(value:TimeCode):void
 		{
 			_endTime = value;
+		}
+		
+		protected function set remainingNodeCount(v:int):void
+		{
+			SMPTETTParser.REMAINING_NODE_COUNT = v;
+		}
+		
+		protected function get remainingNodeCount():int
+		{
+			return SMPTETTParser.REMAINING_NODE_COUNT
 		}
 		
 		public function parse(i_rawData:String):CaptioningDocument
@@ -373,7 +383,7 @@ package org.osmf.smpte.tt.parsing
 		// private var regionElementsHash:Dictionary;
 		// private var captionRegionsHash:Dictionary; 
 		
-		private function buildRegions(document:TtElement):void
+		protected function buildRegions(document:TtElement):void
 		{
 			parseTime = getTimer();
 			
@@ -417,13 +427,13 @@ package org.osmf.smpte.tt.parsing
 			// trace((++this._taskId) + " build Regions");
 			if (document.body != null)
 			{
-				SMPTETTParser.REMAINING_NODE_COUNT = document.totalNodeCount;
+				remainingNodeCount = document.totalNodeCount;
 				
 				debug(this+" buildRegions: "+(getTimer()-parseTime)/1000+"s");
-				debug(this+" totalNodeCount: "+SMPTETTParser.REMAINING_NODE_COUNT);
+				debug(this+" totalNodeCount: "+remainingNodeCount);
 				
 				var parseEvent:ParseEvent = new ParseEvent(ParseEvent.PROGRESS);
-					parseEvent.data = new ParseEventData(document.body
+					parseEvent.data = createParseEventData(document.body
 						,regionElementsHash
 						,captionRegionsHash
 						,timelineEventsHash
@@ -434,8 +444,8 @@ package org.osmf.smpte.tt.parsing
 			//return regions;
 		}
 		
-		private var parseTime:uint;
-		private function buildCaptions(timedTextElement:TimedTextElementBase, regionElementsHash:Dictionary, captionRegionsHash:Dictionary, timelineEventsHash:Dictionary):void
+		protected var parseTime:uint;
+		protected function buildCaptions(timedTextElement:TimedTextElementBase, regionElementsHash:Dictionary, captionRegionsHash:Dictionary, timelineEventsHash:Dictionary):void
 		{	
 			var parseEvent:ParseEvent;
 			var pElement:PElement = timedTextElement as PElement;
@@ -490,10 +500,10 @@ package org.osmf.smpte.tt.parsing
 					AsyncThread.queue(buildCaptions, [ j, regionElementsHash, captionRegionsHash, timelineEventsHash ] );
 				}
 			}
-			if(SMPTETTParser.REMAINING_NODE_COUNT<=0)
+			if(remainingNodeCount<=0)
 			{
 				parseEvent = new ParseEvent(ParseEvent.PROGRESS);
-				parseEvent.data = new ParseEventData(null, regionElementsHash, captionRegionsHash, timelineEventsHash);
+				parseEvent.data = createParseEventData(null, regionElementsHash, captionRegionsHash, timelineEventsHash);
 				
 				dispatchEvent( parseEvent );
 			} else {
@@ -501,7 +511,7 @@ package org.osmf.smpte.tt.parsing
 			}
 		}
 		
-		private function mapToCaptionRegion(regionElement:RegionElement):CaptionRegion
+		protected function mapToCaptionRegion(regionElement:RegionElement):CaptionRegion
 		{
 			var endTime:Number = (regionElement.end.totalSeconds >= TimeSpan.MAX_VALUE.totalSeconds)
 				? TimeSpan.MAX_VALUE.totalSeconds
@@ -524,7 +534,7 @@ package org.osmf.smpte.tt.parsing
 			return captionRegion;
 		}
 		
-		private function mapToCaption(pElement:PElement, region:RegionElement):CaptionElement
+		protected function mapToCaption(pElement:PElement, region:RegionElement):CaptionElement
 		{	
 			var captionElement:CaptionElement = buildTimedTextElements(pElement, region) as CaptionElement;
 			captionElement.id = (pElement.id) ? pElement.id : getTimer().toString();
@@ -583,7 +593,7 @@ package org.osmf.smpte.tt.parsing
 				if (element.parent is SpanElement)
 					captionElement.style = TimedTextStyleParser.mapStyle(TimedTextElementBase(element.parent), region);
 				
-				SMPTETTParser.REMAINING_NODE_COUNT--;
+				remainingNodeCount--;
 			}
 			else if (!(element is SetElement))
 			{
@@ -612,6 +622,11 @@ package org.osmf.smpte.tt.parsing
 			} else {
 				return null;
 			}
+		}
+		
+		protected function createParseEventData(i_timedTextElement:TimedTextElementBase=null, i_regionElementsHash:Dictionary=null, i_captionRegionsHash:Dictionary=null, i_timelineEventsHash:Dictionary=null):ParseEventData
+		{
+			return new ParseEventData(i_timedTextElement,i_regionElementsHash, i_captionRegionsHash, i_timelineEventsHash);
 		}
 		
 		/**

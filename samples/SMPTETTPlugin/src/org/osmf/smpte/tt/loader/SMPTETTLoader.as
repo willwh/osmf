@@ -97,108 +97,16 @@ package org.osmf.smpte.tt.loader
 		 */
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			updateLoadTrait(loadTrait, LoadState.LOADING);			
-						
-			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
-			
-			// Create a temporary LoadTrait for this purpose, so that our main
-			// LoadTrait doesn't reflect any of the state changes from the
-			// loading of the URL, and so that we can catch any errors.
-			var httpLoadTrait:HTTPLoadTrait = new HTTPLoadTrait(httpLoader, loadTrait.resource);
-						
-			httpLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
-			
-			CONFIG::LOGGING
-			{
-				if (logger != null)
-				{
-					logger.debug("Downloading document at " + URLResource(httpLoadTrait.resource).url);
-				}
-			}
-			
-			// var smptettLoader:SMPTETTLoader = this;
-			// var loadTime:int = getTimer();
-			
-			httpLoader.load(httpLoadTrait);
-
-			function onHTTPLoaderStateChange(event:LoaderEvent):void
-			{
-				if (event.newState == LoadState.READY)
-				{
-					// trace(smptettLoader+" onHTTPLoaderStateChange: "+event.newState+" "+(getTimer()-loadTime)/1000+"s");
-					// loadTime = getTimer();
-					
-					// This is a terminal state, so remove all listeners.
-					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
-					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
-
-					var parser:ISMPTETTParser = createSMPTETTParser();
-					var captioningDocument:CaptioningDocument;
-					
-					try
-					{
-						var p:SMPTETTParser = parser as SMPTETTParser;
-						if (p) 
-						{
-							p.startTime = startTime;
-							p.endTime = endTime;
-							p.addEventListener(ParseEvent.BEGIN, onParseEvent);
-							p.addEventListener(ParseEvent.PROGRESS, onParseEvent);
-							p.addEventListener(ParseEvent.COMPLETE, onParseEvent);
-						}
-						parser.parse(httpLoadTrait.urlLoader.data.toString());
-					}
-					catch(e:Error)
-					{
-						CONFIG::LOGGING
-						{
-							if (logger != null)
-							{
-								logger.debug("Error parsing captioning document: " + e.errorID + "-" + e.message);
-							}
-						}
-						updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
-					}
-					
-					function onParseEvent(event:ParseEvent):void
-					{
-						// trace(smptettLoader+" onParseEvent: "+event.type+" "+(getTimer()-loadTime)/1000+"s");
-						// loadTime = getTimer();
-						if(event.type == ParseEvent.COMPLETE){
-							captioningDocument = event.data as CaptioningDocument;
-							SMPTETTLoadTrait(loadTrait).document = captioningDocument;
-							updateLoadTrait(loadTrait, LoadState.READY);
-						}
-					}
-				}
-				else if (event.newState == LoadState.LOAD_ERROR)
-				{
-					// This is a terminal state, so remove the listener.  But
-					// don't remove the error event listener, as that will be
-					// removed when the error event for this failure is
-					// dispatched.
-					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
-					
-					CONFIG::LOGGING
-					{
-						if (logger != null)
-						{
-							logger.debug("Error loading SMPTE-TT document");;
-						}
-					}
-					
-					updateLoadTrait(loadTrait, event.newState);
-				}
-			}
-			
-			function onLoadError(event:MediaErrorEvent):void
-			{
-				// Only remove this listener, as there will be a corresponding
-				// event for the load failure.
-				httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
-				
-				loadTrait.dispatchEvent(event.clone());
-			}	
+			var helper:SMPTETTLoader_LoadTrait_Helper = SMPTETTLoader_LoadTrait_Helper.create(this,httpLoader);
+			helper.executeLoad(loadTrait);
+		}
+		
+		
+		
+		//Referenced from the LoadTrait_Helper
+		public function updateLoadTraitAccessor(loadTrait:LoadTrait, newState:String):void
+		{
+			updateLoadTrait(loadTrait, newState);
 		}
 		
 		/**
@@ -244,13 +152,6 @@ package org.osmf.smpte.tt.loader
 			_endTime = value;
 		}
 		
-		/**
-		 * Override to create your own parser.
-		 */
-		protected function createSMPTETTParser():ISMPTETTParser
-		{
-			return new SMPTETTParser();
-		}
 		
 		private var httpLoader:HTTPLoader;
 		

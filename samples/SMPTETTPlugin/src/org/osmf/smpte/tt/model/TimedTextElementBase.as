@@ -1178,7 +1178,9 @@ package org.osmf.smpte.tt.model
 			var localPreserve:Boolean = preserveContext;  // record whether xml:space=preserve is in effect
 
 			//{ region process raw xml attributes into timed text equivalents
-			for each (var xmlAttribute:XML in xmlElement.attributes())
+			var attributes:XMLList = xmlElement.attributes();
+			var xmlAttribute:XML
+			for each (xmlAttribute in attributes)
 			{
 				// copy the attribute identity
 				var attribute:TimedTextAttributeBase = new TimedTextAttributeBase();
@@ -1211,11 +1213,13 @@ package org.osmf.smpte.tt.model
 			//} endregion
 			
 			//{ region process child elements
-			for each (var xmlNode:XML in xmlElement.children())
+			var children:XMLList = xmlElement.children();
+			var childNode:XML;
+			for each (childNode in children)
 			{
 				parseChild(
 					{ 
-						xmlNode:xmlNode, 
+						xmlNode:childNode, 
 						parentNode:parentNode, 
 						newRoot:newRoot, 
 						localPreserve:localPreserve 
@@ -1304,6 +1308,8 @@ package org.osmf.smpte.tt.model
 			}
 		}
 		
+		private static const WHITESPACE_REGEXP:RegExp =  /[\n\r\t]/g;
+		private static const DOUBLESPACE_REGEXP:RegExp =  /\ {2}/g; 
 		
 		//{ region Helper Methods
 		/** 
@@ -1313,10 +1319,10 @@ package org.osmf.smpte.tt.model
 		 */
 		private static function normalizeWhitespace(n:XML):String
 		{
-			var normalized:String = n.normalize().toString().replace(/[\n\r\t]/g, " ");
-			while (/\ {2}/g.test(normalized))
+			var normalized:String = n.normalize().toString().replace(WHITESPACE_REGEXP, " ");
+			while (DOUBLESPACE_REGEXP.test(normalized))
 			{
-				normalized = normalized.replace(/\ {2}/g, " ");
+				normalized = normalized.replace(DOUBLESPACE_REGEXP, " ");
 			}
 			return normalized;
 		}

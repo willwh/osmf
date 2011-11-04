@@ -102,6 +102,10 @@ package org.osmf.smpte.tt.media
 				_regionsHash[value.id] = region;
 				if (_rootContainer) _rootContainer.layoutRenderer.addTarget(region);
 			} 
+			else
+			{
+				region = _regionsHash[value.id]
+			}
 			return region;
 		}
 		
