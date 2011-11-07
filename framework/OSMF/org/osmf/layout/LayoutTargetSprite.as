@@ -399,11 +399,11 @@ package org.osmf.layout
             // so that he can recalculate the viewport. We only call the
             // setter of the child, this will propagate to the VideoSurface 
             // object and localToGlobal will compute the absolute coordinate
-			if(this.numChildren)
+			if (this.numChildren)
 			{	
-				for(var i:int = 0; i<this.numChildren; i++)
+				for (var i:int = 0; i<this.numChildren; i++)
 				{
-					if(this.getChildAt(i))
+					if (this.getChildAt(i))
 					{
                         // we only call the setter, we don't actually want to
                         // change the value in the child
@@ -425,11 +425,11 @@ package org.osmf.layout
             // so that he can recalculate the viewport. We only call the
             // setter of the child, this will propagate to the VideoSurface 
             // object and localToGlobal will compute the absolute coordinate
-			if(this.numChildren)
+			if this.numChildren)
 			{	
-				for(var i:int = 0; i<this.numChildren; i++)
+				for (var i:int = 0; i<this.numChildren; i++)
 				{
-					if(this.getChildAt(i))
+					if (this.getChildAt(i))
 					{
                         // we only call the setter, we don't actually want to
                         // change the value in the child
