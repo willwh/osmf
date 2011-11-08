@@ -65,5 +65,10 @@ package org.osmf.net.httpstreaming
 		 * Gets a chunk of bytes from source for further processing.
 		 */
 		function getBytes():ByteArray;
+		
+		/**
+		 * The duration of the current fragment
+		 */ 
+		function get fragmentDuration():Number;
 	}
 }

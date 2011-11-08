@@ -79,6 +79,7 @@ package org.osmf.net.httpstreaming
 			addEventListener(HTTPStreamingEvent.TRANSITION, 			onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.TRANSITION_COMPLETE, 	onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.DOWNLOAD_ERROR,			onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
+			addEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, 		onFragmentDuration,		false, HIGH_PRIORITY, true);
 			
 			setState(HTTPStreamingState.INIT);
 			
@@ -244,6 +245,14 @@ package org.osmf.net.httpstreaming
 			}
 		}
 
+		/**
+		 * Returns the duration of the current fragment
+		 */
+		public function get fragmentDuration():Number 
+		{
+			return _fragmentDuration;
+		}
+		
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////
@@ -911,6 +920,19 @@ package org.osmf.net.httpstreaming
 			_dispatcher.dispatchEvent(event);
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * Event listener called when index handler of file handler obtain fragment duration.
+		 */
+		private function onFragmentDuration(event:HTTPStreamingEvent):void
+		{
+			if (_mediaHandler != null && _mediaHandler.streamName == event.url)
+			{
+				_fragmentDuration = event.fragmentDuration;
+			}
+		}
+		
 		/// Internals
 		private static const FILTER_NONE:uint = 0;
 		private static const FILTER_VIDEO:uint = 1;
@@ -946,6 +968,8 @@ package org.osmf.net.httpstreaming
 		private var _alternateIgnored:Boolean = false;
 		
 		private var _state:String = null;
+		
+		private var _fragmentDuration:Number = 0;
 		
 		CONFIG::LOGGING
 		{

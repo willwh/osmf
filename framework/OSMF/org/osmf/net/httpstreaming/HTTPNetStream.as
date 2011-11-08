@@ -557,6 +557,14 @@ package org.osmf.net.httpstreaming
 					// mode until the provider is ready.
 					if (_source.isReady)
 					{
+						// cleaning up the previous seek info
+						_flvParser = null;
+						if (_enhancedSeekTags != null)
+						{
+							_enhancedSeekTags.length = 0;
+							_enhancedSeekTags = null;
+						}
+						
 						_enhancedSeekTarget = _seekTarget;
 						
 						super.seek(_seekTarget);
@@ -700,7 +708,7 @@ package org.osmf.net.httpstreaming
 				logger.debug("Detected begin fragment for stream [" + event.url + "].");
 				logger.debug("Dropped frames=" + this.info.droppedFrames + ".");
 			}			
-			
+
 			if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags ||  _playForDuration >= 0)
 			{
 				if (_flvParser == null)
@@ -1124,14 +1132,16 @@ package org.osmf.net.httpstreaming
 			// probably done seeing the tags, unless we are in playForDuration mode...
 			if (_playForDuration >= 0)
 			{
-				if (_mediaFragmentDuration >= 0 && _flvParserIsSegmentStart)
+				// using fragment duration to let the parser start when we're getting close to the end 
+				// of the play duration (FM-1440)
+				if (_source.fragmentDuration >= 0 && _flvParserIsSegmentStart)
 				{
 					// if the segmentDuration has been reported, it is possible that we might be able to shortcut
 					// but we need to be careful that this is the first tag of the segment, otherwise we don't know what duration means in relation to the tag timestamp
 					
 					_flvParserIsSegmentStart = false; // also used by enhanced seek, but not generally set/cleared for everyone. be careful.
 					currentTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
-					if (currentTime + _mediaFragmentDuration >= (_initialTime + _playForDuration))
+					if (currentTime + _source.fragmentDuration >= (_initialTime + _playForDuration))
 					{
 						// it stops somewhere in this segment, so we need to keep seeing the tags
 						return true;

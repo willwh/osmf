@@ -318,6 +318,14 @@ package org.osmf.net.httpstreaming
 
 		}
 		
+		/**
+		 * Returns the duration of the current fragment
+		 */
+		public function get fragmentDuration():Number 
+		{
+			return _fragmentDuration;
+		}
+		
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////
