@@ -91,6 +91,7 @@ package
 			import org.osmf.layout.TestLayoutTargetEvent;
 			import org.osmf.layout.TestLayoutRendererBase;
 			import org.osmf.layout.TestLayoutRenderer;
+            import org.osmf.layout.TestLayoutTargetSprite;
 			import org.osmf.layout.TestLayoutMetadata;
 			import org.osmf.layout.TestLayoutAttributesMetadata;
 			import org.osmf.layout.TestGenericLayout;
@@ -123,6 +124,7 @@ package
 					testsToRun.push(org.osmf.layout.TestLayoutAttributesMetadata);
 					testsToRun.push(org.osmf.layout.TestLayoutMetadata);
 					testsToRun.push(org.osmf.layout.TestLayoutRenderer);
+                    testsToRun.push(org.osmf.layout.TestLayoutTargetSprite);
 					testsToRun.push(org.osmf.layout.TestLayoutRendererBase);
 					testsToRun.push(org.osmf.layout.TestLayoutTargetEvent);
 					testsToRun.push(org.osmf.layout.TestLayoutTargetRenderers);
