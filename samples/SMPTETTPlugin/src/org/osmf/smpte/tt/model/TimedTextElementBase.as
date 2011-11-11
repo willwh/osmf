@@ -244,35 +244,36 @@ package org.osmf.smpte.tt.model
 			var styleCount:uint = DictionaryUtils.getLength(_styling);
 
 			// check for local override, this will always win
-			if (styleCount > 0 && DictionaryUtils.containsKey(_styling,property))
+			if (styleCount > 0 && _styling[property] !== undefined)
 			{	
 				return _styling[property];
 			}
 			
 			// find out if we refer to any other styles.
-			if (styleCount > 0 && DictionaryUtils.containsKey(_styling,"style"))
+			var referentStyles:Vector.<String> = _styling["style"] as Vector.<String>;
+			if (styleCount > 0 && referentStyles)
 			{
-				
-				var referentStyles:Vector.<String> = _styling["style"] as Vector.<String>;
-								
 				if (referentStyles == null || referentStyles.length == 0)
 				{
 					_styling[property] = null;
 					return null;
 				} 
 				// recursively check them in reverse order.
-				for (var i:int = referentStyles.length - 1; i >= 0; i--)
+				var i:int = referentStyles.length - 1;
+				while (i >= 0)
 				{
 					var s:String = referentStyles[i];
-					if (DictionaryUtils.containsKey(root.styles,s))
+					var styleElement:StyleElement = root.styles[s] as StyleElement;
+					if (styleElement)
 					{
-						var result:* = (root.styles[s] as StyleElement).getReferentStyle(property);
+						var result:* = styleElement.getReferentStyle(property);
 						if (result != null)
 						{	
 							_styling[property] = result;
 							return result;
 						}
 					}
+					i--;
 				}
 				
 			}
@@ -314,7 +315,7 @@ package org.osmf.smpte.tt.model
 		public function getInheritedStyle(propertyName:String, currentRegion:RegionElement):Object
 		{
 			var isBodyElement:Boolean = (this is BodyElement);
-			var canInherit:Boolean = !(isBodyElement) && !(this is RegionElement);
+			var canInherit:Boolean = !isBodyElement && !(this is RegionElement);
 
 			// we don't want the same background colors to to be 
 			// inherited by a container element and an inline element.
@@ -325,7 +326,7 @@ package org.osmf.smpte.tt.model
 			
 			if (parent != null && canInherit)
 			{	
-				return (parent as TimedTextElementBase).getComputedStyle(propertyName, currentRegion);
+				return TimedTextElementBase(parent).getComputedStyle(propertyName, currentRegion);
 			} if (isBodyElement && currentRegion != null)
 			{
 				// body needs to inherit from the region it has been parented to
@@ -651,7 +652,7 @@ package org.osmf.smpte.tt.model
 					case "http://www.w3.org/ns/ttml/profile/dfxp-transformation":
 						for each (f in ParameterElement.transformProfile)
 						{
-							if (!DictionaryUtils.containsKey(ParameterElement.features, f.key))
+							if (ParameterElement.features[f.key] !== undefined)
 							{   // if local profile has added this, then dont over-ride it
 								ParameterElement.features[f.key] = f.value;
 							}
@@ -660,7 +661,7 @@ package org.osmf.smpte.tt.model
 					case "http://www.w3.org/ns/ttml/profile/dfxp-presentation":
 						for each (f in ParameterElement.presentationProfile)
 						{
-							if (!DictionaryUtils.containsKey(ParameterElement.features, f.key))
+							if (ParameterElement.features[f.key] !== undefined)
 							{   // if local profile has added this, then dont over-ride it
 								ParameterElement.features[f.key] = f.value;
 							}
@@ -669,14 +670,14 @@ package org.osmf.smpte.tt.model
 					case "http://www.w3.org/ns/ttml/profile/dfxp-full":
 						for each (f in ParameterElement.presentationProfile)
 						{
-							if (!DictionaryUtils.containsKey(ParameterElement.features, f.key))
+							if (ParameterElement.features[f.key] !== undefined)
 							{   // if local profile has added this, then dont over-ride it
 								ParameterElement.features[f.key] = f.value;
 							}
 						}
 						for each (f in ParameterElement.transformProfile)
 						{
-							if (!DictionaryUtils.containsKey(ParameterElement.features, f.key))
+							if (ParameterElement.features[f.key] !== undefined)
 							{   // if local profile has added this, then dont over-ride it
 								ParameterElement.features[f.key] = f.value;
 							}
@@ -740,7 +741,8 @@ package org.osmf.smpte.tt.model
 			// we should do a pattern match to ensure its legal.
 			var idrefs:Vector.<String> = new Vector.<String>();
 			var whitespace:String = " ";
-			for each (var s:String in attribute.value.split(whitespace))
+			var attributeArray:Array = attribute.value.split(whitespace);
+			for each (var s:String in attributeArray)
 			{
 				// to do - what we want to do here is check it's in m_styles; however that won't work for 
 				// forward references in styling; can we get a spec restriction here?.
@@ -790,7 +792,7 @@ package org.osmf.smpte.tt.model
 		private function validAttributeValue(matchExpression:String, attribute:TimedTextAttributeBase):Boolean
 		{
 			var matchRE:RegExp;
-			if (DictionaryUtils.containsKey(cachedRegex, matchExpression))
+			if (cachedRegex[matchExpression])
 			{
 				matchRE = cachedRegex[matchExpression];
 			}
@@ -1081,12 +1083,12 @@ package org.osmf.smpte.tt.model
 						case "thought":
 						case "title":
 						case "transcription":
-							this.metadata[attribute.localName] = attribute.value;
+							metadata[attribute.localName] = attribute.value;
 							break;
 						default:
 							if (attribute.value.indexOf("x-")==0)
 							{
-								this.metadata[attribute.localName] = attribute.value;
+								metadata[attribute.localName] = attribute.value;
 							}
 							else
 							{
@@ -1136,16 +1138,17 @@ package org.osmf.smpte.tt.model
 		 */
 		private static function parseRecursive(xmlElement:XML, root:TtElement, preserveContext:Boolean):TimedTextElementBase
 		{	
-			if(root==null){
-				if(xmlElement.namespace().uri.match(Namespaces.TTML_NS_REGEXP))
-				{
-					Namespaces.useLegacyNamespace(xmlElement.namespace());
-				}
+			var ttns:Namespace = xmlElement.namespace();
+			
+			if(root==null && ttns.uri.match(Namespaces.TTML_NS_REGEXP))
+			{
+				Namespaces.useLegacyNamespace(ttns);
+				ttns = xmlElement.namespace();
 			}
 			
 			var element:String = xmlElement.localName();
 			
-			var nameSpace:String = namespaceFromTimedTextNamespace(xmlElement.namespace().uri);
+			var nameSpace:String = namespaceFromTimedTextNamespace(ttns.uri);
 
 			var parentNode:TimedTextElementBase = null;
 			
@@ -1157,7 +1160,7 @@ package org.osmf.smpte.tt.model
 				// if there is a namespace, then its a timed text element
 				parentNode = TimedTextElementBase.getElementFromName(nameSpace + conventionName);
 				parentNode.localName = element;
-				parentNode.namespace = xmlElement.namespace();
+				parentNode.namespace = ttns;
 			}
 
 			/// if node is still null, either we failed to implement the element
@@ -1182,33 +1185,14 @@ package org.osmf.smpte.tt.model
 			var xmlAttribute:XML
 			for each (xmlAttribute in attributes)
 			{
-				// copy the attribute identity
-				var attribute:TimedTextAttributeBase = new TimedTextAttributeBase();
-				attribute.parent = parentNode as TimedTextElementBase;;
-				attribute.localName = xmlAttribute.localName();
-				attribute.value = xmlAttribute;
-				
-				// not sure if it is absolutely correct to move 
-				// empty namespace elements into tt namespace but seems
-				// to work.
-				attribute.namespace = (!xmlAttribute.namespace()) ? xmlElement.namespace() : xmlAttribute.namespace();
-				
-				if(!attribute.namespace.uri && attribute.parent.namespace) {
-					attribute.namespace = attribute.parent.namespace;
-				}
-				
-				// attach new attribute to current element
-				parentNode.attributes.push(attribute);
-				
-				// check whether we are changing the space preserve behaviour
-				if (attribute.isXmlAttribute() && attribute.localName == "space")
-				{
-					localPreserve = (attribute.value == "preserve");
-				}
-				// record the type of preservation as a local style.
-				parentNode.setLocalStyle("preserve", localPreserve);
-				
-				//trace("\t"+attribute.namespace+":"+attribute.localName+"="+attribute.value);
+				parseAttribute(
+					{ 
+						xmlNode:xmlElement,
+						xmlAttribute:xmlAttribute, 
+						parentNode:parentNode,
+						localPreserve:localPreserve 
+					}
+				);
 			}
 			//} endregion
 			
@@ -1230,7 +1214,45 @@ package org.osmf.smpte.tt.model
 			return parentNode;
 		}
 		
-		private static function parseChild(obj:Object):void {
+		private static function parseAttribute(obj:Object):void
+		{
+			var xmlNode:XML 					= obj.xmlNode,
+				xmlAttribute:XML 				= obj.xmlAttribute,
+				parentNode:TimedTextElementBase = obj.parentNode,
+				localPreserve:Boolean 			= obj.localPreserve;
+			
+			// copy the attribute identity
+			var attribute:TimedTextAttributeBase = new TimedTextAttributeBase();
+			attribute.parent = parentNode;
+			attribute.localName = xmlAttribute.localName();
+			attribute.value = xmlAttribute;
+			
+			// not sure if it is absolutely correct to move 
+			// empty namespace elements into tt namespace but seems
+			// to work.
+			attribute.namespace = (!xmlAttribute.namespace()) ? xmlNode.namespace() : xmlAttribute.namespace();
+			
+			if(!attribute.namespace.uri && attribute.parent.namespace)
+			{
+				attribute.namespace = attribute.parent.namespace;
+			}
+			
+			// attach new attribute to current element
+			parentNode.attributes.push(attribute);
+			
+			// check whether we are changing the space preserve behaviour
+			if (attribute.isXmlAttribute() && attribute.localName == "space")
+			{
+				localPreserve = (attribute.value == "preserve");
+			}
+			// record the type of preservation as a local style.
+			parentNode.setLocalStyle("preserve", localPreserve);
+			
+			//trace("\t"+attribute.namespace+":"+attribute.localName+"="+attribute.value);
+		}
+		
+		private static function parseChild(obj:Object):void
+		{
 			
 			var xmlNode:XML 					= obj.xmlNode,
 				parentNode:TimedTextElementBase = obj.parentNode,
@@ -1427,9 +1449,9 @@ package org.osmf.smpte.tt.model
 		 */
 		public function getMetadata(attribute:String):String
 		{
-			if (DictionaryUtils.containsKey(metadata,attribute))
+			if (metadata[attribute] !== undefined)
 			{
-				return this.metadata[attribute] as String;
+				return metadata[attribute] as String;
 			}
 			else
 			{

@@ -19,12 +19,8 @@
  **********************************************************/
 package org.osmf.smpte.tt.model.parameter
 {
-	import org.osmf.smpte.tt.errors.SMPTETTException;
 	import org.osmf.smpte.tt.model.AnonymousSpanElement;
 	import org.osmf.smpte.tt.model.TimedTextAttributeBase;
-	import org.osmf.smpte.tt.model.TimedTextElementBase;
-	import org.osmf.smpte.tt.timing.TimeTree;
-	import org.osmf.smpte.tt.utilities.DictionaryUtils;
 	
 	public class ExtensionElement extends ParameterElement
 	{
@@ -70,9 +66,9 @@ package org.osmf.smpte.tt.model.parameter
 			var child:uint = 0;
 			var sb:String = "";
 			while (child < children.length
-				&& (children[child] is AnonymousSpanElement))
+					&& children[child] is AnonymousSpanElement)
 			{
-				sb += ((children[child] as AnonymousSpanElement).text);
+				sb += AnonymousSpanElement(children[child]).text;
 				child++;
 			}
 			text = sb;

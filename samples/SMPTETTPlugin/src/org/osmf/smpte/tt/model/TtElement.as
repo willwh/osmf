@@ -142,7 +142,7 @@ package org.osmf.smpte.tt.model
 			//endregion
 			
 			//region add a block container to the flow for each temporally active region
-			for each (var region:RegionElement in DictionaryUtils.getValues(regions))
+			for each (var region:RegionElement in regions)
 			{
 				if (region.temporallyActive(tick))
 				{
@@ -151,7 +151,7 @@ package org.osmf.smpte.tt.model
 					for each (var child:TimedTextElementBase in region.children)
 					{
 						{
-							var fo:FormattingObject = (child as SetElement).getFormattingObject(tick);
+							var fo:FormattingObject = SetElement(child).getFormattingObject(tick);
 							if (fo is Animation)
 							{
 								blockContainer.animations.push(fo as Animation);
@@ -254,9 +254,7 @@ package org.osmf.smpte.tt.model
 				
 					break;
 				case 2:
-				
-					
-					
+
 					//{ region Check first child is head, and second is body
 					if (children[0] is HeadElement)
 					{

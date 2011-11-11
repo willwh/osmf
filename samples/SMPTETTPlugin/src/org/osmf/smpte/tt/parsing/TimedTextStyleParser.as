@@ -23,24 +23,16 @@ package org.osmf.smpte.tt.parsing
 	import flash.text.engine.FontWeight;
 	import flash.utils.Dictionary;
 	
-	import flashx.textLayout.formats.FormatValue;
 	import flashx.textLayout.formats.TextDecoration;
 	import flashx.textLayout.formats.WhiteSpaceCollapse;
 	
 	import org.osmf.smpte.tt.captions.DisplayAlign;
-	import org.osmf.smpte.tt.captions.Length;
 	import org.osmf.smpte.tt.captions.Overflow;
 	import org.osmf.smpte.tt.captions.ShowBackground;
 	import org.osmf.smpte.tt.captions.TextAlignment;
 	import org.osmf.smpte.tt.captions.TimedTextStyle;
-	import org.osmf.smpte.tt.enums.Unit;
-	import org.osmf.smpte.tt.errors.SMPTETTException;
-	import org.osmf.smpte.tt.formatting.FormattingObject;
-	import org.osmf.smpte.tt.logging.SMPTETTLogging;
 	import org.osmf.smpte.tt.model.RegionElement;
 	import org.osmf.smpte.tt.model.TimedTextElementBase;
-	import org.osmf.smpte.tt.styling.AutoExtent;
-	import org.osmf.smpte.tt.styling.AutoOrigin;
 	import org.osmf.smpte.tt.styling.ColorExpression;
 	import org.osmf.smpte.tt.styling.Extent;
 	import org.osmf.smpte.tt.styling.FontSize;
@@ -56,7 +48,6 @@ package org.osmf.smpte.tt.parsing
 	import org.osmf.smpte.tt.styling.Visibility;
 	import org.osmf.smpte.tt.styling.WrapOption;
 	import org.osmf.smpte.tt.styling.WritingMode;
-	import org.osmf.smpte.tt.utilities.DictionaryUtils;
 	import org.osmf.smpte.tt.vocabulary.Styling;
 	
 	/**
@@ -152,7 +143,7 @@ package org.osmf.smpte.tt.parsing
 		private static var _numberPairXref:Dictionary = new Dictionary();
 		public static function getNumberPair(value:String):NumberPair
 		{
-			if (DictionaryUtils.containsKey(_numberPairXref, value))
+			if (_numberPairXref[value] !== undefined)
 			{
 				return new NumberPair(_numberPairXref[value]);
 			}
@@ -168,7 +159,7 @@ package org.osmf.smpte.tt.parsing
 		private static var _cachedBrushes:Dictionary = new Dictionary();
 		public static function getCachedBrush(src:ColorExpression):ColorExpression
 		{
-			if (DictionaryUtils.containsKey(_cachedBrushes,src.argb))
+			if (_cachedBrushes[src.argb] !== undefined)
 			{
 				return _cachedBrushes[src.argb];
 			}

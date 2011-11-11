@@ -19,14 +19,12 @@
  **********************************************************/
 package org.osmf.smpte.tt.parsing
 {
-	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
 	
 	import org.osmf.smpte.tt.captions.CaptionElement;
 	import org.osmf.smpte.tt.captions.CaptionRegion;
@@ -36,7 +34,6 @@ package org.osmf.smpte.tt.parsing
 	import org.osmf.smpte.tt.captions.TimedTextElementType;
 	import org.osmf.smpte.tt.errors.SMPTETTException;
 	import org.osmf.smpte.tt.events.ParseEvent;
-	import org.osmf.smpte.tt.formatting.Animation;
 	import org.osmf.smpte.tt.logging.SMPTETTLogging;
 	import org.osmf.smpte.tt.model.AnonymousSpanElement;
 	import org.osmf.smpte.tt.model.BrElement;
@@ -57,7 +54,6 @@ package org.osmf.smpte.tt.parsing
 	import org.osmf.smpte.tt.timing.TimeSpan;
 	import org.osmf.smpte.tt.timing.TreeType;
 	import org.osmf.smpte.tt.utilities.AsyncThread;
-	import org.osmf.smpte.tt.utilities.DictionaryUtils;
 	import org.osmf.smpte.tt.vocabulary.Namespaces;
 
 	[Event(name="begin", type="org.osmf.smpte.tt.events.ParseEvent")]
@@ -646,8 +642,9 @@ package org.osmf.smpte.tt.parsing
 
 class ParseEventData
 {
-	import org.osmf.smpte.tt.model.TimedTextElementBase;
 	import flash.utils.Dictionary;
+	
+	import org.osmf.smpte.tt.model.TimedTextElementBase;
 	
 	public var timedTextElement:TimedTextElementBase=null;
 	public var regionElementsHash:Dictionary=null;
