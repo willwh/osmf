@@ -25,12 +25,8 @@ package org.osmf.smpte.tt.model
 	import org.osmf.smpte.tt.styling.FontSize;
 	import org.osmf.smpte.tt.styling.FontStyleAttributeValue;
 	import org.osmf.smpte.tt.styling.FontWeightAttributeValue;
-	import org.osmf.smpte.tt.styling.LineHeight;
-	import org.osmf.smpte.tt.styling.NormalHeight;
-	import org.osmf.smpte.tt.styling.Origin;
 	import org.osmf.smpte.tt.styling.PaddingThickness;
 	import org.osmf.smpte.tt.styling.TextDecorationAttributeValue;
-	import org.osmf.smpte.tt.styling.TextOutline;
 	import org.osmf.smpte.tt.vocabulary.Namespaces;
 
 	public class TimedTextAttributeBase

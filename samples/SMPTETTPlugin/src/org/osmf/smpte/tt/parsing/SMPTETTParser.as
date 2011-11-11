@@ -25,6 +25,7 @@ package org.osmf.smpte.tt.parsing
 	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 	
 	import org.osmf.smpte.tt.captions.CaptionElement;
 	import org.osmf.smpte.tt.captions.CaptionRegion;
@@ -178,29 +179,39 @@ package org.osmf.smpte.tt.parsing
 			if(e.data && e.data is TtElement){
 				//trace(this+".handleParseTtElement("+e+")");
 				removeEventListener(ParseEvent.PROGRESS, handleParseTtElement);
+				addEventListener(ParseEvent.PROGRESS, handleValitateTtElement);
+				
+				_ttElement = e.data as TtElement;
+				setTimeout(validateTtElement, 5, _ttElement);
+			}
+		}
+		
+		private function handleValitateTtElement(e:ParseEvent):void
+		{
+			if(e.data && e.data is TtElement){
+				//trace(this+".handleParseTtElement("+e+")");
+				removeEventListener(ParseEvent.PROGRESS, handleValitateTtElement);
 				addEventListener(ParseEvent.PROGRESS, handleComputeTimeIntervals);
 				
 				_ttElement = e.data as TtElement;
-				computeTimeIntervals(e.data as TtElement, _startTime, _endTime);
+				setTimeout(computeTimeIntervals, 5, _ttElement, _startTime, _endTime);
 			}
 		}
 		
 		private function handleComputeTimeIntervals(e:ParseEvent):void
 		{
-			
 			if(e.data && e.data is TtElement){
 				//trace(this+".handleComputeTimeIntervals("+e+")");
 				removeEventListener(ParseEvent.PROGRESS, handleComputeTimeIntervals);
-				var parseTree:TtElement =  e.data as TtElement;
-				_ttElement = parseTree;
 				addEventListener(ParseEvent.PROGRESS, handleBuildDocumentTimeInterval);
-				buildRegions(parseTree);
+
+				_ttElement = e.data as TtElement;
+				setTimeout(buildRegions, 5, _ttElement);
 			}
 		}
 		
 		private function handleBuildDocumentTimeInterval(e:ParseEvent):void
 		{
-			
 			if(e.data)
 			{
 				//trace(this+".handleBuildDocumentTimeInterval("+e+")");
@@ -328,7 +339,6 @@ package org.osmf.smpte.tt.parsing
 				xml = new XML(xmlStr);
 												
 				parsetree = TimedTextElementBase.parse(xml) as TtElement;
-								
 			} catch (e:SMPTETTException) {
 				SMPTETTLogging.debugLog("Unhandled exception in TimedTextParser : "+e.message);
 				throw e;				
@@ -344,13 +354,25 @@ package org.osmf.smpte.tt.parsing
 				debug("No Parse tree returned");
 				throw new SMPTETTException("No Parse tree returned");
 			}
-			if (!parsetree.valid())
+						
+			debug(this+" parseTTElement: "+(getTimer()-parseTime)/1000+"s");
+			
+			dispatchEvent(new ParseEvent(ParseEvent.PROGRESS, true, false, parsetree) );
+			return parsetree;
+		}
+		
+		private function validateTtElement(parsetree:TtElement):TtElement
+		{	
+			parseTime = getTimer();
+			
+			var isValid:Boolean = parsetree.valid();
+			if (!isValid)
 			{
 				debug("Document is Well formed XML, but invalid Timed Text");
 				throw new SMPTETTException("Document is Well formed XML, but invalid Timed Text");
 			}
 			
-			debug(this+" parseTTElement: "+(getTimer()-parseTime)/1000+"s");
+			debug(this+" validateTTElement(): "+isValid+ " "+(getTimer()-parseTime)/1000+"s");
 			
 			dispatchEvent(new ParseEvent(ParseEvent.PROGRESS, true, false, parsetree) );
 			return parsetree;

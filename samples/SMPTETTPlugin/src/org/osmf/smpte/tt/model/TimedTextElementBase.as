@@ -155,7 +155,7 @@ package org.osmf.smpte.tt.model
 		 */
 		public static function getElementFromName(elem:String):TimedTextElementBase
 		{
-			var ClassReference:Class =  flash.utils.getDefinitionByName(elem) as Class;
+			var ClassReference:Class = getDefinitionByName(elem) as Class;
 			
 			if (ClassReference != null)
 			{
@@ -1182,9 +1182,9 @@ package org.osmf.smpte.tt.model
 
 			//{ region process raw xml attributes into timed text equivalents
 			var attributes:XMLList = xmlElement.attributes();
-			var xmlAttribute:XML
+			var xmlAttribute:XML;
 			for each (xmlAttribute in attributes)
-			{
+			{	
 				parseAttribute(
 					{ 
 						xmlNode:xmlElement,
@@ -1192,7 +1192,7 @@ package org.osmf.smpte.tt.model
 						parentNode:parentNode,
 						localPreserve:localPreserve 
 					}
-				);
+				);	
 			}
 			//} endregion
 			
@@ -1429,8 +1429,6 @@ package org.osmf.smpte.tt.model
 				case "http://www.w3.org/2006/04/ttaf1#parameter":
 				case "http://www.w3.org/2006/10/ttaf1#parameter":
 				case "http://www.w3.org/ns/ttml#parameter":
-					nsPrefix = "org.osmf.smpte.tt.model.parameter.";
-					break;
 				case "http://www.w3.org/ns/ttml/profile":
 					nsPrefix = "org.osmf.smpte.tt.model.parameter.";
 					break;

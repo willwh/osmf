@@ -64,11 +64,15 @@ package org.osmf.smpte.tt.model.parameter
 		{
 			var child:uint = 0;
 			var sb:String = "";
-			while (child < children.length
-					&& children[child] is AnonymousSpanElement)
+			var childElement:AnonymousSpanElement;
+			while (child < children.length)
 			{
-				sb += AnonymousSpanElement(children[child]).text;
-				child++;
+				childElement = children[child] as AnonymousSpanElement;
+				if(childElement)
+				{
+					sb += childElement.text;
+					child++;
+				}
 			}
 			text = sb;
 			

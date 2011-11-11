@@ -120,7 +120,6 @@ package org.osmf.smpte.tt.model
 			_totalNodeCount = value;
 		}
 		
-		
 		/**
 		 * return the root formatting object
 		 * @param regionId
@@ -230,7 +229,7 @@ package org.osmf.smpte.tt.model
 					return;
 					break;
 				case 1:
-				
+					
 					//{ region test if child element is head or body
 					if (children[0] is HeadElement)
 					{
@@ -282,7 +281,6 @@ package org.osmf.smpte.tt.model
 				error("erroneous child in " + this);
 			}
 			
-
 			//{ region now check each of the children is individually valid
 			for each (var element:TimedTextElementBase in children)
 			{

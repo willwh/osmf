@@ -531,8 +531,8 @@ package org.osmf.smpte.tt.media
 			}		
 		}
 		
-		private var captionElementsDisplayed:Dictionary;
-		private var totalCaptionElementsToDisplay:uint = 0;
+		protected var captionElementsDisplayed:Dictionary;
+		protected var totalCaptionElementsToDisplay:uint = 0;
 		
 		/**
 		 * @private
@@ -541,11 +541,6 @@ package org.osmf.smpte.tt.media
 											SMPTETTMetadata:TimelineMetadata):void
 		{
 			buildCaptioningMediaElement(document);
-			
-			if (DEBUG && captionElementsDisplayed)
-			{ 
-				captionElementsDisplayed = new Dictionary();
-			}
 			
 			addEachCaptionToMetaData(document,SMPTETTMetadata);
 		}
@@ -591,15 +586,17 @@ package org.osmf.smpte.tt.media
 			}
 		}
 		
-		private function flagCaptionElementAsDisplayed(captionElement:CaptionElement):void
+		protected function flagCaptionElementAsDisplayed(captionElement:CaptionElement):void
 		{
+			
 			if (!DEBUG) return;
+						
 			if (captionElement.captionElementType == TimedTextElementType.Text 
 				&& captionElementsDisplayed[captionElement]
 				&& captionElementsDisplayed[captionElement].displayed == false)
 			{
 				captionElementsDisplayed[captionElement].displayed = true;
-				debug((captionElementsDisplayed[captionElement].index+1)+" of "+totalCaptionElementsToDisplay+":\t"+captionElement.regionId+"\t"+TimeExpression.parse(captionElement.begin+"s")+"\t"+TimeExpression.parse(captionElement.end+"s")+"\t"+captionElement.content);
+				debug((captionElementsDisplayed[captionElement].index)+" of "+(totalCaptionElementsToDisplay-1)+":\t"+captionElement.regionId+"\t"+TimeExpression.parse(captionElement.begin+"s")+"\t"+TimeExpression.parse(captionElement.end+"s")+"\t"+captionElement.content);
 			} else
 			{
 				var c:CaptionElement;

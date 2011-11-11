@@ -74,9 +74,6 @@ package org.osmf.smpte.tt.parsing
 			determineBuildCaptionProgress(timedTextElement,regionElementsHash,captionRegionsHash,timelineEventsHash);
 		}
 
-		
-
-
 		private function buildCaptionWithPElement(timedTextElement:TimedTextElementBase, pElement:PElement, regionElementsHash:Dictionary, captionRegionsHash:Dictionary, timelineEventsHash:Dictionary):void
 		{
 			//trace ("buildCaptionWithPElement: Start" + getTimer())
@@ -89,8 +86,7 @@ package org.osmf.smpte.tt.parsing
 					regionNameAttribute = i;
 					break;
 				}
-			}
-			
+			}			
 			
 			//get Computed Style has recursion
 			var computedRegionName:String = pElement.getComputedStyle("region",null);
@@ -141,8 +137,6 @@ package org.osmf.smpte.tt.parsing
 				AsyncThread.queue(buildCaptions, [ j, regionElementsHash, captionRegionsHash, timelineEventsHash ] );
 			}
 		}
-
-
 
 		private function determineBuildCaptionProgress(timedTextElement:TimedTextElementBase, regionElementsHash:Dictionary, captionRegionsHash:Dictionary, timelineEventsHash:Dictionary):void
 		{

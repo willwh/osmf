@@ -24,7 +24,7 @@ package org.osmf.smpte.tt.model
 	import org.osmf.smpte.tt.timing.TimeCode;
 	import org.osmf.smpte.tt.timing.TimeTree;
 	
-	public class AnonymousSpanElement extends SpanElement
+	public class AnonymousSpanElement extends SpanElement 
 	{	
 		public function AnonymousSpanElement(p_text:String)
 		{

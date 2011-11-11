@@ -150,31 +150,24 @@ package org.osmf.smpte.tt.model
 		protected override function validElements():void
 		{
 			var child:uint = 0;
-			
-			//{ region Allow arbitrary metadata, set elements (Animation class), span, br, PCDATA (Inline class)
-			while (child < children.length
-					&& (children[child] is org.osmf.smpte.tt.model.MetadataElement 
-						|| children[child] is org.osmf.smpte.tt.model.metadata.MetadataElement
-						|| children[child] is SetElement
-						|| children[child] is SpanElement
-						|| children[child] is BrElement
-						|| children[child] is AnonymousSpanElement))
-			{
-				child++;
-			}
-			//} endregion
-			
-			//{ region Ensure no other element present
-			if (children.length != child)
-			{
-				error(children[child] + " is not allowed in " + this + " at position " + child);
-			}
-			//} endregion
-			
 			//{ region Check each of the children is individually valid
 			for each (var element:TimedTextElementBase in children)
 			{
-				element.valid();
+				if (element is org.osmf.smpte.tt.model.MetadataElement 
+					|| element is org.osmf.smpte.tt.model.metadata.MetadataElement
+					|| element is SetElement
+					|| element is SpanElement
+					|| element is BrElement
+					|| element is AnonymousSpanElement)
+				{
+					child++;
+					element.valid();
+				}
+				else
+				{
+					error(element + " is not allowed in " + this + " at position " + (children.length-child));
+					continue;
+				}
 			}
 			//} endregion
 		}
