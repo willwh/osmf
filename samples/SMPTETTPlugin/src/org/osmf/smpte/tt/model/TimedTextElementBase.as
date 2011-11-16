@@ -1192,7 +1192,8 @@ package org.osmf.smpte.tt.model
 						parentNode:parentNode,
 						localPreserve:localPreserve 
 					}
-				);	
+				);
+				localPreserve = parentNode.getReferentStyle("preserve");
 			}
 			//} endregion
 			
