@@ -405,7 +405,7 @@ package org.osmf.smpte.tt.media
 			
 			if (_mediaPlayer)
 			{
-				pauseMediaPlayerDuringLoadCaptions();
+				// pauseMediaPlayerDuringLoadCaptions();
 				updateEndTimetoMediaDuration(smptettLoader);
 			}
 			

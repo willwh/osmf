@@ -29,9 +29,11 @@ package org.osmf.smpte.tt.utilities
 	 *  @eventType flash.events.Event.COMPLETE
 	 */
 	[Event(name="complete", type="flash.events.Event")] 
+	[Event(name="started",type="flash.events.Event")]
 	
 	public class AsyncThread extends EventDispatcher
 	{
+		public static const STARTED:String = "started";
 		private var _shape:Shape;
 		public function get shape():Shape
 		{
@@ -40,6 +42,24 @@ package org.osmf.smpte.tt.utilities
 		}
 		
 		private var _isComplete:Boolean = true;
+		private var _isStarted:Boolean = false;
+
+		[Bindable(event="started")]
+		public function get isStarted():Boolean
+		{
+			return _isStarted;
+		}
+
+		public function set isStarted(value:Boolean):void
+		{
+			if (_isStarted != value)
+			{
+				_isStarted = value;
+				dispatchEvent(new Event(STARTED));
+			}
+		}
+
+		
 		[Bindable("complete")]
 		public function get isComplete():Boolean
 		{
@@ -62,6 +82,7 @@ package org.osmf.smpte.tt.utilities
 		
 		private function queue( func:Function, args:Array = null ):void
 		{
+			if (!isStarted) {_threadStack.push( this );}
 			currentQueue.push( [ func, args ] );
 			_isComplete = false;
 		}
@@ -92,7 +113,13 @@ package org.osmf.smpte.tt.utilities
 			
 			if (entry[1] && entry[1] is Array) args = ( entry[1] as Array );
 			
-			_threadStack.push( this );
+			if (isStarted) {
+				_threadStack.push( this );
+			}
+			else
+			{
+				isStarted = true;
+			}
 			func.apply( null, args );
 			_threadStack.pop();
 		}
@@ -107,6 +134,7 @@ package org.osmf.smpte.tt.utilities
 		 */             
 		public function run( elapsed:int = -1 ):void
 		{
+			isStarted = true;
 			_endTime = getTimer() + elapsed;
 			while ( ( elapsed == -1 ) 
 				|| ( getTimer() < _endTime ) )
@@ -170,7 +198,7 @@ package org.osmf.smpte.tt.utilities
 		 */             
 		public static function queue( func:Function, args:Array = null ):void
 		{
-			if ( _threadStack.length > 0 )
+			if ( _threadStack.length > 0)
 			{
 				// append call to the current ( topmost ) runner's queue
 				( _threadStack[ _threadStack.length - 1 ] as AsyncThread ).queue( func, args );           

@@ -50,25 +50,7 @@ package org.osmf.smpte.tt.model
 			_regions = new Dictionary();
 		}
 		
-		private var _head:HeadElement;
-		public function get head():HeadElement
-		{
-			return _head;
-		}
-		public function set head(value:HeadElement):void
-		{
-			_head = value;
-		}
-		
-		private var _body:BodyElement;
-		public override function get body():BodyElement
-		{
-			return _body;
-		}
-		public override function set body(value:BodyElement):void
-		{
-			_body = value;
-		}
+		public var head:HeadElement;
 		
 		private var _regions:Dictionary;
 		public function get regions():Dictionary
@@ -215,9 +197,7 @@ package org.osmf.smpte.tt.model
 		 * Check tt element validity
 		 */
 		protected override function validElements():void
-		{
-			
-			
+		{			
 			var isValid:Boolean = true;
 			// we need an extra check to validate the root attributes in order
 			// to ensure parameters are parsed.
@@ -233,16 +213,16 @@ package org.osmf.smpte.tt.model
 					//{ region test if child element is head or body
 					if (children[0] is HeadElement)
 					{
-						_head = children[0] as HeadElement;
+						head = children[0] as HeadElement;
 						isValid = true;
 					}
 					else if (children[0] is BodyElement)
 					{
-						_body = children[0] as BodyElement;
-						_head = new HeadElement();
+						body = children[0] as BodyElement;
+						head = new HeadElement();
 						children.length = 0;
-						children.push(_head);
-						children.push(_body);
+						children.push(head);
+						children.push(body);
 						isValid = true;
 					}
 					else
@@ -257,14 +237,14 @@ package org.osmf.smpte.tt.model
 					//{ region Check first child is head, and second is body
 					if (children[0] is HeadElement)
 					{
-						_head = children[0] as HeadElement;
+						head = children[0] as HeadElement;
 					}
 					if (children[1] is BodyElement)
 					{
-						_body = children[1] as BodyElement;
+						body = children[1] as BodyElement;
 					}
 					
-					isValid = (_body != null && _head != null);
+					isValid = (body != null && head != null);
 					//} endregion
 				
 					break;
@@ -294,10 +274,10 @@ package org.osmf.smpte.tt.model
 				
 				var defaultLayout:LayoutElement = new LayoutElement();
 				defaultLayout.localName = "layout";
-				defaultLayout.namespace = _head.namespace;
+				defaultLayout.namespace = head.namespace;
 				
-				_head.children.push(defaultLayout);
-				defaultLayout.parent = _head;
+				head.children.push(defaultLayout);
+				defaultLayout.parent = head;
 				var defaultRegion:RegionElement = new RegionElement();
 				defaultRegion.id = RegionElement.DEFAULT_REGION_NAME;
 				defaultRegion.setLocalStyle("backgroundColor",new ColorExpression(0,0.75));

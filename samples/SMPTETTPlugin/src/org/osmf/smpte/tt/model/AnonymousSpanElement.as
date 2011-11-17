@@ -28,18 +28,10 @@ package org.osmf.smpte.tt.model
 	{	
 		public function AnonymousSpanElement(p_text:String)
 		{
-			_text = p_text;
+			text = p_text;
 		}
 		
-		private var _text:String;
-		public function get text():String
-		{
-			return _text;
-		}
-		public function set text(value:String):void
-		{
-			_text = value;
-		}
+		public var text:String;
 		
 		/** 
 		 * Return the formatting object for anonymous span element
@@ -58,7 +50,7 @@ package org.osmf.smpte.tt.model
 		
 		public override function writeElement(writer:XML, isRoot:Boolean = false):void
 		{
-			writer.appendChild(_text);
+			writer.appendChild(text);
 		}
 	}
 }

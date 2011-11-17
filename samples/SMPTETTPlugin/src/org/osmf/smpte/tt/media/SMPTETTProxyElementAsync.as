@@ -102,7 +102,7 @@ package org.osmf.smpte.tt.media
 				var startAt:int = Math.max(0,SMPTETTMetadata.numMarkers-1);
 				for (i=startAt; i<document.numTimelineMarkerEvents; i++)
 				{
-					c = captionElements[i]
+					c = captionElements[i];
 					if (c)
 					{
 						SMPTETTMetadata.addMarker(c);
