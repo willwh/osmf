@@ -25,7 +25,6 @@ package org.osmf.smpte.tt.parsing
 	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
 	
 	import org.osmf.smpte.tt.captions.CaptionElement;
 	import org.osmf.smpte.tt.captions.CaptionRegion;
@@ -160,9 +159,9 @@ package org.osmf.smpte.tt.parsing
 			_document = new CaptioningDocument();
 			
 			// if global time parameters for this session haven't been established, we should set them
-			if(!TimeExpression.CurrentTimeBase){
+			if(!TimeExpression.CurrentTimeBase)
 				TimeExpression.initializeParameters();
-			}
+			
 				
 			var parseTree:TtElement = null;
 			
@@ -182,7 +181,7 @@ package org.osmf.smpte.tt.parsing
 				addEventListener(ParseEvent.PROGRESS, handleValitateTtElement);
 				
 				_ttElement = e.data as TtElement;
-				setTimeout(validateTtElement, 5, _ttElement);
+				validateTtElement(_ttElement);
 			}
 		}
 		
@@ -194,7 +193,7 @@ package org.osmf.smpte.tt.parsing
 				addEventListener(ParseEvent.PROGRESS, handleComputeTimeIntervals);
 				
 				_ttElement = e.data as TtElement;
-				setTimeout(computeTimeIntervals, 5, _ttElement, _startTime, _endTime);
+				computeTimeIntervals(_ttElement, _startTime, _endTime);
 			}
 		}
 		
@@ -206,7 +205,7 @@ package org.osmf.smpte.tt.parsing
 				addEventListener(ParseEvent.PROGRESS, handleBuildDocumentTimeInterval);
 
 				_ttElement = e.data as TtElement;
-				setTimeout(buildRegions, 5, _ttElement);
+				buildRegions(_ttElement);
 			}
 		}
 		
@@ -296,7 +295,23 @@ package org.osmf.smpte.tt.parsing
 				}
 			}
 			
+			xml.setNamespace(newDefaultNS);
+			
 			return 	newDefaultNS;	
+		}
+		
+		private function stripSMPTETTNodes(xml:XML):XML
+		{
+			if(xml.namespace("smpte"))
+			{
+				var xmlList:XMLList = xml..smpte::*;
+				var len:uint = xmlList.length();
+				for each(var node:XML in xmlList)
+				{
+					delete node.parent().*[node.childIndex()];
+				}
+			}
+			return xml;
 		}
 		
 		private function parseTtElement(rawData:String):TtElement
@@ -310,7 +325,7 @@ package org.osmf.smpte.tt.parsing
 			var saveXMLPrettyPrinting:Boolean = XML.prettyPrinting; 
 			
 			// Remove line ending whitespaces
-			var xmlStr:String = rawData.replace(/\s+$/, "");
+			var xmlStr:String = rawData; //.replace(/\s+$/, "");
 			
 			// Remove whitespaces between tags
 			xmlStr = xmlStr.replace(/(?<!span)>\s+<(?!$1)|(?<=span)>\s*[\n\r\t]\s*</g, "><");
@@ -334,11 +349,17 @@ package org.osmf.smpte.tt.parsing
 				ttp = xml.namespace("ttp");
 				smpte = xml.namespace("smpte");
 				m608 = xml.namespace("m608");
+				xml.addNamespace(Namespaces.XML_NS);
 
 				// rewrite xml with corrected namespace
-				xml = new XML(xmlStr);
+				// xml = new XML(xmlStr);
+				// xml = stripSMPTETTNodes(xml);
 												
-				parsetree = TimedTextElementBase.parse(xml) as TtElement;
+				//parsetree = TimedTextElementBase.parse(xml) as TtElement;
+				//parsetree = XMLToTTElementParser.parse(xml) as TtElement;
+				var asyncParser:XMLToTTElementParser = XMLToTTElementParser.parse(xml);
+				asyncParser.addEventListener(ParseEvent.COMPLETE, onXMLToTTElementComplete);
+				
 			} catch (e:SMPTETTException) {
 				SMPTETTLogging.debugLog("Unhandled exception in TimedTextParser : "+e.message);
 				throw e;				
@@ -349,16 +370,21 @@ package org.osmf.smpte.tt.parsing
 				XML.prettyPrinting = saveXMLPrettyPrinting;
 			}
 			
+			return parsetree;
+		}
+
+		private function onXMLToTTElementComplete(event:ParseEvent):void
+		{
+			var parsetree:TtElement = event.data as TtElement;
 			if (parsetree == null)
 			{
 				debug("No Parse tree returned");
 				throw new SMPTETTException("No Parse tree returned");
 			}
-						
+			
 			debug(this+" parseTTElement: "+(getTimer()-parseTime)/1000+"s");
 			
 			dispatchEvent(new ParseEvent(ParseEvent.PROGRESS, true, false, parsetree) );
-			return parsetree;
 		}
 		
 		private function validateTtElement(parsetree:TtElement):TtElement
@@ -385,12 +411,7 @@ package org.osmf.smpte.tt.parsing
 			var st:TimeCode = (i_startTime) ? i_startTime : TimeExpression.parse("00:00:00:00");
 			var et:TimeCode = (i_endTime) ? i_endTime : TimeExpression.parse("12:00:00:00");
 			
-			
-			
 			parsetree.computeTimeIntervals(TimeContainer.PAR, st, et);	
-			
-			XML.ignoreWhitespace = true;
-			XML.prettyPrinting = false;
 
 			debug(this+" computeTimeIntervals("+st+", "+et+"): "+(getTimer()-parseTime)/1000+"s");
 			
