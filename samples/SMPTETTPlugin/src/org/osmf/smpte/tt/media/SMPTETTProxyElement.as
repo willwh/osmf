@@ -51,6 +51,7 @@ package org.osmf.smpte.tt.media
 	import org.osmf.smpte.tt.architecture.creation.SMPTETTFactoryFacade;
 	import org.osmf.smpte.tt.captions.CaptionElement;
 	import org.osmf.smpte.tt.captions.CaptioningDocument;
+	import org.osmf.smpte.tt.captions.TimedTextElement;
 	import org.osmf.smpte.tt.captions.TimedTextElementType;
 	import org.osmf.smpte.tt.loader.SMPTETTLoadTrait;
 	import org.osmf.smpte.tt.loader.SMPTETTLoader;
@@ -678,12 +679,59 @@ package org.osmf.smpte.tt.media
 				if (DEBUG) flagCaptionElementAsDisplayed(captionElement);
 				
 				// Start the _currentPositionTimer to monitor playhead position.
-				if(_currentPositionTimer)
+				if(_currentPositionTimer 
+					&& hasDescendantMarkerEvents(TimedTextElement(captionElement)))
 				{
 					_currentPositionTimer.delay = CURRENT_POSITION_UPDATE_INTERVAL;
 					_currentPositionTimer.start();
 				}
 			}
+		}
+		
+		/**
+		 * @private
+		 */	
+		private function hasDescendantMarkerEvents(timedTextElement:TimedTextElement):Boolean
+		{
+			var bool:Boolean = false;
+			var t:TimedTextElement;
+			for each(t in timedTextElement.animations)
+			{
+				if(t.begin != timedTextElement.begin || t.end != timedTextElement.end)
+				{
+					return true;
+				}
+			}
+			for each(t in timedTextElement.children)
+			{
+				if(t.begin != timedTextElement.begin || t.end != timedTextElement.end)
+				{
+					return true;
+				} else 
+				{
+					bool = hasDescendantMarkerEvents(t);
+				}
+			}	
+			for each(t in timedTextElement.siblings)
+			{
+				if(t.begin != timedTextElement.begin || t.end != timedTextElement.end)
+				{
+					return true;
+				} else 
+				{
+					bool = hasDescendantMarkerEvents(t);
+				}
+			}
+			var captionElement:CaptionElement = timedTextElement as CaptionElement;
+			if(captionElement)
+			{
+				var regionLayoutTargetSprite:RegionLayoutTargetSprite = captioningMediaElement.getRegionById(captionElement.regionId);
+				if(regionLayoutTargetSprite && regionLayoutTargetSprite.captionRegion.animations.length>0)
+				{
+					return true;
+				}
+			}
+			return bool;
 		}
 		
 		/**
@@ -977,7 +1025,7 @@ package org.osmf.smpte.tt.media
 		{
 			event.target.removeEventListener(Event.ADDED_TO_STAGE, onDisplayObjectAddedToStage);
 			
-			CURRENT_POSITION_UPDATE_INTERVAL = Math.round(1000 / DisplayObject(event.target).stage.frameRate);
+			CURRENT_POSITION_UPDATE_INTERVAL = Math.round(4000 / DisplayObject(event.target).stage.frameRate);
 			
 			if (_currentPositionTimer)
 				_currentPositionTimer.delay = CURRENT_POSITION_UPDATE_INTERVAL;
@@ -1034,6 +1082,6 @@ package org.osmf.smpte.tt.media
 				
 		private static const ERROR_MISSING_TTML_METADATA:String = "Media Element is missing TTML metadata";
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";
-		private static var CURRENT_POSITION_UPDATE_INTERVAL:int = 100;
+		private static var CURRENT_POSITION_UPDATE_INTERVAL:int = 250;
 	}
 }

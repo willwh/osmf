@@ -516,7 +516,7 @@ package org.osmf.smpte.tt.parsing
 					
 					captionRegion.children.push(captionElement);
 					
-					var timecode:String = TimeExpression.parse(captionElement.begin+"s").toString();
+					var timecode:String = timedTextElement.begin.toString();
 					if(timelineEventsHash[timecode]){
 						CaptionElement(timelineEventsHash[timecode]).siblings.push(captionElement);
 					} else {
@@ -585,22 +585,21 @@ package org.osmf.smpte.tt.parsing
 			// trace(region.id+" buildTimedTextElements: "+ element+" "+(element.hasOwnProperty("text") ? element["text"]:""));
 			
 			var timedTextElement:TimedTextElement = createTimedTextElement(element, region);
-			var captionElement:CaptionElement = timedTextElement as CaptionElement;
 			
 			for each (var c:TimedTextElementBase in element.children)
 			{
 				var child:TimedTextElement = buildTimedTextElements(c, region);
 				if (!child) continue;
 				
-				child.parentElement = captionElement;
+				child.parentElement = timedTextElement;
 				
 				if (child is TimedTextAnimation)
 				{
 					timedTextElement.animations.push(child);
 				} else if (child is CaptionElement)
 				{
-					CaptionElement(child).index = captionElement.children.length;
-					captionElement.children.push(child);
+					CaptionElement(child).index = timedTextElement.children.length;
+					timedTextElement.children.push(child);
 				}
 			}
 			return timedTextElement;

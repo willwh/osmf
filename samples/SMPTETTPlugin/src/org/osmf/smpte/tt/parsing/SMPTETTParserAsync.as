@@ -110,7 +110,7 @@ package org.osmf.smpte.tt.parsing
 		
 				captionRegion.children.push(captionElement);
 
-				var timecode:String = TimeExpression.parse(captionElement.begin+"s").toString();
+				var timecode:String = timedTextElement.begin.toString();
 								
 				if(timelineEventsHash[timecode]){
 					CaptionElement(timelineEventsHash[timecode]).siblings.push(captionElement);

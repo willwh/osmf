@@ -95,7 +95,7 @@ package org.osmf.smpte.tt.media
 			{
 				_regionsHash = new Dictionary();
 			}
-			var region:RegionLayoutTargetSprite 
+			var region:RegionLayoutTargetSprite;
 			if (!_regionsHash[value.id])
 			{
 				region = new RegionLayoutTargetSprite(value);
@@ -107,6 +107,12 @@ package org.osmf.smpte.tt.media
 				region = _regionsHash[value.id]
 			}
 			return region;
+		}
+		
+		public function getRegionById(id:String):RegionLayoutTargetSprite
+		{
+			if (!_regionsHash) return null;			
+			return _regionsHash[id] as RegionLayoutTargetSprite;
 		}
 		
 		public function removeRegionById(id:String):void
