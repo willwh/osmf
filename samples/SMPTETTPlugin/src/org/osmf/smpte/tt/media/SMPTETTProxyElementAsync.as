@@ -1,20 +1,12 @@
 package org.osmf.smpte.tt.media
 {
 	import org.osmf.elements.ParallelElement;
-	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.URLResource;
 	import org.osmf.metadata.TimelineMetadata;
-	import org.osmf.smpte.tt.SMPTETTPluginInfo;
 	import org.osmf.smpte.tt.captions.CaptionElement;
 	import org.osmf.smpte.tt.captions.CaptioningDocument;
 	import org.osmf.smpte.tt.events.ParseEvent;
 	import org.osmf.smpte.tt.loader.SMPTETTLoadTrait;
-	import org.osmf.smpte.tt.loader.SMPTETTLoader;
-	import org.osmf.smpte.tt.parsing.SMPTETTParser;
-	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.MediaTraitBase;
 	
 	public class SMPTETTProxyElementAsync extends SMPTETTProxyElement
 	{
@@ -63,13 +55,26 @@ package org.osmf.smpte.tt.media
 		override protected function addLoadTraitListeners(trait:SMPTETTLoadTrait):void
 		{
 			super.addLoadTraitListeners(trait);
-			trait.addEventListener(ParseEvent.PARTIAL, onPartialLoad, false,0, true);
+			trait.addEventListener(ParseEvent.BEGIN, onParseEvent, false, 0, true);
+			trait.addEventListener(ParseEvent.PROGRESS, onParseEvent, false, 0, true);
+			trait.addEventListener(ParseEvent.PARTIAL, onParseEvent, false, 0, true);
+			trait.addEventListener(ParseEvent.COMPLETE, onParseEvent, false, 0, true);
 		}
 		
+		protected function onParseEvent(e:ParseEvent):void
+		{
+			switch(e.type)
+			{
+				case ParseEvent.PARTIAL:
+					onPartialLoad(e);
+					break;
+			}
+			dispatchEvent(e);
+		}
 
 		protected function onPartialLoad(e:ParseEvent):void
 		{
-			addMetaDataTimelineMarkers()
+			addMetaDataTimelineMarkers();
 			
 			//Make sure on partial loading of captions, we quickly get to the nearest one
 			if (_mediaPlayer)

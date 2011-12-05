@@ -49,7 +49,7 @@ package org.osmf.smpte.tt.events
 
 		public override function toString():String
 		{
-			return formatToString("ParseEvent","data","data");
+			return formatToString("ParseEvent","type","data");
 		}
 
 		

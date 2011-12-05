@@ -20,9 +20,6 @@ package org.osmf.smpte.tt.loader
 	
 	One of the callbacks was a protected final method : updateLoadTrait(), 
 	so SMPTETTLoader had to add a public delegate method to access it: updateLoadTraitAccessor()
-	
-	
-	
 	*/
 	public class SMPTETTLoader_LoadTrait_Helper
 	{
@@ -138,10 +135,8 @@ package org.osmf.smpte.tt.loader
 				case ParseEvent.COMPLETE:
 					updateLoadTrait(loadTrait, LoadState.READY);
 					break;
-				case ParseEvent.PARTIAL:
-					loadTrait.dispatchEvent(event);
-					break;
 			}
+			loadTrait.dispatchEvent(event);
 		}
 		
 		private function prepLoadErrorState(event:LoaderEvent):void
