@@ -148,6 +148,6 @@ package org.osmf.media
 		
 		
 		/// Internals
-		private static const RTMP_LIVE:String = "rtmp://cp34973.live.edgefcs.net/live/Flash_live_bm_500K@9319";	
+		private static const RTMP_LIVE:String = "rtmp://mediadelivery.adobe.com/mpp/livestream2";	
 	}
 }
