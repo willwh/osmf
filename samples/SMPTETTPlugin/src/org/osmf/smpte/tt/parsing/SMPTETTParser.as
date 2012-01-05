@@ -408,12 +408,15 @@ package org.osmf.smpte.tt.parsing
 		{	
 			parseTime = getTimer();
 			
-			var st:TimeCode = (i_startTime) ? i_startTime : TimeExpression.parse("00:00:00:00");
-			var et:TimeCode = (i_endTime) ? i_endTime : TimeExpression.parse("12:00:00:00");
+			if(!TimeExpression.CurrentTimeBase)
+				TimeExpression.initializeParameters();
+									
+			var st:TimeCode = (i_startTime) ? i_startTime : new TimeCode(0,TimeExpression.CurrentSmpteFrameRate);
+			var et:TimeCode = (i_endTime) ? i_endTime : new TimeCode(TimeCode.maxValue(TimeExpression.CurrentSmpteFrameRate),TimeExpression.CurrentSmpteFrameRate);
 			
-			parsetree.computeTimeIntervals(TimeContainer.PAR, st, et);	
+			parsetree.computeTimeIntervals(TimeContainer.PAR, st, et);
 
-			debug(this+" computeTimeIntervals("+st+", "+et+"): "+(getTimer()-parseTime)/1000+"s");
+			debug(this+" computeTimeIntervals("+st+", "+et+"): "+(getTimer()-parseTime)/1000+"s\n"/* +parsetree.events.toString() */);
 			
 			dispatchEvent(new ParseEvent(ParseEvent.PROGRESS, true, false, parsetree) );
 			return parsetree;
