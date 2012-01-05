@@ -1,7 +1,5 @@
 package org.osmf.smpte.tt.architecture.creation
 {
-	import avmplus.getQualifiedClassName;
-	
 	import org.osmf.smpte.tt.loader.SMPTETTLoader;
 	import org.osmf.smpte.tt.media.SMPTETTProxyElement;
 	import org.osmf.smpte.tt.media.SMPTETTProxyElementAsync;

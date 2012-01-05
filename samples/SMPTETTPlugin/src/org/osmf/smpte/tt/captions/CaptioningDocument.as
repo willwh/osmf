@@ -19,15 +19,13 @@
  **********************************************************/
 package org.osmf.smpte.tt.captions
 {
+	import flash.errors.IllegalOperationError;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.smpte.tt.timing.TimeExpression;
-
+	import org.osmf.utils.OSMFStrings;
+	
 	public class CaptioningDocument
 	{
-		import flash.errors.IllegalOperationError;
-		
-		import org.osmf.utils.OSMFStrings;
 		
 		/**
 		 * The title, if it was found in the metadata in the header.
