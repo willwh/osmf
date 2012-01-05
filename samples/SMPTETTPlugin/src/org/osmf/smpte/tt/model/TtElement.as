@@ -284,9 +284,9 @@ package org.osmf.smpte.tt.model
 				defaultRegion.setLocalStyle("color", Colors.White);
 				defaultRegion.setLocalStyle("textAlign",TextAlign.CENTER);
 				defaultRegion.setLocalStyle("fontFamily","_sans");
-				defaultRegion.setLocalStyle("fontSize", new FontSize("1c 1c"));
-				defaultRegion.setLocalStyle("extent",new Extent("100% 10%"));
-				defaultRegion.setLocalStyle("origin",new Origin("0% 90%"));
+				defaultRegion.setLocalStyle("fontSize", FontSize.getFontSize("1c"));
+				defaultRegion.setLocalStyle("extent", Extent.getExtent("100% 10%"));
+				defaultRegion.setLocalStyle("origin", Origin.getOrigin("0% 90%"));
 				defaultRegion.setLocalStyle("padding",new PaddingThickness("2px 10%"));
 				defaultLayout.children.push(defaultRegion);
 				defaultRegion.parent = defaultLayout;

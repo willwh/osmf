@@ -798,11 +798,11 @@ package org.osmf.smpte.tt.model
 					case "extent":
 						if (value == "auto")
 						{
-							_styling[attribute.localName] = new AutoExtent();
+							_styling[attribute.localName] = AutoExtent.instance;
 						}
 						else
 						{
-							_styling[attribute.localName] = new Extent(value);
+							_styling[attribute.localName] = Extent.getExtent(value);
 						};
 						break;
 					case "fontFamily":
@@ -818,9 +818,9 @@ package org.osmf.smpte.tt.model
 					case "fontSize":
 						if(validAttributeValue(s_fontSizeExpression, attribute))
 						{
-							_styling["fontSize"] = new FontSize(value);
+							_styling["fontSize"] = FontSize.getFontSize(value);
 						} else {
-							_styling["fontSize"] = new FontSize("1c 1c");
+							_styling["fontSize"] = FontSize.getFontSize("1c");
 						}
 						break;
 					case "fontStyle":
@@ -857,8 +857,8 @@ package org.osmf.smpte.tt.model
 						{
 							_styling["lineHeight"] = 
 								(value=="normal")
-								? new NormalHeight() 
-								: new LineHeight(value);
+								? NormalHeight.instance
+								: LineHeight.getLineHeight(value);
 						}
 						break;
 					case "opacity":
@@ -871,13 +871,13 @@ package org.osmf.smpte.tt.model
 						switch (value)
 						{
 							case "auto":
-								_styling["origin"] = new AutoOrigin();
+								_styling["origin"] = AutoOrigin.instance;
 								break;
 							case "inherit":
 								_styling["origin"] = new Inherit();
 								break;
 							default:
-								_styling["origin"] = new Origin(value);
+								_styling["origin"] = Origin.getOrigin(value);
 								break;
 						};
 						break;
@@ -887,7 +887,7 @@ package org.osmf.smpte.tt.model
 					case "padding":
 						if (validAttributeValue(s_paddingExpression, attribute))
 						{
-							_styling["padding"] = new PaddingThickness(value);
+							_styling["padding"] = PaddingThickness.getPaddingThickness(value);
 						}
 						break;
 					case "showBackground":

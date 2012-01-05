@@ -67,13 +67,13 @@ package org.osmf.smpte.tt.model
 					obj = "none";
 					break;
 				case "extent":
-					obj = new AutoExtent();
+					obj = AutoExtent.instance;
 					break;
 				case "fontFamily":
 					obj = "default";
 					break;
 				case "fontSize":
-					obj = new FontSize("1c 1c");
+					obj = FontSize.getFontSize("1c");
 					break;
 				case "fontStyle":
 					obj = FontStyleAttributeValue.REGULAR;
@@ -88,13 +88,13 @@ package org.osmf.smpte.tt.model
 					obj = 1.0;
 					break;
 				case "origin":
-					obj = new AutoOrigin();
+					obj = AutoOrigin.instance;
 					break;
 				case "overflow": 
 					obj = "hidden";
 					break;
 				case "padding":
-					obj = new PaddingThickness("0px");
+					obj = PaddingThickness.getPaddingThickness("0px");
 					break;
 				case "showBackground":
 					obj = "always";
