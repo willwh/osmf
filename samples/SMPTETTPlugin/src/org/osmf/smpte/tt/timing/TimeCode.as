@@ -582,6 +582,42 @@ package org.osmf.smpte.tt.timing
 		{
 			return TimeCode.absoluteTimeToFrames(_absoluteTime, _frameRate);
 		}
+		
+		/**
+		 * Gets the maximum TimeCode value of a known frame rate. The Max value for Timecode.
+		 *
+		 * @param frameRate The frame rate to get the max value.
+		 * @return The maximum TimeCode value for the given frame rate.
+		 */
+		public static function maxValue(frameRate:SmpteFrameRate):Number
+		{
+			var value:Number = 86399;
+			switch (frameRate)
+			{
+				case SmpteFrameRate.SMPTE_2398:
+					value = 86486.35829166667;
+					break;
+				case SmpteFrameRate.SMPTE_24:
+					value = 86399.95833333333;
+					break;
+				case SmpteFrameRate.SMPTE_25:
+					value = 86399.96;
+					break;
+				case SmpteFrameRate.SMPTE_2997_DROP:
+					value = 86399.88023333333;
+					break;
+				case SmpteFrameRate.SMPTE_2997_NONDROP:
+					value = 86486.36663333333;
+					break;
+				case SmpteFrameRate.SMPTE_30:
+					value = 86399.96666666667;
+					break;
+				default:
+					value = 86399;
+					break;
+			}
+			return value;
+		}
 	
 		/**
 		 * The private Timespan used to track absolute time for this instance.
@@ -1145,7 +1181,6 @@ package org.osmf.smpte.tt.timing
 					absoluteTimeHelper = TimeCode.smpte12M_30_ToAbsoluteTime(timeCode);
 					break;
 			}
-			
 			return absoluteTimeHelper;
 		}
 		
@@ -1394,7 +1429,7 @@ package org.osmf.smpte.tt.timing
 		 */
 		internal static function absoluteTimeToTicksPcrTb(time:AbsoluteTimeHelper):Number
 		{
-			return Math.floor(time.timeAsDouble * 90000);
+			return Math.round(time.timeAsDouble * 90000);
 		}
 		
 		/**
@@ -1649,7 +1684,7 @@ package org.osmf.smpte.tt.timing
 		private static function smpte12M_30fpsToTicks27Mhz(timeCode:String):Number
 		{
 			var t:TimeCode = new TimeCode(timeCode, SmpteFrameRate.SMPTE_30);
-			var ticksPcrTb:Number = Math.floor((t.framesSegment * 3000) 
+			var ticksPcrTb:Number = Math.round((t.framesSegment * 3000) 
 												+ (90000 * t.secondsSegment) 
 												+ (5400000 * t.minutesSegment) 
 												+ (324000000 * t.hoursSegment));
@@ -1666,7 +1701,7 @@ package org.osmf.smpte.tt.timing
 		private static function smpte12M_23_98fpsToTicks27Mhz(timeCode:String):Number
 		{
 			var t:TimeCode = new TimeCode(timeCode, SmpteFrameRate.SMPTE_2398);			
-			var ticksPcrTb:Number = Math.floor(Math.ceil(t.framesSegment * 3753.75) 
+			var ticksPcrTb:Number = Math.round(Math.ceil(t.framesSegment * 3753.75) 
 												+ (90090 * t.secondsSegment) 
 												+ (5405400 * t.minutesSegment) 
 												+ (324324000 * t.hoursSegment));
@@ -1682,7 +1717,7 @@ package org.osmf.smpte.tt.timing
 		private static function smpte12M_24fpsToTicks27Mhz(timeCode:String):Number
 		{
 			var t:TimeCode = new TimeCode(timeCode, SmpteFrameRate.SMPTE_24);
-			var ticksPcrTb:Number = Math.floor((t.framesSegment * 3750) 
+			var ticksPcrTb:Number = Math.round((t.framesSegment * 3750) 
 												+ (90000 * t.secondsSegment) 
 												+ (5400000 * t.minutesSegment) 
 												+ (324000000 * t.hoursSegment));
@@ -1698,7 +1733,7 @@ package org.osmf.smpte.tt.timing
 		private static function smpte12M_25fpsToTicks27Mhz(timeCode:String):Number
 		{
 			var t:TimeCode = new TimeCode(timeCode, SmpteFrameRate.SMPTE_25);
-			var ticksPcrTb:Number = Math.floor((t.framesSegment * 3600) 
+			var ticksPcrTb:Number = Math.round((t.framesSegment * 3600) 
 												+ (90000 * t.secondsSegment) 
 												+ (5400000 * t.minutesSegment) 
 												+ (324000000 * t.hoursSegment));
@@ -1714,7 +1749,7 @@ package org.osmf.smpte.tt.timing
 		private static function smpte12M_29_27_NonDropToTicks27Mhz(timeCode:String):Number
 		{
 			var t:TimeCode = new TimeCode(timeCode, SmpteFrameRate.SMPTE_2997_DROP);
-			var ticksPcrTb:Number = Math.floor((t.framesSegment * 3003) 
+			var ticksPcrTb:Number = Math.round((t.framesSegment * 3003) 
 												+ (90090 * t.secondsSegment) 
 												+ (5405400 * t.minutesSegment) 
 												+ (324324000 * t.hoursSegment));
@@ -1730,7 +1765,7 @@ package org.osmf.smpte.tt.timing
 		private static function smpte12M_29_27_DropToTicks27Mhz(timeCode:String):Number
 		{
 			var t:TimeCode = new TimeCode(timeCode, SmpteFrameRate.SMPTE_2997_NONDROP);
-			var ticksPcrTb:Number = Math.floor((t.framesSegment * 3003) 
+			var ticksPcrTb:Number = Math.round((t.framesSegment * 3003) 
 												+ (90090 * t.secondsSegment) 
 												+ (5399394 * t.minutesSegment) 
 												+ (6006 * int(t.minutesSegment / 10)) 

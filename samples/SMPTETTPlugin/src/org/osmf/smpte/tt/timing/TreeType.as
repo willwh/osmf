@@ -136,7 +136,7 @@ package org.osmf.smpte.tt.timing
 					t.push(tree.end);
 					return t;
 				}
-				_events = distinctTimeCodeVector( this.reduce(reduceQuery).sort(TimeCode.Compare) );
+				_events = distinctTimeCodeVector( this.reduce(reduceQuery) );
 			} 
 			return _events;
 		}
@@ -154,7 +154,7 @@ package org.osmf.smpte.tt.timing
 					unique[unique.length] = tc;
 				}
 			}
-			return unique;
+			return unique.sort(TimeCode.Compare);
 		}
 		
 		/**
