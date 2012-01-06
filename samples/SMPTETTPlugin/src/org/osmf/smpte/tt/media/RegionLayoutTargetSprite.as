@@ -459,13 +459,14 @@ package org.osmf.smpte.tt.media
 					}
 					case "wrapOption":
 					{
-						_containerController.lineBreak = (styles.wrapOption == WrapOption.NOWRAP.value) ? LineBreak.EXPLICIT : LineBreak.TO_FIT;
+						_containerController.lineBreak = _textFlow.lineBreak = (styles.wrapOption == WrapOption.NOWRAP.value) ? LineBreak.EXPLICIT : LineBreak.TO_FIT;
 						break;
 					}
 					case "ttFontSize":
 					{
 						var ttFontSize:FontSize = value as FontSize;
-						if(ttFontSize){
+						if (ttFontSize)
+						{
 							safeAreaWidth = (ttFontSize.unitMeasureHorizontal==Unit.CELL) ? toTextSafeArea(size.width) : size.width;
 							safeAreaHeight = (ttFontSize.unitMeasureVertical==Unit.CELL) ? toTextSafeArea(size.height) : size.height;
 							ttFontSize.setContext(safeAreaWidth, safeAreaHeight);
@@ -474,11 +475,11 @@ package org.osmf.smpte.tt.media
 							cellHeight = (ttFontSize.unitMeasureVertical==Unit.PERCENT) ? cellSize.height*(NumberPair.cellRows-2) : cellSize.height;
 							ttFontSize.setFontContext(cellWidth, cellHeight);
 
-							_containerController.fontSize = ttFontSize.fontHeight;
+							_containerController.fontSize = _textFlow.fontSize = ttFontSize.fontHeight;
 							//trace(_containerController+" setContext("+safeAreaWidth+","+safeAreaHeight+")");
 							//trace(_containerController+" setFontContext("+cellWidth+","+cellHeight+")");
 						} else {
-							_containerController.fontSize = 16;
+							_containerController.fontSize = _textFlow.fontSize = cellSize.height;
 						}
 						//trace(_containerController+" fontSize="+_containerController.fontSize);
 						break;
@@ -486,7 +487,8 @@ package org.osmf.smpte.tt.media
 					case "ttLineHeight":
 					{
 						var ttLineHeight:LineHeight = value as LineHeight;
-						if(ttLineHeight){
+						if (ttLineHeight)
+						{
 							safeAreaWidth = (ttLineHeight.unitMeasureHorizontal==Unit.CELL) ? toTextSafeArea(size.width) : size.width;
 							safeAreaHeight = (ttLineHeight.unitMeasureVertical==Unit.CELL) ? toTextSafeArea(size.height) : size.height;
 							ttLineHeight.setContext(safeAreaWidth, safeAreaHeight);
@@ -494,7 +496,10 @@ package org.osmf.smpte.tt.media
 							cellWidth = (ttLineHeight.unitMeasureHorizontal==Unit.PERCENT) ? cellSize.width*(NumberPair.cellColumns-2) : cellSize.width;
 							cellHeight = (ttLineHeight.unitMeasureVertical==Unit.PERCENT) ? cellSize.height*(NumberPair.cellRows-2) : cellSize.height;
 							ttLineHeight.setFontContext(cellWidth, cellHeight);
-							_containerController.lineHeight = ttLineHeight.height;
+							_containerController.lineHeight = _textFlow.lineHeight = ttLineHeight.height;
+						} else
+						{
+							_containerController.lineHeight = _textFlow.lineHeight = (_containerController.fontSize ? _containerController.fontSize : cellSize.height) * 1.2;
 						}
 						//trace("lineHeight: " + _containerController.lineHeight);
 						break;
@@ -506,10 +511,10 @@ package org.osmf.smpte.tt.media
 						{
 							padding.setContext(this.layoutRenderer.parent.container.measuredWidth,this.layoutRenderer.parent.container.measuredHeight);
 							padding.setFontContext(cellSize.width, cellSize.height);
-							_containerController.paddingTop = (padding.widthBefore>0) ? padding.widthBefore : 0;
-							_containerController.paddingRight = (padding.widthEnd>0) ? padding.widthEnd : 0;
-							_containerController.paddingBottom = (padding.widthAfter>0) ? padding.widthAfter : 0;
-							_containerController.paddingLeft = (padding.widthStart>0) ? padding.widthStart : 0;
+							_containerController.paddingTop = _textFlow.paddingTop = (padding.widthBefore>0) ? padding.widthBefore : 0;
+							_containerController.paddingRight = _textFlow.paddingRight = (padding.widthEnd>0) ? padding.widthEnd : 0;
+							_containerController.paddingBottom = _textFlow.paddingBottom = (padding.widthAfter>0) ? padding.widthAfter : 0;
+							_containerController.paddingLeft = _textFlow.paddingLeft = (padding.widthStart>0) ? padding.widthStart : 0;
 						}
 						break;
 					}
@@ -525,35 +530,41 @@ package org.osmf.smpte.tt.media
 					case "lineThrough":
 					case "textDecoration":
 					{
-						_containerController.textDecoration = styles["textDecoration"] ? styles["textDecoration"] : TextDecoration.NONE;
-						_containerController.lineThrough = (styles["lineThrough"]) ? styles["lineThrough"] : false;
+						_containerController.textDecoration = _textFlow.textDecoration = styles["textDecoration"] ? styles["textDecoration"] : TextDecoration.NONE;
+						_containerController.lineThrough = _textFlow.lineThrough = (styles["lineThrough"]) ? styles["lineThrough"] : false;
 						break;
 					}
 					case "direction":
 					{
-						_containerController.direction = (value==Direction.RTL) ? Direction.RTL : Direction.LTR;
+						_containerController.direction = _textFlow.direction = (value==Direction.RTL) ? Direction.RTL : Direction.LTR;
 						break;
 					}
 					case "visibility":
 					{
 						if (styles[key]==Visibility.HIDDEN.value)
 						{
-							_containerController.textAlpha = 0;
-							_containerController.backgroundAlpha = 0;
+							_containerController.textAlpha = _textFlow.textAlpha = 0;
+							_containerController.backgroundAlpha = _textFlow.backgroundAlpha = 0;
 						} else
 						{
-							_containerController.textAlpha = styles["textAlpha"];
-							_containerController.backgroundAlpha = styles["backgroundAlpha"];
+							_containerController.textAlpha = _textFlow.textAlpha = styles["textAlpha"];
+							_containerController.backgroundAlpha = _textFlow.backgroundAlpha = styles["backgroundAlpha"];
 						}
 						break;
 					}
 					default:
 					{
-						if(_containerController.hasOwnProperty(key) && value){
+						if(_containerController.hasOwnProperty(key) && value)
+						{
 							_containerController.setStyle(key,value);
+						} else if(_textFlow.hasOwnProperty(key) && value)
+						{
+							_textFlow.setStyle(key,value);
 						} else {
 							// trace(this+" "+key+"="+styles[key]);
 						}
+						
+						
 						break;
 					}
 				}
@@ -624,7 +635,7 @@ package org.osmf.smpte.tt.media
 							//trace(flowElement+" setFontContext("+cellWidth+","+cellHeight+")");
 							
 						} else {
-							flowElement.fontSize = 16;
+							flowElement.fontSize = cellSize.height;
 						}
 						//trace(flowElement+" fontSize="+flowElement.fontSize);
 						break;
@@ -642,6 +653,9 @@ package org.osmf.smpte.tt.media
 							ttLineHeight.setFontContext(cellWidth, cellHeight);
 							
 							flowElement.lineHeight = ttLineHeight.height;
+						} else
+						{
+							flowElement.lineHeight = (flowElement.fontSize ?  flowElement.fontSize : cellSize.height) * 1.2;
 						}
 						//trace(flowElement+" lineHeight=" + flowElement.lineHeight);
 						break;
@@ -955,6 +969,8 @@ package org.osmf.smpte.tt.media
 				_textFlow.flowComposer.updateAllControllers();
 				
 				applyTextOutlines();
+				
+				this._textFlowContainer.scrollRect = null;
 			}
 			
 			super.layout(availableWidth, availableHeight, deep);
