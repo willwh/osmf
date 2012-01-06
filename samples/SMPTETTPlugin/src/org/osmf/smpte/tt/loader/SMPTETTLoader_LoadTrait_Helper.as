@@ -2,6 +2,7 @@ package org.osmf.smpte.tt.loader
 {
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.media.URLResource;
 	import org.osmf.smpte.tt.architecture.creation.SMPTETTFactoryFacade;
 	import org.osmf.smpte.tt.captions.CaptioningDocument;
 	import org.osmf.smpte.tt.events.ParseEvent;
@@ -12,6 +13,11 @@ package org.osmf.smpte.tt.loader
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.HTTPLoadTrait;
 	import org.osmf.utils.HTTPLoader;
+	
+	CONFIG::LOGGING
+	{
+		import org.osmf.logging.*;		
+	}
 
 	/*
 	This whole class was represented by a single method before refactoring. 
@@ -181,5 +187,10 @@ package org.osmf.smpte.tt.loader
 		
 		private function get startTime():TimeCode {return _loader.startTime;}
 		private function get endTime():TimeCode {return _loader.endTime;}
+		
+		CONFIG::LOGGING
+		{	
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.captioning.loader.SMPTETTLoader");		
+		}	
 	}
 }
