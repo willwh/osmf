@@ -8,7 +8,7 @@ package org.osmf.smpte.tt.parsing.conditions
 	{
 		public static function getCondition():ParsingCondition
 		{
-			return atDefinedDurations()
+			return every10PercentDuration()
 		}
 		
 		private static function every10PercentDuration():ParsingCondition
