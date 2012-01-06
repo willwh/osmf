@@ -344,7 +344,7 @@ package org.osmf.smpte.tt.media
 		 */
 		protected function onMetadataValueRemove(event:MetadataEvent):void
 		{
-			//trace(event.type+ " { "+event.key +", " +event.value+" } ");
+			//debug(event.type+ " { "+event.key +", " +event.value+" } ");
 			var metadata:Metadata = event.target as Metadata;
 			switch(event.key)
 			{
@@ -679,7 +679,8 @@ package org.osmf.smpte.tt.media
 				
 				// Start the _currentPositionTimer to monitor playhead position.
 				if(_currentPositionTimer 
-					&& hasDescendantMarkerEvents(TimedTextElement(captionElement)))
+					&& (_seeked
+						|| hasDescendantMarkerEvents(TimedTextElement(captionElement))))
 				{
 					_currentPositionTimer.delay = CURRENT_POSITION_UPDATE_INTERVAL;
 					_currentPositionTimer.start();
@@ -875,7 +876,8 @@ package org.osmf.smpte.tt.media
 			// debug(event.target + " onSeekingChange: " + event.seeking);
 			_currentPositionTimer.stop();
 			_seeked = true;
-			clearCaptionText();
+			if (event.seeking) 
+				clearCaptionText();
 			showNearestCaption(event.time);
 			_seeked = false;
 		}
@@ -892,7 +894,7 @@ package org.osmf.smpte.tt.media
 				if (captionElement.isActiveAtPosition(time,true))
 				{
 					toShow = captionElement;
-				} else if(toShow
+				} else if (toShow
 						 &&	time>captionElement.end 
 						 && captionElement.end<toShow.end)
 				{
@@ -1068,7 +1070,7 @@ package org.osmf.smpte.tt.media
 		private var _seeked:Boolean = false;
 		private var _currentPositionTimer:Timer;
 		private var _captioningEnabled:Boolean = true;
-		private var _timelineMetadata:TimelineMetadata; 	
+		private var _timelineMetadata:TimelineMetadata;
 		private var _currentCaption:CaptionElement;	
 		private var _namespaces:Dictionary = new Dictionary();
 		private var _mediaContainer:IMediaContainer;
