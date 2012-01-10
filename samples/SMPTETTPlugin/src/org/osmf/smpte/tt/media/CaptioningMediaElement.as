@@ -86,6 +86,9 @@ package org.osmf.smpte.tt.media
 			addTrait(MediaTraitType.DISPLAY_OBJECT, _displayObjectTrait);
 			
 			_rootContainer.addEventListener(Event.RESIZE, rootContainer_resizeHandler);
+
+			// set visibility of the _rootContainer based on showCaptions
+			_rootContainer.visible = showCaptions;
 		}
 		
 		public function addRegion(value:CaptionRegion):RegionLayoutTargetSprite
