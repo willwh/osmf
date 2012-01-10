@@ -155,8 +155,16 @@ package org.osmf.smpte.tt.parsing
 		}
 		
 		public function parse(i_rawData:String):CaptioningDocument
-		{			
-			_document = new CaptioningDocument();
+		{   
+            if (ASYNC_THREAD)
+            {
+                // clean-up any running threads
+                debug("ASYNC_THREAD.stop()");
+                ASYNC_THREAD.stop();
+                ASYNC_THREAD = null;
+            }
+            
+            _document = new CaptioningDocument();
 			
 			// if global time parameters for this session haven't been established, we should set them
 			if(!TimeExpression.CurrentTimeBase)
@@ -226,7 +234,7 @@ package org.osmf.smpte.tt.parsing
 						if(!ASYNC_THREAD)
 						{
 							parseTime = getTimer();
-							_captionElements = new Vector.<CaptionElement>;		
+                            _captionElements = new Vector.<CaptionElement>();	
 							ASYNC_THREAD = AsyncThread.create( buildCaptions, 
 															  [ ped.timedTextElement,
 																ped.regionElementsHash,
@@ -236,6 +244,8 @@ package org.osmf.smpte.tt.parsing
 							ASYNC_THREAD.runEachFrame(50);
 						} else
 						{
+                            if (!_captionElements)
+                                _captionElements = new Vector.<CaptionElement>();
 							AsyncThread.queue( buildCaptions, 
 											   [ ped.timedTextElement,
 												 ped.regionElementsHash,

@@ -123,6 +123,21 @@ package org.osmf.smpte.tt.utilities
 			func.apply( null, args );
 			_threadStack.pop();
 		}
+        
+        public function stop():void
+        {
+            if (!_isComplete)
+            {   
+                _isComplete = true;
+                _stack = [[]];
+                if(_shape)
+                {
+                    _shape.removeEventListener( Event.ENTER_FRAME, shape_enterFrame );
+                    _shape = null;
+                }
+                isStarted = false;
+            }
+        }
 		
 		private var _endTime:int;
 		/**
@@ -195,8 +210,8 @@ package org.osmf.smpte.tt.utilities
 		 * @param func
 		 * @param args
 		 * 
-		 */             
-		public static function queue( func:Function, args:Array = null ):void
+		 */
+        public static function queue( func:Function, args:Array = null ):void
 		{
 			if ( _threadStack.length > 0)
 			{
@@ -208,5 +223,16 @@ package org.osmf.smpte.tt.utilities
 				throw new Error( "There is no active AsyncThread. You cannot queue a method call." );   
 			}
 		}
+        
+        public static function stop():void
+        {
+            if ( _threadStack.length > 0)
+            {
+                for each(var thread:AsyncThread in _threadStack)
+                {
+                    thread.stop();
+                }
+            }
+        }
 	}
 }
