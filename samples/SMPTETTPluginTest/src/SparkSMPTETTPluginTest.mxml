@@ -49,8 +49,8 @@
 			private static const F4M_STREAM_URL:String = "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m";
 			private static const AKAMAI_STREAM_URL:String = "rtmp://cp67126.edgefcs.net/ondemand/mediapm/osmf/content/test/akamai_10_year_f8_512K";
 			private static const ADOBE_STREAM_URL:String = "http://www.helpexamples.com/flash/video/caption_video.flv";
-			private static const W3C_STREAM_URL:String = "dfxp-testsuite/dfxp_movie.flv";
-			private static const BASE_W3C_TEST_SUITE_URL:String = "dfxp-testsuite/"; // "http://mediapm.edgesuite.net/osmf/content/test/captioning/dfxp-testsuite/";
+			private static const W3C_STREAM_URL:String = "http://www.w3.org/2008/12/dfxp-testsuite/web-framework/dfxp_movie.flv";
+			private static const BASE_W3C_TEST_SUITE_URL:String = "http://www.w3.org/2008/12/dfxp-testsuite/";
 			private static const BASE_OVP_TEST_SUITE_URL:String = "http://mediapm.edgesuite.net/osmf/content/test/captioning/ovp-testsuite/";
 			
 			private var videoDisplay:VideoDisplay;
