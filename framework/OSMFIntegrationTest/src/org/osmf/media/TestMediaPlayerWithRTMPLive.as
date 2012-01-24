@@ -42,6 +42,7 @@ package org.osmf.media
 		 * Tests the playback of Live RTMP content
 		 * Test that you can pause and resume a RTMP Live stream
 		 */
+        [Ignore]
 		[Test(async, timeout="60000", order=1)]
 		public function playLiveStream():void
 		{
