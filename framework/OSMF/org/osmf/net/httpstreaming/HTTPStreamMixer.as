@@ -81,6 +81,10 @@ package org.osmf.net.httpstreaming
 			addEventListener(HTTPStreamingEvent.DOWNLOAD_ERROR,			onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
 			addEventListener(HTTPStreamingEvent.FRAGMENT_DURATION, 		onFragmentDuration,		false, HIGH_PRIORITY, true);
 			
+			// FM-1003 (http://bugs.adobe.com/jira/browse/FM-1003)
+			// We need to listen to this type of event as well, so we can redispatch it on the _dispatcher
+			addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE,		onHTTPStreamingEvent,	false, HIGH_PRIORITY, true);
+			
 			setState(HTTPStreamingState.INIT);
 			
 			_alternateIgnored = true;
@@ -111,6 +115,16 @@ package org.osmf.net.httpstreaming
 		{
 			// we are interested only by the media track which is the one which dictates the timeline
 			return (video != null && video.source.hasErrors);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get isLiveStalled():Boolean
+		{
+			return video != null &&
+				video.source != null &&
+				video.source.isLiveStalled;
 		}
 
 		/**
@@ -244,7 +258,7 @@ package org.osmf.net.httpstreaming
 				_mediaNeedsInitialization = true;
 			}
 		}
-
+		
 		/**
 		 * Returns the duration of the current fragment
 		 */
@@ -253,6 +267,16 @@ package org.osmf.net.httpstreaming
 			return _fragmentDuration;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */	
+		public function get isBestEffortFetchEnabled():Boolean
+		{
+			return _desiredMediaHandler != null &&
+				_desiredMediaHandler.source != null &&
+				_desiredMediaHandler.source.isBestEffortFetchEnabled;
+		}
+
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////

@@ -31,7 +31,7 @@
 	<target name="core" depends="compile.osmf">
 		<subant target="build" inheritall="true" antfile="testing/NetMockerLibrary/build.xml" buildpath="."/>
         <subant target="run" inheritall="true" antfile="framework/OSMFTest/build.xml" buildpath="."/>
-		<subant target="run" inheritall="true" antfile="framework/OSMFIntegrationTest/build.xml" buildpath="."/>
+		<!-- <subant target="run" inheritall="true" antfile="framework/OSMFIntegrationTest/build.xml" buildpath="."/> -->
 	</target>
 	
 	<!-- compile strobe media player and compile and run coresponding tests -->
@@ -43,7 +43,7 @@
 	<!-- run all project available tests -->
 	<target name="test">
 		<antcall target="run.unittests" />
-		<antcall target="run.integrationtests" />
+		<!-- <antcall target="run.integrationtests" /> -->
 	</target>
 	
 	<!-- ========= subtargets ========= -->
@@ -119,12 +119,14 @@
 	</target>
 	
 	<!-- runs integration tests -->
+	<!--
 	<target name="run.integrationtests" >
 		<sequential>
 			<subant target="run" inheritall="true" antfile="framework/OSMFIntegrationTest/build.xml" buildpath="."/>
 		</sequential>
 	</target>
-
+	-->
+	
 	<!-- deletes the output directories -->
 	<target name="clean">
 		<sequential>

@@ -25,7 +25,7 @@
 		<link>
 			<name>[source path] src</name>
 			<type>2</type>
-			<location>/Work/osmf/trunk-smp/player/StrobeMediaPlayback/src</location>
+			<locationURI>DOCUMENTS/player/StrobeMediaPlayback/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

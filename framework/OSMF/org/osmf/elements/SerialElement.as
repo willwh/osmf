@@ -117,7 +117,7 @@ package org.osmf.elements
 	 * <li>
 	 * TimeTrait - The reported duration of the TimeTrait of a SerialElement
 	 * is the sum of the current child and any completed children only. The
-	 * reported value does not reflect the sum of the duration of all the children. 
+	 * reported value does not reflect the sum of the duration of all the children.
 	 * </li>
 	 * </ul>
 	 * 

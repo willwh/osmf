@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testrun name="" >
-<testsuite  name="Default Test Suite" project="OSMFIntegrationTest">
-<testsuite name="org.osmf.elements.f4mClasses:TestManifestParser" type="testcaseclass"/>
-<testsuite name="org.osmf.elements.f4mClasses:TestMultiLevelManifestParser" type="testcaseclass"/>
-</testsuite>
-</testrun>

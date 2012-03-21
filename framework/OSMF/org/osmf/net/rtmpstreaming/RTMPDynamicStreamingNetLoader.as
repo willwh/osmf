@@ -105,14 +105,8 @@ package org.osmf.net.rtmpstreaming
 		 */
 		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManagerBase
 		{
-			// Only generate the switching manager if the resource is truly
-			// switchable.
-			if (dsResource != null)
-			{
-				var metrics:RTMPNetStreamMetrics = new RTMPNetStreamMetrics(netStream);
-				return new NetStreamSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
-			}
-			return null;
+			var metrics:RTMPNetStreamMetrics = new RTMPNetStreamMetrics(netStream);
+			return new NetStreamSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
 		}
 		
 		CONFIG::FLASH_10_1	
@@ -134,7 +128,7 @@ package org.osmf.net.rtmpstreaming
 					var nsPlayOptions:NetStreamPlayOptions = new NetStreamPlayOptions();
 					 
 					loadTrait.netStream.attach(loadTrait.connection);
-					nsPlayOptions.transition = "resume";
+					nsPlayOptions.transition = NetStreamPlayTransitions.RESUME;
 					
 					var currentStreamItem:DynamicStreamingItem = dsResource.streamItems[loadTrait.switchManager.currentIndex]; 
 					var streamName:String = currentStreamItem.streamName;

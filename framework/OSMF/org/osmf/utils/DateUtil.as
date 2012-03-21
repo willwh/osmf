@@ -1,54 +1,69 @@
 /*****************************************************
- *  
- *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
- *  
- *****************************************************
- *  The contents of this file are subject to the Mozilla Public License
- *  Version 1.1 (the "License"); you may not use this file except in
- *  compliance with the License. You may obtain a copy of the License at
- *  http://www.mozilla.org/MPL/
- *   
- *  Software distributed under the License is distributed on an "AS IS"
- *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- *  License for the specific language governing rights and limitations
- *  under the License.
- *   
- *  
- *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
- *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
- *  Incorporated. All Rights Reserved. 
- *  
- *****************************************************/
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.utils
 {
+	[ExcludeClass]
+
 	/**
-	 * @private
-	 * 
-	 * Class that contains static utility methods for manipulating and working
-	 * with Dates.
-	 * 
-	 * @langversion 3.0
-	 * @playerversion Flash 10
-	 * @playerversion AIR 1.5
-	 * @productversion OSMF 1.0
-	 */	
+	* @private
+	* 
+	* 	Class that contains static utility methods for manipulating and working
+	*	with Dates.
+	* 
+	* 	@langversion ActionScript 3.0
+	*	@playerversion Flash 9.0
+	*	@tiptext
+	*  
+	*  @langversion 3.0
+	*  @playerversion Flash 10
+	*  @playerversion AIR 1.5
+	*  @productversion OSMF 1.0
+	*/	
 	public class DateUtil
 	{
+	
 		/**
-		 * Parses dates that conform to the W3C Date-time Format into Date objects.
-		 *
-		 * This function is useful for parsing RSS 1.0 and Atom 1.0 dates.
-		 *
-		 * @see http://www.w3.org/TR/NOTE-datetime
-		 *  
-		 * @langversion 3.0
-		 * @playerversion Flash 10
-		 * @playerversion AIR 1.5
-		 * @productversion OSMF 1.0
-		 */		     
+		* Parses dates that conform to the W3C Date-time Format into Date objects.
+		*
+		* This function is useful for parsing RSS 1.0 and Atom 1.0 dates.
+		*
+		* @param str
+		*
+		* @returns
+		*
+		* @langversion ActionScript 3.0
+		* @playerversion Flash 9.0
+		* @tiptext
+		*
+		* @see http://www.w3.org/TR/NOTE-datetime
+		*  
+		*  @langversion 3.0
+		*  @playerversion Flash 10
+		*  @playerversion AIR 1.5
+		*  @productversion OSMF 1.0
+		*/		     
 		public static function parseW3CDTF(str:String):Date
 		{
-			var finalDate:Date;
+            var finalDate:Date;
 			try
 			{
 				var dateStr:String = str.substring(0, str.indexOf("T"));
@@ -95,7 +110,7 @@ package org.osmf.utils
 				var utc:Number = Date.UTC(year, month-1, date, hour, minutes, seconds, milliseconds);
 				var offset:Number = (((offsetHours * 3600000) + (offsetMinutes * 60000)) * multiplier);
 				finalDate = new Date(utc - offset);
-				
+	
 				if (finalDate.toString() == "Invalid Date")
 				{
 					throw new Error("This date does not conform to W3CDTF.");
@@ -107,7 +122,8 @@ package org.osmf.utils
 				eStr += "The internal error was: " + e.toString();
 				throw new Error(eStr);
 			}
-			return finalDate;
+            return finalDate;
 		}
+	 
 	}
 }

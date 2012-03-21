@@ -133,8 +133,8 @@ package org.osmf.utils
 		private static const FIELD_SEPARATOR:String = ".";
 		
 		/** Use single quotes, to facilitate build system updates **/
-		private static const _major:String = '1';
-		private static const _minor:String = '6.1';		
-		private static const _build_number:String = '0';
+		private static const _major:String = '2';
+		private static const _minor:String = '0';		
+		private static const _build_number:String = '71';
 	}
 }

@@ -12,7 +12,7 @@
 	<!-- run unittests -->
 	<target name="run" depends="build">
 		<OSMF.unittest.run project="OSMFTest" projectDir="${basedir}" flexUnitPlayer="air" />
-	</target>	
+	</target>
 	
 	<!-- cleans the output directory -->
 	<target name="clean-bin">
