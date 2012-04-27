@@ -1261,7 +1261,7 @@ package org.osmf.net.httpstreaming.f4f
 				
 				// If the stream is live, initialize the bootstrap update timer
 				// if we are in a live stream with rolling window feature activated
-				if (bootstrapBox.live && _f4fIndexInfo.dvrInfo != null && _f4fIndexInfo.dvrInfo.windowDuration != -1)
+				if (bootstrapBox.live && _f4fIndexInfo.dvrInfo != null)
 				{
 					initializeBootstrapUpdateTimer();
 				}
