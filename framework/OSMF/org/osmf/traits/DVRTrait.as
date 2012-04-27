@@ -100,6 +100,23 @@ package org.osmf.traits
 		}
 		
 		/**
+		 * Indicates the number of seconds to be added to the time-related
+		 * properties of the stream in order to obtain the real values.<br />
+		 * (OSMF always exposes a zero-based timeline)
+		 * <p>The timeOffset might have a non-zero value in case of DVR with 
+		 * a rolling window.</p>
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 2.0.1
+		 */
+		public function get timeOffset():Number
+		{
+			return 0;
+		}
+		
+		/**
 		 * @private
 		 * 
 		 * Method that allows subclasses to set the isRecording property.

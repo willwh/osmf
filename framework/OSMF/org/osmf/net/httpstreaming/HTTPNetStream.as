@@ -362,6 +362,16 @@ package org.osmf.net.httpstreaming
 				_source.isBestEffortFetchEnabled;
 		}
 		
+		/**
+		 * The offset applied to the reported time
+		 * 
+		 * @see #time
+		 */
+		public function get initialTime():Number
+		{
+			return _initialTime;
+		}
+		
 		///////////////////////////////////////////////////////////////////////
 		/// Internals
 		///////////////////////////////////////////////////////////////////////
