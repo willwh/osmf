@@ -488,7 +488,7 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * @private
-		 * calls f for each true gap (discontinuity of type 2) found within the FRT. f will be passed
+		 * calls f for each true gap (discontinuity of type 3) found within the FRT. f will be passed
 		 * an Object argument (arg) with 3 fields.
 		 * 
 		 * arg.fdp will be the discontinuity entry.
@@ -511,9 +511,13 @@ package org.osmf.net.httpstreaming.f4f
 				var fdp:FragmentDurationPair = _fragmentDurationPairs[i];
 				
 				if(fdp.duration != 0 ||
-					fdp.discontinuityIndicator != 2)
+					(fdp.discontinuityIndicator != 2 && fdp.discontinuityIndicator != 3))
 				{
-					// skip until we find a discontinuity of type 2
+					// skip until we find a discontinuity of type 3
+					// 
+					// NOTE: FMS 4.5.1 and earlier incorrrectly inserted a discontinuity type 2 (time only disccontinuity)
+					// where there should have been a discontinuity type 3 (time and fragment-number discontinuity).
+					// For backward compatibility, we will treat both 2 & 3 as time and fragment-number discontinuities.
 					continue;
 				}
 				
