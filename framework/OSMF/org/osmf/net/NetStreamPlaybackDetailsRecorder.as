@@ -142,7 +142,7 @@ package org.osmf.net
 		public function resetRecord():void
 		{
 			playbackDetailsRecord = new Vector.<PlaybackDetails>();
-			lastNetStreamTime = netStream.time;
+			lastNetStreamTime = getNetStreamTime();
 			lastDroppedFrames = netStream.info.droppedFrames;
 			
 			CONFIG::LOGGING
@@ -171,7 +171,7 @@ package org.osmf.net
 		
 		private function performComputation():void
 		{
-			var newNetStreamTime:Number = netStream.time;
+			var newNetStreamTime:Number = getNetStreamTime();
 			var newDroppedFrames:Number = netStream.info.droppedFrames;
 			
 			if (getTimer() - lastTransitionTime < DFPS_AFTER_TRANSITION_IGNORE_TIME)
@@ -245,7 +245,7 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
 					CONFIG::LOGGING
 					{
-						logger.debug("Seek complete to time: " + netStream.time);
+						logger.debug("Seek complete to time: " + netStream.time + "; true time: " + getNetStreamTime());
 					}
 					resetRecord();
 					seeking = false;
@@ -295,6 +295,16 @@ package org.osmf.net
 					}
 					break;
 			}
+		}
+		
+		private function getNetStreamTime():Number
+		{
+			if (netStream.hasOwnProperty("initialTime"))
+			{
+				return netStream.time + netStream["initialTime"];
+			}
+			
+			return netStream.time;
 		}
 		
 		private var _playingIndex:uint;
