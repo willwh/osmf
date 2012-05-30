@@ -1363,6 +1363,33 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 * 
+		 * Method called by the onTag method to adjust the currentTime
+		 * (if needed) to support 32-bit roll-over
+		 */
+		private function adjustCurrentTime(value:Number):Number
+		{
+			// Fix for http://bugs.adobe.com/jira/browse/FM-1544
+			// We need to take into account that flv tags' timestamps are 32-bit unsigned ints
+			// This means they will roll over, but the bootstrap times won't, since they are 64-bit unsigned ints
+			// 
+			// Fix for http://bugs.adobe.com/jira/browse/FM-1567
+			// The fix for FM-1544 introduced a regression when dealing with DVR Rolling Window.
+			// In this case, it is possible for the currentTime to be smaller than the initialTime, if the playhead
+			// drifted out of the window.
+			// To avoid the false positive, we're allowing the currentTime to be smaller than initialTime within a limit
+			while (value + DVR_ROLLING_WINDOW_MAX_TIME_DRIFT_IN_SEC < _initialTime)
+			{
+				// Add 2^32 (4,294,967,296) milliseconds to the currentTime
+				// currentTime is in seconds so we divide that by 1000
+				value += 4294967.296;
+			}
+			
+			return value;
+		}
+		
+		/**
+		 * @private
+		 * 
 		 * Method called by FLV parser object every time it detects another
 		 * FLV tag inside the buffer it tries to parse.
 		 */
@@ -1370,17 +1397,7 @@ package org.osmf.net.httpstreaming
 		{
 			var i:int;
 			
-			var currentTime:Number = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
-			
-			// Fix for http://bugs.adobe.com/jira/browse/FM-1544
-			// We need to take into account that flv tags' timestamps are 32-bit unsigned ints
-			// This means they will roll over, but the bootstrap times won't, since they are 64-bit unsigned ints
-			while (currentTime < _initialTime)
-			{
-				// Add 2^32 (4,294,967,296) milliseconds to the currentTime
-				// currentTime is in seconds so we divide that by 1000
-				currentTime += 4294967.296;
-			}
+			var currentTime:Number = adjustCurrentTime((tag.timestamp / 1000.0) + _fileTimeAdjustment);
 			
 			if (_playForDuration >= 0)
 			{
@@ -1872,6 +1889,8 @@ package org.osmf.net.httpstreaming
 		private var _isPaused:Boolean = false; // true if we're currently paused. see checkIfExtraKickNeeded
 		private var _liveStallStartTime:Date;
 
+		private static const DVR_ROLLING_WINDOW_MAX_TIME_DRIFT_IN_SEC:Number = 60;
+		
 		private static const HIGH_PRIORITY:int = int.MAX_VALUE;
 		
 		CONFIG::LOGGING
