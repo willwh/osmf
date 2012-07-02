@@ -731,15 +731,15 @@ package org.osmf.elements.f4mClasses
 				var keyInfo:Object = params["KeyInfo"];
 				var keyInfoData:Object = null;
 				
-				switch(version)
+				// we try to read data from FMRMS_METADATA property if not
+				// we try to read data from Data property
+				if (keyInfo.hasOwnProperty("FMRMS_METADATA"))
 				{
-					case "2": // FAXS2 structure KeyInfo > FMRMS_METADATA > Metadata
-						keyInfoData = keyInfo["FMRMS_METADATA"];
-						break;
-					
-					case "3": // FAXS3 structure KeyInfo > Data > Metadata
-						keyInfoData = keyInfo["Data"];
-						break;
+					keyInfoData = keyInfo["FMRMS_METADATA"];
+				}
+				else if (keyInfo.hasOwnProperty("Data"))
+				{
+					keyInfoData = keyInfo["Data"];
 				}
 				
 				if (keyInfoData != null)
