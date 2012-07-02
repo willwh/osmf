@@ -192,8 +192,22 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function dispose():void
 		{
-			//close the bootstrap update timer
 			destroyBootstrapUpdateTimer();
+			
+			_pendingIndexLoads = 0;
+			_pendingIndexUpdates = 0;
+			_pendingIndexUrls = new Object();
+			
+			_bestEffortNeedsToFireFragmentDuration = false;
+			_bestEffortEnabled = true;
+			if (_bestEffortNotifyBootstrapBoxInfo != null && _bestEffortNotifyBootstrapBoxInfo.hasOwnProperty("downloader"))
+			{
+				var downloader:HTTPStreamDownloader = _bestEffortNotifyBootstrapBoxInfo.downloader as HTTPStreamDownloader;
+				if (downloader != null)
+				{
+					downloader.close(true);
+				}
+			}
 		}
 		
 		/**
