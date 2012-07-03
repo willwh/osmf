@@ -53,7 +53,6 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.qos.QoSInfo;
 	import org.osmf.net.qos.QualityLevel;
 	import org.osmf.utils.OSMFSettings;
-	import org.osmf.utils.OSMFStrings;
 	
 	CONFIG::LOGGING 
 	{	
@@ -370,6 +369,22 @@ package org.osmf.net.httpstreaming
 		public function get initialTime():Number
 		{
 			return _initialTime;
+		}
+		
+		/**
+		 * Called when the runtime has changed throttle mode, which can be "throttle", "pause", "resume". 
+		 * Can also be called manually to preserve early throttle events.
+		 */
+		public function setThrottleMode(throttleMode:String):void
+		{
+			if (throttleMode != "throttle" && throttleMode != "pause" && throttleMode != "resume")
+			{
+				return;
+			}
+			if (playbackDetailsRecorder != null)
+			{
+				playbackDetailsRecorder.setThrottleMode(throttleMode);
+			}
 		}
 		
 		///////////////////////////////////////////////////////////////////////

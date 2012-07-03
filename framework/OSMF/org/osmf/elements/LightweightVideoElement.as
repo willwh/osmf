@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.NetStatusEvent;
 	import flash.events.StatusEvent;
@@ -29,7 +28,6 @@ package org.osmf.elements
 	import flash.net.NetStream;
 	import flash.utils.ByteArray;
 	
-	import org.osmf.events.AlternativeAudioEvent;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -38,7 +36,6 @@ package org.osmf.elements
 	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.media.MediaType;
 	import org.osmf.media.URLResource;
 	import org.osmf.media.videoClasses.VideoSurface;
 	import org.osmf.metadata.CuePoint;
@@ -349,6 +346,8 @@ package org.osmf.elements
 
 			videoSurface.attachNetStream(stream);
 			
+			videoSurface.addEventListener("throttle", onThrottle);
+			
 			// Hook up our metadata listeners
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_CUE_POINT, onCuePoint);
@@ -382,6 +381,18 @@ package org.osmf.elements
 				}
     		}
 			finishLoad();			
+		}
+		
+		private function onThrottle(event:Event):void
+		{
+			if (event.hasOwnProperty("state"))
+			{
+				var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+				if (loadTrait != null)
+				{
+					loadTrait.setThrottleMode(event["state"]);
+				}
+			}
 		}
 		
 		// DRM APIs

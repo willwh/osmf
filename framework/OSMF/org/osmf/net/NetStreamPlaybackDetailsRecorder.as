@@ -24,7 +24,6 @@ package org.osmf.net
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetStream;
-	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
@@ -169,6 +168,8 @@ package org.osmf.net
 			lastDroppedFrames = netStream.info.droppedFrames;
 		}
 		
+		
+		
 		private function performComputation():void
 		{
 			var newNetStreamTime:Number = getNetStreamTime();
@@ -184,6 +185,20 @@ package org.osmf.net
 						(
 							"Ignoring " + (newDroppedFrames - lastDroppedFrames) + " dropped frames, " +
 							"because they are right after a transition."
+						);
+				}
+				lastDroppedFrames = newDroppedFrames;
+			}
+			
+			if (isThrottling)
+			{
+				// Workaround because the new throttling introduced in Flash 11.2 is dropping frames when the browser tab is inactive
+				CONFIG::LOGGING
+				{
+					logger.debug
+						(
+							"Ignoring " + (newDroppedFrames - lastDroppedFrames) + " dropped frames, " +
+							"because the Flash Player is throttling"
 						);
 				}
 				lastDroppedFrames = newDroppedFrames;
@@ -297,6 +312,29 @@ package org.osmf.net
 			}
 		}
 		
+		public function setThrottleMode(throttleMode:String):void
+		{
+			if (throttleMode == "throttle" || throttleMode == "pause")
+			{
+				performComputation();
+				isThrottling = true;
+			}
+			
+			else if (throttleMode == "resume")
+			{
+				isThrottling = false;
+				CONFIG::LOGGING
+				{
+					logger.debug
+						(
+							"Ignoring " + (netStream.info.droppedFrames - lastDroppedFrames) + " dropped frames, " +
+							"because the Flash Player is throttling"
+						);
+				}
+				lastDroppedFrames = netStream.info.droppedFrames;
+			}
+		}
+		
 		private function getNetStreamTime():Number
 		{
 			if (netStream.hasOwnProperty("initialTime"))
@@ -316,6 +354,8 @@ package org.osmf.net
 		private var playbackDetailsRecord:Vector.<PlaybackDetails>;
 		private var timer:Timer;
 		private var seeking:Boolean = false;
+		
+		private var isThrottling:Boolean = false; // display objects are throttled, do not count the dropped frames 
 		
 		private static const DFPS_AFTER_TRANSITION_IGNORE_TIME:Number = 2000;
 		

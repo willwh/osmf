@@ -27,6 +27,7 @@ package org.osmf.media
 	import flash.utils.Timer;
 	
 	import org.osmf.events.*;
+	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.StreamingItem;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
@@ -338,7 +339,7 @@ package org.osmf.media
 						updateTraitListeners(traitType, true);
 					}
 				}
-				dispatchEvent(new MediaElementChangeEvent(MediaElementChangeEvent.MEDIA_ELEMENT_CHANGE));				
+				dispatchEvent(new MediaElementChangeEvent(MediaElementChangeEvent.MEDIA_ELEMENT_CHANGE));
 			}
 		}
 		
@@ -1198,7 +1199,7 @@ package org.osmf.media
 	    {
 	    	return temporal ? (getTraitOrThrow(MediaTraitType.TIME) as TimeTrait).currentTime : 0;
 	    }
-	    	    
+    
 	    /**
 		 * Indicates whether the media is currently buffering.
 		 * 
@@ -1457,6 +1458,28 @@ package org.osmf.media
 			return dvrTrait != null ? dvrTrait.timeOffset : 0;
 		}
 	
+		/**
+		 * @private
+		 * 
+		 * Called manually to simulate that the runtime is throttling. 
+		 * Use this to preserve early throttle events.
+		 */
+		public function notifyThrottling():void
+		{
+			if (_state == MediaPlayerState.READY)
+			{
+				var loadTrait:NetStreamLoadTrait = media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+				if (loadTrait != null)
+				{
+					loadTrait.setThrottleMode("throttle");
+				}
+			}
+			else 
+			{
+				throw new IllegalOperationError("notifyThrottling() can only be used in MediaPlayerState.READY!");
+			}
+		}
+		
 		// Internals
 		//
 	    
@@ -1867,6 +1890,7 @@ package org.osmf.media
 		private function processReadyState():void
 		{
 			setState(MediaPlayerState.READY);
+			
 			if (autoPlay && canPlay && !playing)
 			{
 				play();
