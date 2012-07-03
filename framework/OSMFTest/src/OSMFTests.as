@@ -126,6 +126,7 @@ package
 	import org.osmf.traits.TestTimeTrait;
 	import org.osmf.traits.TestTimeTraitAsSubclass;
 	import org.osmf.traits.TestTraitEventDispatcher;
+	import org.osmf.utils.TestDateUtil;
 	import org.osmf.utils.OSMFUtilTestSettings;
 	import org.osmf.utils.OSMFUtilTestStrings;
 	import org.osmf.utils.OSMFUtilTestTime;
@@ -248,6 +249,7 @@ package
 			testsToRun.push(org.osmf.utils.OSMFUtilTestTime);
 			testsToRun.push(org.osmf.utils.OSMFUtilTestURL);
 			testsToRun.push(org.osmf.utils.TestURL);
+			testsToRun.push(org.osmf.utils.TestDateUtil);
 			
 			return testsToRun;
 		}
