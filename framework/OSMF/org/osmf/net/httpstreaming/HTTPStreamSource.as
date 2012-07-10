@@ -59,6 +59,10 @@ package org.osmf.net.httpstreaming
 	 */ 
 	public class HTTPStreamSource implements IHTTPStreamSource, IHTTPStreamHandler
 	{
+		/*
+		AdobePatentID="2390US01"
+		*/
+		
 		/**
 		 * Default constructor.
 		 */

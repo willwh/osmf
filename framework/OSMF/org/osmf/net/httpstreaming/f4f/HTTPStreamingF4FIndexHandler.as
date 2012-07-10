@@ -63,6 +63,10 @@ package org.osmf.net.httpstreaming.f4f
 	 */	
 	public class HTTPStreamingF4FIndexHandler extends HTTPStreamingIndexHandlerBase
 	{
+		/*
+		AdobePatentID="2390US01"
+		*/
+
 		/**
 		 * Default Constructor.
 		 *
@@ -356,7 +360,7 @@ package org.osmf.net.httpstreaming.f4f
 			
 			return streamRequest;
 		}
-		
+				
 		/**
 		 * @private
 		 * 
