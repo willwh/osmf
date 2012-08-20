@@ -109,6 +109,10 @@ package org.osmf.net.httpstreaming
 		 */
 		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManagerBase
 		{
+			/*
+			AdobePatentID="2278US01"
+			*/
+
 			// Create a QoSInfoHistory, to hold a history of QoSInfo provided by the NetStream
 			var netStreamQoSInfoHistory:QoSInfoHistory = createNetStreamQoSInfoHistory(netStream);
 			

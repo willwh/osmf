@@ -19,6 +19,11 @@
  *  Incorporated. All Rights Reserved. 
  *  
  *****************************************************/
+
+/*
+AdobePatentID="2278US01"
+*/
+
 package org.osmf.net.metrics
 {
 	import flash.utils.Dictionary;
