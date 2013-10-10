@@ -24,6 +24,7 @@ package org.osmf.net
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetStream;
+	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
@@ -141,7 +142,7 @@ package org.osmf.net
 		public function resetRecord():void
 		{
 			playbackDetailsRecord = new Vector.<PlaybackDetails>();
-			lastNetStreamTime = getNetStreamTime();
+			lastNetStreamTime = netStream.time;
 			lastDroppedFrames = netStream.info.droppedFrames;
 			
 			CONFIG::LOGGING
@@ -168,11 +169,9 @@ package org.osmf.net
 			lastDroppedFrames = netStream.info.droppedFrames;
 		}
 		
-		
-		
 		private function performComputation():void
 		{
-			var newNetStreamTime:Number = getNetStreamTime();
+			var newNetStreamTime:Number = netStream.time;
 			var newDroppedFrames:Number = netStream.info.droppedFrames;
 			
 			if (getTimer() - lastTransitionTime < DFPS_AFTER_TRANSITION_IGNORE_TIME)
@@ -185,20 +184,6 @@ package org.osmf.net
 						(
 							"Ignoring " + (newDroppedFrames - lastDroppedFrames) + " dropped frames, " +
 							"because they are right after a transition."
-						);
-				}
-				lastDroppedFrames = newDroppedFrames;
-			}
-			
-			if (isThrottling)
-			{
-				// Workaround because the new throttling introduced in Flash 11.2 is dropping frames when the browser tab is inactive
-				CONFIG::LOGGING
-				{
-					logger.debug
-						(
-							"Ignoring " + (newDroppedFrames - lastDroppedFrames) + " dropped frames, " +
-							"because the Flash Player is throttling"
 						);
 				}
 				lastDroppedFrames = newDroppedFrames;
@@ -260,7 +245,7 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
 					CONFIG::LOGGING
 					{
-						logger.debug("Seek complete to time: " + netStream.time + "; true time: " + getNetStreamTime());
+						logger.debug("Seek complete to time: " + netStream.time);
 					}
 					resetRecord();
 					seeking = false;
@@ -312,39 +297,6 @@ package org.osmf.net
 			}
 		}
 		
-		public function setThrottleMode(throttleMode:String):void
-		{
-			if (throttleMode == "throttle" || throttleMode == "pause")
-			{
-				performComputation();
-				isThrottling = true;
-			}
-			
-			else if (throttleMode == "resume")
-			{
-				isThrottling = false;
-				CONFIG::LOGGING
-				{
-					logger.debug
-						(
-							"Ignoring " + (netStream.info.droppedFrames - lastDroppedFrames) + " dropped frames, " +
-							"because the Flash Player is throttling"
-						);
-				}
-				lastDroppedFrames = netStream.info.droppedFrames;
-			}
-		}
-		
-		private function getNetStreamTime():Number
-		{
-			if (netStream.hasOwnProperty("initialTime"))
-			{
-				return netStream.time + netStream["initialTime"];
-			}
-			
-			return netStream.time;
-		}
-		
 		private var _playingIndex:uint;
 		private var netStream:NetStream;
 		private var lastDroppedFrames:Number;
@@ -354,8 +306,6 @@ package org.osmf.net
 		private var playbackDetailsRecord:Vector.<PlaybackDetails>;
 		private var timer:Timer;
 		private var seeking:Boolean = false;
-		
-		private var isThrottling:Boolean = false; // display objects are throttled, do not count the dropped frames 
 		
 		private static const DFPS_AFTER_TRANSITION_IGNORE_TIME:Number = 2000;
 		

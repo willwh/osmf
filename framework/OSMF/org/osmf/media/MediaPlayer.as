@@ -27,7 +27,6 @@ package org.osmf.media
 	import flash.utils.Timer;
 	
 	import org.osmf.events.*;
-	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.StreamingItem;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
@@ -339,7 +338,7 @@ package org.osmf.media
 						updateTraitListeners(traitType, true);
 					}
 				}
-				dispatchEvent(new MediaElementChangeEvent(MediaElementChangeEvent.MEDIA_ELEMENT_CHANGE));
+				dispatchEvent(new MediaElementChangeEvent(MediaElementChangeEvent.MEDIA_ELEMENT_CHANGE));				
 			}
 		}
 		
@@ -1199,7 +1198,7 @@ package org.osmf.media
 	    {
 	    	return temporal ? (getTraitOrThrow(MediaTraitType.TIME) as TimeTrait).currentTime : 0;
 	    }
-    
+	    	    
 	    /**
 		 * Indicates whether the media is currently buffering.
 		 * 
@@ -1438,48 +1437,7 @@ package org.osmf.media
 			var dvrTrait:DVRTrait = media != null ? media.getTrait(MediaTraitType.DVR) as DVRTrait : null;
 			return dvrTrait != null ? dvrTrait.isRecording : false;
 		}
-		
-		/**
-		 * Indicates the number of seconds to be added to the time-related
-		 * properties (currentTime and duration) of the stream in order to 
-		 * obtain the real values.<br />
-		 * (OSMF always exposes a zero-based timeline)
-		 * <p>The dvrTimeOffset might have a non-zero value in case of DVR with 
-		 * a rolling window.</p>
-		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 2.0.1
-		 */
-		public function get dvrTimeOffset():Number
-		{
-			var dvrTrait:DVRTrait = media != null ? media.getTrait(MediaTraitType.DVR) as DVRTrait : null;
-			return dvrTrait != null ? dvrTrait.timeOffset : 0;
-		}
 	
-		/**
-		 * @private
-		 * 
-		 * Called manually to simulate that the runtime is throttling. 
-		 * Use this to preserve early throttle events.
-		 */
-		public function notifyThrottling():void
-		{
-			if (_state == MediaPlayerState.READY)
-			{
-				var loadTrait:NetStreamLoadTrait = media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-				if (loadTrait != null)
-				{
-					loadTrait.setThrottleMode("throttle");
-				}
-			}
-			else 
-			{
-				throw new IllegalOperationError("notifyThrottling() can only be used in MediaPlayerState.READY!");
-			}
-		}
-		
 		// Internals
 		//
 	    
@@ -1890,7 +1848,6 @@ package org.osmf.media
 		private function processReadyState():void
 		{
 			setState(MediaPlayerState.READY);
-			
 			if (autoPlay && canPlay && !playing)
 			{
 				play();

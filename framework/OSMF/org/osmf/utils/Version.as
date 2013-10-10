@@ -135,6 +135,6 @@ package org.osmf.utils
 		/** Use single quotes, to facilitate build system updates **/
 		private static const _major:String = '2';
 		private static const _minor:String = '0';		
-		private static const _build_number:String = '71';
+		private static const _build_number:String = '2494';
 	}
 }

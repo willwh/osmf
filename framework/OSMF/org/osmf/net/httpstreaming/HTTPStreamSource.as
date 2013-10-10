@@ -59,10 +59,6 @@ package org.osmf.net.httpstreaming
 	 */ 
 	public class HTTPStreamSource implements IHTTPStreamSource, IHTTPStreamHandler
 	{
-		/*
-		AdobePatentID="2390US01"
-		*/
-		
 		/**
 		 * Default constructor.
 		 */
@@ -237,13 +233,6 @@ package org.osmf.net.httpstreaming
 			{
 				_downloader.close();
 			}
-			if (_indexDownloader != null)
-			{
-				_indexDownloader.close();
-			}
-			_currentIndexDownloadEvent = null;
-			_pendingIndexDownloadRequests.length = 0;
-			_pendingIndexDownloadRequestsLenght = 0;
 			
 			_indexHandler.dispose();
 			

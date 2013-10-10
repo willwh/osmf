@@ -63,10 +63,6 @@ package org.osmf.net.httpstreaming.f4f
 	 */	
 	public class HTTPStreamingF4FIndexHandler extends HTTPStreamingIndexHandlerBase
 	{
-		/*
-		AdobePatentID="2390US01"
-		*/
-
 		/**
 		 * Default Constructor.
 		 *
@@ -196,22 +192,8 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function dispose():void
 		{
+			//close the bootstrap update timer
 			destroyBootstrapUpdateTimer();
-			
-			_pendingIndexLoads = 0;
-			_pendingIndexUpdates = 0;
-			_pendingIndexUrls = new Object();
-			
-			_bestEffortNeedsToFireFragmentDuration = false;
-			_bestEffortEnabled = true;
-			if (_bestEffortNotifyBootstrapBoxInfo != null && _bestEffortNotifyBootstrapBoxInfo.hasOwnProperty("downloader"))
-			{
-				var downloader:HTTPStreamDownloader = _bestEffortNotifyBootstrapBoxInfo.downloader as HTTPStreamDownloader;
-				if (downloader != null)
-				{
-					downloader.close(true);
-				}
-			}
 		}
 		
 		/**
@@ -360,7 +342,7 @@ package org.osmf.net.httpstreaming.f4f
 			
 			return streamRequest;
 		}
-				
+		
 		/**
 		 * @private
 		 * 
@@ -1279,7 +1261,7 @@ package org.osmf.net.httpstreaming.f4f
 				
 				// If the stream is live, initialize the bootstrap update timer
 				// if we are in a live stream with rolling window feature activated
-				if (bootstrapBox.live && _f4fIndexInfo.dvrInfo != null)
+				if (bootstrapBox.live && _f4fIndexInfo.dvrInfo != null && _f4fIndexInfo.dvrInfo.windowDuration != -1)
 				{
 					initializeBootstrapUpdateTimer();
 				}

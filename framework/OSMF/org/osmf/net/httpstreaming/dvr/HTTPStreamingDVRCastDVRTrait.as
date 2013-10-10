@@ -47,11 +47,6 @@ package org.osmf.net.httpstreaming.dvr
 			super(dvrInfo.isRecording, dvrInfo.windowDuration);			
 		}
 		
-		override public function get timeOffset():Number
-		{
-			return _stream.initialTime;
-		}
-		
 		//
 		// Internal
 		//

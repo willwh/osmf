@@ -295,16 +295,6 @@ package org.osmf.net
 			return isStreamingResource ? NaN : (netStream != null ? netStream.bytesTotal : NaN);
 		}
 		
-		/**
-		 * Called when the runtime has changed throttle mode, which can be "throttle", "pause", "resume". 
-		 * Can also be called manually to preserve early throttle events.
-		 */
-		public function setThrottleMode(throttleMode:String):void
-		{
-			if (_netStream is HTTPNetStream)
-				(_netStream as HTTPNetStream).setThrottleMode(throttleMode);
-		}
-		
 		// Internals
 		//
 		

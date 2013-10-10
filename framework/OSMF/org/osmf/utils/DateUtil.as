@@ -40,6 +40,7 @@ package org.osmf.utils
 	*/	
 	public class DateUtil
 	{
+	
 		/**
 		* Parses dates that conform to the W3C Date-time Format into Date objects.
 		*
@@ -60,113 +61,69 @@ package org.osmf.utils
 		*  @playerversion AIR 1.5
 		*  @productversion OSMF 1.0
 		*/		     
-		public static function parseW3CDTF(str:String):Date 
+		public static function parseW3CDTF(str:String):Date
 		{
-			var parsedDate:Date = null;	
-			try 
+            var finalDate:Date;
+			try
 			{
-				parsedDate = parseW3CDTFInternal(str);
-			}
-			catch (e:Error) 
-			{
-				throw new Error("Unable to parse the string [" + str + "] into a date. " + "The internal error was: " + e.toString());
-			}
-			
-			return parsedDate;
-		}
-		
-		// Internals
-		//
-
-		private static function parseW3CDTFInternal(dateStr:String):Date 
-		{
-			var expression:RegExp = /^ (\d\d\d\d) (?: - (\d\d) (?: - (\d\d) (?: T (\d\d) (?: : (\d\d) (?: : (\d\d (?: \.\d* )? ) )? )? )?  (?: Z | ([+-]) (\d\d) : (\d\d) )? )? )? $/x;
-			
-			if (!dateStr) 
-			{
-				throw new Error(PARSING_ERROR_STR);
-			}
-
-			var matches:Object = expression.exec(dateStr);
-			
-			if (!matches) 
-			{
-				throw new Error(PARSING_ERROR_STR);
-			}
-			
-			function getMatch(matchNo:Number, minAllowedValue:Number, maxAllowedValue:Number):Number 
-			{
-				var match:String = matches[matchNo];
-				if (!match) 
+				var dateStr:String = str.substring(0, str.indexOf("T"));
+				var timeStr:String = str.substring(str.indexOf("T")+1, str.length);
+				var dateArr:Array = dateStr.split("-");
+				var year:Number = Number(dateArr.shift());
+				var month:Number = Number(dateArr.shift());
+				var date:Number = Number(dateArr.shift());
+				
+				var multiplier:Number;
+				var offsetHours:Number;
+				var offsetMinutes:Number;
+				var offsetStr:String;
+				
+				if (timeStr.indexOf("Z") != -1)
 				{
-					return minAllowedValue;
+					multiplier = 1;
+					offsetHours = 0;
+					offsetMinutes = 0;
+					timeStr = timeStr.replace("Z", "");
 				}
-				
-				var matchValue:Number = Number(match);
-				if (matchValue < minAllowedValue || matchValue > maxAllowedValue) 
+				else if (timeStr.indexOf("+") != -1)
 				{
-					throw new Error(PARSING_ERROR_STR);
+					multiplier = 1;
+					offsetStr = timeStr.substring(timeStr.indexOf("+")+1, timeStr.length);
+					offsetHours = Number(offsetStr.substring(0, offsetStr.indexOf(":")));
+					offsetMinutes = Number(offsetStr.substring(offsetStr.indexOf(":")+1, offsetStr.length));
+					timeStr = timeStr.substring(0, timeStr.indexOf("+"));
 				}
-				
-				return matchValue;
-			}
-			
-			// get date components
-			var year:Number = getMatch(GROUP_INDEX_YEAR, 0, 9999);
-			var month:Number = getMatch(GROUP_INDEX_MONTH, 1, 12);
-			var lastDayInCurrentMonth:Number = getLastDayInMonth(year, month);
-			var day:Number = getMatch(GROUP_INDEX_DAY, 1, lastDayInCurrentMonth);
-			var hour:Number = getMatch(GROUP_INDEX_HOUR, 0, 23);
-			var minutes:Number = getMatch(GROUP_INDEX_MINUTE, 0, 59);
-			var secondsAndMilliseconds:Number = getMatch(GROUP_INDEX_SECOND, 0, 59.99999999999);
-			var seconds:Number =  Math.floor(secondsAndMilliseconds);
-			var milliseconds:Number = Math.floor(secondsAndMilliseconds * 1000 % 1000);
-			var tzSign:String = matches[GROUP_INDEX_TZ];
-			var offsetMilliseconds:Number = 0;
-			
-			// get the timezone offset
-			if (tzSign) 
-			{
-				var offsetHours:Number = getMatch(GROUP_INDEX_OFFSET_HOURS, 0, 23);
-				var offsetMinutes:Number = getMatch(GROUP_INDEX_OFFSET_MINUTES, 0, 59);
-				
-				offsetMilliseconds = (offsetHours * 60 + offsetMinutes) * 60 * 1000;
-				if (tzSign == '-')
+				else // offset is -
 				{
-					offsetMilliseconds = offsetMilliseconds * -1;
+					multiplier = -1;
+					offsetStr = timeStr.substring(timeStr.indexOf("-")+1, timeStr.length);
+					offsetHours = Number(offsetStr.substring(0, offsetStr.indexOf(":")));
+					offsetMinutes = Number(offsetStr.substring(offsetStr.indexOf(":")+1, offsetStr.length));
+					timeStr = timeStr.substring(0, timeStr.indexOf("-"));
+				}
+				var timeArr:Array = timeStr.split(":");
+				var hour:Number = Number(timeArr.shift());
+				var minutes:Number = Number(timeArr.shift());
+				var secondsArr:Array = (timeArr.length > 0) ? String(timeArr.shift()).split(".") : null;
+				var seconds:Number = (secondsArr != null && secondsArr.length > 0) ? Number(secondsArr.shift()) : 0;
+				var milliseconds:Number = (secondsArr != null && secondsArr.length > 0) ? Number(secondsArr.shift()) : 0;
+				var utc:Number = Date.UTC(year, month-1, date, hour, minutes, seconds, milliseconds);
+				var offset:Number = (((offsetHours * 3600000) + (offsetMinutes * 60000)) * multiplier);
+				finalDate = new Date(utc - offset);
+	
+				if (finalDate.toString() == "Invalid Date")
+				{
+					throw new Error("This date does not conform to W3CDTF.");
 				}
 			}
-			
-			// convert the date to milliseconds and adjust it using the timezone offset
-			var utc:Number = Date.UTC(year, month - 1, day, hour, minutes, seconds, milliseconds);
-			var parsedDate:Date = new Date(utc - offsetMilliseconds);
-			
-			// check the parsed date validity
-			if (parsedDate.toString() == "Invalid Date")
+			catch (e:Error)
 			{
-				throw new Error(PARSING_ERROR_STR);
+				var eStr:String = "Unable to parse the string [" +str+ "] into a date. ";
+				eStr += "The internal error was: " + e.toString();
+				throw new Error(eStr);
 			}
-			
-			return parsedDate;
+            return finalDate;
 		}
-		
-		private static function getLastDayInMonth(year:Number, month:Number):Number
-		{
-			var dt:Date = new Date(year, month, 0);
-			
-			return dt.date;
-		}
-		
-		private static const PARSING_ERROR_STR:String = "This date does not conform to W3CDTF.";
-		
-		private static const GROUP_INDEX_YEAR:Number = 1;
-		private static const GROUP_INDEX_MONTH:Number = 2;
-		private static const GROUP_INDEX_DAY:Number = 3;
-		private static const GROUP_INDEX_HOUR:Number = 4;
-		private static const GROUP_INDEX_MINUTE:Number = 5;
-		private static const GROUP_INDEX_SECOND:Number = 6;
-		private static const GROUP_INDEX_TZ:Number = 7;
-		private static const GROUP_INDEX_OFFSET_HOURS = 8;
-		private static const GROUP_INDEX_OFFSET_MINUTES = 9;
+	 
 	}
 }
