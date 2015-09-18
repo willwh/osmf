@@ -58,7 +58,7 @@
 
          <path-element>../VPAIDLibrary/#output.bin#/VPAID.swc</path-element>
          <path-element>../VASTLibrary/#output.bin#/VAST.swc</path-element>
-         <path-element>assets\EWSamplePlayerUI.swc</path-element>
+         <path-element>assets/EWSamplePlayerUI.swc</path-element>
 		 <path-element>#osmf.swc.path#</path-element>
 		 
       </library-path>
